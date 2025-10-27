@@ -11,3 +11,4 @@
     - Intel Core i5 (2nd Gen)
     - MS Edge and Firefox browser
     - VS Code
+    - XAMPP
