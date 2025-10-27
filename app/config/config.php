@@ -1,7 +1,7 @@
 <?php
 
 // Global Database connection parameters
-define('DB_HOST', 'LOCALHOST');
+define('DB_HOST', '127.0.0.1');
 define('DB_NAME', 'php-cash-management-db');
 define('DB_USER', 'root');
 define('DB_PASS', '');
