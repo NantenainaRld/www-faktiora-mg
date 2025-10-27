@@ -11,6 +11,7 @@
 ## Prerequisites
     - PHP 8.2.4
     - MySQL database
+    - PDO for database connection and query (include in PHP)
 
 ## Configuration used
     - Ubuntu 24.04.3 LTS
