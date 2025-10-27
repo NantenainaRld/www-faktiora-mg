@@ -1,5 +1,12 @@
-################### Cash Management #################
+################## Cash Management #################
 
+## Project b : 
+    Nantenaina Rld : 
+        --links : 
+                * github.com/NantenainaRld
+                * facebook.com/NantenainaRld
+                * wahatsapp : +261 33 59 464 38
+                * email : nantenainarld@gmail.com
 
 ## Prerequisites
     - PHP 8.2.4
@@ -11,4 +18,4 @@
     - Intel Core i5 (2nd Gen)
     - MS Edge and Firefox browser
     - VS Code
-    - XAMPP
+    - XAMPP 8.2.4
