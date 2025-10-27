@@ -1,6 +1,6 @@
 ################## Cash Management #################
 
-## Project b : 
+## Project by : 
     Nantenaina Rld : 
         --links : 
                 * github.com/NantenainaRld
