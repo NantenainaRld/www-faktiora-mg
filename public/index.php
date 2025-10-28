@@ -8,8 +8,8 @@ require_once ROOT . '/core/Autoload.php';
 // Autoload
 Autoload::register();
 
+// Router
 try {
-    // Router
     $route = $_GET['route'] ?? 'not_found';
     $router = new Router($route);
     $router->run();

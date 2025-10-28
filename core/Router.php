@@ -24,9 +24,13 @@ class Router
 
             //----------------------- PAGE --------------------------
 
-            // not found
+            // page: not found
             case 'not_found':
                 require_once __DIR__ . '/../app/views/not_found.php';
+                break;
+                // page: create_user
+            case 'user/create':
+
                 break;
 
                 // default
