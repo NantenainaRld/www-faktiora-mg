@@ -33,6 +33,7 @@ class Database
             $stm = $this->pdo->prepare($sql);
             return $stm->execute($params);
         } catch (PDOException $e) {
+            $this->handleError($e);
             return false;
         }
     }
