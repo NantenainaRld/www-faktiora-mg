@@ -13,7 +13,7 @@ class Router
         $this->route = $route;
 
         // controller initialize
-        $this->client_controller = null;
+        $this->client_controller = new ClientController();
     }
 
     // run route
@@ -28,12 +28,12 @@ class Router
             case 'not_found':
                 require_once __DIR__ . '/../app/views/not_found.php';
                 break;
-                // page: create_user
+            // page: create_user
             case 'user/create':
-
+                $this->client_controller->pageAddUser();
                 break;
 
-                // default
+            // default
             default:
                 header("Location: ../public/index.php?route=not_found");
                 break;

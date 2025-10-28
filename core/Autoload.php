@@ -14,7 +14,7 @@ class Autoload
         // initialize directory
         $dirs = [];
         // controllers classes
-        if (str_ends_with($class_name, 'Controller')) {
+        if (str_ends_with($class_name, 'Controller') && $class_name !== 'Controller') {
             $dirs[] = '/app/controllers/';
         }
         // database class
