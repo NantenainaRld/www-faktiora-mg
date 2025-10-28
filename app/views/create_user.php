@@ -16,12 +16,12 @@
         <!-- prenoms_utilisateur -->
          <div>
             <label for="prenoms-utilisateur">Prénom(s) : </label>
-            <input type="text">
+            <input type="text" id='prenoms-utilisateur'>
          </div>
          <!-- sexe_utilisateur-->
         <div>
             <label for="sexe-utilisateur">Sexe : </label>
-            <select name="" id="">
+            <select name="" id="sexe-utilisateur">
                 <option value="" disabled selected>Séléctionner</option>
                 <option value="masculin">Masculin</option>
                 <option value="féminin">Féminin</option>
@@ -30,9 +30,9 @@
         <!-- role  -->
          <div>
             <label for="role">Rôle : </label>
-            <input type="radio" value="admin" id="admin" name="sexe-utilisateur">
+            <input type="radio" value="admin" name="sexe-utilisateur">
             <label for="admin">Administrateur</label>
-            <input type="radio" value="caissier" id="caissier" name="sexe-utilisateur">
+            <input type="radio" value="caissier" name="sexe-utilisateur">
             <label for="caissier">Caissier</label>
          </div>
          <!-- email_utilisateur  -->
@@ -43,12 +43,12 @@
           <!-- mdp  -->
            <div>
             <label for="mdp">Mot de passe : </label>
-            <input type="password">
+            <input type="password" id="mdp">
            </div>
            <!-- mdp confirm  -->
             <div>
                 <label for="mdp-confirm">Confirmer le mot de passe : </label>
-                <input type="password" name="" id="">
+                <input type="password" name="" id="mdp-confirm">
             </div>
             <button type="button">Créer</button>
     </form>
