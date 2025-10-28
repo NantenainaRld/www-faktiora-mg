@@ -10,7 +10,7 @@ Autoload::register();
 
 try {
     // Router
-    $route = $_GET['route'] ?? 'not found';
+    $route = $_GET['route'] ?? 'not_found';
     $router = new Router($route);
     $router->run();
 } catch (Exception $e) {

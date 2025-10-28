@@ -25,12 +25,13 @@ class Router
             //----------------------- PAGE --------------------------
 
             // not found
-            case 'not found':
-                require_once __DIR__ . '../app/views/not_found.php';
+            case 'not_found':
+                require_once __DIR__ . '/../app/views/not_found.php';
                 break;
 
                 // default
             default:
+                header("Location: ../public/index.php?route=not_found");
                 break;
         }
     }
