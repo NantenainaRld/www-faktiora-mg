@@ -13,7 +13,7 @@
     - MySQL database
     - PDO for database connection and query (include in PHP)
 
-## Configuration used
+## Configuration used and Browser
     - Ubuntu 24.04.3 LTS
     - 4GB RAM
     - Intel Core i5 (2nd Gen)
