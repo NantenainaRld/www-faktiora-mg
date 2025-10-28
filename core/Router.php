@@ -20,13 +20,17 @@ class Router
     public function run()
     {
         // switch route
-        switch ($route) {
+        switch ($this->route) {
 
             //----------------------- PAGE --------------------------
 
             // not found
             case 'not found':
                 require_once __DIR__ . '../app/views/not_found.php';
+                break;
+
+                // default
+            default:
                 break;
         }
     }
