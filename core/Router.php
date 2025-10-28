@@ -19,7 +19,16 @@ class Router
     // run route
     public function run()
     {
-        $this->route = $_GET['route'] ?? 'not found';
+        // switch route
+        switch ($route) {
+
+            //----------------------- PAGE --------------------------
+
+            // not found
+            case 'not found':
+                require_once __DIR__ . '../app/views/not_found.php';
+                break;
+        }
     }
 
 }
