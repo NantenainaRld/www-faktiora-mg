@@ -12,7 +12,7 @@ class ClientController extends Controller
 
     //---------------------- PAGE ------------------------
 
-    public function pageAddUser()
+    public function addUserPage()
     {
         $this->render('create_user', array('title' => "Création du compte",
         'description' => "Page de création du compte utilisateur"));

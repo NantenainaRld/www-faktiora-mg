@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     // function create_user
     function createUser(){
         // AJAX create_user
-        fetch("")
+        fetch("../index.php?route=user/create_controller")
     }
          // AJAX create_user
         // fetch("../public/index.php?route=user/create_controller", {
