@@ -4,31 +4,31 @@
 class Controller
 {
     // method load model instance
-    public function loadModel(string $modelName)
+    public function loadModel(string $model_name)
     {
         // class exist? not
-        if (!class_exists($modelName)) {
-            throw new exception("Model not found : " . $modelName);
+        if (!class_exists($model_name)) {
+            throw new exception("Model not found : " . $model_name);
         }
         // ?
         else {
             // return object
-            return new $modelName();
+            return new $model_name();
         }
     }
     // method load view
-    public function render(string $viewName, array $data = [])
+    public function render(string $view_name, array $data = [])
     {
         // extract data to variables
         extract($data);
-        $viewFile = ROOT . '/app/views/' . $viewName . '.php';
+        $view_file = ROOT . '/app/views/' . $view_name . '.php';
         // view exist ? not
-        if (!file_exists($viewFile)) {
-            die("View not found : " . $viewFile);
+        if (!file_exists($view_file)) {
+            die("View not found : " . $view_file);
         }
         // ?
         else {
-            require_once $viewFile;
+            require_once $view_file;
         }
     }
 }

@@ -9,17 +9,17 @@ class Autoload
         spl_autoload_register(array(__CLASS__, 'autoload'));
     }
     // Method autoload
-    public static function autoload($className)
+    public static function autoload($class_name)
     {
         // initialize directory
         $dirs = [];
         // controllers classes
-        if (str_ends_with($className, 'Controller')) {
+        if (str_ends_with($class_name, 'Controller')) {
             $dirs[] = '/app/controllers/';
         }
         // database class
         elseif (class_exists('Database')
-            && $className === 'Database') {
+            && $class_name === 'Database') {
             $dirs[] = '/core/';
         }
         // models or core
@@ -34,7 +34,7 @@ class Autoload
         }
         // require all classes files
         foreach ($dirs as $dir) {
-            $file = ROOT . $dir . $className . '.php';
+            $file = ROOT . $dir . $class_name . '.php';
             // file found
             if (file_exists($file)) {
                 require_once $file;
@@ -44,7 +44,7 @@ class Autoload
         }
         // class not found
         if (defined('DEBUG') && DEBUG) {
-            error_log("Autoload : class not found : " . $className);
+            error_log("Autoload : class not found : " . $class_name);
         }
     }
 }
