@@ -15,21 +15,26 @@ class Autoload
         $dirs = [];
         // controllers classes
         if (str_ends_with($className, 'Controller')) {
-            $dirs[] = '/controllers/';
+            $dirs[] = '/app/controllers/';
         }
-        // models or
+        // database class
+        elseif (class_exists('Database')
+            && $className === 'Database') {
+            $dirs[] = '/core/';
+        }
+        // models or core
         else {
-            $dirs[] = '/models/';
+            $dirs[] = '/app/models/';
             $dirs[] = '/core/';
         }
         // ROOT exist ? not
         if (!defined('ROOT')) {
             // config file
-            require_once __DIR . '/../config/config.php';
+            require_once __DIR__ . '/../config/config.php';
         }
         // require all classes files
         foreach ($dirs as $dir) {
-            $file = ROOT .'/app' . $dir . $className . '.php';
+            $file = ROOT . $dir . $className . '.php';
             // file found
             if (file_exists($file)) {
                 require_once $file;
