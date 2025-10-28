@@ -9,6 +9,8 @@ define('DB_PASS', '');
 define('SITE_NAME', 'Gestion de Caisse');
 // For prod or dev
 define('DEBUG', true);
+// ROOT folder
+define('ROOT', dirname(dirname(__FILE__)));
 
 // Function to get a database connection using PDO
 function getConnection()
