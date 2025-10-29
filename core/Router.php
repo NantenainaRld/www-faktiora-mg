@@ -3,41 +3,34 @@
 // class router
 class Router
 {
-    private $route;
+    private $controller;
+    private $action;
 
-    // controller variables
-    private $client_controller;
-
-    public function __construct($route)
+    public function __construct()
     {
-        $this->route = $route;
-
-        // controller initialize
-        $this->client_controller = new ClientController();
+        // get controller name and change to lower_case
+        $this->controller = strtolower($_GET['c'] ?? 'Login');
+        // get action name and change to lower_case
+        $this->action = strtolower($_GET['a'] ?? 'index');
     }
 
     // run route
     public function run()
     {
-        // switch route
-        switch ($this->route) {
-
-            //----------------------- PAGE --------------------------
-
-            // page: not found
-            case 'not_found':
-                require_once __DIR__ . '/../app/views/not_found.php';
-                break;
-                // page: create_user
-            case 'user/create':
-                $this->client_controller->addUserPage();
-                break;
-
-                // default
-            default:
-                header("Location: ../public/index.php?route=not_found");
-                break;
-        }
     }
 
+    // convert controller name
+    private function toPasCalCase()
+    {
+        // words
+        $parts = explode('_', $this->controller);
+        // first word
+        $converted = $parts[0];
+
+        // conert to pascal case
+        for ($i = 1; $i < count($parts); $i++) {
+            $converted .= ucfirst($parts[$i]);
+        }
+        print_r($converted);
+    }
 }

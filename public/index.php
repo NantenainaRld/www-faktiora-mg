@@ -21,14 +21,10 @@ require_once CORE_PATH . '/Autoload.php';
 // Autoload
 Autoload::register();
 
-$test = new Database();
-// // Router
-// try {
-//     $route = $_GET['route'] ?? 'not_found';
-//     $router = new Router($route);
-//     $router->run();
-// } catch (Exception $e) {
-//     if (defined('DEBUG') && DEBUG) {
-//         echo "Error : " . $e->getMessage();
-//     }
-// }
+// Router
+try {
+    $router = new Router();
+    $router->run();
+} catch (Throwable $e) {
+    echo $e->getMessage();
+}
