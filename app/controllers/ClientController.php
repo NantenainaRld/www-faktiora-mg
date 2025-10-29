@@ -7,7 +7,7 @@ class ClientController extends Controller
     public function __construct()
     {
         // initialize model
-        // $this->client_model = new ClientModel();
+        $this->client_model = $this->loadModel('Client');
     }
 
     //---------------------- PAGE ------------------------
