@@ -25,27 +25,14 @@ class Database
         }
     }
     // execute INSERT, DELETE, UPDATE query
-    public function execute($sql, $params = [])
+    public function executeQuery($sql, $params = [])
     {
         try {
             $stm = $this->pdo->prepare($sql);
-            return $stm->execute($params);
+            $stm->execute($params);
+            return ['message' => 'success'];
         } catch (PDOException $e) {
-            $this->handleError($e);
-            return false;
-        }
-    }
-
-    // handle ERRORs in DEV mode
-    public function handleError(PDOException $e)
-    {
-        // error for DEV mod
-        if (defined('DEBUG') && DEBUG === true) {
-            die('SQL error : ' . $e->getMessage());
-        }
-        // error for PROD mod
-        else {
-            die('Une erreur est survenue.');
+            return ['message' => $e->getMessage()];
         }
     }
 }
