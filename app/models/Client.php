@@ -10,11 +10,8 @@ class Client extends Database
 
     public function alefa()
     {
-        try {
-            $this->results = $this->selectQuery("SELECT * FROM produit");
-        } catch (Throwable $e) {
-            die("Error : " . $e->getMessage());
-        }
+        $this->results = $this->selectQuery("SELECT * FROM produit
+             WHERE id_produit = :id", [':id' => "tes"]);
         print_r($this->results);
     }
 }

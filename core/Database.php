@@ -18,9 +18,10 @@ class Database
             $stm = $this->pdo->prepare($sql);
             $stm->execute($params);
 
-            return $stm->fetchAll(PDO::FETCH_ASSOC);
+            $results = $stm->fetchAll(PDO::FETCH_ASSOC);
+            return ['message' => 'success', 'data' => $results];
         } catch (PDOException $e) {
-            return [];
+            return ['message' => $e->getMessage()];
         }
     }
     // execute INSERT, DELETE, UPDATE query
