@@ -9,12 +9,14 @@ ini_set('display_startup_errors', 1);
 define('ROOT_PATH', dirname(__DIR__));
 define('APP_PATH', ROOT_PATH . '/app');
 define('CORE_PATH', ROOT_PATH . '/core');
+define('CONFIG_PATH', ROOT_PATH . '/config');
+define('LIBS_PATH', ROOT_PATH . '/libs');
 define('PUBLIC_PATH', __DIR__);
 
 // charge config file
-require_once __DIR__ . '/../config/config.php';
-// // charge autoload
-// require_once ROOT . '/core/Autoload.php';
+require_once CONFIG_PATH . '/config.php';
+// charge autoload
+require_once CORE_PATH . '/Autoload.php';
 
 // // Autoload
 // Autoload::register();
