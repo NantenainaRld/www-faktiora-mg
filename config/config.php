@@ -1,16 +1,29 @@
 <?php
 
+// DEBUG for prod or dev
+define('DEBUG', true);
+
 // Global Database connection parameters
 define('DB_HOST', '127.0.0.1');
 define('DB_NAME', 'php-cash-management-db');
 define('DB_USER', 'root');
 define('DB_PASS', '');
+
 // Other global parameters
 define('SITE_NAME', 'Gestion de Caisse');
-// For prod or dev
-define('DEBUG', true);
-// ROOT folder
-define('ROOT', dirname(__DIR__));
+
+// dynamic URL
+//-- https or http
+$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
+ === 'on' ? 'https' : 'http';
+//-- site.com
+$host  = $_SERVER['HTTP_HOST'];
+//-- /public/index.php
+$script_dir = dirname($_SERVER['SCRIPT_NAME']);
+//-- /public/
+define('BASE_URL', rtrim($script_dir, '/'));
+//-- https://site.com/
+define('SITE_URL', $protocol . '://' . $host . BASE_URL);
 
 // Function to get a database connection using PDO
 function getConnection()

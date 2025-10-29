@@ -50,10 +50,9 @@
                 <label for="mdp-confirm">Confirmer le mot de passe : </label>
                 <input type="password" name="" id="mdp-confirm">
             </div>
-            <button type="button">Créer</button>
+            <button type="button" id="btn">Créer</button>
     </form>
-
     <!-- script js  -->
-     <script src="../../public"></script>
+     <script src="../public/js/create-user.js"></script>
 </body>
 </html>

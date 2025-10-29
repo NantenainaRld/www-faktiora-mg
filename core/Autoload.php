@@ -34,7 +34,7 @@ class Autoload
         }
         // require all classes files
         foreach ($dirs as $dir) {
-            $file = ROOT . $dir . $class_name . '.php';
+            $file = ROOT_PATH . $dir . $class_name . '.php';
             // file found
             if (file_exists($file)) {
                 require_once $file;
