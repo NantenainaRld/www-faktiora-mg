@@ -7,12 +7,12 @@ class Database
 
     public function __construct()
     {
-        // open connection
+        // open  (config.php)
         $this->pdo = getConnection();
     }
 
     // execute SELECT query and return result
-    public function query($sql, $params = [])
+    protected function query($sql, $params = [])
     {
         try {
             $stm = $this->pdo->prepare($sql);

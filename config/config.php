@@ -39,10 +39,14 @@ function getConnection()
 
         return $pdo;
     } catch (PDOException $e) {
-        if (DEBUG) {
-            die('DB error :' . $e->getMessage());
-        } else {
-            die('Connection error .');
+        //dev error
+        if (!DEBUG) {
+            die("Database connection error : " . $e->getMessage());
+        }
+        //prod error
+        else {
+            echo "Erreur de connection à la base des données, retourner .";
+            exit;
         }
     }
 }
