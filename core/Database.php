@@ -1,8 +1,5 @@
 <?php
 
-// config file
-require_once __DIR__ . '/../config/config.php';
-
 // CLASS database : open connection - execute query
 class Database
 {

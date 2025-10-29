@@ -18,6 +18,7 @@ require_once CONFIG_PATH . '/config.php';
 // charge autoload
 require_once CORE_PATH . '/Autoload.php';
 
+$test = new Database();
 // // Autoload
 // Autoload::register();
 

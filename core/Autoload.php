@@ -15,13 +15,24 @@ class Autoload
 
         //possible paths
         $possible_paths = [
-            APP_PATH . "/controllers/{$class_nae}",
-            APP_PATH . "/models/{$class_name}",
-            CORE_PATH . "/core/{$class_name}"
+            APP_PATH . "/controllers/{$class_nae}.php",
+            APP_PATH . "/models/{$class_name}.php",
+            CORE_PATH . "/{$class_name}.php",
+
         ];
+
+        // foreach paths
+        foreach ($possible_paths as $file) {
+            // file found
+            if (file_exists($file)) {
+                require_once $file;
+                return;
+            }
+        }
         // class not found
         if (defined('DEBUG') && DEBUG) {
             error_log("Autoload : class not found : " . $class_name);
+            throw new Exception("Autoload : class not found : " . $class_name);
         }
     }
 }
