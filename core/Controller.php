@@ -21,12 +21,13 @@ class Controller
     {
         // extract data to variables
         extract($data);
-        $view_file = ROOT . '/app/views/' . $view_name . '.php';
-        // view exist ? not
-        if (!file_exists($view_file)) {
-            die("View not found : " . $view_file);
+        $view_file = APP_PATH . '/views/' . $view_name . '.php';
+        // view not found
+        if (!file_exists($view_file) && DEBUG) {
+            echo "Views not found : " . $view_file;
+            exit;
         }
-        // ?
+        //view found
         else {
             require_once $view_file;
         }
