@@ -12,9 +12,16 @@ class ClientController extends Controller
 
     //---------------------- PAGE ------------------------
 
-    public function addUserPage()
+    //page - add user
+    public function pageAdd()
     {
-        $this->render('create_user', array('title' => "Création du compte",
-        'description' => "Page de création du compte utilisateur"));
+        echo "page add";
+        // $this->render('create_user', array('title' => "Création du compte",
+        // 'description' => "Page de création du compte utilisateur"));
+    }
+    //page - index
+    public function index()
+    {
+        echo "page index";
     }
 }

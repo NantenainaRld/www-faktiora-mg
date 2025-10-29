@@ -17,6 +17,44 @@ class Router
     // run route
     public function run()
     {
+        $this->toPasCalCase();
+        $this->toCamelCase();
+
+        try {
+            //initialize controller
+            $controller = new $this->controller();
+            $action = $this->action;
+
+            //method exist
+            if (method_exists($controller, $action)) {
+                $controller->$action();
+            }
+            //method !exist
+            else {
+                $message = null;
+                //page not found
+                if (str_contains($this->action, 'page')) {
+                    $message = "Erreur : la page demandée n'est pas trouvée .";
+                }
+                //action not found
+                else {
+                    $message = "Erreur : l'action demandée n'est pas trouvée .";
+                }
+                //*********************page errors
+                echo $message;
+            }
+        } catch (Throwable $e) {
+            //error dev
+            if (DEBUG) {
+                echo $e->getMessage() . "<br>" . $e->getFIle()
+                . "<br>Line : " . $e->getLine();
+            }
+            //error prod
+            else {
+                //*********************page errors
+                echo "Une erreur est survenue, retourner à la page d'accuille .";
+            }
+        }
     }
 
     // convert controller name
@@ -31,6 +69,7 @@ class Router
         for ($i = 1; $i < count($parts); $i++) {
             $converted .= ucfirst($parts[$i]);
         }
+        $this->controller = $converted . 'Controller';
     }
 
     //convert action name
@@ -45,5 +84,7 @@ class Router
         for ($i = 1; $i < count($parts); $i++) {
             $converted .= ucfirst($parts[$i]);
         }
+
+        $this->action = $converted;
     }
 }

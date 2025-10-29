@@ -22,9 +22,5 @@ require_once CORE_PATH . '/Autoload.php';
 Autoload::register();
 
 // Router
-try {
-    $router = new Router();
-    $router->run();
-} catch (Throwable $e) {
-    echo $e->getMessage();
-}
+$router = new Router();
+$router->run();
