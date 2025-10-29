@@ -17,7 +17,6 @@ class Router
     // run route
     public function run()
     {
-        $this->toPasCalCase();
     }
 
     // convert controller name
@@ -32,12 +31,19 @@ class Router
         for ($i = 1; $i < count($parts); $i++) {
             $converted .= ucfirst($parts[$i]);
         }
-        echo $converted;
     }
 
     //convert action name
     private function toCamelCase()
     {
+        // words
+        $parts = explode('_', $this->action);
+        // first word
+        $converted = $parts[0];
 
+        // conert to pascal case
+        for ($i = 1; $i < count($parts); $i++) {
+            $converted .= ucfirst($parts[$i]);
+        }
     }
 }
