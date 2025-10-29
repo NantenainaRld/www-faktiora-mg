@@ -8,7 +8,8 @@ class Client extends Database
         parent::__construct();
     }
 
-    public function alefa()
+    //add client
+    public function addClient()
     {
         $this->results = $this->selectQuery("SELECT * FROM produit");
         print_r($this->results);
