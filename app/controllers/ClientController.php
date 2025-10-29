@@ -23,4 +23,9 @@ class ClientController extends Controller
     {
         echo "page index";
     }
+
+    public function test()
+    {
+        $this->client_model->alefa();
+    }
 }

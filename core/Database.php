@@ -12,11 +12,11 @@ class Database
     }
 
     // execute SELECT query and return result
-    protected function query($sql, $params = [])
+    protected function selectQuery($sql, $params = [])
     {
         try {
             $stm = $this->pdo->prepare($sql);
-            $stm->execute();
+            $stm->execute($params);
 
             return $stm->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {

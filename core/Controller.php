@@ -7,6 +7,7 @@ class Controller
     public function loadModel(string $model_name)
     {
         $model = new $model_name();
+        return $model;
     }
     // method load view
     public function render(string $view_name, array $data = [])
