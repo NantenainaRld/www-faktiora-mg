@@ -18,10 +18,10 @@ require_once CONFIG_PATH . '/config.php';
 // charge autoload
 require_once CORE_PATH . '/Autoload.php';
 
-$test = new Database();
-// // Autoload
-// Autoload::register();
+// Autoload
+Autoload::register();
 
+$test = new Database();
 // // Router
 // try {
 //     $route = $_GET['route'] ?? 'not_found';
