@@ -26,7 +26,10 @@ class UserController extends Controller
         echo "page index";
     }
     //page - user dashboard
-    public function pageUser() {}
+    public function pageUser()
+    {
+        $this->render('user_dashboard', ['title' => 'Gestion des utilisateurs']);
+    }
 
     //---------------------ACTION------------------------
 

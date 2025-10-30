@@ -9,7 +9,7 @@
     <script>
         const SITE_URL = "<?= SITE_URL ?>";
     </script>
-    user <!-- helper js  -->
+    <!-- helper js  -->
     <script src="<?= SITE_URL ?>/js/helper.js"></script>
 </head>
 
