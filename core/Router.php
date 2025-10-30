@@ -3,15 +3,23 @@
 // class router
 class Router
 {
+    private $url;
     private $controller;
     private $action;
 
     public function __construct()
     {
-        // get controller name and change to lower_case
-        $this->controller = strtolower($_GET['c'] ?? 'Login');
-        // get action name and change to lower_case
-        $this->action = strtolower($_GET['a'] ?? 'index');
+        $url = $_GET['url'] ?? 'login';
+
+        //remove '/' begin and after
+        $url = trim($url, '/');
+        //explode url
+        $parts = $url ? explode('/', $url) : [];
+
+        //controller
+        $this->controller = $parts[0];
+        //action
+        $this->action = $parts[1] ?? 'index';
     }
 
     // run route
@@ -20,39 +28,49 @@ class Router
         $this->toPasCalCase();
         $this->toCamelCase();
 
-        try {
-            //initialize controller
-            $controller = new $this->controller();
-            $action = $this->action;
+        //page error
+        if ($this->controller === 'Error') {
+            require_once APP_PATH . '/views/error.php';
+        }
+        //no error
+        else {
+            try {
+                $this->controller .= 'Controller';
+                //initialize controller
+                $controller = new $this->controller();
+                $action = $this->action;
 
-            //method exist
-            if (method_exists($controller, $action)) {
-                $controller->$action();
-            }
-            //method !exist
-            else {
-                $message = null;
-                //page not found
-                if (str_contains($this->action, 'page')) {
-                    $message = "Erreur : la page demandée n'est pas trouvée .";
+                //method exist
+                if (method_exists($controller, $action)) {
+                    $controller->$action();
                 }
-                //action not found
+                //method !exist
                 else {
-                    $message = "Erreur : l'action demandée n'est pas trouvée .";
+                    $message = null;
+                    //page not found
+                    if (str_contains($this->action, 'page')) {
+                        $message = "Erreur : la page demandée n'est pas trouvée .";
+
+                    }
+                    //action not found
+                    else {
+                        $message = "Erreur : l'action demandée n'est pas trouvée .";
+                    }
+
+                    //redirect to error page
+                    header('Location: ' . SITE_URL . '/error?message=' . $message);
                 }
-                //*********************page errors
-                echo $message;
-            }
-        } catch (Throwable $e) {
-            //error dev
-            if (DEBUG) {
-                echo $e->getMessage() . "<br>" . $e->getFIle()
-                . "<br>Line : " . $e->getLine();
-            }
-            //error prod
-            else {
-                //*********************page errors
-                echo "Une erreur est survenue, retourner à la page d'accuille .";
+            } catch (Throwable $e) {
+                //error dev
+                if (DEBUG) {
+                    echo $e->getMessage() . "<br>" . $e->getFIle()
+                    . "<br>Line : " . $e->getLine();
+                }
+                //error prod
+                else {
+                    //*********************page errors
+                    echo "Une erreur est survenue, retourne .";
+                }
             }
         }
     }
@@ -65,11 +83,11 @@ class Router
         // first word
         $converted = ucfirst($parts[0]);
 
-        // conert to pascal case
+        // convert to pascal case
         for ($i = 1; $i < count($parts); $i++) {
             $converted .= ucfirst($parts[$i]);
         }
-        $this->controller = $converted . 'Controller';
+        $this->controller = $converted;
     }
 
     //convert action name

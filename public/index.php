@@ -19,12 +19,11 @@ require_once CONFIG_PATH . '/config.php';
 require_once CORE_PATH . '/Autoload.php';
 
 // Autoload
-// Autoload::register();
+Autoload::register();
 
-// // Router
-// $router = new Router();
-// $router->run();
-
+// Router
+$router = new Router();
+$router->run();
 
 // //get url request
 // $request_uri = $_SERVER['REQUEST_URI'];
@@ -37,5 +36,3 @@ require_once CORE_PATH . '/Autoload.php';
 // echo BASE_URL . '<br>';
 // echo SITE_URL . '<br>';
 // echo str_replace(BASE_URL, "", $path);
-
-print_r($_GET['url']);
