@@ -1,8 +1,3 @@
-//asset
-function asset(path) {
-  return BASE_URL + path;
-}
-
 //api request
 async function apiRequest(url, options = {}) {
   url = SITE_URL + url;

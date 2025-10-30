@@ -14,25 +14,14 @@ class Database
     // execute SELECT query and return result
     protected function selectQuery($sql, $params = [])
     {
-        try {
-            $stm = $this->pdo->prepare($sql);
-            $stm->execute($params);
-
-            $results = $stm->fetchAll(PDO::FETCH_ASSOC);
-            return ['message' => 'success', 'data' => $results];
-        } catch (PDOException $e) {
-            return ['message' => $e->getMessage()];
-        }
+        $stm = $this->pdo->prepare($sql);
+        $stm->execute($params);
+        return $results = $stm->fetchAll(PDO::FETCH_ASSOC);
     }
     // execute INSERT, DELETE, UPDATE query
     public function executeQuery($sql, $params = [])
     {
-        try {
-            $stm = $this->pdo->prepare($sql);
-            $stm->execute($params);
-            return ['message' => 'success'];
-        } catch (PDOException $e) {
-            return ['message' => $e->getMessage()];
-        }
+        $stm = $this->pdo->prepare($sql);
+        $stm->execute($params);
     }
 }

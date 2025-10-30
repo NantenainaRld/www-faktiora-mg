@@ -15,11 +15,47 @@ document.addEventListener("DOMContentLoaded", () => {
   const mdpConfirm = document.getElementById("mdp-confirm");
 
   //------------------ FUNCTION --------------------
+
   // function create_user
-  function createUser(nomU, prenomsU, sexeU, emailU, roleU, mdpU, mdpConfirmU) {
+  async function addUser(
+    nomU,
+    prenomsU,
+    sexeU,
+    roleU,
+    emailU,
+    mdpU,
+    mdpConfirmU
+  ) {
     try {
+      const response = await apiRequest("/user/add_user", {
+        method: "POST",
+        body: {
+          nom_utilisateur: nomU,
+          prenoms_utilisateur: prenomsU,
+          sexe_utilisateur: sexeU,
+          role: roleU,
+          email_utilisateur: emailU,
+          mdp: mdpU,
+          mdpConfirm: mdpConfirmU,
+        },
+      });
+      console.log(response);
     } catch (Error) {
       console.log("Error : ".Error);
     }
   }
+  //--------------------------------EVENTS-------------------
+  //--btn-add-user
+  const btnAddUser = document.getElementById("btn-add-user");
+  btnAddUser.addEventListener("click", () => {
+    addUser(
+      "Anarana",
+      "fanampipny",
+      "féminin",
+      "admin",
+      "ema@a.b",
+      "mdpsss",
+      "mdpsss"
+    );
+  });
 });

@@ -8,10 +8,9 @@
     <!-- JS base URL -->
     <script>
         const SITE_URL = "<?= SITE_URL ?>";
-        const BASE_URL = "<?= BASE_URL ?>";
     </script>
     <!-- helper js  -->
-    <script src="<?= BASE_URL ?>/js/helper.js"></script>
+    <script src="<?= SITE_URL ?>/js/helper.js"></script>
 </head>
 
 <body>
@@ -63,7 +62,7 @@
         <button type="button" id="btn-add-user">Créer</button>
     </form>
     <!-- script js  -->
-    <script src="<?= BASE_URL ?>/js/create-user.js"></script>
+    <script src="<?= SITE_URL ?>/js/create-user.js"></script>
 </body>
 
 </html>

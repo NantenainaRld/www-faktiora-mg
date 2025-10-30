@@ -15,7 +15,7 @@ define('SITE_NAME', 'Gestion de Caisse');
 // dynamic URL
 //-- https or http
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']
- === 'on' ? 'https' : 'http';
+    === 'on' ? 'https' : 'http';
 //-- site.com
 $host  = $_SERVER['HTTP_HOST'];
 //-- /public/index.php
@@ -31,8 +31,8 @@ function getConnection()
     try {
         // data source name
         $dsn = 'mysql:host='
-        . DB_HOST .';dbname=' . DB_NAME
-        . ';charset=utf8';
+            . DB_HOST . ';dbname=' . DB_NAME
+            . ';charset=utf8';
         // pdo instance
         $pdo = new PDO($dsn, DB_USER, DB_PASS);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
