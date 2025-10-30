@@ -9,7 +9,7 @@ class User extends Database
         parent::__construct();
     }
 
-    //add client
+    //add user
     public function addUser($json)
     {
         //response

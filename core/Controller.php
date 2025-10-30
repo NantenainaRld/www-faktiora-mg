@@ -16,9 +16,17 @@ class Controller
         extract($data);
         $view_file = APP_PATH . '/views/' . $view_name . '.php';
         // view not found
-        if (!file_exists($view_file) && DEBUG) {
-            echo "Views not found : " . $view_file;
-            exit;
+        if (!file_exists($view_file)) {
+            //debug error
+            if (DEBUG) {
+                echo "View not found : " . $view_file;
+                exit;
+            }
+            //prod error
+            else {
+                header('Location: ' . SITE_URL . '/error');
+                exit;
+            }
         }
         //view found
         else {
