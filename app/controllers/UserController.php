@@ -1,13 +1,13 @@
 <?php
 
 // class client controller
-class ClientController extends Controller
+class UserController extends Controller
 {
-    private $client_model;
+    private $user_model;
     public function __construct()
     {
         // initialize model
-        $this->client_model = $this->loadModel('Client');
+        $this->user_model = $this->loadModel('User');
     }
 
     //---------------------- PAGE ------------------------
@@ -24,8 +24,16 @@ class ClientController extends Controller
         echo "page index";
     }
 
-    public function test()
+    //---------------------ACTION------------------------
+
+    //action - add user
+    public function addUser()
     {
-        $this->client_model->alefa();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            header("Content-Type: application/json");
+            // $response = null;
+            // $json = json_decode(file_get_contents("php://input"), true);
+            echo json_encode("ssss");
+        }
     }
 }

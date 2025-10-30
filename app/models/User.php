@@ -1,6 +1,6 @@
 <?php
 
-class Client extends Database
+class User extends Database
 {
     private $results = [];
     public function __construct()
@@ -9,7 +9,7 @@ class Client extends Database
     }
 
     //add client
-    public function addClient()
+    public function addUser()
     {
         $this->results = $this->selectQuery("SELECT * FROM produit");
         print_r($this->results);

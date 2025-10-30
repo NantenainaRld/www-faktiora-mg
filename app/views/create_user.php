@@ -4,6 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?=$title?></title>
+    <!-- JS base URL -->
+     <script>
+        const SITE_URL = "<?=SITE_URL?>";
+        const BASE_URL = "<?=BASE_URL?>";
+
+        //asset
+        function asset(path){
+            return BASE_URL  + path;
+        }
+        //api
+        function apiUrl(api){
+            return SITE_URL + api;
+        }
+     </script>
 </head>
 <body>
     <h2>Création du compte</h2>
@@ -38,7 +52,7 @@
          <!-- email_utilisateur  -->
           <div>
             <label for="email-utilisateur">Email : </label>
-            <input type="email">
+            <input type="email" id="email-utilisateur">
           </div>
           <!-- mdp  -->
            <div>
@@ -50,9 +64,9 @@
                 <label for="mdp-confirm">Confirmer le mot de passe : </label>
                 <input type="password" name="" id="mdp-confirm">
             </div>
-            <button type="button" id="btn">Créer</button>
+            <button type="button" id="btn-add-user">Créer</button>
     </form>
     <!-- script js  -->
-     <script src="../public/js/create-user.js"></script>
+     <script src="<?=BASE_URL?>/js/create-user.js"></script>
 </body>
 </html>
