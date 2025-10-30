@@ -14,7 +14,7 @@ class LoginController extends Controller
     public function index()
     {
         $this->render('login', array(
-            'title' => "Connection",
+            'title' => "Connexion",
             'description' => "Page de connection"
         ));
     }
