@@ -27,10 +27,10 @@
             <label for="mdp">Mot de passe : </label>
             <input type="password" id="mdp">
         </div>
-        <button type="button" id="btn-login">Connecter</button>
+        <button type="button" id="btn-login">Se connecter</button>
     </form>
     <!-- script js  -->
-    <!-- <script src="<?= SITE_URL ?>/js/create-user.js"></script> -->
+    <script src="<?= SITE_URL ?>/js/login.js"></script>
 </body>
 
 </html>
