@@ -23,7 +23,7 @@ $script_dir = dirname($_SERVER['SCRIPT_NAME']);
 //-- /public/
 define('BASE_URL', rtrim($script_dir, '/'));
 //-- https://site.com/
-define('SITE_URL', $protocol . '://' . $host . BASE_URL);
+define('SITE_URL', $protocol . '://' . $host);
 
 // Function to get a database connection using PDO
 function getConnection()
