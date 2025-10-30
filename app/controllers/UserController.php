@@ -131,6 +131,12 @@ class UserController extends Controller
             echo json_encode($response);
         }
     }
+    //action - list user
+    public function listUser()
+    {
+        header('Content-Type: application/json');
+        return;
+    }
 
     //---------------------PRIVATE FUNCTION---------------------
 }

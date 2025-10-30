@@ -145,6 +145,8 @@ class User extends Database
         return $response;
     }
 
+    //list user
+
     //------------------PRIVATE FUNCTION------------------
 
     //generate id_utilisateur
