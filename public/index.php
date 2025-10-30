@@ -19,8 +19,23 @@ require_once CONFIG_PATH . '/config.php';
 require_once CORE_PATH . '/Autoload.php';
 
 // Autoload
-Autoload::register();
+// Autoload::register();
 
-// Router
-$router = new Router();
-$router->run();
+// // Router
+// $router = new Router();
+// $router->run();
+
+
+// //get url request
+// $request_uri = $_SERVER['REQUEST_URI'];
+// //path , remove ?
+// $path = parse_url($request_uri, PHP_URL_PATH);
+// //remove '/' begin and after
+// $path  = trim($path, '/');
+
+// echo $path . '<br>';
+// echo BASE_URL . '<br>';
+// echo SITE_URL . '<br>';
+// echo str_replace(BASE_URL, "", $path);
+
+print_r($_GET['url']);
