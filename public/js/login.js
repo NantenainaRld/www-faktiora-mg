@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const responseAddUser = await apiRequest("/login/login_user", {
         method: "POST",
         body: {
-          login: "test",
-          mdp: "mdp",
+          login: "test@a.b",
+          mdp: "mdp123",
         },
       });
       console.log(responseAddUser);

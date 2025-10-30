@@ -29,9 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
           prenoms_utilisateur: "fanampipny",
           sexe_utilisateur: "féminin",
           role: "admin",
-          email_utilisateur: "esa@a.com",
-          mdp: "mdpsss",
-          mdpConfirm: "mdpsss",
+          email_utilisateur: "test@a.b",
+          mdp: "mdp123",
+          mdpConfirm: "mdp123",
         },
       });
       console.log(responseAddUser);

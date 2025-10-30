@@ -83,6 +83,67 @@ class User extends Database
         }
     }
 
+    //login user
+    public function loginUser($json)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+        try {
+            //get password
+            $response = $this->selectQuery(
+                "SELECT mdp, id_utilisateur FROM utilisateur
+         WHERE email_utilisateur = :email OR id_utilisateur = :id",
+                [
+                    'email' => $json['login'],
+                    'id' => $json['login']
+                ]
+            );
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //success
+            else {
+                //account not exist
+                if (count($response['data']) <= 0) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => "Compte avec l'identifiant/email <b>{$json['login']}</b> n'existe pas ."
+                    ];
+                }
+                //account existé
+                else {
+                    //password incorrect
+                    if (!password_verify(
+                        $json['mdp'],
+                        $response['data'][0]['mdp']
+                    )) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => 'Adresse email/identifiant ou mot de passe incorrect .'
+                        ];
+                    }
+                    //password correct
+                    else {
+                        //session
+                        $_SESSION['id_utilisateur'] =
+                            $response['data'][0]['id_utilisateur'];
+                        $response['message'] = "Loged in";
+                    }
+                }
+            }
+        } catch (Throwable $e) {
+            $response = [
+                'message_type' => 'error',
+                'message' => 'Error : ' . $e->getMessage()
+            ];
+        }
+
+        return $response;
+    }
 
     //------------------PRIVATE FUNCTION------------------
 
