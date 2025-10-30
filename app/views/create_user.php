@@ -8,16 +8,9 @@
      <script>
         const SITE_URL = "<?=SITE_URL?>";
         const BASE_URL = "<?=BASE_URL?>";
-
-        //asset
-        function asset(path){
-            return BASE_URL  + path;
-        }
-        //api
-        function apiUrl(api){
-            return SITE_URL + api;
-        }
      </script>
+     <!-- helper js  -->
+      <script src="<?=BASE_URL?>/js/helper.js"></script>
 </head>
 <body>
     <h2>Création du compte</h2>
