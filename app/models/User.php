@@ -27,40 +27,58 @@ class User extends Database
             }
             //success
             else {
-                //passsword hash
-                $json['mdp'] = password_hash($json['mdp'], PASSWORD_DEFAULT);
+                //email exist ?
+                $emailExist = $this->isEmailExist($json['email_utilisateur']);
+                //error
+                if ($emailExist['message_type'] === 'error') {
+                    return $emailExist;
+                }
+                //success
+                else {
+                    //found
+                    if ($emailExist['message'] === 'found') {
+                        return $response = [
+                            'message_type' => 'invalid',
+                            'message' => 'Cette adresse <b>email</b> est déjà utilisée .'
+                        ];
+                    }
+                    //not found
+                    else {
+                        //passsword hash
+                        $json['mdp'] = password_hash($json['mdp'], PASSWORD_DEFAULT);
 
-                $response = $this->executeQuery(
-                    "INSERT INTO utilisateur 
+                        $response = $this->executeQuery(
+                            "INSERT INTO utilisateur 
                     (id_utilisateur, nom_utilisateur, prenoms_utilisateur, sexe_utilisateur,
                     email_utilisateur, role, mdp)
                 VALUES (:id, :nom, :prenoms, :sexe, :email, :role, :mdp)",
-                    [
-                        'id' => $this->id_utilisateur,
-                        'nom' => $json['nom_utilisateur'],
-                        'prenoms' => $json['prenoms_utilisateur'],
-                        'sexe' => $json['sexe_utilisateur'],
-                        'email' => $json['email_utilisateur'],
-                        'role' => $json['role'],
-                        'mdp' => $json['mdp']
-                    ]
-                );
+                            [
+                                'id' => $this->id_utilisateur,
+                                'nom' => $json['nom_utilisateur'],
+                                'prenoms' => $json['prenoms_utilisateur'],
+                                'sexe' => $json['sexe_utilisateur'],
+                                'email' => $json['email_utilisateur'],
+                                'role' => $json['role'],
+                                'mdp' => $json['mdp']
+                            ]
+                        );
 
-                //error
-                if ($response['message_type'] === 'error') {
-                    return $response;
-                } else {
-                    return $response = [
-                        'message_type' => 'success',
-                        'message' => 'Utilisateur créé avec succès .'
-                    ];
+                        //error
+                        if ($response['message_type'] === 'error') {
+                            return $response;
+                        } else {
+                            return $response = [
+                                'message_type' => 'success',
+                                'message' => 'Utilisateur créé avec succès .'
+                            ];
+                        }
+                    }
                 }
             }
-            // $response['message'] = $this->id_utilisateur;
         } catch (Throwable $e) {
             return $response = [
                 'message_type' => 'error',
-                'message' => 'Error' . $e->getMessage()
+                'message' => 'Error addUser : ' . $e->getMessage()
             ];
         }
     }
@@ -71,6 +89,11 @@ class User extends Database
     //generate id_utilisateur
     private function generateIdUser()
     {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
         //first id_utilisateur
         $this->id_utilisateur = 'U' .
             strval(sprintf("%06d", mt_rand(0, 999999))) .
@@ -84,7 +107,7 @@ class User extends Database
         try {
             //sql
             $sql = null;
-            $find = true;
+            $found = true;
             do {
                 $sql = $this->selectQuery("SELECT id_utilisateur FROM 
             utilisateur WHERE id_utilisateur = :id", ['id' =>
@@ -109,10 +132,10 @@ class User extends Database
                     }
                     //not found
                     else {
-                        $find = false;
+                        $found = false;
                     }
                 }
-            } while ($find);
+            } while ($found);
         } catch (Throwable $e) {
             $response = [
                 'message_type' => 'error',
@@ -127,37 +150,35 @@ class User extends Database
     {
         $response = [
             'message_type' => 'success',
-            'message' => 'success'
+            'message' => 'not found'
         ];
 
         try {
             //sql
             $sql = null;
-            $find = true;
-            do {
-                $sql = $this->selectQuery("SELECT email_utilisateur FROM 
+            $sql = $this->selectQuery("SELECT email_utilisateur FROM 
             utilisateur WHERE email_utilisateur = :email", ['email' => $email_utilisateur]);
-                //error
-                if ($sql['message_type'] === 'error') {
-                    $response = $sql;
-                    break;
+            //error
+            if ($sql['message_type'] === 'error') {
+                return $sql;
+            }
+            //data
+            else {
+                //found
+                if (count($sql['data'])  >= 1) {
+                    $response['message'] = 'found';
+                    return $response;
                 }
-                //data
+                //not found
                 else {
-                    //found
-                    if (count($sql['data'])  >= 1) {
-                        $response['message'] = 'found';
-                        break;
-                    }
+                    return $response;
                 }
-            } while ($find);
+            }
         } catch (Throwable $e) {
-            $response = [
+            return $response = [
                 'message_type' => 'error',
                 'message' => $e->getMessage()
             ];
         }
-
-        return $response;
     }
 }
