@@ -16,46 +16,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //------------------ FUNCTION --------------------
 
-  // function create_user
-  async function addUser(
-    nomU,
-    prenomsU,
-    sexeU,
-    roleU,
-    emailU,
-    mdpU,
-    mdpConfirmU
-  ) {
-    try {
-      const response = await apiRequest("/user/add_user", {
-        method: "POST",
-        body: {
-          nom_utilisateur: nomU,
-          prenoms_utilisateur: prenomsU,
-          sexe_utilisateur: sexeU,
-          role: roleU,
-          email_utilisateur: emailU,
-          mdp: mdpU,
-          mdpConfirm: mdpConfirmU,
-        },
-      });
-      console.log(response);
-    } catch (Error) {
-      console.log("Error : ".Error);
-    }
-  }
   //--------------------------------EVENTS-------------------
   //--btn-add-user
   const btnAddUser = document.getElementById("btn-add-user");
-  btnAddUser.addEventListener("click", () => {
-    // addUser(
-    //   "Anarana",
-    //   "fanampipny",
-    //   "féminin",
-    //   "admin",
-    //   "esa@a.com",
-    //   "mdpsss",
-    //   "mdpsss"
-    // );
+  btnAddUser.addEventListener("click", async () => {
+    try {
+      //==call api add user
+      const responseAddUser = await apiRequest("/user/add_user", {
+        method: "POST",
+        body: {
+          nom_utilisateur: "Anarana",
+          prenoms_utilisateur: "fanampipny",
+          sexe_utilisateur: "féminin",
+          role: "admin",
+          email_utilisateur: "esa@a.com",
+          mdp: "mdpsss",
+          mdpConfirm: "mdpsss",
+        },
+      });
+      console.log(responseAddUser);
+    } catch (Error) {
+      console.log("Error : " + Error);
+    }
   });
 });
