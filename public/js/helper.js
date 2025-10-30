@@ -7,6 +7,12 @@ async function apiRequest(url, options = {}) {
       headers: { "Content-Type": "application/json" },
       body: options.body ? JSON.stringify(options.body) : null,
     });
+
+    //redirect to error page
+    if (response.redirected) {
+      window.location.href = response.url;
+      return;
+    }
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     //return data from api
     return await response.json();
