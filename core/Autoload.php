@@ -34,5 +34,9 @@ class Autoload
             error_log("Autoload : class not found : " . $class_name);
             throw new Exception("Autoload : class not found : " . $class_name);
         }
+        //page error
+        else {
+            header('Location: ' . SITE_URL . '/error?message="Une erreur est survenue');
+        }
     }
 }
