@@ -23,7 +23,14 @@ class UserController extends Controller
     //page - index
     public function index()
     {
-        echo "page index";
+        //loged
+        if (isset($_SESSION['id_utilisateur'])) {
+            echo "page index";
+        }
+        //not loged
+        else {
+            header("Location: " . SITE_URL . "/login");
+        }
     }
 
     //---------------------ACTION------------------------
