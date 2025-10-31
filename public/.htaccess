@@ -1,0 +1,10 @@
+RewriteEngine ON
+
+RewriteCond %{REQUEST_URI} !index\.php$
+
+# Show reals files 
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d 
+
+# Redirect to indexe.php?url=
+RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]
