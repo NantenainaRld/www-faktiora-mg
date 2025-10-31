@@ -48,14 +48,14 @@ document.addEventListener("DOMContentLoaded", () => {
   //--btn-add-user
   const btnAddUser = document.getElementById("btn-add-user");
   btnAddUser.addEventListener("click", () => {
-    addUser(
-      "Anarana",
-      "fanampipny",
-      "féminin",
-      "admin",
-      "esa@a.com",
-      "mdpsss",
-      "mdpsss"
-    );
+    // addUser(
+    //   "Anarana",
+    //   "fanampipny",
+    //   "féminin",
+    //   "admin",
+    //   "esa@a.com",
+    //   "mdpsss",
+    //   "mdpsss"
+    // );
   });
 });
