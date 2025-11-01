@@ -135,7 +135,8 @@ class UserController extends Controller
     public function listUser()
     {
         header('Content-Type: application/json');
-        return;
+
+        echo json_encode($this->user_model->listUser());
     }
 
     //---------------------PRIVATE FUNCTION---------------------

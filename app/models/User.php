@@ -9,6 +9,7 @@ class User extends Database
         parent::__construct();
     }
 
+    //==================  PUBLIC FUNCTION ====================
     //add user
     public function addUser($json)
     {
@@ -146,8 +147,30 @@ class User extends Database
     }
 
     //list user
+    public function listUser()
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
 
-    //------------------PRIVATE FUNCTION------------------
+        try {
+            $response =
+                //error or success
+                $this->selectQuery("SELECT id_utilisateur,
+              nom_utilisateur, prenoms_utilisateur,sexe_utilisateur,
+               email_utilisateur, role FROM utilisateur;");
+        } catch (Throwable $e) {
+            $response = [
+                'message_type' => 'error',
+                'message' => 'Error : ' . $e->getMessage()
+            ];
+        }
+
+        return $response;
+    }
+
+    //====================== PRIVATE FUNCTION ====================
 
     //generate id_utilisateur
     private function generateIdUser()
