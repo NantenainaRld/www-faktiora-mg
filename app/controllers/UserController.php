@@ -138,6 +138,13 @@ class UserController extends Controller
 
         echo json_encode($this->user_model->listUser());
     }
+    //action - nb user
+    public function nbUser()
+    {
+        header('Content-Type: application/json');
+
+        echo json_encode($this->user_model->nbUser());
+    }
 
     //---------------------PRIVATE FUNCTION---------------------
 }

@@ -169,6 +169,28 @@ class User extends Database
 
         return $response;
     }
+    //nb user
+    public function nbUser()
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+            $response =
+                //error or success
+                $this->selectQuery("SELECT 
+                COUNT(DISTINCT id_utilisateur) AS nb_utilisateur FROM utilisateur;");
+        } catch (Throwable $e) {
+            $response = [
+                'message_type' => 'error',
+                'message' => 'Error : ' . $e->getMessage()
+            ];
+        }
+
+        return $response;
+    }
 
     //====================== PRIVATE FUNCTION ====================
 
