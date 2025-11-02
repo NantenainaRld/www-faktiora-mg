@@ -15,6 +15,7 @@
 
 <body>
     <?= "user dashboard"; ?>
+    <button id='test'>Test</button>
     <!-- script js -->
     <script src="<?= SITE_URL ?>/js/user-dashboard.js"></script>
 </body>

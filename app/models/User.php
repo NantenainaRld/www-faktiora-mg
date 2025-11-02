@@ -157,9 +157,18 @@ class User extends Database
         try {
             $response =
                 //error or success
-                $this->selectQuery("SELECT id_utilisateur,
-              nom_utilisateur, prenoms_utilisateur,sexe_utilisateur,
-               email_utilisateur, role FROM utilisateur;");
+                $this->selectQuery("SELECT
+    u.id_utilisateur,
+    u.nom_utilisateur,
+    u.prenoms_utilisateur,
+    u.sexe_utilisateur,
+    u.email_utilisateur,
+    u.role,
+    c.num_caisse
+FROM
+    utilisateur u
+LEFT JOIN caisse c ON
+    u.id_utilisateur = c.id_utilisateur;");
         } catch (Throwable $e) {
             $response = [
                 'message_type' => 'error',
@@ -180,8 +189,75 @@ class User extends Database
         try {
             $response =
                 //error or success
-                $this->selectQuery("SELECT 
-                COUNT(DISTINCT id_utilisateur) AS nb_utilisateur FROM utilisateur;");
+                $this->selectQuery("SELECT
+    COUNT(u.id_utilisateur) AS nb_utilisateur,
+    COUNT( u1.role) AS nb_admin,
+    COUNT(u2.role) AS nb_caissier
+FROM
+    utilisateur u
+LEFT JOIN utilisateur u1 ON
+    u1.id_utilisateur = u.id_utilisateur AND u1.role = 'admin'
+LEFT JOIN utilisateur u2 ON
+    u2.id_utilisateur = u.id_utilisateur AND u2.role = 'caissier';");
+        } catch (Throwable $e) {
+            $response = [
+                'message_type' => 'error',
+                'message' => 'Error : ' . $e->getMessage()
+            ];
+        }
+
+        return $response;
+    }
+    //transactions user
+    public function transactionsUser($id)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+            //error or success
+            $response = $this->selectQuery("SELECT
+    COUNT(f.num_facture) AS nb_factures,
+    COUNT(ae.id_entree) AS nb_ae,
+    COUNT(s.id_sortie) AS nb_sorties,
+    (
+        COUNT(ae.id_entree) + COUNT(f.num_facture)
+    ) AS nb_entrees,
+    (
+        COUNT(ae.id_entree) + COUNT(f.num_facture) + COUNT(s.id_sortie)
+    ) AS nb_transactions,
+    (COUNT(DISTINCT f.id_client)) AS nb_clients,
+    COALESCE(
+        SUM(ae.montant_entree) + SUM(s.montant_sortie) + SUM(f.montant_facture), 0
+    ) AS total_transactions,
+    COALESCE(SUM(f.montant_facture),
+    0) AS total_factures,
+    COALESCE(SUM(ae.montant_entree),
+    0) AS total_ae,
+    COALESCE(SUM(s.montant_sortie),
+    0) AS total_sorties,
+    COALESCE(
+        SUM(ae.montant_entree) + SUM(f.montant_facture),
+        0
+    ) AS total_entrees
+FROM
+    utilisateur u
+LEFT JOIN caisse c ON
+    c.id_utilisateur = u.id_utilisateur
+LEFT JOIN facture f ON
+    f.id_utilisateur = u.id_utilisateur AND DATE(f.date_facture) = CURDATE()
+LEFT JOIN autre_entree ae ON
+    ae.id_utilisateur = u.id_utilisateur AND DATE(ae.date_entree) = CURDATE()
+LEFT JOIN sortie s ON
+    s.id_utilisateur = u.id_utilisateur AND DATE(s.date_sortie) = CURDATE()
+WHERE
+    u.id_utilisateur = :id
+GROUP BY
+    u.id_utilisateur
+ORDER BY
+    total_transactions;", ['id' => $id]);
         } catch (Throwable $e) {
             $response = [
                 'message_type' => 'error',

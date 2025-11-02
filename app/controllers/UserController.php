@@ -145,6 +145,14 @@ class UserController extends Controller
 
         echo json_encode($this->user_model->nbUser());
     }
+    //action - transactions user
+    public function transactionsUser()
+    {
+        header('Content-Type: application/json');
+        $id = trim($_GET['id']);
+
+        echo json_encode($this->user_model->transactionsUser($id));
+    }
 
     //---------------------PRIVATE FUNCTION---------------------
 }
