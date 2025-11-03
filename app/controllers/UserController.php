@@ -131,20 +131,7 @@ class UserController extends Controller
             echo json_encode($response);
         }
     }
-    //action - list user
-    public function defaultListUser()
-    {
-        header('Content-Type: application/json');
 
-        echo json_encode($this->user_model->defaultListUser());
-    }
-    //action - nb user
-    public function defaultNbUser()
-    {
-        header('Content-Type: application/json');
-
-        echo json_encode($this->user_model->defaultNbUser());
-    }
     //action - filter user
     public function filterUser()
     {
@@ -169,9 +156,9 @@ class UserController extends Controller
         ];
         $per_default = ['day', 'week', 'month', 'year'];
         //__order_name
-        $order_name = $_GET['order_name'] ?? 'asc';
+        $order_name = $_GET['order_name'] ?? 'none';
         $order_name = strtolower(trim($order_name));
-        $order_name = in_array($order_name, $order_default, true) ? $order_name : 'asc';
+        $order_name = in_array($order_name, $order_default, true) ? $order_name : 'none';
         //__search_user
         $search_user = $_GET['search_user'] ?? '';
         $search_user = trim($search_user);
@@ -184,13 +171,13 @@ class UserController extends Controller
         $sexe = strtolower(trim($sexe));
         $sexe = in_array($sexe, $sexe_default, true) ? $sexe : 'all';
         //__by
-        $by = $_GET['by'] ?? 'all';
+        $by = $_GET['by'] ?? 'none';
         $by = strtolower(trim($by));
-        $by = in_array($by, $by_default, true) ? $by : 'all';
+        $by = in_array($by, $by_default, true) ? $by : 'none';
         //__order_by
-        $order_by = $_GET['order_by'] ?? 'desc';
+        $order_by = $_GET['order_by'] ?? 'none';
         $order_by = strtolower(trim($order_by));
-        $order_by = in_array($order_by, $order_default, true) ? $order_by : 'desc';
+        $order_by = in_array($order_by, $order_default, true) ? $order_by : 'none';
         //__date_from
         $from = $_GET['from'] ?? '';
         $from = strtolower(trim($from));
@@ -198,28 +185,33 @@ class UserController extends Controller
         $to = $_GET['to'] ?? '';
         $to = strtolower(trim($to));
         //__per
-        $per = $_GET['per'] ?? 'all';
+        $per = $_GET['per'] ?? 'none';
         $per = strtolower(trim($per));
-        $per = in_array($per, $per_default, true) ? $per : 'all';
-        //__order_date
-        $order_date = $_GET['order_date'] ?? 'desc';
-        $order_date =   strtolower(trim($order_date));
-        $order_date = in_array($order_date, $order_default, true) ? $order_date : 'desc';
+        $per = in_array($per, $per_default, true) ? $per : 'none';
+        //__month
+        $month = $_GET['month'] ?? 'none';
+        $month = trim($month);
+        $month = ($month !== 'none') ? (((int)$month >= 1 && (int)$month <= 12) ? (int)($month) : 1) : $month;
+        //__year
+        $year = $_GET['year'] ?? 'none';
+        $year = trim($year);
+        $year  = ($year !== 'none') ? (((int)$year >= 1970 && (int)$year <= 2500) ? (int)$year : date('Y')) : $year;
 
         //paramters
         $params = [
-            'order_name' => $order_name,
-            'search_user' => $search_user,
-            'role' => $role,
-            'sexe' => $sexe,
-            'by' => $by,
-            'order_by' => $order_by,
-            'from' => $from,
-            'to' => $to,
-            'per' => $per,
-            'order_date' => $order_date
+            'per' => $per, //on and
+            'from' => $from, //on and
+            'to' => $to, //on and
+            'month' => $month, //on and
+            'year' => $year, //on and
+            'sexe' => $sexe, //where
+            'role' => $role, //where
+            'search_user' => $search_user, //where
+            'order_name' => $order_name, //order by
+            'by' => $by, //order
+            'order_by' => $order_by //order by
         ];
-        echo json_encode($params);
+        echo json_encode($this->user_model->filterUser($params));
     }
     // //action - transactions user
     // public function transactionsUser()

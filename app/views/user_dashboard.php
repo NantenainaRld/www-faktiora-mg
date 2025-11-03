@@ -18,6 +18,7 @@
     <button id='test'>Test</button>
     <!-- script js -->
     <script src="<?= SITE_URL ?>/js/user-dashboard.js"></script>
+    <input type="date">
 </body>
 
 </html>
