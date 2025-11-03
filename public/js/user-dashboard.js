@@ -1,15 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
   //================ FUNCTION ================
   // function - default list user
-  async function defaultList() {
+  async function defaultListUser() {
     try {
-      const response = await apiRequest("/user/default_list");
+      const response = await apiRequest("/user/default_list_user");
       console.log(response);
     } catch (error) {
       console.log("Error : " + error);
     }
   }
-  defaultList();
+  defaultListUser();
   // //function - nb user
   // async function nbUser() {
   //   try {

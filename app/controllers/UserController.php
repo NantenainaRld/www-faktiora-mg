@@ -132,19 +132,19 @@ class UserController extends Controller
         }
     }
     //action - list user
-    public function defaultList()
+    public function defaultListUser()
     {
         header('Content-Type: application/json');
 
-        echo json_encode($this->user_model->defaultList());
+        echo json_encode($this->user_model->defaultListUser());
     }
-    // //action - nb user
-    // public function nbUser()
-    // {
-    //     header('Content-Type: application/json');
+    //action - nb user
+    public function defaultNbUser()
+    {
+        header('Content-Type: application/json');
 
-    //     echo json_encode($this->user_model->nbUser());
-    // }
+        echo json_encode($this->user_model->defaultNbUser());
+    }
     // //action - transactions user
     // public function transactionsUser()
     // {
