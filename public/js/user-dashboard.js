@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   //================ FUNCTION ================
+
   // function - default list user
   async function defaultListUser() {
     try {
@@ -20,19 +21,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   defaultNbUser();
-  // //function - transactions user
-  // async function transactionsUser() {
-  //   try {
-  //     const response = await apiRequest("/user/transactions_user?id=U025167CG");
-  //     console.log(response);
-  //   } catch (error) {
-  //     console.log("Error : " + error);
-  //   }
-  // }
+  //function - filter user
+  async function filterUser() {
+    try {
+      //order by name
+      const response = await apiRequest(
+        "/user/filter_user&order_name=asc&search_user=anarana&role=admin&sexe=masculin&by=nb_factures&order_by=asc&from=2024&to=2025&per=week&order_date=desc"
+      );
+      console.log(response);
+    } catch (error) {
+      console.log("Error : " + error);
+    }
+  }
+
   //==================== EVENTS ===================
+
   //btn test
-  // const btnTest = document.getElementById("test");
-  // btnTest.addEventListener("click", async () => {
-  //   transactionsUser();
-  // });
+  const btnTest = document.getElementById("test");
+  btnTest.addEventListener("click", async () => {
+    filterUser();
+  });
 });

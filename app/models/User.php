@@ -157,7 +157,7 @@ class User extends Database
         try {
             $response =
                 //error or success
-                $this->selectQuery("SELECT u.id_utilisateur, u.nom_utilisateur, u.prenoms_utilisateur, u.sexe_utilisateur, u.email_utilisateur, u.role, c.num_caisse FROM utilisateur u LEFT JOIN caisse c ON u.id_utilisateur = c.id_utilisateur");
+                $this->selectQuery("SELECT u.id_utilisateur, u.nom_utilisateur, u.prenoms_utilisateur, u.sexe_utilisateur, u.email_utilisateur, u.role, c.num_caisse FROM utilisateur u LEFT JOIN caisse c ON u.id_utilisateur = c.id_utilisateur ORDER BY u.nom_utilisateur ASC");
         } catch (Throwable $e) {
             $response = [
                 'message_type' => 'error',

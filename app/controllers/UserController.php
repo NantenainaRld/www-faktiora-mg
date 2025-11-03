@@ -145,6 +145,82 @@ class UserController extends Controller
 
         echo json_encode($this->user_model->defaultNbUser());
     }
+    //action - filter user
+    public function filterUser()
+    {
+        header('Content-Type: application/json');
+
+        //get parameters
+        $order_default = ['asc', 'desc'];
+        $role_default = ['admin', 'caissier'];
+        $sexe_default = ['masculin', "féminin"];
+        $by_default = [
+            'nb_factures',
+            'nb_ae',
+            'nb_sorties',
+            'nb_entrees',
+            'nb_transactions',
+            'total_factures',
+            'total_ae',
+            'total_sorties',
+            'total_entrees',
+            'total_transactions'
+
+        ];
+        $per_default = ['day', 'week', 'month', 'year'];
+        //__order_name
+        $order_name = $_GET['order_name'] ?? 'asc';
+        $order_name = strtolower(trim($order_name));
+        $order_name = in_array($order_name, $order_default, true) ? $order_name : 'asc';
+        //__search_user
+        $search_user = $_GET['search_user'] ?? '';
+        $search_user = trim($search_user);
+        //__role
+        $role = $_GET['role'] ?? 'all';
+        $role = strtolower(trim($role));
+        $role = in_array($role, $role_default, true) ? $role : 'all';
+        //__sexe
+        $sexe = $_GET['sexe'] ?? 'all';
+        $sexe = strtolower(trim($sexe));
+        $sexe = in_array($sexe, $sexe_default, true) ? $sexe : 'all';
+        //__by
+        $by = $_GET['by'] ?? 'all';
+        $by = strtolower(trim($by));
+        $by = in_array($by, $by_default, true) ? $by : 'all';
+        //__order_by
+        $order_by = $_GET['order_by'] ?? 'desc';
+        $order_by = strtolower(trim($order_by));
+        $order_by = in_array($order_by, $order_default, true) ? $order_by : 'desc';
+        //__date_from
+        $from = $_GET['from'] ?? '';
+        $from = strtolower(trim($from));
+        //__date_to
+        $to = $_GET['to'] ?? '';
+        $to = strtolower(trim($to));
+        //__per
+        $per = $_GET['per'] ?? 'all';
+        $per = strtolower(trim($per));
+        $per = in_array($per, $per_default, true) ? $per : 'all';
+        //__order_date
+        $order_date = $_GET['order_date'] ?? 'desc';
+        $order_date =   strtolower(trim($order_date));
+        $order_date = in_array($order_date, $order_default, true) ? $order_date : 'desc';
+
+        //paramters
+        $params = [
+            'order_name' => $order_name,
+            'search_user' => $search_user,
+            'role' => $role,
+            'sexe' => $sexe,
+            'by' => $by,
+            'order_by' => $order_by,
+            'from' => $from,
+            'to' => $to,
+            'per' => $per,
+            'order_date' => $order_date
+        ];
+        echo json_encode($params);
+    }
     // //action - transactions user
     // public function transactionsUser()
     // {
