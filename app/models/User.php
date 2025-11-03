@@ -168,35 +168,26 @@ class User extends Database
         return $response;
     }
     //nb user
-    //     public function nbUser()
-    //     {
-    //         $response = [
-    //             'message_type' => 'success',
-    //             'message' => 'success'
-    //         ];
+    public function defaultNbUser()
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
 
-    //         try {
-    //             $response =
-    //                 //error or success
-    //                 $this->selectQuery("SELECT
-    //     COUNT(u.id_utilisateur) AS nb_utilisateur,
-    //     COUNT( u1.role) AS nb_admin,
-    //     COUNT(u2.role) AS nb_caissier
-    // FROM
-    //     utilisateur u
-    // LEFT JOIN utilisateur u1 ON
-    //     u1.id_utilisateur = u.id_utilisateur AND u1.role = 'admin'
-    // LEFT JOIN utilisateur u2 ON
-    //     u2.id_utilisateur = u.id_utilisateur AND u2.role = 'caissier';");
-    //         } catch (Throwable $e) {
-    //             $response = [
-    //                 'message_type' => 'error',
-    //                 'message' => 'Error : ' . $e->getMessage()
-    //             ];
-    //         }
+        try {
+            $response =
+                //error or success
+                $this->selectQuery("SELECT COUNT(id_utilisateur) as nb_utilisateur, COUNT(CASE WHEN role = 'admin' THEN 1 END) as nb_admin, COUNT(CASE WHEN role = 'caissier' THEN 1 END) as nb_caissier FROM utilisateur;");
+        } catch (Throwable $e) {
+            $response = [
+                'message_type' => 'error',
+                'message' => 'Error : ' . $e->getMessage()
+            ];
+        }
 
-    //         return $response;
-    // }
+        return $response;
+    }
     //transactions user
     //     public function transactionsUser($id)
     //     {

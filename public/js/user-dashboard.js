@@ -10,16 +10,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   defaultListUser();
-  // //function - nb user
-  // async function nbUser() {
-  //   try {
-  //     const response = await apiRequest("/user/nb_user");
-  //     console.log(response);
-  //   } catch (error) {
-  //     console.log("Error : " + error);
-  //   }
-  // }
-  // nbUser();
+  //function - nb user
+  async function defaultNbUser() {
+    try {
+      const response = await apiRequest("/user/default_nb_user");
+      console.log(response);
+    } catch (error) {
+      console.log("Error : " + error);
+    }
+  }
+  defaultNbUser();
   // //function - transactions user
   // async function transactionsUser() {
   //   try {
