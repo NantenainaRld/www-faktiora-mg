@@ -132,27 +132,27 @@ class UserController extends Controller
         }
     }
     //action - list user
-    public function listUser()
+    public function defaultList()
     {
         header('Content-Type: application/json');
 
-        echo json_encode($this->user_model->listUser());
+        echo json_encode($this->user_model->defaultList());
     }
-    //action - nb user
-    public function nbUser()
-    {
-        header('Content-Type: application/json');
+    // //action - nb user
+    // public function nbUser()
+    // {
+    //     header('Content-Type: application/json');
 
-        echo json_encode($this->user_model->nbUser());
-    }
-    //action - transactions user
-    public function transactionsUser()
-    {
-        header('Content-Type: application/json');
-        $id = trim($_GET['id']);
+    //     echo json_encode($this->user_model->nbUser());
+    // }
+    // //action - transactions user
+    // public function transactionsUser()
+    // {
+    //     header('Content-Type: application/json');
+    //     $id = trim($_GET['id']);
 
-        echo json_encode($this->user_model->transactionsUser($id));
-    }
+    //     echo json_encode($this->user_model->transactionsUser($id));
+    // }
 
     //---------------------PRIVATE FUNCTION---------------------
 }
