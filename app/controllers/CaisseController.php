@@ -204,4 +204,42 @@ class CaisseController extends Controller
             echo json_encode($response);
         }
     }
+    //action - update solde && seuil
+    public function updateSoldeSeuil()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            header('Content-Type: application/json');
+            $response  = null;
+            $json = json_decode(file_get_contents("php://input"));
+
+            //trim values
+            $json = array_map(fn($x) => trim($x), $json);
+            //filter values
+            $invalidNum = array_values(array_filter($json, fn($x) => filter_var($x, FILTER_VALIDATE_INT) === false));
+
+            //invalid num
+            $nbINvalid = count($invalidNum);
+            if ($nbINvalid >= 1) {
+                //sing
+                if ($nbINvalid === 1) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => "Numéro du caisse invalide : " . $invalidNum[0]
+                    ];
+                }
+                //plur
+                else {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => "Numéro du caisse invalide : " . implode(', ', $invalidNum)
+                    ];
+                }
+            }
+            //valid num_caisse
+            else {
+            }
+
+            echo json_encode($response);
+        }
+    }
 }

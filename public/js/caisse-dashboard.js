@@ -46,11 +46,25 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
+  //function - update solde && seuil
+  async function updateSoldeSeuil() {
+    const nums = ["   s1", "s2", "qq", 3, 4, 5, 6, 8];
+
+    try {
+      const response = await apiRequest("/caisse/update_solde_seuil", {
+        method: "PUT",
+        body: nums,
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   //=================== EVENTS =================
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    updateCaisse();
+    updateSoldeSeuil();
   });
 });
