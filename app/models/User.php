@@ -298,57 +298,90 @@ class User extends Database
             'message' => 'success'
         ];
         try {
-            //email exist ?
-            $emailExist = $this->updateUserIsEmailExist($json['email_utilisateur'], $json['id_utilisateur']);
+            //user exist?
+            $response = $this->isUserExist($json['id_utilisateur']);
+
             //error
-            if ($emailExist['message_type'] === 'error') {
-                $response = $emailExist;
+            if ($response['message_type'] === 'error') {
+                return $response;
             }
             //success
             else {
-                //found
-                if ($emailExist['message'] === 'found') {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => 'Cette adresse <b>email</b> est déjà utilisée .'
-                    ];
-                }
                 //not found
+                if ($response['message'] === 'not found') {
+                    $response = ['message_type' => 'inalid', 'message' => "L'tilisateur avec l'ID <b>{$json['id_utilisateur']}</b> n'existe pas"];
+                }
+                //found
                 else {
-                    //     //passsword hash
-                    //     $json['mdp'] = password_hash($json['mdp'], PASSWORD_DEFAULT);
+                    //email exist ?
+                    $response = $this->updateUserIsEmailExist($json['email_utilisateur'], $json['id_utilisateur']);
 
-                    //     $response = $this->executeQuery(
-                    //         "INSERT INTO utilisateur 
-                    //     (id_utilisateur, nom_utilisateur, prenoms_utilisateur, sexe_utilisateur,
-                    //     email_utilisateur, role, mdp)
-                    // VALUES (:id, :nom, :prenoms, :sexe, :email, :role, :mdp)",
-                    //         [
-                    //             'id' => $this->id_utilisateur,
-                    //             'nom' => $json['nom_utilisateur'],
-                    //             'prenoms' => $json['prenoms_utilisateur'],
-                    //             'sexe' => $json['sexe_utilisateur'],
-                    //             'email' => $json['email_utilisateur'],
-                    //             'role' => $json['role'],
-                    //             'mdp' => $json['mdp']
-                    //         ]
-                    //     );
+                    //error
+                    if ($response['message_type'] === 'error') {
+                        return $response;
+                    }
+                    //success
+                    else {
+                        //found
+                        if ($response['message'] === 'found') {
+                            $response = [
+                                'message_type' => 'invalid',
+                                'message' => 'Cette adresse <b>email</b> est déjà utilisée .'
+                            ];
+                        }
+                        //not found
+                        else {
+                            //mdp - empty
+                            if (empty($json['mdp'])) {
+                                //update user
+                                $response = $this->executeQuery(
+                                    "UPDATE utilisateur SET nom_utilisateur = :nom, prenoms_utilisateur = :prenoms, sexe_utilisateur = :sexe, role = :role, email_utilisateur = :email WHERE id_utilisateur = :id",
+                                    [
+                                        'nom' => $json['nom_utilisateur'],
+                                        'prenoms' => $json['prenoms_utilisateur'],
+                                        'sexe' => $json['sexe_utilisateur'],
+                                        'role' => $json['role'],
+                                        'email' => $json['email_utilisateur'],
+                                        'id' => $json['id_utilisateur']
+                                    ]
+                                );
+                            }
+                            //mdp -
+                            else {
+                                //passsword hash
+                                $json['mdp'] = password_hash($json['mdp'], PASSWORD_DEFAULT);
 
-                    //     //error
-                    //     if ($response['message_type'] === 'error') {
-                    //         return $response;
-                    //     } else {
-                    //         return $response = [
-                    //             'message_type' => 'success',
-                    //             'message' => 'Utilisateur créé avec succès .'
-                    //         ];
-                    //     }
+                                //update user
+                                $response = $this->executeQuery(
+                                    "UPDATE utilisateur SET nom_utilisateur = :nom, prenoms_utilisateur = :prenoms, sexe_utilisateur = :sexe, role = :role, email_utilisateur = :email, mdp = :mdp WHERE id_utilisateur = :id",
+                                    [
+                                        'nom' => $json['nom_utilisateur'],
+                                        'prenoms' => $json['prenoms_utilisateur'],
+                                        'sexe' => $json['sexe_utilisateur'],
+                                        'role' => $json['role'],
+                                        'email' => $json['email_utilisateur'],
+                                        'id' => $json['id_utilisateur'],
+                                        'mdp' => $json['mdp']
+                                    ]
+                                );
+                            }
+
+                            //error
+                            if ($response['message_type'] === 'error') {
+                                return $response;
+                            }
+                            //success
+                            else {
+                                $response['message'] = "Les informations de l'utilisateur on été modifiées avec succès .";
+                            }
+                        }
+                    }
                 }
             }
         } catch (Throwable $e) {
             $response = [
                 'message_type' => 'error',
-                'message' => 'Error addUser : ' . $e->getMessage()
+                'message' => 'Error update user : ' . $e->getMessage()
             ];
         }
 
@@ -452,6 +485,41 @@ class User extends Database
             ];
         }
     }
+    //user exist ?
+    private function isUserExist($id_utilisateur)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'not found'
+        ];
+
+        try {
+            //sql
+            $sql = null;
+            $sql = $this->selectQuery("SELECT id_utilisateur FROM 
+            utilisateur WHERE id_utilisateur = :id", [
+                'id' => $id_utilisateur
+            ]);
+            //error
+            if ($sql['message_type'] === 'error') {
+                $response = $sql;
+            }
+            //data
+            else {
+                //found
+                if (count($sql['data'])  >= 1) {
+                    $response['message'] = 'found';
+                }
+            }
+        } catch (Throwable $e) {
+            $response = [
+                'message_type' => 'error',
+                'message' => $e->getMessage()
+            ];
+        }
+
+        return $response;
+    }
     //email exist?
     private function updateUserIsEmailExist($email_utilisateur, $id_utilisateur)
     {
@@ -491,5 +559,4 @@ class User extends Database
             ];
         }
     }
-    //user exist?
 }

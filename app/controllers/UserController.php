@@ -277,7 +277,7 @@ class UserController extends Controller
                         //**email_utilisateur
                         else {
                             //mdp small
-                            if (strlen($json['mdp']) < 6) {
+                            if (strlen($json['mdp']) < 6 && $json['mdp'] !== '') {
                                 $response = [
                                     'message_type' => 'invalid',
                                     'message' => "Le mot de passe doit être au moins <b>6</b> caratctères ."
