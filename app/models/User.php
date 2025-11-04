@@ -261,6 +261,24 @@ class User extends Database
 
         try {
             $response = $this->selectQuery($sql, $paramsQuery);
+
+            //count nbUser
+            $response['nb_user'] = count($response['data']);
+            //count nb_admin && nb_caissier
+            $nb_admin = 0;
+            $nb_caissier = 0;
+            for ($i = 0; $i < $response['nb_user']; $i++) {
+                //nb_admin
+                if ($response['data'][$i]['role'] === 'admin') {
+                    $nb_admin++;
+                }
+                //nb_caissier
+                else {
+                    $nb_caissier++;
+                }
+            }
+            $response['nb_admin'] = $nb_admin;
+            $response['nb_caissier'] = $nb_caissier;
         } catch (Throwable $e) {
             $response = [
                 'message_type' => 'error',
