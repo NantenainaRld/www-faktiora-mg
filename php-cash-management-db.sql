@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 27, 2025 at 11:32 AM
+-- Generation Time: Nov 03, 2025 at 10:11 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -44,8 +44,8 @@ CREATE TABLE `autre_entree` (
 
 CREATE TABLE `caisse` (
   `num_caisse` int(11) NOT NULL COMMENT 'Caisse ID',
-  `solde_initial` decimal(15,2) NOT NULL DEFAULT 0.00 COMMENT 'Caisse initial fund',
-  `solde_actuel` decimal(15,2) NOT NULL DEFAULT 0.00 COMMENT 'Caisse recent fund',
+  `solde` decimal(15,2) NOT NULL DEFAULT 0.00 COMMENT 'Caisse initial fund',
+  `seuil` decimal(15,2) NOT NULL DEFAULT 0.00 COMMENT 'Caisse recent fund',
   `id_utilisateur` varchar(15) DEFAULT NULL COMMENT 'Utilisateur foreign key'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -119,6 +119,14 @@ CREATE TABLE `produit` (
   `nb_stock` int(11) NOT NULL COMMENT 'Produit stock amount'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `produit`
+--
+
+INSERT INTO `produit` (`id_produit`, `libelle_produit`, `prix_unitaire`, `nb_stock`) VALUES
+('p001', 'zavatra', 500.00, 20),
+('test', 'divay fotsy', 3000.00, 5);
+
 -- --------------------------------------------------------
 
 --
@@ -129,9 +137,17 @@ CREATE TABLE `sortie` (
   `id_sortie` varchar(20) NOT NULL COMMENT 'Sortie ID',
   `libelle_sortie` varchar(50) NOT NULL COMMENT 'Sortie libelle',
   `date_sortie` datetime NOT NULL COMMENT 'Sortie date',
-  `montant_sortie_` decimal(15,2) NOT NULL COMMENT 'Sortie amount',
-  `id_utilisateur` varchar(15) DEFAULT NULL COMMENT 'User foreign key'
+  `montant_sortie` decimal(15,2) NOT NULL COMMENT 'Sortie amount',
+  `id_utilisateur` varchar(15) DEFAULT NULL COMMENT 'User foreign key',
+  `num_caisse` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `sortie`
+--
+
+INSERT INTO `sortie` (`id_sortie`, `libelle_sortie`, `date_sortie`, `montant_sortie`, `id_utilisateur`, `num_caisse`) VALUES
+('ddd', 'ddddd', '2025-11-03 21:39:30', 22222.00, 'U087962YH', NULL);
 
 -- --------------------------------------------------------
 
@@ -143,12 +159,21 @@ CREATE TABLE `utilisateur` (
   `id_utilisateur` varchar(15) NOT NULL COMMENT 'User ID',
   `nom_utilisateur` varchar(100) NOT NULL COMMENT 'User name',
   `prenoms_utilisateur` varchar(100) DEFAULT NULL COMMENT 'User firstname',
-  `sexe_utlisateur` enum('masculin','féminin') NOT NULL COMMENT 'Utilisateur sex',
+  `sexe_utilisateur` enum('masculin','féminin') NOT NULL COMMENT 'Utilisateur sex',
   `email_utilisateur` varchar(150) NOT NULL COMMENT 'User email',
-  `role` enum('admin','caissier') NOT NULL COMMENT 'User role',
+  `role` enum('admin','caissier') NOT NULL DEFAULT 'caissier' COMMENT 'User role',
   `mdp` varchar(200) NOT NULL COMMENT 'User password',
   `mdp_oublie` varchar(200) DEFAULT NULL COMMENT 'User forgot password'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `utilisateur`
+--
+
+INSERT INTO `utilisateur` (`id_utilisateur`, `nom_utilisateur`, `prenoms_utilisateur`, `sexe_utilisateur`, `email_utilisateur`, `role`, `mdp`, `mdp_oublie`) VALUES
+('232', '232sq', 'qq', 'masculin', 'xq', 'caissier', 'qqqqqqq', NULL),
+('U025167CG', 'ANARANA', 'fanampipny', 'féminin', 'emsa@a.com', 'admin', '$2y$10$Y/rStwdCFMqS5RaGFuD0Jur8q1uyoG7sedmPrQblMHNdXjP/gM1Q2', NULL),
+('U087962YH', 'ANARANA', 'fanampipny', 'féminin', 'test@a.b', 'admin', '$2y$10$UBffHRSnsZv9oKQKDAUds.Ew7lQtiuMONeVj.J2kpU6790YSutDDO', NULL);
 
 --
 -- Indexes for dumped tables
@@ -159,8 +184,8 @@ CREATE TABLE `utilisateur` (
 --
 ALTER TABLE `autre_entree`
   ADD PRIMARY KEY (`id_entree`),
-  ADD KEY `fk_num_caisse` (`num_caisse`),
-  ADD KEY `fk_user` (`id_utilisateur`);
+  ADD KEY `fk_user` (`id_utilisateur`),
+  ADD KEY `fk_caisse` (`num_caisse`);
 
 --
 -- Indexes for table `caisse`
@@ -189,9 +214,9 @@ ALTER TABLE `depense`
 --
 ALTER TABLE `facture`
   ADD PRIMARY KEY (`num_facture`),
-  ADD KEY `fk_caisse_00` (`num_caisse`),
   ADD KEY `fk_user_01` (`id_utilisateur`),
-  ADD KEY `fk_client` (`id_client`);
+  ADD KEY `fk_client` (`id_client`),
+  ADD KEY `fk_caisse_00` (`num_caisse`);
 
 --
 -- Indexes for table `ligne_facture`
@@ -213,7 +238,8 @@ ALTER TABLE `produit`
 --
 ALTER TABLE `sortie`
   ADD PRIMARY KEY (`id_sortie`),
-  ADD KEY `fk_id_utilisateur` (`id_utilisateur`);
+  ADD KEY `fk_id_utilisateur` (`id_utilisateur`),
+  ADD KEY `fk_num_caisse` (`num_caisse`);
 
 --
 -- Indexes for table `utilisateur`
@@ -247,7 +273,7 @@ ALTER TABLE `ligne_facture`
 -- Constraints for table `autre_entree`
 --
 ALTER TABLE `autre_entree`
-  ADD CONSTRAINT `fk_num_caisse` FOREIGN KEY (`num_caisse`) REFERENCES `caisse` (`num_caisse`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_caisse` FOREIGN KEY (`num_caisse`) REFERENCES `caisse` (`num_caisse`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_user` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
@@ -266,7 +292,7 @@ ALTER TABLE `depense`
 -- Constraints for table `facture`
 --
 ALTER TABLE `facture`
-  ADD CONSTRAINT `fk_caisse_00` FOREIGN KEY (`num_caisse`) REFERENCES `caisse` (`num_caisse`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_caisse_00` FOREIGN KEY (`num_caisse`) REFERENCES `caisse` (`num_caisse`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `fk_client` FOREIGN KEY (`id_client`) REFERENCES `client` (`id_client`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_user_01` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE SET NULL ON UPDATE CASCADE;
 
@@ -281,7 +307,8 @@ ALTER TABLE `ligne_facture`
 -- Constraints for table `sortie`
 --
 ALTER TABLE `sortie`
-  ADD CONSTRAINT `fk_id_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_id_utilisateur` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_num_caisse` FOREIGN KEY (`num_caisse`) REFERENCES `caisse` (`num_caisse`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
