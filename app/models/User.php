@@ -289,6 +289,72 @@ class User extends Database
         return $response;
     }
 
+    //update user
+    public function updateUser($json)
+    {
+        //response
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+        try {
+            //email exist ?
+            $emailExist = $this->updateUserIsEmailExist($json['email_utilisateur'], $json['id_utilisateur']);
+            //error
+            if ($emailExist['message_type'] === 'error') {
+                $response = $emailExist;
+            }
+            //success
+            else {
+                //found
+                if ($emailExist['message'] === 'found') {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => 'Cette adresse <b>email</b> est déjà utilisée .'
+                    ];
+                }
+                //not found
+                else {
+                    //     //passsword hash
+                    //     $json['mdp'] = password_hash($json['mdp'], PASSWORD_DEFAULT);
+
+                    //     $response = $this->executeQuery(
+                    //         "INSERT INTO utilisateur 
+                    //     (id_utilisateur, nom_utilisateur, prenoms_utilisateur, sexe_utilisateur,
+                    //     email_utilisateur, role, mdp)
+                    // VALUES (:id, :nom, :prenoms, :sexe, :email, :role, :mdp)",
+                    //         [
+                    //             'id' => $this->id_utilisateur,
+                    //             'nom' => $json['nom_utilisateur'],
+                    //             'prenoms' => $json['prenoms_utilisateur'],
+                    //             'sexe' => $json['sexe_utilisateur'],
+                    //             'email' => $json['email_utilisateur'],
+                    //             'role' => $json['role'],
+                    //             'mdp' => $json['mdp']
+                    //         ]
+                    //     );
+
+                    //     //error
+                    //     if ($response['message_type'] === 'error') {
+                    //         return $response;
+                    //     } else {
+                    //         return $response = [
+                    //             'message_type' => 'success',
+                    //             'message' => 'Utilisateur créé avec succès .'
+                    //         ];
+                    //     }
+                }
+            }
+        } catch (Throwable $e) {
+            $response = [
+                'message_type' => 'error',
+                'message' => 'Error addUser : ' . $e->getMessage()
+            ];
+        }
+
+        return $response;
+    }
+
     //====================== PRIVATE FUNCTION ====================
 
     //generate id_utilisateur
@@ -386,4 +452,44 @@ class User extends Database
             ];
         }
     }
+    //email exist?
+    private function updateUserIsEmailExist($email_utilisateur, $id_utilisateur)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'not found'
+        ];
+
+        try {
+            //sql
+            $sql = null;
+            $sql = $this->selectQuery("SELECT email_utilisateur FROM 
+            utilisateur WHERE email_utilisateur = :email AND id_utilisateur != :id", [
+                'email' => $email_utilisateur,
+                'id' => $id_utilisateur
+            ]);
+            //error
+            if ($sql['message_type'] === 'error') {
+                return $sql;
+            }
+            //data
+            else {
+                //found
+                if (count($sql['data'])  >= 1) {
+                    $response['message'] = 'found';
+                    return $response;
+                }
+                //not found
+                else {
+                    return $response;
+                }
+            }
+        } catch (Throwable $e) {
+            return $response = [
+                'message_type' => 'error',
+                'message' => $e->getMessage()
+            ];
+        }
+    }
+    //user exist?
 }

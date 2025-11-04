@@ -285,6 +285,7 @@ class UserController extends Controller
                             }
                             //**mdp
                             else {
+                                $response = $this->user_model->updateUser($json);
                             }
                         }
                     }
