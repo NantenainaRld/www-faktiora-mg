@@ -80,4 +80,16 @@ class CaisseController extends Controller
             echo json_encode($response);
         }
     }
+    //action - filter caisse
+    public function filterCaisse()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            header('Content-Type: application/json');
+            $response = null;
+            $json = json_decode(file_get_contents('php://input'), true);
+
+
+            echo json_encode($response);
+        }
+    }
 }
