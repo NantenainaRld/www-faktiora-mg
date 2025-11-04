@@ -15,7 +15,7 @@
 
 <body>
     <?= "caisse dashboard"; ?>
-    <button id='test'>Test</button>
+    <button id='btn-test'>Test</button>
     <!-- script js -->
     <script src="<?= SITE_URL ?>/js/caisse-dashboard.js"></script>
 </body>
