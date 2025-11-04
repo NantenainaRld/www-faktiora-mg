@@ -6,8 +6,8 @@ class CaisseController extends Controller
     private $caisse_model;
     public function __construct()
     {
-        // initialize model
-        // $this->caisse_model = $this->loadModel('Caisse');
+        //initialize model
+        $this->caisse_model = $this->loadModel('Caisse');
     }
 
     //===================== PAGE ======================
@@ -73,6 +73,7 @@ class CaisseController extends Controller
                     }
                     //solde >= seuil
                     else {
+                        $response = $this->caisse_model->addCaisse($json);
                     }
                 }
             }
