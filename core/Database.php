@@ -19,7 +19,11 @@ class Database
             $stm->execute($params);
 
             $results = $stm->fetchAll(PDO::FETCH_ASSOC);
-            return ['message_type' => 'success', 'data' => $results];
+            return [
+                'message_type' => 'success',
+                'data' => $results,
+                'message' => 'success'
+            ];
         } catch (PDOException $e) {
             return [
                 'message_type' => 'error',
@@ -33,7 +37,7 @@ class Database
         try {
             $stm = $this->pdo->prepare($sql);
             $stm->execute($params);
-            return ['message_type' => 'success'];
+            return ['message_type' => 'success', 'message' => 'success'];
         } catch (PDOException $e) {
             return [
                 'message_type' => 'error',
