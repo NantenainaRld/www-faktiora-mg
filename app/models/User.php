@@ -10,6 +10,7 @@ class User extends Database
     }
 
     //==================  PUBLIC FUNCTION ====================
+
     //add user
     public function addUser($json)
     {

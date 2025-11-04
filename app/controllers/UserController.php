@@ -209,14 +209,91 @@ class UserController extends Controller
         ];
         echo json_encode($this->user_model->filterUser($params));
     }
-    // //action - transactions user
-    // public function transactionsUser()
-    // {
-    //     header('Content-Type: application/json');
-    //     $id = trim($_GET['id']);
 
-    //     echo json_encode($this->user_model->transactionsUser($id));
-    // }
+    //action - update user
+    public function updateUser()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            header("Content-Type: application/json");
+            $json = json_decode(file_get_contents("php://input"), true);
+            $response = null;
+
+            //trim datas
+            $json = [
+                'id_utilisateur' => trim($json['id_utilisateur']),
+                'nom_utilisateur' => trim($json['nom_utilisateur']),
+                'prenoms_utilisateur' => trim($json['prenoms_utilisateur']),
+                'sexe_utilisateur' => trim($json['sexe_utilisateur']),
+                'role' => trim($json['role']),
+                'email_utilisateur' => trim($json['email_utilisateur']),
+                'mdp' => $json['mdp'],
+            ];
+
+            //nom_utilisateur empty
+            if (empty($json['nom_utilisateur'])) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => 'Veuiller compléter le champ <b>Nom</b>'
+                ];
+            }
+            //**nom_utilisateur
+            else {
+                $json['nom_utilisateur'] = strtoupper($json['nom_utilisateur']);
+
+                //sexe_utilisateur error
+                if (
+                    $json['sexe_utilisateur'] !== 'masculin'
+                    && $json['sexe_utilisateur'] !== 'féminin'
+                ) {
+                    $response = [
+                        'message_type' => 'error',
+                        'error_message' => "Error : sexe_utilisateur = {$json['sexe_utilisateur']}"
+                    ];
+                }
+                //**sexe_utilisateur
+                else {
+                    //role error
+                    if (
+                        $json['role'] !== 'admin' &&
+                        $json['role'] !== 'caissier'
+                    ) {
+                        $response = [
+                            'message_type' => 'error',
+                            'error_message' => "Error : role = {$json['role']}"
+                        ];
+                    }
+                    //**role
+                    else {
+                        //email invalid
+                        if (!filter_var(
+                            $json['email_utilisateur'],
+                            FILTER_VALIDATE_EMAIL
+                        )) {
+                            $response = [
+                                'message_type' => 'invalid',
+                                'message' => "L'adresse <b>email</b> saisie n'est pas valide ."
+                            ];
+                        }
+                        //**email_utilisateur
+                        else {
+                            //mdp small
+                            if (strlen($json['mdp']) < 6) {
+                                $response = [
+                                    'message_type' => 'invalid',
+                                    'message' => "Le mot de passe doit être au moins <b>6</b> caratctères ."
+                                ];
+                            }
+                            //**mdp
+                            else {
+                            }
+                        }
+                    }
+                }
+            }
+
+            echo json_encode($response);
+        }
+    }
 
     //---------------------PRIVATE FUNCTION---------------------
 }
