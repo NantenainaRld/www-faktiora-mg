@@ -6,13 +6,14 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       //order by name
       const response = await apiRequest(
-        "/user/filter_user&order_name=asc&search_user=67&role=caissier&sexe=féminin&by=nb_factures&order_by=none&from=&to=&per=none&month=none&year=none"
+        "/user/filter_user&search_user=&role=admin&sexe=féminin&by=nb_sorties&order_by=none&from=&to=&per=none&month=none&year=none"
       );
       console.log(response);
     } catch (error) {
       console.log("Error : " + error);
     }
   }
+  filterUser();
 
   //==================== EVENTS ===================
 

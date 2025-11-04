@@ -151,14 +151,11 @@ class UserController extends Controller
             'total_ae',
             'total_sorties',
             'total_entrees',
-            'total_transactions'
+            'total_transactions',
+            'nom_utilisateur'
 
         ];
         $per_default = ['day', 'week', 'month', 'year'];
-        //__order_name
-        $order_name = $_GET['order_name'] ?? 'none';
-        $order_name = strtolower(trim($order_name));
-        $order_name = in_array($order_name, $order_default, true) ? $order_name : 'none';
         //__search_user
         $search_user = $_GET['search_user'] ?? '';
         $search_user = trim($search_user);
@@ -175,9 +172,9 @@ class UserController extends Controller
         $by = strtolower(trim($by));
         $by = in_array($by, $by_default, true) ? $by : 'none';
         //__order_by
-        $order_by = $_GET['order_by'] ?? 'none';
+        $order_by = $_GET['order_by'] ?? 'desc';
         $order_by = strtolower(trim($order_by));
-        $order_by = in_array($order_by, $order_default, true) ? $order_by : 'none';
+        $order_by = in_array($order_by, $order_default, true) ? $order_by : 'desc';
         //__date_from
         $from = $_GET['from'] ?? '';
         $from = strtolower(trim($from));
@@ -207,7 +204,6 @@ class UserController extends Controller
             'sexe' => $sexe, //where
             'role' => $role, //where
             'search_user' => $search_user, //where
-            'order_name' => $order_name, //order by
             'by' => $by, //order
             'order_by' => $order_by //order by
         ];
