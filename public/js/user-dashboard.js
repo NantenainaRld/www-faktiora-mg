@@ -20,6 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn test
   const btnTest = document.getElementById("test");
   btnTest.addEventListener("click", async () => {
-    updateUser();
+    deleteUser();
   });
 });

@@ -296,5 +296,17 @@ class UserController extends Controller
         }
     }
 
+    //action - delete user
+    public function deleteUser()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+            header('Content-Type: application/json');
+            $json = json_decode(file_get_contents("php://input"), true);
+            $json['id_utilisateur'] = trim($json['id_utilisateur']);
+
+            echo json_encode($this->user_model->deleteUser($json));
+        }
+    }
+
     //---------------------PRIVATE FUNCTION---------------------
 }

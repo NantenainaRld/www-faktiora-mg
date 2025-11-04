@@ -18,6 +18,8 @@
     <button id='test'>Test</button>
     <!-- script update user  -->
     <script src="<?= SITE_URL ?>/js/update-user.js"></script>
+    <!-- script deleet user  -->
+    <script src="<?= SITE_URL ?>/js/delete-user.js"></script>
     <!-- script js -->
     <script src="<?= SITE_URL ?>/js/user-dashboard.js"></script>
     <input type="date">

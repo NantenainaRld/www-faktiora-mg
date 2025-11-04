@@ -388,6 +388,56 @@ class User extends Database
         return $response;
     }
 
+    //delete user
+    public function deleteUser($json)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+            //user exist?
+            $response = $this->isUserExist($json['id_utilisateur']);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //success
+            else {
+                //not found
+                if ($response['message'] === 'not found') {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => "L'utilisateur avec l'ID <b>{$json['id_utilisateur']}</b> n'existe pas ."
+                    ];
+                }
+                //found 
+                else {
+                    //delete user
+                    $response = $this->executeQuery(
+                        "DELETE FROM utilisateur WHERE id_utilisateur = :id",
+                        ['id' => $json['id_utilisateur']]
+                    );
+
+                    //error
+                    if ($response['message_type'] === 'error') {
+                        return $response;
+                    }
+                    //success
+                    else {
+                        $response['messages'] = "L'utilisateur avec l'ID <b>{$json['id_utilisateur']}</b> a été supprimé avec succès.";
+                    }
+                }
+            }
+        } catch (Throwable $e) {
+            $response = ['message_type' => 'error', 'message' => "Error " . $e->getMessage()];
+        }
+
+        return $response;
+    }
+
     //====================== PRIVATE FUNCTION ====================
 
     //generate id_utilisateur
