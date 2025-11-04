@@ -171,7 +171,6 @@ class Caisse extends Database
 
         return $response;
     }
-
     //filter caisse
     public function filterCaisse($params)
     { {
@@ -282,9 +281,24 @@ class Caisse extends Database
             return $response;
         }
     }
+    //update solde seuil
+    public function updateSoldeSeuil($json)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+        } catch (Throwable $e) {
+            $response['message_type'] = 'error';
+            $response['message'] = 'Error : ' . $e->getMessage();
+        }
+
+        return $response;
+    }
 
     //================= PRIVATE FUNCTION ======================
-
     //num_caisse exist?
     private function isNumCaisseExist($num_caisse)
     {
@@ -309,6 +323,47 @@ class Caisse extends Database
                 //not found
                 else {
                     $response['message'] = 'not found';
+                }
+            }
+        } catch (Throwable $e) {
+            $response['message_type'] = 'error';
+            $response['message'] = 'Error : ' . $e->getMessage();
+        }
+
+        return $response;
+    }
+    //num_caisse tab exist?
+    private function numTabExist($tab)
+    {
+        $response  = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+            //placaeholders
+            $placeholders = str_repeat('?, ', count($tab) - 1) . '?';
+            //exist
+            $response = $this->selectQuery("SELECT num_caisse FROM caisse WHERE num_caisse IN ({$tab})", $tab);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //success
+            else {
+                //tab founds
+                $founds = array_column($response['data'], 'num_caisse');
+                //tab not found
+                $notFounds = array_diff($tab, $founds);
+
+                //not found
+                if (count($notFounds) >= 1) {
+                    $response['message_type'] = 'invalid';
+                    //sing
+                    if (count($notFounds) === 1) {
+                        $response['message'] = "Numéro du caisse";
+                    }
                 }
             }
         } catch (Throwable $e) {
