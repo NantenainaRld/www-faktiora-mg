@@ -536,7 +536,7 @@ class User extends Database
         }
     }
     //user exist ?
-    private function isUserExist($id_utilisateur)
+    public function isUserExist($id_utilisateur)
     {
         $response = [
             'message_type' => 'success',
@@ -559,6 +559,10 @@ class User extends Database
                 //found
                 if (count($sql['data'])  >= 1) {
                     $response['message'] = 'found';
+                }
+                //not found
+                else {
+                    $response['message'] = 'not found';
                 }
             }
         } catch (Throwable $e) {

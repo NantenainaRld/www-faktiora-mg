@@ -28,11 +28,29 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
+  //function - update caisse
+  async function updateCaisse() {
+    try {
+      const response = await apiRequest("/caisse/update_caisse", {
+        method: "PUT",
+        body: {
+          num_caisse: 6,
+          num_caisse_update: 8,
+          solde: 88,
+          seuil: 88,
+          id_utilisateur: "U087962YH",
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   //=================== EVENTS =================
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    filterCaisse();
+    updateCaisse();
   });
 });

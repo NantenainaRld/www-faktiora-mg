@@ -39,7 +39,7 @@ class CaisseController extends Controller
             ];
 
             //invalid num_caisse
-            if (!filter_var($json['num_caisse'], FILTER_VALIDATE_INT)) {
+            if (filter_var($json['num_caisse'], FILTER_VALIDATE_INT) === false) {
                 $response = [
                     'message_type' => 'invalid',
                     'message' => 'Le numéro du caisse doit être des nombres entiers positifs .'
@@ -51,8 +51,8 @@ class CaisseController extends Controller
 
                 //invalid solde && seuil
                 if (
-                    !filter_var($json['solde'], FILTER_VALIDATE_FLOAT)
-                    || !filter_var($json['seuil'], FILTER_VALIDATE_FLOAT)
+                    filter_var($json['solde'], FILTER_VALIDATE_FLOAT) === false
+                    || filter_var($json['seuil'], FILTER_VALIDATE_FLOAT) === false
                 ) {
                     $response = [
                         'message_type' => 'invalid',
@@ -144,6 +144,64 @@ class CaisseController extends Controller
             ];
 
             echo json_encode($this->caisse_model->filterCaisse($params));
+        }
+    }
+    //action - update caisse
+    public function updateCaisse()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            header('Content-TYpe: application/json');
+            $json = json_decode(file_get_contents('php://input'), true);
+            $response = null;
+            //trim data
+            $json['num_caisse'] = trim($json['num_caisse']);
+            $json['num_caisse_update'] = trim($json['num_caisse_update']);
+            $json['solde'] = trim($json['solde']);
+            $json['seuil'] = trim($json['seuil']);
+            $json['id_utilisateur'] = trim($json['id_utilisateur']);
+
+            //invalid num_caisse
+            if (filter_var($json['num_caisse'], FILTER_VALIDATE_INT) === false || filter_var($json['num_caisse_update'], FILTER_VALIDATE_INT) === false) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => 'Le numéro du caisse doit être des nombres entiers positifs .'
+                ];
+            }
+            //valid num_caisse
+            else {
+                $json['num_caisse'] = (int)$json['num_caisse'];
+                $json['num_caisse_update'] = (int)$json['num_caisse_update'];
+
+                //invalid solde && seuil
+                if (
+                    filter_var($json['solde'], FILTER_VALIDATE_FLOAT) === false ||
+                    filter_var($json['seuil'], FILTER_VALIDATE_FLOAT) === false
+                ) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => 'Le solde et le seuil doivent être des valeurs décimaux .'
+                    ];
+                }
+                //valid solde && seuil
+                else {
+                    $json['solde'] = (float)$json['solde'];
+                    $json['seuil'] = (float)$json['seuil'];
+
+                    //solde < seuil
+                    if ($json['solde'] < $json['seuil']) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => 'Le sole doit être supérieur ou égal au seuil .'
+                        ];
+                    }
+                    //solde > seuil
+                    else {
+                        $response = $this->caisse_model->updateCaisse($json);
+                    }
+                }
+            }
+
+            echo json_encode($response);
         }
     }
 }
