@@ -61,6 +61,117 @@ class Caisse extends Database
         return $response;
     }
 
+    //filter caisse
+    public function filterCaisse($params)
+    { {
+            $paramsQuery = [];
+
+            $response = ['message_type' => 'success', 'message' => 'success'];
+            $sql = "SELECT u.id_utilisateur, c.num_caisse,COUNT(c.num_caisse) AS nb_caisse, COUNT(f.num_facture) AS nb_factures, COUNT(ae.id_entree) AS nb_ae, (COUNT(f.num_facture) + COUNT(ae.id_entree)) AS nb_entrees, COUNT(s.id_sortie) AS nb_sorties, (COUNT(f.num_facture) + COUNT(ae.id_entree) + COUNT(s.id_sortie)) AS nb_transactions , COALESCE(SUM(f.montant_facture), 0) AS total_factures, COALESCE(SUM(ae.montant_entree), 0) AS total_ae, COALESCE(SUM(f.montant_facture) + SUM(ae.montant_entree) , 0) AS total_entrees, COALESCE(SUM(s.montant_sortie), 0) AS total_sorties, COALESCE(SUM(f.montant_facture) + + SUM(ae.montant_entree) + SUM(s.montant_sortie) , 0 )  AS total_transactions FROM caisse c LEFT JOIN utilisateur u ON u.id_utilisateur = c.id_utilisateur ";
+
+            //per - none
+            if ($params['per'] === 'none') {
+                //from - empty
+                if ($params['from'] === '') {
+                    //to - empty
+                    if ($params['to'] === '') {
+                        //month - none
+                        if ($params['month'] === 'none') {
+                            //year - none
+                            if ($params['year'] === 'none') {
+                                $sql .= "LEFT JOIN facture f ON f.num_caisse = c.num_caisse LEFT JOIN autre_entree ae ON ae.num_caisse = c.num_caisse LEFT JOIN sortie s ON s.num_caisse = c.num_caisse ";
+                            }
+                            //year - 
+                            else {
+                                $sql .= "LEFT JOIN facture f ON f.num_caisse = c.num_caisse AND YEAR(f.date_facture) = :year LEFT JOIN autre_entree ae ON ae.num_caisse = c.num_caisse AND YEAR(ae.date_entree) = :year LEFT JOIN sortie s ON s.num_caisse = c.num_caisse AND YEAR(s.date_sortie) = :year ";
+                                $paramsQuery['year'] = $params['year'];
+                            }
+                        }
+                        //month - 
+                        else {
+                            //year - none === now
+                            if ($params['year'] === 'none') {
+                                $sql .= "LEFT JOIN facture f ON f.num_caisse = c.num_caisse AND MONTH(f.date_facture) = :month AND YEAR(f.date_facture) = YEAR(CURDATE()) LEFT JOIN autre_entree ae ON ae.num_caisse = c.num_caisse AND MONTH(ae.date_entree) = :month AND YEAR(ae.date_entree) = YEAR(CURDATE()) LEFT JOIN sortie s ON s.num_caisse = c.num_caisse AND MONTH(s.date_sortie) = :month AND YEAR(s.date_sortie) = YEAR(CURDATE()) ";
+                                $paramsQuery['month'] = $params['month'];
+                            }
+                            //year - 
+                            else {
+                                $sql .= "LEFT JOIN facture f ON f.num_caisse = c.num_caisse AND MONTH(f.date_facture) = :month AND YEAR(f.date_facture) = :year LEFT JOIN autre_entree ae ON ae.num_caisse = c.num_caisse AND MONTH(ae.date_entree) = :month AND YEAR(ae.date_entree) = :year LEFT JOIN sortie s ON s.num_caisse = c.num_caisse AND MONTH(s.date_sortie) = :month AND YEAR(s.date_sortie) = :year ";
+                                $paramsQuery['month'] = $params['month'];
+                                $paramsQuery['year'] = $params['year'];
+                            }
+                        }
+                    }
+                    //to - 
+                    else {
+                        $sql .= "LEFT JOIN facture f ON f.num_caisse = c.num_caisse AND DATE(f.date_facture) <= :to LEFT JOIN autre_entree ae ON ae.num_caisse = c.num_caisse AND DATE(ae.date_entree) <= :to LEFT JOIN sortie s ON s.num_caisse = c.num_caisse AND DATE(s.date_sortie) <= :to ";
+                        $paramsQuery['to'] = $params['to'];
+                    }
+                }
+                //from -
+                else {
+                    // to - empty
+                    if ($params['to'] === '') {
+                        $sql .= "LEFT JOIN facture f ON f.num_caisse = c.num_caisse AND DATE(f.date_facture) >= :from LEFT JOIN autre_entree ae ON ae.num_caisse = c.num_caisse AND DATE(ae.date_entree) >= :from LEFT JOIN sortie s ON s.num_caisse = c.num_caisse AND DATE(s.date_sortie) >= :from ";
+                        $paramsQuery['from'] = $params['from'];
+                    }
+                    //to -
+                    else {
+                        $sql .= "LEFT JOIN facture f ON f.num_caisse = c.num_caisse AND DATE(f.date_facture) BETWEEN :from AND :to LEFT JOIN autre_entree ae ON ae.num_caisse = c.num_caisse AND DATE(ae.date_entree) BETWEEN :from AND :to LEFT JOIN sortie s ON s.num_caisse = c.num_caisse AND DATE(s.date_sortie)BETWEEN :from AND :to ";
+                        $paramsQuery['from'] = $params['from'];
+                        $paramsQuery['to'] = $params['to'];
+                    }
+                }
+            }
+            //per - type
+            else {
+                //per - day
+                if ($params['per'] === 'day') {
+                    $sql .= "LEFT JOIN facture f ON f.num_caisse = c.num_caisse AND DATE(f.date_facture) = CURDATE() LEFT JOIN autre_entree ae ON ae.num_caisse = c.num_caisse AND DATE(ae.date_entree) = CURDATE() LEFT JOIN sortie s ON s.num_caisse = c.num_caisse AND DATE(s.date_sortie) = CURDATE() ";
+                }
+                //per - week year month
+                else {
+                    $params['per'] = strtoupper($params['per']);
+                    $sql .= "LEFT JOIN facture f ON f.num_caisse = c.num_caisse AND {$params['per']}(f.date_facture) = {$params['per']}(CURDATE()) LEFT JOIN autre_entree ae ON ae.num_caisse = c.num_caisse AND {$params['per']}(ae.date_entree) = {$params['per']}(CURDATE()) LEFT JOIN sortie s ON s.num_caisse = c.num_caisse AND {$params['per']}(s.date_sortie) = {$params['per']}(CURDATE()) ";
+                }
+            }
+
+            //where
+            $sql .= "WHERE 1=1 ";
+
+            //search_caisse
+            if ($params['search_caisse'] !== '') {
+                $params['search_caisse'] = "%" . $params['search_caisse'] . "%";
+                $sql .= "AND (c.num_caisse LIKE :num_caisse OR u.id_utilisateur LIKE :id) ";
+                $paramsQuery['num_caisse'] = $params['search_caisse'];
+                $paramsQuery['id'] = $params['search_caisse'];
+            }
+
+            //group by id
+            $sql .= "GROUP BY c.num_caisse ";
+
+            //by - 
+            if ($params['by'] !== 'none') {
+                $sql .= "ORDER BY {$params['by']} " . strtoupper($params['order_by']);
+            }
+            //order - none
+            else {
+                $sql .= "ORDER BY c.num_caisse ASC ";
+            }
+
+            try {
+                $response = $this->selectQuery($sql, $paramsQuery);
+            } catch (Throwable $e) {
+                $response = [
+                    'message_type' => 'error',
+                    'message' => 'Error : ' . $e->getMessage()
+                ];
+            }
+
+            return $response;
+        }
+    }
+
     //================= PRIVATE FUNCTION ======================
 
     //num_caisse exist?

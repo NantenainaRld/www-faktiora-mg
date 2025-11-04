@@ -254,7 +254,7 @@ class User extends Database
         if ($params['by'] !== 'none') {
             $sql .= "ORDER BY {$params['by']} " . strtoupper($params['order_by']);
         }
-        //order - none
+        //per - none
         else {
             $sql .= "ORDER BY u.nom_utilisateur ASC";
         }

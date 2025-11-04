@@ -85,11 +85,65 @@ class CaisseController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             header('Content-Type: application/json');
-            $response = null;
-            $json = json_decode(file_get_contents('php://input'), true);
 
+            //get parameters
+            $order_default = ['asc', 'desc'];
+            $by_default = [
+                'nb_factures',
+                'nb_ae',
+                'nb_sorties',
+                'nb_entrees',
+                'nb_transactions',
+                'total_factures',
+                'total_ae',
+                'total_sorties',
+                'total_entrees',
+                'total_transactions',
+            ];
+            $per_default = ['day', 'week', 'month', 'year'];
+            //__search_user
+            $search_caisse = $_GET['search_caisse'] ?? '';
+            $search_caisse = trim($search_caisse);
+            //__by
+            $by = $_GET['by'] ?? 'none';
+            $by = strtolower(trim($by));
+            $by = in_array($by, $by_default, true) ? $by : 'none';
+            //__order_by
+            $order_by = $_GET['order_by'] ?? 'desc';
+            $order_by = strtolower(trim($order_by));
+            $order_by = in_array($order_by, $order_default, true) ? $order_by : 'desc';
+            //__date_from
+            $from = $_GET['from'] ?? '';
+            $from = strtolower(trim($from));
+            //__date_to
+            $to = $_GET['to'] ?? '';
+            $to = strtolower(trim($to));
+            //__per
+            $per = $_GET['per'] ?? 'none';
+            $per = strtolower(trim($per));
+            $per = in_array($per, $per_default, true) ? $per : 'none';
+            //__month
+            $month = $_GET['month'] ?? 'none';
+            $month = trim($month);
+            $month = ($month !== 'none') ? (((int)$month >= 1 && (int)$month <= 12) ? (int)($month) : 1) : $month;
+            //__year
+            $year = $_GET['year'] ?? 'none';
+            $year = trim($year);
+            $year  = ($year !== 'none') ? (((int)$year >= 1970 && (int)$year <= 2500) ? (int)$year : date('Y')) : $year;
 
-            echo json_encode($response);
+            //paramters
+            $params = [
+                'per' => $per, //on and
+                'from' => $from, //on and
+                'to' => $to, //on and
+                'month' => $month, //on and
+                'year' => $year, //on and
+                'search_caisse' => $search_caisse, //where
+                'by' => $by, //order
+                'order_by' => $order_by //order by
+            ];
+
+            echo json_encode($this->caisse_model->filterCaisse($params));
         }
     }
 }

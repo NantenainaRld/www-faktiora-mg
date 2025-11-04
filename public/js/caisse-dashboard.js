@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function filterCaisse() {
     try {
       const response = await apiRequest(
-        "/caisse/filter_caisse&search_caisse=5&by=nb_sorties&order_by=desc&from=&to=&per=none&month=none&year=none"
+        "/caisse/filter_caisse&search_caisse=85&by=nb_sorties&order_by=desc&from=202&to=22&per=week&month=4&year=2026"
       );
       console.log(response);
     } catch (error) {
@@ -33,6 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    addCaisse();
+    filterCaisse();
   });
 });
