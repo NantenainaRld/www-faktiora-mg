@@ -292,7 +292,7 @@ class Caisse extends Database
         }
     }
     //update solde seuil
-    public function updateSoldeSeuil($json)
+    public function updateSoldeSeuil($params)
     {
         $response = [
             'message_type' => 'success',
@@ -300,6 +300,13 @@ class Caisse extends Database
         ];
 
         try {
+            //nums exist?
+            $response = $this->numTabExist($params['nums']);
+
+            //error or invalid
+            if ($response['message_type'] !== 'success') {
+                return $response;
+            }
         } catch (Throwable $e) {
             $response['message_type'] = 'error';
             $response['message'] = 'Error : ' . $e->getMessage();
@@ -354,7 +361,7 @@ class Caisse extends Database
             //placaeholders
             $placeholders = str_repeat('?, ', count($tab) - 1) . '?';
             //exist
-            $response = $this->selectQuery("SELECT num_caisse FROM caisse WHERE num_caisse IN ({$tab})", $tab);
+            $response = $this->selectQuery("SELECT num_caisse FROM caisse WHERE num_caisse IN ({$placeholders})", $tab);
 
             //error
             if ($response['message_type'] === 'error') {
@@ -365,14 +372,20 @@ class Caisse extends Database
                 //tab founds
                 $founds = array_column($response['data'], 'num_caisse');
                 //tab not found
-                $notFounds = array_diff($tab, $founds);
+                $notFounds = array_values(array_diff($tab, $founds));
 
-                //not found
+                // $response['message'] = $tab;
+                // not found
                 if (count($notFounds) >= 1) {
                     $response['message_type'] = 'invalid';
+
                     //sing
                     if (count($notFounds) === 1) {
-                        // $response['message'] = "Numéro du caisse";
+                        $response['message'] = "Numéro de caisse non trouvé : " . $notFounds[0];
+                    }
+                    //plur
+                    else {
+                        $response['message'] = "Numéros de caisse non trouvés : " . implode(', ', $notFounds);
                     }
                 }
             }

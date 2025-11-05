@@ -48,12 +48,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   //function - update solde && seuil
   async function updateSoldeSeuil() {
-    const nums = ["   s1", "s2", "qq", 3, 4, 5, 6, 8];
+    // const nums = ["5", "0", 6, 8];
+    const nums = [58, 8];
 
     try {
       const response = await apiRequest("/caisse/update_solde_seuil", {
         method: "PUT",
-        body: nums,
+        body: {
+          solde: 500,
+          seuil: 500,
+          nums: nums,
+        },
       });
       console.log(response);
     } catch (error) {
@@ -65,6 +70,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    filterCaisse();
+    updateSoldeSeuil();
   });
 });

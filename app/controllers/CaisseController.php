@@ -216,33 +216,81 @@ class CaisseController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
             header('Content-Type: application/json');
             $response  = null;
-            $json = json_decode(file_get_contents("php://input"));
+            $json = json_decode(file_get_contents("php://input"), true);
 
+            $nums = $json['nums'];
             //trim values
-            $json = array_map(fn($x) => trim($x), $json);
-            //filter values
-            $invalidNum = array_values(array_filter($json, fn($x) => filter_var($x, FILTER_VALIDATE_INT) === false));
+            $json = [
+                'solde' => trim($json['solde']),
+                'seuil' => trim($json['seuil'])
+            ];
+
+            $nums = array_map(fn($x) => trim($x), $nums);
+            // filter values (char and negatif)
+            $invalidNum = array_values(array_filter($nums, function ($x) {
+                $val = filter_var($x, FILTER_VALIDATE_INT);
+                return $val === false || $val < 0;
+            }));
 
             //invalid num
-            $nbINvalid = count($invalidNum);
-            if ($nbINvalid >= 1) {
+            if (count($invalidNum) >= 1) {
                 //sing
-                if ($nbINvalid === 1) {
+                if (count($invalidNum) === 1) {
                     $response = [
                         'message_type' => 'invalid',
-                        'message' => "Numéro du caisse invalide : " . $invalidNum[0]
+                        'message' => "Numéro de caisse invalide : " . $invalidNum[0]
                     ];
                 }
                 //plur
                 else {
                     $response = [
                         'message_type' => 'invalid',
-                        'message' => "Numéro du caisse invalide : " . implode(', ', $invalidNum)
+                        'message' => "Numéros de caisse invalides : " . implode(', ', $invalidNum)
                     ];
                 }
             }
-            //valid num_caisse
+            //valid num
             else {
+                //invalid solde && seuil
+                if (filter_var($json['solde'], FILTER_VALIDATE_FLOAT) === false || filter_var($json['seuil'], FILTER_VALIDATE_FLOAT) === false) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => "Valeurs de solde ou seuil entrées sont invalides."
+                    ];
+                }
+                //valid solde && seuil
+                else {
+                    //< 0
+                    if ($json['solde'] < 0 || $json['seuil'] < 0) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => "Valeurs de solde et seuil doient être supérieur ou égal à 0."
+                        ];
+                    }
+                    //>0
+                    else {
+                        //solde < seuil
+                        if ($json['solde'] < $json['seuil']) {
+                            $response = [
+                                'message_type' => 'invalid',
+                                'message' => "Le solde doit être supérieur ou égal au seuil."
+                            ];
+                        }
+                        //solde >= seuil
+                        else {
+                            //convert to int
+                            $nums  = array_map('intval', $nums);
+                            $params = [
+                                'nums' => $nums,
+                                'solde' => $json['solde'],
+                                'seuil' => $json['seuil']
+                            ];
+
+                            //update caisses
+                            $response = $this->caisse_model->updateSoldeSeuil($params);
+                        }
+                    }
+                }
             }
 
             echo json_encode($response);
