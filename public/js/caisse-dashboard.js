@@ -48,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   //function - update solde && seuil
   async function updateSoldeSeuil() {
-    // const nums = ["5", "0", 6, 8];
     const nums = [58, 8];
 
     try {

@@ -307,6 +307,24 @@ class Caisse extends Database
             if ($response['message_type'] !== 'success') {
                 return $response;
             }
+            //success
+            else {
+                //placeholders
+                $placeholders = str_repeat('?, ', count($params['nums']) - 1) . '?';
+                $sql = "UPDATE caisse SET solde = ?, seuil = ? WHERE num_caisse IN ({$placeholders})";
+
+                //update multi solde && seuil
+                $response = $this->executeQuery($sql, array_merge([$params['solde'], $params['seuil']], $params['nums']));
+
+                //error
+                if ($response['message_type'] === 'error') {
+                    return $response;
+                }
+                //success
+                else {
+                    $response['message'] = "Solde et seuil sont modifiés pour les caisses : " . implode(', ', $params['nums']);
+                }
+            }
         } catch (Throwable $e) {
             $response['message_type'] = 'error';
             $response['message'] = 'Error : ' . $e->getMessage();
