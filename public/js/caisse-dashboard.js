@@ -111,7 +111,6 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
-
   //=================== EVENTS =================
   //btn-test
   const btnTest = document.getElementById("btn-test");

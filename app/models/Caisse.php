@@ -625,4 +625,35 @@ class Caisse extends Database
 
         return $response;
     }
+    //update solde
+    public function updateSolde($num_caisse, $solde, $type)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+            //increase
+            if ($type === 'increase') {
+                $response = $this->executeQuery("UPDATE caisse SET solde = solde + :solde WHERE num_caisse = :um_caisse", [
+                    'solde' => $solde,
+                    'num_caisse' => $num_caisse
+                ]);
+            }
+            //decrease
+            else {
+                $response = $this->executeQuery("UPDATE caisse SET solde = solde - :solde WHERE num_caisse = :um_caisse", [
+                    'solde' => $solde,
+                    'num_caisse' => $num_caisse
+                ]);
+            }
+            // $response
+        } catch (Throwable $e) {
+            $response['message_type'] = 'error';
+            $response['message'] = 'Error : ' . $e->getMessage();
+        }
+
+        return $response;
+    }
 }
