@@ -64,11 +64,28 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
+  //function - free caisse (remove user)
+  async function freeCaisse() {
+    // const nums = [58, 8];
+    const nums = [8, 9];
+
+    try {
+      const response = await apiRequest("/caisse/free_caisse", {
+        method: "PUT",
+        body: {
+          nums: nums,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   //=================== EVENTS =================
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    updateCaisse();
+    freeCaisse();
   });
 });

@@ -334,6 +334,53 @@ class Caisse extends Database
 
         return $response;
     }
+    //free caisse
+    public function freeCaisse($json)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+            //num_tab exist?
+            $response = $this->numTabExist($json);
+
+            //error or invalid
+            if ($response['message_type'] !== 'success') {
+                return $response;
+            }
+            //success
+            else {
+                //placeholders
+                $placeholders = str_repeat('?, ', count($json) - 1) . '?';
+
+                //free caisse
+                $response = $this->executeQuery("UPDATE caisse SET id_utilisateur = NULL WHERE num_caisse IN ({$placeholders})", $json);
+
+                //error
+                if ($response['message_type'] === 'error') {
+                    return $response;
+                }
+                //success
+                else {
+                    //sing
+                    if (count($json) === 1) {
+                        $response['message'] =  "Une caisse a été libérée avec succès .";
+                    }
+                    //plur
+                    else {
+                        $response['message'] = count($json) . " caisses sont libérées avec succès .";
+                    }
+                }
+            }
+        } catch (Throwable $e) {
+            $response['message_type'] = 'error';
+            $response['message'] = 'Error : ' . $e->getMessage();
+        }
+
+        return $response;
+    }
 
     //================= PRIVATE FUNCTION ======================
 

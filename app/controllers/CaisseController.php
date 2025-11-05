@@ -311,4 +311,56 @@ class CaisseController extends Controller
             echo json_encode($response);
         }
     }
+    //action - free caisse
+    public function freeCaisse()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            header('Content-Type: application/json');
+            $json = json_decode(file_get_contents("php://input"), true);
+            $response = null;
+
+            //no selection
+            if (count($json['nums']) <= 0) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => "Aucune caisse n'est séléctionnée ."
+                ];
+            }
+            //selection
+            else {
+                //trim
+                $json = array_map(fn($x) => trim($x), $json['nums']);
+
+                // filter values (char and negatif)
+                $invalidNum = array_values(array_filter($json, function ($x) {
+                    $val = filter_var($x, FILTER_VALIDATE_INT);
+                    return $val === false || $val < 0;
+                }));
+
+                //invalid num_caisse
+                if (count($invalidNum) >= 1) {
+                    //sing
+                    if (count($invalidNum) === 1) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => "Numéro de caisse invalide : " . $invalidNum[0]
+                        ];
+                    }
+                    //plur
+                    else {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => "Numéros de caisse invalides : " . implode(', ', $invalidNum)
+                        ];
+                    }
+                }
+                //valid num_caisse
+                else {
+                    $response = $this->caisse_model->freeCaisse($json);
+                }
+            }
+
+            echo json_encode($response);
+        }
+    }
 }
