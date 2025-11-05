@@ -241,68 +241,79 @@ class CaisseController extends Controller
             ];
 
             $nums = array_map(fn($x) => trim($x), $nums);
-            // filter values (char and negatif)
-            $invalidNum = array_values(array_filter($nums, function ($x) {
-                $val = filter_var($x, FILTER_VALIDATE_INT);
-                return $val === false || $val < 0;
-            }));
 
-            //invalid num
-            if (count($invalidNum) >= 1) {
-                //sing
-                if (count($invalidNum) === 1) {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => "Numéro de caisse invalide : " . $invalidNum[0]
-                    ];
-                }
-                //plur
-                else {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => "Numéros de caisse invalides : " . implode(', ', $invalidNum)
-                    ];
-                }
+            //no selection
+            if (count($nums) <= 0) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => "Aucune caisse n'est séléctionnée ."
+                ];
             }
-            //valid num
+            //selection
             else {
-                //invalid solde && seuil
-                if (filter_var($json['solde'], FILTER_VALIDATE_FLOAT) === false || filter_var($json['seuil'], FILTER_VALIDATE_FLOAT) === false) {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => "Valeurs de solde ou seuil entrées sont invalides."
-                    ];
-                }
-                //valid solde && seuil
-                else {
-                    //< 0
-                    if ($json['solde'] < 0 || $json['seuil'] < 0) {
+                // filter values (char and negatif)
+                $invalidNum = array_values(array_filter($nums, function ($x) {
+                    $val = filter_var($x, FILTER_VALIDATE_INT);
+                    return $val === false || $val < 0;
+                }));
+
+                //invalid num
+                if (count($invalidNum) >= 1) {
+                    //sing
+                    if (count($invalidNum) === 1) {
                         $response = [
                             'message_type' => 'invalid',
-                            'message' => "Valeurs de solde et seuil doient être supérieur ou égal à 0."
+                            'message' => "Numéro de caisse invalide : " . $invalidNum[0]
                         ];
                     }
-                    //>0
+                    //plur
                     else {
-                        //solde < seuil
-                        if ($json['solde'] < $json['seuil']) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => "Numéros de caisse invalides : " . implode(', ', $invalidNum)
+                        ];
+                    }
+                }
+                //valid num
+                else {
+                    //invalid solde && seuil
+                    if (filter_var($json['solde'], FILTER_VALIDATE_FLOAT) === false || filter_var($json['seuil'], FILTER_VALIDATE_FLOAT) === false) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => "Valeurs de solde ou seuil entrées sont invalides."
+                        ];
+                    }
+                    //valid solde && seuil
+                    else {
+                        //< 0
+                        if ($json['solde'] < 0 || $json['seuil'] < 0) {
                             $response = [
                                 'message_type' => 'invalid',
-                                'message' => "Le solde doit être supérieur ou égal au seuil."
+                                'message' => "Valeurs de solde et seuil doient être supérieur ou égal à 0."
                             ];
                         }
-                        //solde >= seuil
+                        //>0
                         else {
-                            //convert to int
-                            $nums  = array_map('intval', $nums);
-                            $params = [
-                                'nums' => $nums,
-                                'solde' => $json['solde'],
-                                'seuil' => $json['seuil']
-                            ];
+                            //solde < seuil
+                            if ($json['solde'] < $json['seuil']) {
+                                $response = [
+                                    'message_type' => 'invalid',
+                                    'message' => "Le solde doit être supérieur ou égal au seuil."
+                                ];
+                            }
+                            //solde >= seuil
+                            else {
+                                //convert to int
+                                $nums  = array_map('intval', $nums);
+                                $params = [
+                                    'nums' => $nums,
+                                    'solde' => $json['solde'],
+                                    'seuil' => $json['seuil']
+                                ];
 
-                            //update caisses
-                            $response = $this->caisse_model->updateSoldeSeuil($params);
+                                //update caisses
+                                $response = $this->caisse_model->updateSoldeSeuil($params);
+                            }
                         }
                     }
                 }

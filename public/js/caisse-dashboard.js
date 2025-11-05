@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   //function - update solde && seuil
   async function updateSoldeSeuil() {
-    const nums = [58, 8];
+    const nums = [];
 
     try {
       const response = await apiRequest("/caisse/update_solde_seuil", {
@@ -86,6 +86,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    freeCaisse();
+    updateSoldeSeuil();
   });
 });
