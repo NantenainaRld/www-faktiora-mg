@@ -81,11 +81,26 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
+  //function - delete caisse
+  async function deleteCaisse() {
+    const nums = [8, 9];
+    try {
+      const response = await apiRequest("/caisse/delete_caisse", {
+        method: "DELETE",
+        body: {
+          nums: nums,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   //=================== EVENTS =================
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    updateSoldeSeuil();
+    deleteCaisse();
   });
 });

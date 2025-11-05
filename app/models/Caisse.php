@@ -381,6 +381,53 @@ class Caisse extends Database
 
         return $response;
     }
+    //delete caisses
+    public function deleteCaisse($json)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+            //num_caisse tab exist?
+            $response = $this->numTabExist($json);
+
+            //error && invalid
+            if ($response['message_type'] !== 'success') {
+                return $response;
+            }
+            //success
+            else {
+                //placeholders
+                $placeholders = str_repeat('?, ', count($json) - 1) . '?';
+
+                //delete caisse
+                $response = $this->executeQuery("DELETE FROM caisse WHERE num_caisse IN ({$placeholders})", $json);
+
+                //error
+                if ($response['message_type'] === 'error') {
+                    return $response;
+                }
+                //success
+                else {
+                    //sing
+                    if (count($json) === 1) {
+                        $response['message'] = "Une caisse a été supprimée avec succès .";
+                    }
+                    //plur
+                    else {
+                        $response['message'] = count($json) . " caisses ont été supprimées avec succès.";
+                    }
+                }
+            }
+        } catch (Throwable $e) {
+            $response['message_type'] = 'error';
+            $response['message'] = 'Error : ' . $e->getMessage();
+        }
+
+        return $response;
+    }
 
     //================= PRIVATE FUNCTION ======================
 
