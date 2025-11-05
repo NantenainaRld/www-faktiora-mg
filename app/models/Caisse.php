@@ -256,7 +256,17 @@ class Caisse extends Database
                 $paramsQuery['num_caisse'] = $params['search_caisse'];
                 $paramsQuery['id'] = $params['search_caisse'];
             }
-
+            //type
+            if ($params['type'] !== 'all') {
+                //null
+                if ($params['type'] === 'null') {
+                    $sql .= "AND c.id_utilisateur IS NULL ";
+                }
+                //!null
+                else {
+                    $sql .= "AND c.id_utilisateur IS NOT NULL ";
+                }
+            }
             //group by id
             $sql .= "GROUP BY c.num_caisse ";
 
@@ -362,7 +372,7 @@ class Caisse extends Database
                     $response['message_type'] = 'invalid';
                     //sing
                     if (count($notFounds) === 1) {
-                        $response['message'] = "Numéro du caisse";
+                        // $response['message'] = "Numéro du caisse";
                     }
                 }
             }

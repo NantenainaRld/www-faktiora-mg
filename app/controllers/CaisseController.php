@@ -99,8 +99,10 @@ class CaisseController extends Controller
                 'total_sorties',
                 'total_entrees',
                 'total_transactions',
+                'c.num_caisse'
             ];
             $per_default = ['day', 'week', 'month', 'year'];
+            $type_default = ['null', '!null'];
             //__search_user
             $search_caisse = $_GET['search_caisse'] ?? '';
             $search_caisse = trim($search_caisse);
@@ -130,6 +132,9 @@ class CaisseController extends Controller
             $year = $_GET['year'] ?? 'none';
             $year = trim($year);
             $year  = ($year !== 'none') ? (((int)$year >= 1970 && (int)$year <= 2500) ? (int)$year : date('Y')) : $year;
+            //__type
+            $type = trim($_GET['type'] ?? 'all');
+            $type = in_array($type, $type_default) ? $type : 'all';
 
             //paramters
             $params = [
@@ -140,7 +145,8 @@ class CaisseController extends Controller
                 'year' => $year, //on and
                 'search_caisse' => $search_caisse, //where
                 'by' => $by, //order
-                'order_by' => $order_by //order by
+                'order_by' => $order_by, //order by
+                'type' => $type //where
             ];
 
             echo json_encode($this->caisse_model->filterCaisse($params));
