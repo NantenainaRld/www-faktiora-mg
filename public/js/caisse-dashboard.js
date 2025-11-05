@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await apiRequest("/caisse/add_caisse", {
         method: "POST",
         body: {
-          num_caisse: 58,
+          num_caisse: 2,
           solde: 150000,
-          seuil: 10000,
+          seuil: "10000    ",
         },
       });
       console.log(response);
@@ -35,9 +35,9 @@ document.addEventListener("DOMContentLoaded", () => {
         method: "PUT",
         body: {
           num_caisse: 6,
-          num_caisse_update: 8,
-          solde: 88,
-          seuil: 88,
+          update_num_caisse: 9,
+          solde: 588,
+          seuil: 288,
           id_utilisateur: "U087962YH",
         },
       });
@@ -69,6 +69,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    updateSoldeSeuil();
+    updateCaisse();
   });
 });
