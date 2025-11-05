@@ -96,11 +96,26 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
+  //function - affect caisse
+  async function affectCaisse() {
+    try {
+      const response = await apiRequest("/caisse/affect_caisse", {
+        method: "PUT",
+        body: {
+          num_caisse: 58,
+          id_utilisateur: "U087962YH",
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   //=================== EVENTS =================
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    deleteCaisse();
+    affectCaisse();
   });
 });

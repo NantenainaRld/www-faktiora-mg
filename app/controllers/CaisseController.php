@@ -426,4 +426,43 @@ class CaisseController extends Controller
             echo json_encode($response);
         }
     }
+    //action - affect caisse
+    public function affectCaisse()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === "PUT") {
+            header('Content-Type: application/json');
+            $json = json_decode(file_get_contents("php://input"), true);
+            $response = null;
+
+            //trim
+            $json = array_map(fn($x) => trim($x), $json);
+
+            //num_caisse INT ?
+            $num_caisse = filter_var($json['num_caisse'], FILTER_VALIDATE_INT);
+
+            //num_caisse invalid
+            if ($num_caisse === false || $num_caisse < 0) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => "Numéro de caisse invalide : " .  $num_caisse
+                ];
+            }
+            //num_caisse valid
+            else {
+                //id_utilisateur - empty
+                if (empty($json['id_utilisateur'])) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => "Veuiller entrer le numéro de l'utilisateur ."
+                    ];
+                }
+                //if_utilisateur -
+                else {
+                    $response = $this->caisse_model->affectCaisse($json);
+                }
+            }
+
+            echo json_encode($response);
+        }
+    }
 }

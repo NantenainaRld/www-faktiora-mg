@@ -428,6 +428,84 @@ class Caisse extends Database
 
         return $response;
     }
+    //affect caisse
+    public function affectCaisse($json)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+            //num_caisse exist?
+            $response = $this->isNumCaisseExist($json['num_caisse']);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //success
+            else {
+                //not found
+                if ($response['message'] === 'not found') {
+                    $response['message'] = "Numéro de caisse non trouvé : " . $json['num_caisse'];
+                }
+                //found
+                else {
+                    //user exist?
+                    $user_model = new User();
+                    $response = $user_model->isUserExist($json['id_utilisateur']);
+
+                    //error
+                    if ($response['message_type'] === 'error') {
+                        return $response;
+                    }
+                    //success
+                    else {
+                        //not found
+                        if ($response['message'] === 'not found') {
+                            $response['message'] = "Utilisateur avec l'ID : <b>"  . $json['id_utilisateur'] . "</b> n'existe pas .";
+                        }
+                        //found
+                        else {
+                            //affect caisse
+                            $response = $this->executeQuery("UPDATE caisse SET id_utilisateur = :id WHERE num_caisse = :num_caisse", [
+                                'id' => $json['id_utilisateur'],
+                                'num_caisse' => $json['num_caisse']
+                            ]);
+
+                            //error
+                            if ($response['message_type'] === 'error') {
+                                return $response;
+                            }
+                            //success
+                            else {
+                                //move user to the selected caisse
+                                $response = $this->executeQuery("UPDATE caisse SET id_utilisateur = NULL WHERE id_utilisateur = :id AND num_caisse != :num_caisse", [
+                                    'id' => $json['id_utilisateur'],
+                                    'num_caisse' => $json['num_caisse']
+                                ]);
+
+                                //error
+                                if ($response['message_type'] === 'error') {
+                                    return $response;
+                                }
+                                //success
+                                else {
+                                    $response['message'] = "L'utilisateur <b>" . $json['id_utilisateur'] . "</b> a été mis au caisse numéro <b>" . $json['num_caisse'] . "</b>";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Throwable $e) {
+            $response['message_type'] = 'error';
+            $response['message'] = 'Error : ' . $e->getMessage();
+        }
+
+        return $response;
+    }
 
     //================= PRIVATE FUNCTION ======================
 
