@@ -16,4 +16,19 @@ class EntreeController extends Controller
     {
         $this->render('entree_dashboard', ['title' => "Gestion des entrées"]);
     }
+
+
+    //========================== ACTIONS ============================
+
+    //action - add autree entree
+    public function addAutreEntree()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            header('Content-Type: application/json');
+            $json = json_decode(file_get_contents("php://input"), true);
+            $response = null;
+
+            echo json_encode($response);
+        }
+    }
 }
