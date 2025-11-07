@@ -1,6 +1,7 @@
 <?php
 
 return [
-    'titles' =>
-    ['login' => "Faktiora - login"]
+    'titles' => [
+        'login' => "Faktiora - login",
+    ]
 ];

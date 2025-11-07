@@ -23,9 +23,10 @@ require_once CONFIG_PATH . '/config.php';
 require_once SERVICE_PAH . '/TranslationService.php';
 
 //initialize translation
-TranslationService::init();
+TranslationService::init('mg');
 
-// echo TranslationService::$curren_lang;
+// print_r(TranslationService::translate("forms.titles.login"));
+echo (TranslationService::translate("forms.titles.login"));
 // // charge autoload
 // require_once CORE_PATH . '/Autoload.php';
 
