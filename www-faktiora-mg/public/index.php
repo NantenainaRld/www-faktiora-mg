@@ -15,14 +15,16 @@ define('CONFIG_PATH', ROOT_PATH . '/config');
 define('LIBS_PATH', ROOT_PATH . '/libs');
 define('PUBLIC_PATH', __DIR__);
 
-// charge config file
-require_once CONFIG_PATH . '/config.php';
-// charge autoload
-require_once CORE_PATH . '/Autoload.php';
+echo 'test';
 
-// Autoload
-Autoload::register();
+// // charge config file
+// require_once CONFIG_PATH . '/config.php';
+// // charge autoload
+// require_once CORE_PATH . '/Autoload.php';
 
-// Router
-$router = new Router();
-$router->run();
+// // Autoload
+// Autoload::register();
+
+// // Router
+// $router = new Router();
+// $router->run();

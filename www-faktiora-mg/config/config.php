@@ -1,6 +1,6 @@
 <?php
 
-// DEBUG for prod or dev
+// DEBUG for prod 
 define('DEBUG', true);
 
 // Global Database connection parameters
