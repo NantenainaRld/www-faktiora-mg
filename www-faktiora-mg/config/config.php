@@ -35,14 +35,7 @@ function getConnection()
 
         return $pdo;
     } catch (PDOException $e) {
-        //dev error
-        if (!DEBUG) {
-            die("Database connection error : " . $e->getMessage());
-        }
-        //prod error
-        else {
-            echo "Erreur de connection à la base des données, retourner .";
-            exit;
-        }
+        //redirect to error page
+        header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.database', ['field' => $e->getMessage()]));
     }
 }

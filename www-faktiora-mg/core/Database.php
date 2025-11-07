@@ -27,7 +27,7 @@ class Database
         } catch (PDOException $e) {
             return [
                 'message_type' => 'error',
-                'message' => $e->getMessage()
+                'message' => __('errors.catch.query', ['field' => $e->getMessage()])
             ];
         }
     }
@@ -41,7 +41,7 @@ class Database
         } catch (PDOException $e) {
             return [
                 'message_type' => 'error',
-                'message' => $e->getMessage()
+                'message' => __('errors.catch.query', ['field' => $e->getMessage()])
             ];
         }
     }
