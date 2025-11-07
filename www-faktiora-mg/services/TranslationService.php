@@ -6,7 +6,10 @@ class TranslationService
     //translations files types
     private static $translations = [];
     //default lang
-    private static $curren_lang = 'fr';
+    private static $current_lang = 'fr';
+
+
+    //==================== PUBLIC METHODS ======================
 
     //method - initialize transalation service
     public static function init($lang = null)
@@ -14,16 +17,18 @@ class TranslationService
         //get || set language by cookie
         //__cookie exist - cookie mang
         if (isset($_COOKIE['lang'])) {
-            self::$curren_lang = trim($_COOKIE['lang']);
+            self::$current_lang = trim($_COOKIE['lang']);
         }
         //__cookie !exist
         else {
             //browser lang
-            self::$curren_lang = $lang ?: self::detectLang();
+            self::$current_lang = $lang ?: self::detectLang();
         }
     }
-    //mehod - detect lang
-    public static function detectLang(): string
+
+    //====================== PRIVATE METHODS ====================
+    //method - detect lang
+    private static function detectLang(): string
     {
         //browser lang
         $browser_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'fr', 0, 2);
@@ -32,5 +37,28 @@ class TranslationService
 
         //browser lang - supported or not
         return in_array($browser_lang, $supported) ? $browser_lang : 'fr';
+    }
+    //method - load transalation folder/files
+    private static function loadFiles()
+    {
+        //lang path
+        $lang_path = I18N_PATH . '/locales/' . self::$current_lang . '/';
+        //files
+        $files = ['errors', 'forms', 'messages'];
+
+        //require files
+        foreach ($files as $file) {
+            //file path
+            $file_path = $lang_path . $file . '.php';
+
+            //file !exist
+            if (!file_exists($file_path)) {
+                error_log("File not found : " . $file_path);
+            }
+            //file exist - require
+            else {
+                self::$translations[$file] = require $file_path;
+            }
+        }
     }
 }

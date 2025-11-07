@@ -14,6 +14,7 @@ define('CORE_PATH', ROOT_PATH . '/core');
 define('CONFIG_PATH', ROOT_PATH . '/config');
 define('LIBS_PATH', ROOT_PATH . '/libs');
 define('SERVICE_PAH', ROOT_PATH . '/services');
+define('I18N_PATH', ROOT_PATH . '/i18n');
 define('PUBLIC_PATH', __DIR__);
 
 //charge config file
