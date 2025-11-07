@@ -21,6 +21,8 @@ define('PUBLIC_PATH', __DIR__);
 require_once CONFIG_PATH . '/config.php';
 //charge translations
 require_once SERVICE_PAH . '/TranslationService.php';
+//charge helper
+require_once CORE_PATH . '/helper.php';
 
 //initialize translation
 TranslationService::init();

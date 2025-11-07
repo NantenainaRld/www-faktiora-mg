@@ -1,3 +1,15 @@
-<?php
+<!DOCTYPE html>
+<html lang="en">
 
-echo "not found";
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= __('forms.titles.error'); ?></title>
+</head>
+
+<body>
+
+</body>
+<?= $_GET['messages'] ?? __('forms.buttons.return'); ?>
+
+</html>

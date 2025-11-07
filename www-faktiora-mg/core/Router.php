@@ -3,7 +3,6 @@
 // class router
 class Router
 {
-    private $url;
     private $controller;
     private $action;
 
@@ -52,30 +51,23 @@ class Router
                 }
                 //method !exist
                 else {
-                    $message = null;
                     //page not found
-                    if (str_contains($this->action, 'page')) {
-                        $message = "Erreur : la page demandée n'est pas trouvée .";
-                    }
+                    $type = 'page';
+
                     //action not found
-                    else {
-                        $message = "Erreur : l'action demandée n'est pas trouvée .";
+                    if (!str_contains($this->action, 'page')) {
+                        $type = 'action';
                     }
 
                     //redirect to error page
-                    header('Location: ' . SITE_URL . '/error?message=' . $message);
+                    header('Location: ' . SITE_URL . '/error?messages=' . __(
+                        'errors.not_found.' . $type,
+                        ['field' => $this->action]
+                    ));
                 }
             } catch (Throwable $e) {
-                //error dev
-                if (DEBUG) {
-                    echo $e->getMessage() . "<br>" . $e->getFIle()
-                        . "<br>Line : " . $e->getLine();
-                }
-                //error prod
-                else {
-                    //*********************page errors
-                    echo "Une erreur est survenue, retourne .";
-                }
+                //redirect to error page
+                header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.router', ['field' => $e->getMessage()]));
             }
         }
     }

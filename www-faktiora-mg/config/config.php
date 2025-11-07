@@ -22,27 +22,27 @@ define('BASE_URL', rtrim($script_dir, '/'));
 define('SITE_URL', $protocol . '://' . $host);
 
 // Function to get a database connection using PDO
-// function getConnection()
-// {
-//     try {
-//         // data source name
-//         $dsn = 'mysql:host='
-//             . DB_HOST . ';dbname=' . DB_NAME
-//             . ';charset=utf8';
-//         // pdo instance
-//         $pdo = new PDO($dsn, DB_USER, DB_PASS);
-//         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+function getConnection()
+{
+    try {
+        // data source name
+        $dsn = 'mysql:host='
+            . DB_HOST . ';dbname=' . DB_NAME
+            . ';charset=utf8';
+        // pdo instance
+        $pdo = new PDO($dsn, DB_USER, DB_PASS);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-//         return $pdo;
-//     } catch (PDOException $e) {
-//         //dev error
-//         if (!DEBUG) {
-//             die("Database connection error : " . $e->getMessage());
-//         }
-//         //prod error
-//         else {
-//             echo "Erreur de connection à la base des données, retourner .";
-//             exit;
-//         }
-//     }
-// }
+        return $pdo;
+    } catch (PDOException $e) {
+        //dev error
+        if (!DEBUG) {
+            die("Database connection error : " . $e->getMessage());
+        }
+        //prod error
+        else {
+            echo "Erreur de connection à la base des données, retourner .";
+            exit;
+        }
+    }
+}
