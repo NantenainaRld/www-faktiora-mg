@@ -24,6 +24,10 @@ require_once SERVICE_PAH . '/TranslationService.php';
 //charge helper
 require_once CORE_PATH . '/helper.php';
 
+//time_zone
+$time_zone = $_COOKIE['time_zone'] ?? 'Indian/Antananarivo';
+define('TIME_ZONE', $time_zone);
+
 //initialize translation
 TranslationService::init();
 

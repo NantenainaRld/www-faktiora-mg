@@ -9,6 +9,9 @@ class Database
     {
         // open  (config.php)
         $this->pdo = getConnection();
+        //set time_zone
+        $time_zone = (new DateTime('now', new DateTimeZone(TIME_ZONE)))->format('P');
+        $this->pdo->exec("SET time_zone = '$time_zone'");
     }
 
     // execute SELECT query and return result

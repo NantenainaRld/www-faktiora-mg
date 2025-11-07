@@ -1,3 +1,8 @@
+//set timezone
+document.cookie = `time_zone=${
+  Intl.DateTimeFormat().resolvedOptions().timeZone
+}; path=/`;
+
 //api request
 async function apiRequest(url, options = {}) {
   url = SITE_URL + url;
