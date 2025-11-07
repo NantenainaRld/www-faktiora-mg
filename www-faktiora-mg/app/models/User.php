@@ -11,6 +11,47 @@ class User extends Database
 
     //==================  PUBLIC FUNCTION ====================
 
+    //create default admin account
+    public function createDefaultAdmin()
+    {
+        $response = [
+            'message_type' => "success",
+            'message' => 'success'
+        ];
+
+        try {
+            //admin exist?
+            $response = self::isAdminExist();
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //success
+            else {
+                //not found
+                if ($response['message'] === 'not found') {
+                    //create default admin
+                    return $this->executeQuery("INSERT INTO utilisateur (id_utilisateur, nom_utilisateur, sexe_utilisateur, email_utilisateur, role, mdp) VALUES (:id, :nom, :sexe, :email, :role, :mdp)", [
+                        'id' => "000000",
+                        'nom' => 'admin',
+                        'email' => 'admin@faktiora.mg',
+                        'sexe' => 'masculin',
+                        'role' => 'admin',
+                        'mdp' => password_hash('admin', PASSWORD_DEFAULT)
+                    ]);
+                }
+
+                return $response;
+            }
+        } catch (Throwable $e) {
+            $response['message_type'] = 'error';
+            $response['message'] = __('errors.catch.create_default_admin', ['field' => $e->getMessage()]);
+        }
+
+        return $response;
+    }
+
     //add user
     public function addUser($json)
     {
@@ -439,6 +480,42 @@ class User extends Database
     }
 
     //====================== PRIVATE FUNCTION ====================
+
+    //is admin exist ?
+    private static function isAdminExist()
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'not found'
+        ];
+
+        try {
+            //count admin
+            $user = new self();
+            $response = $user->selectQuery("SELECT COUNT(id_utilisateur) as nb_admin FROM utilisateur WHERE etat_utilisateur != 'supprimé' AND role ='admin'");
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //success
+            else {
+                //exist
+                if ($response['data'][0]['nb_admin'] >= 1) {
+                    $response['message'] = 'found';
+                }
+                //not exist
+                else {
+                    $response['message'] = 'not found';
+                }
+            }
+        } catch (Throwable $e) {
+            $response['message_type'] = 'error';
+            $response['message'] = __('errors.catch.create_default_admin', ['field' => $e->getMessage()]);
+        }
+
+        return $response;
+    }
 
     //generate id_utilisateur
     private function generateIdUser()

@@ -40,6 +40,9 @@ class Router
         //no error
         else {
             try {
+                //create default admin
+                UserController::createDefaultAdmin();
+
                 $this->controller .= 'Controller';
                 //initialize controller
                 $controller = new $this->controller();
