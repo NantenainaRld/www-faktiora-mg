@@ -1,5 +1,5 @@
 <?php
-//CLASS- transalation service
+//CLASS - transalation service
 
 class TranslationService
 {
@@ -7,6 +7,8 @@ class TranslationService
     private static $translations = [];
     //default lang
     private static $current_lang = 'fr';
+    //supported lang
+    private static $supported_lang = ['fr', 'mg', 'en'];
 
 
     //==================== PUBLIC METHODS ======================
@@ -22,7 +24,7 @@ class TranslationService
         //__cookie !exist
         else {
             //browser lang
-            self::$current_lang = $lang ?: self::detectLang();
+            self::$current_lang = $lang ? (in_array($lang, self::$supported_lang) ? $lang : 'fr') : self::detectLang();
         }
 
         //load lang files
@@ -56,8 +58,26 @@ class TranslationService
             $string = $string[$message];
         }
 
+        //replace field
+        foreach ($params as $field => $val) {
+            $string =  str_replace(":$field", $val, $string);
+        }
+
         // return $strings;
         return $string;
+    }
+    //method - change lang
+    public static function setLang($lang)
+    {
+        //supported
+        if (in_array($lang, self::$supported_lang)) {
+            //set cookie lang
+            setcookie('lang', $lang, time() + (86400) * 365);
+            //redirect to site url
+            header('Location: ' . SITE_URL);
+            return true;
+        }
+        return false;
     }
 
 
@@ -68,11 +88,9 @@ class TranslationService
     {
         //browser lang
         $browser_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'fr', 0, 2);
-        //supported lang
-        $supported = ['fr', 'mg', 'en'];
 
         //browser lang - supported or not
-        return in_array($browser_lang, $supported) ? $browser_lang : 'fr';
+        return in_array($browser_lang, self::$supported_lang) ? $browser_lang : 'fr';
     }
     //method - load transalation folder/files
     private static function loadFiles()

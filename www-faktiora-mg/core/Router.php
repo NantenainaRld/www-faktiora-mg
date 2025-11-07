@@ -32,6 +32,12 @@ class Router
         if ($this->controller === 'Error') {
             require_once APP_PATH . '/views/error.php';
         }
+        //change lang
+        elseif ($this->controller === 'Lang') {
+            //get lang
+            $lang = trim($_GET['lang'] ?? 'fr');
+            TranslationService::setLang($lang);
+        }
         //no error
         else {
             try {
@@ -50,7 +56,6 @@ class Router
                     //page not found
                     if (str_contains($this->action, 'page')) {
                         $message = "Erreur : la page demandée n'est pas trouvée .";
-
                     }
                     //action not found
                     else {
@@ -64,7 +69,7 @@ class Router
                 //error dev
                 if (DEBUG) {
                     echo $e->getMessage() . "<br>" . $e->getFIle()
-                    . "<br>Line : " . $e->getLine();
+                        . "<br>Line : " . $e->getLine();
                 }
                 //error prod
                 else {

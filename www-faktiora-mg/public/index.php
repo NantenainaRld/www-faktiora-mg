@@ -23,16 +23,14 @@ require_once CONFIG_PATH . '/config.php';
 require_once SERVICE_PAH . '/TranslationService.php';
 
 //initialize translation
-TranslationService::init('mg');
+TranslationService::init();
 
-// print_r(TranslationService::translate("forms.titles.login"));
-echo (TranslationService::translate("forms.titles.login"));
-// // charge autoload
-// require_once CORE_PATH . '/Autoload.php';
+// charge autoload
+require_once CORE_PATH . '/Autoload.php';
 
-// // Autoload
-// Autoload::register();
+// Autoload
+Autoload::register();
 
-// // Router
-// $router = new Router();
-// $router->run();
+// Router
+$router = new Router();
+$router->run();
