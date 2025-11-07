@@ -13,12 +13,18 @@ define('APP_PATH', ROOT_PATH . '/app');
 define('CORE_PATH', ROOT_PATH . '/core');
 define('CONFIG_PATH', ROOT_PATH . '/config');
 define('LIBS_PATH', ROOT_PATH . '/libs');
+define('SERVICE_PAH', ROOT_PATH . '/services');
 define('PUBLIC_PATH', __DIR__);
 
-echo 'test';
+//charge config file
+require_once CONFIG_PATH . '/config.php';
+//charge translations
+require_once SERVICE_PAH . '/TranslationService.php';
 
-// // charge config file
-// require_once CONFIG_PATH . '/config.php';
+//initialize translation
+TranslationService::init();
+
+// echo TranslationService::$curren_lang;
 // // charge autoload
 // require_once CORE_PATH . '/Autoload.php';
 
