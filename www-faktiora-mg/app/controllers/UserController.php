@@ -15,19 +15,46 @@ class UserController extends Controller
     //page - add user
     public function pageSignup()
     {
+        //session exist
+        if (isset($_SESSION['user_id'])) {
+            //redirect to index
+            header('Location: ' . SITE_URL . '/user');
+            return;
+        }
+        //session - !exist
         $this->render('signup', array(
             'title' => __('forms.titles.signup'),
         ));
+        return;
     }
 
     //page - index
     public function index()
     {
+        //session - !exist
+        if (!isset($_SESSION['user_id'])) {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/login');
+            return;
+        }
+        //session - exist
         echo "page index";
     }
     //page - user dashboard
     public function pageUser()
     {
+        //session - !exist
+        if (!isset($_SESSION['user_id'])) {
+            //redirect to login
+            header('Location: ' . SITE_URL . '/login');
+            return;
+        }
+        //role - !admin
+        if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+            //redirect to index
+            header('Location: ' . SITE_URL . '/user');
+            return;
+        }
         $this->render('user_dashboard', ['title' => 'Gestion des utilisateurs']);
     }
 
@@ -179,37 +206,9 @@ class UserController extends Controller
                 echo json_encode($response);
                 return;
             }
-            //             else {
-            //                 //mdp small
-            //                 if (strlen($json['mdp']) < 6) {
-            //                     $response = [
-            //                         'message_type' => 'invalid',
-            //                         'message' => "Le mot de passe doit être au moins <b>6</b> caratctères ."
-            //                     ];
-            //                 }
-            //                 //**mdp
-            //                 else {
-            //                     //mdp != mdpConfirm
-            //                     if ($json['mdp'] !== $json['mdpConfirm']) {
-            //                         $response = [
-            //                             'message_type' => 'invalid',
-            //                             'message' => "Veuiller entrer le même mot de passe pour la confirmation"
-            //                         ];
-            //                     }
-            //                     //**ok
-            //                     else {
-            //                         //add_user
-            //                         $response = $this->user_model->addUser(
-            //                             $json
-            //                         );
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
-            // echo json_encode($response);
-            echo json_encode($json['role']);
+
+            echo json_encode($response);
+            return;
         }
     }
 

@@ -49,7 +49,7 @@ class Router
                 $action = $this->action;
 
                 //method exist
-                if (method_exists($controller, $action)) {
+                if (method_exists($controller, $action) && $this->action !== 'createDefaultAdmin') {
                     $controller->$action();
                 }
                 //method !exist
