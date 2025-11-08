@@ -15,9 +15,8 @@ class UserController extends Controller
     //page - add user
     public function pageSignup()
     {
-        $this->render('create_user', array(
-            'title' => "Création du compte",
-            'description' => "Page de création du compte utilisateur"
+        $this->render('signup', array(
+            'title' => __('forms.titles.signup'),
         ));
     }
 
@@ -32,7 +31,7 @@ class UserController extends Controller
         $this->render('user_dashboard', ['title' => 'Gestion des utilisateurs']);
     }
 
-    //---------------------ACTION------------------------
+    //========================== ACIONS ==========================
 
     //create default admin account
     public static function createDefaultAdmin()
@@ -50,104 +49,169 @@ class UserController extends Controller
         return;
     }
 
-    // //action - add user
-    // public function addUser()
-    // {
-    //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //         header("Content-Type: application/json");
-    //         $json = json_decode(file_get_contents("php://input"), true);
-    //         $response = null;
+    //action - create user
+    public function createUser()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            header("Content-Type: application/json");
+            $json = json_decode(file_get_contents("php://input"), true);
+            $response = null;
 
-    //         //trim datas
-    //         $json = [
-    //             'nom_utilisateur' => trim($json['nom_utilisateur']),
-    //             'prenoms_utilisateur' => trim($json['prenoms_utilisateur']),
-    //             'sexe_utilisateur' => trim($json['sexe_utilisateur']),
-    //             'role' => trim($json['role']),
-    //             'email_utilisateur' => trim($json['email_utilisateur']),
-    //             'mdp' => $json['mdp'],
-    //             'mdpConfirm' => $json['mdpConfirm']
-    //         ];
+            //trim
+            foreach ($json as $key => &$value) {
+                if ($key !== 'mdp' && $key !== 'mdp_confirm') {
+                    $value = trim($value);
+                }
+            }
 
-    //         //nom_utilisateur empty
-    //         if (empty($json['nom_utilisateur'])) {
-    //             $response = [
-    //                 'message_type' => 'invalid',
-    //                 'message' => 'Veuiller compléter le champ <b>Nom</b>'
-    //             ];
-    //         }
-    //         //**nom_utilisateur
-    //         else {
-    //             $json['nom_utilisateur'] = strtoupper($json['nom_utilisateur']);
+            //nom_utilisateur  - empty
+            if (empty($json['nom_utilisateur'])) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.nom')
+                ];
+                echo json_encode($response);
+                return;
+            }
+            //nom_utilisateur - to uppercase
+            $json['nom_utilisateur'] = strtoupper($json['nom_utilisateur']);
 
-    //             //sexe_utilisateur error
-    //             if (
-    //                 $json['sexe_utilisateur'] !== 'masculin'
-    //                 && $json['sexe_utilisateur'] !== 'féminin'
-    //             ) {
-    //                 $response = [
-    //                     'message_type' => 'error',
-    //                     'error_message' => "Error : sexe_utilisateur = {$json['sexe_utilisateur']}"
-    //                 ];
-    //             }
-    //             //**sexe_utilisateur
-    //             else {
-    //                 //role error
-    //                 if (
-    //                     $json['role'] !== 'admin' &&
-    //                     $json['role'] !== 'caissier'
-    //                 ) {
-    //                     $response = [
-    //                         'message_type' => 'error',
-    //                         'error_message' => "Error : role = {$json['role']}"
-    //                     ];
-    //                 }
-    //                 //**role
-    //                 else {
-    //                     //email invalid
-    //                     if (!filter_var(
-    //                         $json['email_utilisateur'],
-    //                         FILTER_VALIDATE_EMAIL
-    //                     )) {
-    //                         $response = [
-    //                             'message_type' => 'invalid',
-    //                             'message' => "L'adresse <b>email</b> saisie n'est pas valide ."
-    //                         ];
-    //                     }
-    //                     //**email_utilisateur
-    //                     else {
-    //                         //mdp small
-    //                         if (strlen($json['mdp']) < 6) {
-    //                             $response = [
-    //                                 'message_type' => 'invalid',
-    //                                 'message' => "Le mot de passe doit être au moins <b>6</b> caratctères ."
-    //                             ];
-    //                         }
-    //                         //**mdp
-    //                         else {
-    //                             //mdp != mdpConfirm
-    //                             if ($json['mdp'] !== $json['mdpConfirm']) {
-    //                                 $response = [
-    //                                     'message_type' => 'invalid',
-    //                                     'message' => "Veuiller entrer le même mot de passe pour la confirmation"
-    //                                 ];
-    //                             }
-    //                             //**ok
-    //                             else {
-    //                                 //add_user
-    //                                 $response = $this->user_model->addUser(
-    //                                     $json
-    //                                 );
-    //                             }
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
+            //sexe_utilisateur - invalid
+            if (!in_array($json['sexe_utilisateur'], ['masculin', 'féminin'], true)) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.sexe', ['field' => $json['sexe_utilisateur']])
+                ];
+                echo json_encode($response);
+                return;
+            }
 
-    //         echo json_encode($response);
-    //     }
-    // }
+            //email - empty
+            if (empty($json['email_utilisateur'])) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.email')
+                ];
+                echo json_encode($response);
+                return;
+            }
+            //email - invalid
+            if (!filter_var($json['email_utilisateur'], FILTER_VALIDATE_EMAIL)) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.email', ['field' => $json['email_utilisateur']])
+                ];
+                echo json_encode($response);
+                return;
+            }
+
+            //role - admin
+            if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+                //role - invalid
+                if (!in_array($json['role'], ['admin', 'caissier'], true)) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.role', ['field' => $json['role']])
+                    ];
+                    echo json_encode($response);
+                    return;
+                }
+            }
+            //role - signup
+            else {
+                $json['role'] = 'caissier';
+            }
+
+            // mdp - empty
+            if (empty($json['mdp'])) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.mdp')
+                ];
+                echo json_encode($response);
+                return;
+            }
+            //mdp - < 6
+            if (strlen($json['mdp']) < 6) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.mdp')
+                ];
+                echo json_encode($response);
+                return;
+            }
+            //mdp_confirm - empty
+            if (empty($json['mdp_confirm'])) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.mdp_confirm')
+                ];
+                echo json_encode($response);
+                return;
+            }
+            //mdp_confirm != mdp
+            if ($json['mdp_confirm'] !== $json['mdp']) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.mdp_confirm')
+                ];
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+                //create user
+                $user_model = (new User())
+                    ->setNomUtilisateur($json['nom_utilisateur'])
+                    ->setPrenomsUtilisateur($json['prenoms_utilisateur'])
+                    ->setSexeUtilisateur($json['sexe_utilisateur'])
+                    ->setEmailUtilisateur($json['email_utilisateur'])
+                    ->setRole($json['role'])
+                    ->setMdp($json['mdp']);
+                $response = $user_model->createUser();
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.catch.create_user', ['field' => $e->getMessage()])
+                ];
+                echo json_encode($response);
+                return;
+            }
+            //             else {
+            //                 //mdp small
+            //                 if (strlen($json['mdp']) < 6) {
+            //                     $response = [
+            //                         'message_type' => 'invalid',
+            //                         'message' => "Le mot de passe doit être au moins <b>6</b> caratctères ."
+            //                     ];
+            //                 }
+            //                 //**mdp
+            //                 else {
+            //                     //mdp != mdpConfirm
+            //                     if ($json['mdp'] !== $json['mdpConfirm']) {
+            //                         $response = [
+            //                             'message_type' => 'invalid',
+            //                             'message' => "Veuiller entrer le même mot de passe pour la confirmation"
+            //                         ];
+            //                     }
+            //                     //**ok
+            //                     else {
+            //                         //add_user
+            //                         $response = $this->user_model->addUser(
+            //                             $json
+            //                         );
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+            // echo json_encode($response);
+            echo json_encode($json['role']);
+        }
+    }
 
     // //action - filter user
     // public function filterUser()

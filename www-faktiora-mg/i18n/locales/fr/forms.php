@@ -3,7 +3,8 @@
 return [
     'titles' => [
         'login' => "Faktiora - connexion",
-        'error' => "Erreur"
+        'error' => "Erreur",
+        'signup' => "Création du compte"
     ],
     'buttons' => ['return' => "Retourner"],
     'welcome' => ['user' => "Bienvenue :nom dans notre site web"]

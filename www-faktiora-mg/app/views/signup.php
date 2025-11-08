@@ -10,7 +10,7 @@
         const SITE_URL = "<?= SITE_URL ?>";
     </script>
     <!-- helper js  -->
-    <script src="<?= SITE_URL ?>/js/helper.js"></script>
+    <script src="<?= SITE_URL ?>/js/helpers/helper.js"></script>
 </head>
 
 <body>
@@ -36,18 +36,16 @@
                 <option value="féminin">Féminin</option>
             </select>
         </div>
-        <!-- role  -->
-        <div>
-            <label for="role">Rôle : </label>
-            <input type="radio" value="admin" name="sexe-utilisateur">
-            <label for="admin">Administrateur</label>
-            <input type="radio" value="caissier" name="sexe-utilisateur">
-            <label for="caissier">Caissier</label>
-        </div>
+
         <!-- email_utilisateur  -->
         <div>
             <label for="email-utilisateur">Email : </label>
             <input type="email" id="email-utilisateur">
+        </div>
+        <!-- roles - hidden  -->
+        <div>
+            <label for="role">Email : </label>
+            <input type="hidden" id="role" value="caissier">
         </div>
         <!-- mdp  -->
         <div>
@@ -62,7 +60,7 @@
         <button type="button" id="btn-add-user">Créer</button>
     </form>
     <!-- script js  -->
-    <script src="<?= SITE_URL ?>/js/create-user.js"></script>
+    <script src="<?= SITE_URL ?>/js/users/create-user.js"></script>
 </body>
 
 </html>
