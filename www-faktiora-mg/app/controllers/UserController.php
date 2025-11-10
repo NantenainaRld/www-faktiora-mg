@@ -43,6 +43,9 @@ class UserController extends Controller
     //page - user dashboard
     public function pageUser()
     {
+        // $_SESSION['user_id'] = '';
+        // $_SESSION['role'] = 'admin';
+
         //session - !exist
         if (!isset($_SESSION['user_id'])) {
             //redirect to login
@@ -219,6 +222,7 @@ class UserController extends Controller
         $response = null;
 
         //defaults
+        $status_default = ['connected', 'disconnected', 'deleted'];
         $role_default = ['admin', 'caissier'];
         // $order_by_default = [
         //     'u.nom_utilisateur',
@@ -233,6 +237,10 @@ class UserController extends Controller
         //     'total_ae',
         //     'total_factures'
         // ];
+
+        //status
+        $status = trim($_GET['status'] ?? 'all');
+        $status = in_array($status, $status_default, true) ? $status : 'all';
 
         //role
         $role = trim($_GET['role'] ?? 'all');
@@ -311,14 +319,17 @@ class UserController extends Controller
         //     'order_by' => $order_by //order by
         // ];
         //parameters> $order_by'
-        $params = ['role' => $role];
+        $params = [
+            'status' => $status,
+            'role' => $role
+        ];
 
         //filter user
         $response = UserRepositorie::filterUser($params);
 
-        echo json_encode($response);
+        // echo json_encode($params);
 
-        // echo json_encode($response);
+        echo json_encode($response);
         return;
     }
 

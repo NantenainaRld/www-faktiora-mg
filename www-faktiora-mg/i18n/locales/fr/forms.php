@@ -12,4 +12,12 @@ return [
         'online' => 'en ligne',
         'disconnected' => 'déconnecté'
     ],
+    'times' => [
+        'minute' => "minute",
+        'hour' => "heure",
+        'day' => "jour",
+        'minutes' => "minutes",
+        'hours' => "heures",
+        'days' => "jours"
+    ],
 ];

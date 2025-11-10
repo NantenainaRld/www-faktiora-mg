@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function filterUser() {
     try {
       const response = await apiRequest(
-        "/user/filter_user?role=admin&order_by=nb_ae"
+        "/user/filter_user?status=connected&role=admin&order_by=nb_ae"
       );
       console.log(response);
     } catch (e) {

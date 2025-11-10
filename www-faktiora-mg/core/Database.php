@@ -3,22 +3,22 @@
 // CLASS database : open connection - execute query
 class Database
 {
-    private $pdo;
+    private static $pdo;
 
     public function __construct()
     {
         // open  (config.php)
-        $this->pdo = getConnection();
+        self::$pdo = getConnection();
         //set time_zone
         $time_zone = (new DateTime('now', new DateTimeZone(TIME_ZONE)))->format('P');
-        $this->pdo->exec("SET time_zone = '$time_zone'");
+        self::$pdo->exec("SET time_zone = '$time_zone'");
     }
 
     // execute SELECT query and return result
-    protected function selectQuery($sql, $params = [])
+    protected static function selectQuery($sql, $params = [])
     {
         try {
-            $stm = $this->pdo->prepare($sql);
+            $stm = self::$pdo->prepare($sql);
             $stm->execute($params);
 
             $results = $stm->fetchAll(PDO::FETCH_ASSOC);
@@ -35,10 +35,10 @@ class Database
         }
     }
     // execute INSERT, DELETE, UPDATE query
-    public function executeQuery($sql, $params = [])
+    protected  static function executeQuery($sql, $params = [])
     {
         try {
-            $stm = $this->pdo->prepare($sql);
+            $stm = self::$pdo->prepare($sql);
             $stm->execute($params);
             return ['message_type' => 'success', 'message' => 'success'];
         } catch (PDOException $e) {

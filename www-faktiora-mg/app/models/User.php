@@ -97,7 +97,7 @@ class User extends Database
                 //not found
                 if ($response['message'] === 'not found') {
                     //create default admin
-                    return $this->executeQuery("INSERT INTO utilisateur (id_utilisateur, nom_utilisateur, sexe_utilisateur, email_utilisateur, role, mdp) VALUES (:id, :nom, :sexe, :email, :role, :mdp)", [
+                    return self::executeQuery("INSERT INTO utilisateur (id_utilisateur, nom_utilisateur, sexe_utilisateur, email_utilisateur, role, mdp) VALUES (:id, :nom, :sexe, :email, :role, :mdp)", [
                         'id' => "000000",
                         'nom' => 'admin',
                         'email' => 'admin@faktiora.mg',
@@ -148,7 +148,7 @@ class User extends Database
             }
 
             //create user
-            $response = $this->executeQuery("INSERT INTO utilisateur (id_utilisateur, nom_utilisateur, prenoms_utilisateur, sexe_utilisateur, email_utilisateur, role, mdp) VALUES (:id, :nom, :prenoms, :sexe, :email, :role, :mdp)", [
+            $response = self::executeQuery("INSERT INTO utilisateur (id_utilisateur, nom_utilisateur, prenoms_utilisateur, sexe_utilisateur, email_utilisateur, role, mdp) VALUES (:id, :nom, :prenoms, :sexe, :email, :role, :mdp)", [
                 'id' => $this->id_utilisateur,
                 'nom' => $this->nom_utilisateur,
                 'prenoms' => $this->prenoms_utilisateur,
