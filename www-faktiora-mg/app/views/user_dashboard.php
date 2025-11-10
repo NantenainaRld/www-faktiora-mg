@@ -15,9 +15,12 @@
 
 <body>
     <button type="button" id="btn-test">test</button>
+    <button type="button" id="btn-add-user">add</button>
 
     <!-- script - user dashboard  -->
     <script src="<?= SITE_URL ?>/js/users/user-dashboard.js"></script>
+    <!-- script create user  -->
+    <script src="<?= SITE_URL ?>/js/users/create-user.js"></script>
 </body>
 
 </html>

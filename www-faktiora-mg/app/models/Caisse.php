@@ -3,13 +3,90 @@
 class Caisse extends Database
 {
 
+    private $num_caisse = null;
+    private $solde = 0;
+    private $seuil = 0;
+    private $etat_caisse = 'actif';
+
     public function __construct()
     {
         parent::__construct();
     }
 
+    //===================== SETTERS =======================
+
+    //setter - num_caisse
+    public function setNumCaisse($num_caisse)
+    {
+        $this->num_caisse = $num_caisse;
+        return $this;
+    }
+    //setter - sodle
+    public function setSolde($solde)
+    {
+        $this->solde = $solde;
+        return $solde;
+    }
+    //setter - seuil
+    public function setSeuil($seuil)
+    {
+        $this->seuil = $seuil;
+        return $seuil;
+    }
+    //setter - seuil
+    public function  seteEtatCaisse($etat_caisse)
+    {
+        $this->etat_caisse = $etat_caisse;
+        return $this;
+    }
+
 
     //===================== PUBLIC FUNCTION ================
+
+    //static - find by id
+    public static function findById($num_caisse)
+    {
+        $response = ['message_type' => 'success', 'message' => 'not found'];
+
+        try {
+            //find caisse
+            $response = self::selectQuery("SELECT * FROM caisse WHERE num_caisse = :num_caisse", ['num_caisse' => $num_caisse]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //not found
+            if (count($response['data']) <= 0) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = 'not found';
+
+                return $response;
+            }
+            //found
+            else {
+                $response['message_type'] = 'success';
+                $response['message'] = 'found';
+
+                //model
+                $caisse_model = new Caisse();
+                $caisse_model->num_caisse = $response['data'][0]['num_caisse'];
+                $caisse_model->solde = $response['data'][0]['solde'];
+                $caisse_model->seuil = $response['data'][0]['seuil'];
+                $caisse_model->etat_caisse = $response['data'][0]['etat_caisse'];
+
+                return $response;
+            }
+        } catch (Throwable $e) {
+            $response['message_type'] = 'error';
+            $response['message'] = __('errors.catch.caisse_findById', ['field' => $e->getMessage()]);
+
+            return $response;
+        }
+
+        return $response;
+    }
 
     // add caisse
     public function addCaisse($json)

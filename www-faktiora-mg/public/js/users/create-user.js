@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "",
       "  masculin",
       "test@faktiora.mg",
-      "adminss",
+      "admin",
       "123456",
       "123456"
     );

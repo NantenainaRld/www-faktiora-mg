@@ -7,7 +7,8 @@ return [
         'role' => "Rôle invalide : <b>:field</b>",
         'mdp' => "Le mot de passe doît être au moins 6 caractères",
         'mdp_confirm' => "Le mot de passe de confirmation doît être similaire au mot de passe",
-        'email_exist' => "Cette adresse email existe déjà : :field"
+        'email_exist' => "Cette adresse email existe déjà : :field",
+        'num_caisse' => "Numéro de caisse invalide : <b>:field</b>",
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",
@@ -17,5 +18,8 @@ return [
     ],
     'success' => [
         'create_user' => "Compte crée avec succès"
-    ]
+    ],
+    'not_found' => [
+        'num_caisse' => "Numéro de caisse n'existe pas : <b>:field</b>"
+    ],
 ];

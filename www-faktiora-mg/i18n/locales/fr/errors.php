@@ -11,6 +11,7 @@ return [
         'user_generate_id' => DEBUG ? "Erreur de génération de ID utilisateur : :field" : "Une erreur est servenue",
         'user_isEmailExist' => DEBUG ? "Erreur dans utilisateur/isEmailExist : :field" : "Une erreur est survenue dans la vérification de l'adresse email",
         'user_repositorie_filter_user' => DEBUG ? "Erreur dans user_repositorie/filterUser : :field" : 'Une erreur est survenue lors de listage des utilisateurs',
+        'caisse_findById' => DEBUG ? "Erreur dans caisse/findById : :field" : "Une erreur est survenue lors de la vérification de numéro de caisse"
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

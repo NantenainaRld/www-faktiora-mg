@@ -58,7 +58,7 @@ class UserController extends Controller
             header('Location: ' . SITE_URL . '/user');
             return;
         }
-        $this->render('user_dashboard', ['title' => 'Gestion des utilisateurs']);
+        $this->render('user_dashboard', ['title' => __('forms.titles.user_dashboard')]);
     }
 
     //========================== ACIONS ==========================
@@ -224,105 +224,105 @@ class UserController extends Controller
         //defaults
         $status_default = ['connected', 'disconnected', 'deleted'];
         $role_default = ['admin', 'caissier'];
-        // $order_by_default = [
-        //     'u.nom_utilisateur',
-        //     'nb_transactions',
-        //     'nb_sorties',
-        //     'nb_entrees',
-        //     'nb_ae',
-        //     'nb_factures',
-        //     'total_transactions',
-        //     'total_sorties',
-        //     'total_entrees',
-        //     'total_ae',
-        //     'total_factures'
-        // ];
+        $sexe_default = ['masculin', 'féminin'];
+        $order_by_default = [
+            'nb_factures',
+            'nb_ae',
+            'nb_entrees',
+            'nb_sorties',
+            'nb_transactions',
+            'total_factures',
+            'total_ae',
+            'total_entrees',
+            'total_sorties',
+            'total_transactions',
+            'name'
+        ];
+        $arrange_default = ['DESC', 'ASC'];
+        $date_by_default = [
+            'per',
+            'between',
+            'month_year'
+        ];
+        $per_default = [
+            'DAY',
+            'WEEK',
+            'MONTH',
+            'YEAR'
+        ];
 
         //status
-        $status = trim($_GET['status'] ?? 'all');
+        $status = strtolower(trim($_GET['status'] ?? 'all'));
         $status = in_array($status, $status_default, true) ? $status : 'all';
 
         //role
-        $role = trim($_GET['role'] ?? 'all');
+        $role = strtolower(trim($_GET['role'] ?? 'all'));
         $role = in_array($role, $role_default, true) ? $role : 'all';
-        // //arange_by
-        // $order_by = trim($_GET['order_by'] ?? 'u.nom_utilisateur');
-        // $order_by = in_array($order_by, $order_by_default, true) ? $order_by : 'u.nom_utilisateur';
-        // //get parameters
-        // $order_default = ['asc', 'desc'];
-        // $role_default = ['admin', 'caissier'];
-        // $sexe_default = ['masculin', "féminin"];
-        // $by_default = [
-        //     'nb_factures',
-        //     'nb_ae',
-        //     'nb_sorties',
-        //     'nb_entrees',
-        //     'nb_transactions',
-        //     'total_factures',
-        //     'total_ae',
-        //     'total_sorties',
-        //     'total_entrees',
-        //     'total_transactions',
-        //     'nom_utilisateur'
 
-        // ];
-        // $per_default = ['day', 'week', 'month', 'year'];
-        // //__search_user
-        // $search_user = $_GET['search_user'] ?? '';
-        // $search_user = trim($search_user);
-        // //__role
-        // $role = $_GET['role'] ?? 'all';
-        // $role = strtolower(trim($role));
-        // $role = in_array($role, $role_default, true) ? $role : 'all';
-        // //__sexe
-        // $sexe = $_GET['sexe'] ?? 'all';
-        // $sexe = strtolower(trim($sexe));
-        // $sexe = in_array($sexe, $sexe_default, true) ? $sexe : 'all';
-        // //__by
-        // $by = $_GET['by'] ?? 'none';
-        // $by = strtolower(trim($by));
-        // $by = in_array($by, $by_default, true) ? $by : 'none';
-        // //__order_by
-        // $order_by = $_GET['order_by'] ?? 'desc';
-        // $order_by = strtolower(trim($order_by));
-        // $order_by = in_array($order_by, $order_default, true) ? $order_by : 'desc';
-        // //__date_from
-        // $from = $_GET['from'] ?? '';
-        // $from = strtolower(trim($from));
-        // //__date_to
-        // $to = $_GET['to'] ?? '';
-        // $to = strtolower(trim($to));
-        // //__per
-        // $per = $_GET['per'] ?? 'none';
-        // $per = strtolower(trim($per));
-        // $per = in_array($per, $per_default, true) ? $per : 'none';
-        // //__month
-        // $month = $_GET['month'] ?? 'none';
-        // $month = trim($month);
-        // $month = ($month !== 'none') ? (((int)$month >= 1 && (int)$month <= 12) ? (int)($month) : 1) : $month;
-        // //__year
-        // $year = $_GET['year'] ?? 'none';
-        // $year = trim($year);
-        // $year  = ($year !== 'none') ? (((int)$year >= 1970 && (int)$year <= 2500) ? (int)$year : date('Y')) : $year;
+        //sexe
+        $sexe = strtolower(trim($_GET['sexe'] ?? 'all'));
+        $sexe = in_array($sexe, $sexe_default, true) ? $sexe : 'all';
 
-        // //paramters
-        // $params = [
-        //     'per' => $per, //on and
-        //     'from' => $from, //on and
-        //     'to' => $to, //on and
-        //     'month' => $month, //on and
-        //     'year' => $year, //on and
-        //     'sexe' => $sexe, //where
-        //     'role' => $role, //where
-        //     'search_user' => $search_user, //where
-        //     'by' => $by, //order
-        //     'order_by' => $order_by //order by
-        // ];
-        //parameters> $order_by'
+        //order_by
+        $order_by = strtolower(trim($_GET['order_by'] ?? 'name'));
+        $order_by = in_array($order_by, $order_by_default, true) ? $order_by : 'name';
+        $order_by = ($order_by === 'name') ? 'u.nom_utilisateur' : $order_by;
+        //arrange
+        $arrange = strtoupper(trim($_GET['arrange'] ?? 'ASC'));
+        $arrange = in_array($arrange, $arrange_default, true) ? $arrange : 'ASC';
+
+        //num_caisse
+        $num_caisse = trim($_GET['num_caisse'] ?? 'all');
+        $num_caisse = ($num_caisse !== 'all') ? filter_var($num_caisse, FILTER_VALIDATE_INT) : $num_caisse;
+        //num_caisse - string
+        if ($num_caisse === false) {
+            $num_caisse = 'all';
+        }
+        //num_caisse - int
+        else {
+            if ($num_caisse < 0) {
+                $response = ['message_type' => 'invalid', __('messages.invalids.num_caisse', ['field' => $num_caisse])];
+
+                echo json_encode($response);
+                return;
+            }
+        }
+
+        //date_by
+        $date_by = strtolower(trim($_GET['date_by'] ?? 'all'));
+        $date_by = in_array($date_by, $date_by_default, true) ? $date_by : 'all';
+        //per
+        $per = strtoupper(trim($_GET['per'] ?? 'DAY'));
+        $per = in_array($per, $per_default, true) ? $per : 'DAY';
+
         $params = [
             'status' => $status,
-            'role' => $role
+            'role' => $role,
+            'sexe' => $sexe,
+            'order_by' => $order_by,
+            'arrange' => $arrange,
+            'num_caisse' => $num_caisse,
+            'date_by' => $date_by,
+            'per' => $per,
         ];
+
+        //num_caisse exist?
+        if ($num_caisse !== 'all') {
+            $response = Caisse::findById($num_caisse);
+            //error
+            if ($response['message_type'] === 'error') {
+
+                echo json_encode($response);
+                return;
+            }
+            //num_caisse - not found
+            if ($response['message'] === 'not found') {
+                $response['message'] = __('messages.not_found.num_caisse', ['field' => $num_caisse]);
+
+                echo json_encode($response);
+                return;
+            }
+        }
 
         //filter user
         $response = UserRepositorie::filterUser($params);
