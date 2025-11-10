@@ -10,19 +10,14 @@
         const SITE_URL = "<?= SITE_URL ?>";
     </script>
     <!-- helper js  -->
-    <script src="<?= SITE_URL ?>/js/helper.js"></script>
+    <script src="<?= SITE_URL ?>/js/helpers/helper.js"></script>
 </head>
 
 <body>
-    <?= "user dashboard"; ?>
-    <button id='test'>Test</button>
-    <!-- script update user  -->
-    <script src="<?= SITE_URL ?>/js/update-user.js"></script>
-    <!-- script deleet user  -->
-    <script src="<?= SITE_URL ?>/js/delete-user.js"></script>
-    <!-- script js -->
-    <script src="<?= SITE_URL ?>/js/user-dashboard.js"></script>
-    <input type="date">
+    <button type="button" id="btn-test">test</button>
+
+    <!-- script - user dashboard  -->
+    <script src="<?= SITE_URL ?>/js/users/user-dashboard.js"></script>
 </body>
 
 </html>

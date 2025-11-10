@@ -18,7 +18,7 @@ class Autoload
             APP_PATH . "/controllers/{$class_name}.php",
             APP_PATH . "/models/{$class_name}.php",
             CORE_PATH . "/{$class_name}.php",
-
+            APP_PATH . "/repositories/{$class_name}.php"
         ];
 
         // foreach paths

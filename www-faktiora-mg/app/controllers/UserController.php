@@ -212,83 +212,115 @@ class UserController extends Controller
         }
     }
 
-    // //action - filter user
-    // public function filterUser()
-    // {
-    //     header('Content-Type: application/json');
+    //action - filter user
+    public function filterUser()
+    {
+        header('Content-Type: application/json');
+        $response = null;
 
-    //     //get parameters
-    //     $order_default = ['asc', 'desc'];
-    //     $role_default = ['admin', 'caissier'];
-    //     $sexe_default = ['masculin', "féminin"];
-    //     $by_default = [
-    //         'nb_factures',
-    //         'nb_ae',
-    //         'nb_sorties',
-    //         'nb_entrees',
-    //         'nb_transactions',
-    //         'total_factures',
-    //         'total_ae',
-    //         'total_sorties',
-    //         'total_entrees',
-    //         'total_transactions',
-    //         'nom_utilisateur'
+        //defaults
+        $role_default = ['admin', 'caissier'];
+        // $order_by_default = [
+        //     'u.nom_utilisateur',
+        //     'nb_transactions',
+        //     'nb_sorties',
+        //     'nb_entrees',
+        //     'nb_ae',
+        //     'nb_factures',
+        //     'total_transactions',
+        //     'total_sorties',
+        //     'total_entrees',
+        //     'total_ae',
+        //     'total_factures'
+        // ];
 
-    //     ];
-    //     $per_default = ['day', 'week', 'month', 'year'];
-    //     //__search_user
-    //     $search_user = $_GET['search_user'] ?? '';
-    //     $search_user = trim($search_user);
-    //     //__role
-    //     $role = $_GET['role'] ?? 'all';
-    //     $role = strtolower(trim($role));
-    //     $role = in_array($role, $role_default, true) ? $role : 'all';
-    //     //__sexe
-    //     $sexe = $_GET['sexe'] ?? 'all';
-    //     $sexe = strtolower(trim($sexe));
-    //     $sexe = in_array($sexe, $sexe_default, true) ? $sexe : 'all';
-    //     //__by
-    //     $by = $_GET['by'] ?? 'none';
-    //     $by = strtolower(trim($by));
-    //     $by = in_array($by, $by_default, true) ? $by : 'none';
-    //     //__order_by
-    //     $order_by = $_GET['order_by'] ?? 'desc';
-    //     $order_by = strtolower(trim($order_by));
-    //     $order_by = in_array($order_by, $order_default, true) ? $order_by : 'desc';
-    //     //__date_from
-    //     $from = $_GET['from'] ?? '';
-    //     $from = strtolower(trim($from));
-    //     //__date_to
-    //     $to = $_GET['to'] ?? '';
-    //     $to = strtolower(trim($to));
-    //     //__per
-    //     $per = $_GET['per'] ?? 'none';
-    //     $per = strtolower(trim($per));
-    //     $per = in_array($per, $per_default, true) ? $per : 'none';
-    //     //__month
-    //     $month = $_GET['month'] ?? 'none';
-    //     $month = trim($month);
-    //     $month = ($month !== 'none') ? (((int)$month >= 1 && (int)$month <= 12) ? (int)($month) : 1) : $month;
-    //     //__year
-    //     $year = $_GET['year'] ?? 'none';
-    //     $year = trim($year);
-    //     $year  = ($year !== 'none') ? (((int)$year >= 1970 && (int)$year <= 2500) ? (int)$year : date('Y')) : $year;
+        //role
+        $role = trim($_GET['role'] ?? 'all');
+        $role = in_array($role, $role_default, true) ? $role : 'all';
+        // //arange_by
+        // $order_by = trim($_GET['order_by'] ?? 'u.nom_utilisateur');
+        // $order_by = in_array($order_by, $order_by_default, true) ? $order_by : 'u.nom_utilisateur';
+        // //get parameters
+        // $order_default = ['asc', 'desc'];
+        // $role_default = ['admin', 'caissier'];
+        // $sexe_default = ['masculin', "féminin"];
+        // $by_default = [
+        //     'nb_factures',
+        //     'nb_ae',
+        //     'nb_sorties',
+        //     'nb_entrees',
+        //     'nb_transactions',
+        //     'total_factures',
+        //     'total_ae',
+        //     'total_sorties',
+        //     'total_entrees',
+        //     'total_transactions',
+        //     'nom_utilisateur'
 
-    //     //paramters
-    //     $params = [
-    //         'per' => $per, //on and
-    //         'from' => $from, //on and
-    //         'to' => $to, //on and
-    //         'month' => $month, //on and
-    //         'year' => $year, //on and
-    //         'sexe' => $sexe, //where
-    //         'role' => $role, //where
-    //         'search_user' => $search_user, //where
-    //         'by' => $by, //order
-    //         'order_by' => $order_by //order by
-    //     ];
-    //     echo json_encode($this->user_model->filterUser($params));
-    // }
+        // ];
+        // $per_default = ['day', 'week', 'month', 'year'];
+        // //__search_user
+        // $search_user = $_GET['search_user'] ?? '';
+        // $search_user = trim($search_user);
+        // //__role
+        // $role = $_GET['role'] ?? 'all';
+        // $role = strtolower(trim($role));
+        // $role = in_array($role, $role_default, true) ? $role : 'all';
+        // //__sexe
+        // $sexe = $_GET['sexe'] ?? 'all';
+        // $sexe = strtolower(trim($sexe));
+        // $sexe = in_array($sexe, $sexe_default, true) ? $sexe : 'all';
+        // //__by
+        // $by = $_GET['by'] ?? 'none';
+        // $by = strtolower(trim($by));
+        // $by = in_array($by, $by_default, true) ? $by : 'none';
+        // //__order_by
+        // $order_by = $_GET['order_by'] ?? 'desc';
+        // $order_by = strtolower(trim($order_by));
+        // $order_by = in_array($order_by, $order_default, true) ? $order_by : 'desc';
+        // //__date_from
+        // $from = $_GET['from'] ?? '';
+        // $from = strtolower(trim($from));
+        // //__date_to
+        // $to = $_GET['to'] ?? '';
+        // $to = strtolower(trim($to));
+        // //__per
+        // $per = $_GET['per'] ?? 'none';
+        // $per = strtolower(trim($per));
+        // $per = in_array($per, $per_default, true) ? $per : 'none';
+        // //__month
+        // $month = $_GET['month'] ?? 'none';
+        // $month = trim($month);
+        // $month = ($month !== 'none') ? (((int)$month >= 1 && (int)$month <= 12) ? (int)($month) : 1) : $month;
+        // //__year
+        // $year = $_GET['year'] ?? 'none';
+        // $year = trim($year);
+        // $year  = ($year !== 'none') ? (((int)$year >= 1970 && (int)$year <= 2500) ? (int)$year : date('Y')) : $year;
+
+        // //paramters
+        // $params = [
+        //     'per' => $per, //on and
+        //     'from' => $from, //on and
+        //     'to' => $to, //on and
+        //     'month' => $month, //on and
+        //     'year' => $year, //on and
+        //     'sexe' => $sexe, //where
+        //     'role' => $role, //where
+        //     'search_user' => $search_user, //where
+        //     'by' => $by, //order
+        //     'order_by' => $order_by //order by
+        // ];
+        //parameters> $order_by'
+        $params = ['role' => $role];
+
+        //filter user
+        $response = UserRepositorie::filterUser($params);
+
+        echo json_encode($response);
+
+        // echo json_encode($response);
+        return;
+    }
 
     // //action - update user
     // public function updateUser()
