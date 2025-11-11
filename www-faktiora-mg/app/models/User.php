@@ -647,7 +647,7 @@ class User extends Database
 
         try {
             $response = $this->selectQuery("SELECT email_utilisateur FROM 
-            utilisateur WHERE email_utilisateur = :email", ['email' => $this->email_utilisateur]);
+            utilisateur WHERE email_utilisateur = :email AND etat_utilisateur !== 'supprimé'", ['email' => $this->email_utilisateur]);
             //error
             if ($response['message_type'] === 'error') {
                 return $response;
