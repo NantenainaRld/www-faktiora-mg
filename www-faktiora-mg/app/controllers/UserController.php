@@ -294,6 +294,58 @@ class UserController extends Controller
         //per
         $per = strtoupper(trim($_GET['per'] ?? 'DAY'));
         $per = in_array($per, $per_default, true) ? $per : 'DAY';
+        //from
+        $from = trim($_GET['from'] ?? '');
+        //to
+        $to = trim($_GET['to'] ?? '');
+        //from && to - empty
+        if ($date_by === 'between') {
+            if (empty($from) && empty($to)) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.empty.from_to');
+
+                echo json_encode($response);
+                return;
+            }
+            //from - !empty
+            if (!empty($from)) {
+
+                //from - invalid
+                if (DateTime::createFromFormat("Y-m-d", $from) === false) {
+                    $response['message_type'] = 'invalid';
+                    $response['message'] = __('messages.invalids.date', ['field' => $from]);
+
+                    echo json_encode($response);
+                    return;
+                }
+            }
+            //to - !empty
+            if (!empty($to)) {
+                //from - invalid
+                if (DateTime::createFromFormat("Y-m-d", $to) === false) {
+                    $response['message_type'] = 'invalid';
+                    $response['message'] = __('messages.invalids.date', ['field' => $to]);
+
+                    echo json_encode($response);
+                    return;
+                }
+            }
+        }
+        //month
+        $month = trim($_GET['month'] ?? 'none');
+        $month = filter_var($month, FILTER_VALIDATE_INT);
+        if ($month === false || ($month < 1 || $month > 12)) {
+            $month = 'none';
+        }
+        //year
+        $year = trim($_GET['year'] ?? 2025);
+        $year = filter_var($year, FILTER_VALIDATE_INT);
+        if ($year === false || ($year < 1700 || $year > 2500)) {
+            $year = 2025;
+        }
+
+        //sarch_user
+        $search_user = trim($_GET['search_user'] ?? '');
 
         $params = [
             'status' => $status,
@@ -304,6 +356,11 @@ class UserController extends Controller
             'num_caisse' => $num_caisse,
             'date_by' => $date_by,
             'per' => $per,
+            'from' => $from,
+            'to' => $to,
+            'month' => $month,
+            'year' => $year,
+            'search_user' => $search_user
         ];
 
         //num_caisse exist?
@@ -317,6 +374,7 @@ class UserController extends Controller
             }
             //num_caisse - not found
             if ($response['message'] === 'not found') {
+                $response['message_type'] = 'invalid';
                 $response['message'] = __('messages.not_found.num_caisse', ['field' => $num_caisse]);
 
                 echo json_encode($response);
@@ -327,7 +385,7 @@ class UserController extends Controller
         //filter user
         $response = UserRepositorie::filterUser($params);
 
-        // echo json_encode($params);
+        // echo json_encode($search_user);
 
         echo json_encode($response);
         return;

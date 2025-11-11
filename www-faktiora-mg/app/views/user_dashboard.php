@@ -14,8 +14,10 @@
 </head>
 
 <body>
-    <button type="button" id="btn-test">test</button>
     <button type="button" id="btn-add-user">add</button>
+    <input type="date" id="from">
+    <input type="date" id="to">
+    <button type="button" id="btn-test">test</button>
 
     <!-- script - user dashboard  -->
     <script src="<?= SITE_URL ?>/js/users/user-dashboard.js"></script>

@@ -21,7 +21,7 @@ class UserRepositorie extends Database
     u.sexe_utilisateur,
     u.email_utilisateur,
     u.role,
-    lc.num_caisse,
+    c.num_caisse,
     CASE WHEN u.dernier_session >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) THEN 'online' ELSE 'disconnected' END AS
 status,
     CASE WHEN u.dernier_session >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) THEN 0 ELSE TIMESTAMPDIFF(
@@ -85,47 +85,155 @@ status,
 
         //num_caisse - all
         if ($params['num_caisse'] === 'all') {
-            $sql .= "LEFT JOIN ligne_caisse lc ON lc.id_utilisateur = u.id_utilisateur AND lc.date_fin IS NULL ";
+            $sql .= "LEFT JOIN ligne_caisse lc ON lc.id_utilisateur = u.id_utilisateur AND lc.date_fin IS NULL LEFT JOIN caisse c ON c.num_caisse = lc.num_caisse ";
         }
         //num_caisse - !all
         else {
-            $sql .= "JOIN ligne_caisse lc ON lc.id_utilisateur = u.id_utilisateur AND lc.num_caisse = {$params['num_caisse']} ";
+            $sql .= "JOIN ligne_caisse lc ON lc.id_utilisateur = u.id_utilisateur JOIN caisse c ON c.num_caisse = {$params['num_caisse']} ";
         }
 
-        //date_by -  all
-        if ($params['date_by'] === 'all') {
-            //join
-            $sql .= "LEFT JOIN facture f ON
-            f.id_utilisateur = u.id_utilisateur AND f.num_caisse = lc.num_caisse 
- LEFT JOIN ligne_facture lf ON
-    lf.num_facture = f.num_facture 
+        //date_by - 
+        switch ($params['date_by']) {
+
+            //date_by - all
+            case 'all':
+                $sql .= "LEFT JOIN facture f ON
+            f.id_utilisateur = u.id_utilisateur 
+LEFT JOIN ligne_facture lf ON
+    lf.num_facture = f.num_facture
 LEFT JOIN produit p ON
-    p.id_produit = lf.id_produit
-LEFT JOIN autre_entree ae ON
-    ae.id_utilisateur = u.id_utilisateur AND ae.num_caisse = lc.num_caisse 
+    p.id_produit = lf.id_produit 
+    LEFT JOIN autre_entree ae ON
+    ae.id_utilisateur = u.id_utilisateur 
     LEFT JOIN demande_sortie ds ON
-    ds.id_utilisateur = u.id_utilisateur AND ds.num_caisse = lc.num_caisse
+    ds.id_utilisateur = u.id_utilisateur
     LEFT JOIN ligne_ds lds ON
     lds.id_ds = ds.id_ds ";
-        }
-        //date_by - per
-        elseif ($params['date_by'] === 'per') {
-            //per - day
-            if ($params['per'] === 'DAY') {
+                break;
+            //date_by - per
+            case 'per':
+                //per - 
+                switch ($params['per']) {
 
-                $sql .= "LEFT JOIN facture f ON
-                f.id_utilisateur = u.id_utilisateur AND f.num_caisse = lc.num_caisse AND DATE(f.date_facture) = CURDATE() 
-                LEFT JOIN ligne_facture lf ON
-                lf.num_facture = f.num_facture 
-                LEFT JOIN produit p ON
-                p.id_produit = lf.id_produit
-                LEFT JOIN autre_entree ae ON
-                ae.id_utilisateur = u.id_utilisateur AND ae.num_caisse = lc.num_caisse AND DATE(ae.date_ae) = CURDATE() 
-                LEFT JOIN demande_sortie ds ON
-                ds.id_utilisateur = u.id_utilisateur AND ds.num_caisse = lc.num_caisse AND DATE(ds.date_ds) = CURDATE()
-                LEFT JOIN ligne_ds lds ON
-                lds.id_ds = ds.id_ds ";
-            }
+                    //per - DAY
+                    case 'DAY':
+                        $sql .= "LEFT JOIN facture f ON
+            f.id_utilisateur = u.id_utilisateur AND DATE(f.date_facture) = CURDATE()
+LEFT JOIN ligne_facture lf ON
+    lf.num_facture = f.num_facture
+LEFT JOIN produit p ON
+    p.id_produit = lf.id_produit 
+    LEFT JOIN autre_entree ae ON
+    ae.id_utilisateur = u.id_utilisateur AND DATE(ae.date_ae)  = CURDATE() 
+    LEFT JOIN demande_sortie ds ON
+    ds.id_utilisateur = u.id_utilisateur AND DATE(ds.date_ds) = CURDATE() 
+    LEFT JOIN ligne_ds lds ON
+    lds.id_ds = ds.id_ds ";
+                        break;
+                    //per - !DAY
+                    default:
+                        $sql .= "LEFT JOIN facture f ON
+            f.id_utilisateur = u.id_utilisateur AND {$params['per']}(f.date_facture) = {$params['per']}(CURDATE()) 
+LEFT JOIN ligne_facture lf ON
+    lf.num_facture = f.num_facture
+LEFT JOIN produit p ON
+    p.id_produit = lf.id_produit 
+    LEFT JOIN autre_entree ae ON
+    ae.id_utilisateur = u.id_utilisateur AND {$params['per']}(ae.date_ae)  = {$params['per']}(CURDATE()) 
+    LEFT JOIN demande_sortie ds ON
+    ds.id_utilisateur = u.id_utilisateur AND {$params['per']}(ds.date_ds) = {$params['per']}(CURDATE()) 
+    LEFT JOIN ligne_ds lds ON
+    lds.id_ds = ds.id_ds ";
+                        break;
+                }
+                break;
+            //date_by - between
+            case 'between':
+                //from - empty
+                if (empty($params['from'])) {
+                    //to - !empty
+                    $sql .= "LEFT JOIN facture f ON
+            f.id_utilisateur = u.id_utilisateur AND DATE(f.date_facture) <= '{$params['to']}'
+LEFT JOIN ligne_facture lf ON
+    lf.num_facture = f.num_facture
+LEFT JOIN produit p ON
+    p.id_produit = lf.id_produit 
+    LEFT JOIN autre_entree ae ON
+    ae.id_utilisateur = u.id_utilisateur AND DATE(ae.date_ae) <= '{$params['to']}' 
+    LEFT JOIN demande_sortie ds ON
+    ds.id_utilisateur = u.id_utilisateur AND DATE(ds.date_ds) <= '{$params['to']}' 
+    LEFT JOIN ligne_ds lds ON
+    lds.id_ds = ds.id_ds ";
+                }
+                //from - !empty
+                else {
+                    //to - empty
+                    if (empty($params['to'])) {
+                        $sql .= "LEFT JOIN facture f ON
+            f.id_utilisateur = u.id_utilisateur AND DATE(f.date_facture) >= '{$params['from']}'
+LEFT JOIN ligne_facture lf ON
+    lf.num_facture = f.num_facture
+LEFT JOIN produit p ON
+    p.id_produit = lf.id_produit 
+    LEFT JOIN autre_entree ae ON
+    ae.id_utilisateur = u.id_utilisateur AND DATE(ae.date_ae) >= '{$params['from']}' 
+    LEFT JOIN demande_sortie ds ON
+    ds.id_utilisateur = u.id_utilisateur AND DATE(ds.date_ds) >= '{$params['from']}' 
+    LEFT JOIN ligne_ds lds ON
+    lds.id_ds = ds.id_ds ";
+                    }
+                    //to - !empty
+                    else {
+                        $sql .= "LEFT JOIN facture f ON
+                                    f.id_utilisateur = u.id_utilisateur AND DATE(f.date_facture) BETWEEN '{$params['from']}' AND '{$params['to']}' 
+                        LEFT JOIN ligne_facture lf ON
+                            lf.num_facture = f.num_facture
+                        LEFT JOIN produit p ON
+                            p.id_produit = lf.id_produit 
+                            LEFT JOIN autre_entree ae ON
+                            ae.id_utilisateur = u.id_utilisateur AND DATE(ae.date_ae) BETWEEN '{$params['from']}' AND '{$params['to']}'  
+                            LEFT JOIN demande_sortie ds ON
+                            ds.id_utilisateur = u.id_utilisateur AND DATE(ds.date_ds) BETWEEN '{$params['from']}' AND '{$params['to']}'  
+                            LEFT JOIN ligne_ds lds ON
+                            lds.id_ds = ds.id_ds ";
+                    }
+                }
+                break;
+            //date_by - month_year
+            case 'month_year':
+                //month - none
+                if ($params['month'] === 'none') {
+                    //year
+                    $sql .= "LEFT JOIN facture f ON
+            f.id_utilisateur = u.id_utilisateur AND YEAR(f.date_facture) = {$params['year']}
+LEFT JOIN ligne_facture lf ON
+    lf.num_facture = f.num_facture
+LEFT JOIN produit p ON
+    p.id_produit = lf.id_produit 
+    LEFT JOIN autre_entree ae ON
+    ae.id_utilisateur = u.id_utilisateur AND YEAR(ae.date_ae) = {$params['year']} 
+    LEFT JOIN demande_sortie ds ON
+    ds.id_utilisateur = u.id_utilisateur AND YEAR(ds.date_ds) = {$params['year']} 
+    LEFT JOIN ligne_ds lds ON
+    lds.id_ds = ds.id_ds ";
+                }
+                //month - !none
+                else {
+                    //mont && year
+                    $sql .= "LEFT JOIN facture f ON
+            f.id_utilisateur = u.id_utilisateur AND MONTH(f.date_facture) = {$params['month']} AND YEAR(f.date_facture) = {$params['year']}
+LEFT JOIN ligne_facture lf ON
+    lf.num_facture = f.num_facture
+LEFT JOIN produit p ON
+    p.id_produit = lf.id_produit 
+    LEFT JOIN autre_entree ae ON
+    ae.id_utilisateur = u.id_utilisateur AND MONTH(ae.date_ae) = {$params['month']} AND YEAR(ae.date_ae) = {$params['year']} 
+    LEFT JOIN demande_sortie ds ON
+    ds.id_utilisateur = u.id_utilisateur AND MONTH(ds.date_ds) = {$params['month']} AND YEAR(ds.date_ds) = {$params['year']} 
+    LEFT JOIN ligne_ds lds ON
+    lds.id_ds = ds.id_ds ";
+                }
+                break;
         }
 
         //where 1=1
@@ -156,6 +264,11 @@ LEFT JOIN autre_entree ae ON
         //sexe - !all
         if ($params['sexe'] !== 'all') {
             $sql .= "AND u.sexe_utilisateur = '{$params['sexe']}' ";
+        }
+
+        //search_user
+        if (!empty($params['search_user'])) {
+            $sql .= "AND (u.id_utilisateur LIKE '%{$params['search_user']}%' OR u.nom_utilisateur LIKE '%{$params['search_user']}%' OR u.prenoms_utilisateur LIKE '%{$params['search_user']}%' OR u.email_utilisateur LIKE '%{$params['search_user']}%') ";
         }
 
         //group by
