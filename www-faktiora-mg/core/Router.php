@@ -8,7 +8,7 @@ class Router
 
     public function __construct()
     {
-        $url = $_GET['url'] ?? 'login';
+        $url = $_GET['url'] ?? 'auth';
 
         //remove '/' begin and after
         $url = trim($url, '/');
@@ -43,6 +43,18 @@ class Router
                 //create default admin
                 UserController::createDefaultAdmin();
 
+                //auth ?
+                if ($this->controller !== 'Auth') {
+                    $is_loged_in = Auth::isLogedIn();
+
+                    //not loged
+                    if (!$is_loged_in->getLoged()) {
+                        //redirect to login page
+                        header('Location: ' . SITE_URL . '/auth');
+                        return;
+                    }
+                }
+
                 $this->controller .= 'Controller';
                 //initialize controller
                 $controller = new $this->controller();
@@ -73,6 +85,8 @@ class Router
                 header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.router', ['field' => $e->getMessage()]));
             }
         }
+
+        return;
     }
 
     // convert controller name

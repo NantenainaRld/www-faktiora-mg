@@ -1,22 +1,34 @@
 <?php
 
-class LoginController extends Controller
+class AuthController extends Controller
 {
     private $user_model;
-    public function __construct()
-    {
-        $this->user_model = $this->loadModel('User');
-    }
+    public function __construct() {}
 
     //================== PAGE ======================
 
-    //page - login (index)
+    //page - index
     public function index()
+    {
+        header('Location: ' . SITE_URL . '/auth/page_login');
+        return;
+    }
+    //page - login
+    public function pageLogin()
     {
         $this->render('login', array(
             'title' => "Connexion",
             'description' => "Page de connection"
         ));
+        return;
+    }
+    //page - signup
+    public function pageSignup()
+    {
+        $this->render('signup', array(
+            'title' => __('forms.titles.signup'),
+        ));
+        return;
     }
 
     //================= ACTION ====================
