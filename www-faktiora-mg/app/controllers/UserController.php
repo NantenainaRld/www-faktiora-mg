@@ -27,21 +27,6 @@ class UserController extends Controller
     //page - user dashboard
     public function pageUser()
     {
-        // $_SESSION['user_id'] = '';
-        // $_SESSION['role'] = 'admin';
-
-        //session - !exist
-        if (!isset($_SESSION['user_id'])) {
-            //redirect to login
-            header('Location: ' . SITE_URL . '/login');
-            return;
-        }
-        //role - !admin
-        if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-            //redirect to index
-            header('Location: ' . SITE_URL . '/user');
-            return;
-        }
         $this->render('user_dashboard', ['title' => __('forms.titles.user_dashboard')]);
     }
 
