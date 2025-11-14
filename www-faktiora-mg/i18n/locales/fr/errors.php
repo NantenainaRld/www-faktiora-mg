@@ -15,7 +15,8 @@ return [
         'auth_isLogedIn' => DEBUG ? "Erreur dans auth/isLogedIn : :field" : "Une erreur est survenue",
         'user_update' => DEBUG ? "Erreur dans user/update : :field" : "Une erreur est survenue lors de la modification des informations d'utilisateur",
         'user_isIdUserExist' => DEBUG ? "Erreur dans user/isIdUserExist : :field" : "Une erreur est survenue",
-        'user_isEmailUserExist' => DEBUG ? "Erreur dans user/isEmailUserExist : :field" : "Une erreur est survenue"
+        'user_isEmailUserExist' => DEBUG ? "Erreur dans user/isEmailUserExist : :field" : "Une erreur est survenue",
+        "user_delete_account" => DEBUG ? "Erreur de suppréssion du compte : :field" : "Erreur de suppréssion du compte"
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

@@ -394,6 +394,32 @@ class User extends Database
         return $response;
     }
 
+    //delete user
+    public function deleteUser()
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+            $response = self::executeQuery("UPDATE utilisateur SET etat_utilisateur = 'supprimé' WHERE id_utilisateur = :id", ['id' => $this->id_utilisateur]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            $response['message_type'] = 'error';
+            $response['message'] = __('errors.catch.user_delete_account', ['field' => $e->getMessage()]);
+
+            return $response;
+        }
+
+        return $response;
+    }
 
     //login user
     public function loginUser($json)
@@ -452,57 +478,6 @@ class User extends Database
                 'message_type' => 'error',
                 'message' => 'Error : ' . $e->getMessage()
             ];
-        }
-
-        return $response;
-    }
-
-
-    //delete user
-    public function deleteUser($json)
-    {
-        $response = [
-            'message_type' => 'success',
-            'message' => 'success'
-        ];
-
-        try {
-            //user exist?
-            $response = $this->isUserExist($json['id_utilisateur']);
-
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-            //success
-            else {
-                //not found
-                if ($response['message'] === 'not found') {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => "L'utilisateur avec l'ID <b>{$json['id_utilisateur']}</b> n'existe pas ."
-                    ];
-                }
-                //found 
-                else {
-                    //delete user
-                    $response = $this->executeQuery(
-                        "DELETE FROM utilisateur WHERE id_utilisateur = :id",
-                        ['id' => $json['id_utilisateur']]
-                    );
-
-                    //error
-                    if ($response['message_type'] === 'error') {
-                        return $response;
-                    }
-                    //success
-                    else {
-                        $response['messages'] = "L'utilisateur avec l'ID <b>{$json['id_utilisateur']}</b> a été supprimé avec succès.";
-                    }
-                }
-            }
-        } catch (Throwable $e) {
-            $response = ['message_type' => 'error', 'message' => "Error " . $e->getMessage()];
         }
 
         return $response;

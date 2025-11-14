@@ -9,7 +9,9 @@ class UserController extends Controller
     //page - index
     public function index()
     {
-        echo "page index";
+        // echo "page index";
+        $this->render('header', ['title' => 'Header']);
+        return;
     }
     //page - user dashboard
     public function pageUser()
@@ -854,9 +856,52 @@ class UserController extends Controller
             header('Content-Type: application/json');
             $response = null;
             $json = json_decode(file_get_contents('php://input'), true);
+            $id_utilisateur = trim($json['id_utilisateur']);
 
+            try {
+                //user exist?
+                $response = User::findById($json['id_utilisateur']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    //redirect to error page
+                    header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.user_delete_account', ['field' => $response['message']]));
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    //redirect to error page
+                    header('Location: ' . SITE_URL . '/error?messages=' . __('messages.not_found.user_id', ['field' => $id_utilisateur]));
+                    return;
+                }
 
-            return $response;
+                //delete account
+                $user_model = new User();
+                $user_model->setIdUtilsateur($id_utilisateur);
+                $response = $user_model->deleteUser();
+                //error
+                if ($response['message_type'] === 'error') {
+                    //redirect to error page
+                    header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.user_delete_account', ['field' => $response['message']]));
+                    return;
+                }
+                //success
+                if ($response['message_type'] === 'success') {
+                    session_destroy();
+                    //redirect to login page
+                    header('Location: ' . SITE_URL . '/auth');
+                    return;
+                }
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                //redirect to error page
+                header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.user_delete_account', ['field' => $e->getMessage()]));
+                return;
+            }
+
+            echo json_encode($response);
+            return;
         }
     }
 
