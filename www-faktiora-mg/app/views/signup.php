@@ -60,7 +60,7 @@
         <button type="button" id="btn-add-user">Créer</button>
     </form>
     <!-- script js  -->
-    <script src="<?= SITE_URL ?>/js/users/create-user.js"></script>
+    <script src="<?= SITE_URL ?>/js/users/signup.js"></script>
 </body>
 
 </html>

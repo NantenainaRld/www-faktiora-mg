@@ -17,16 +17,15 @@ document.addEventListener("DOMContentLoaded", () => {
   //======================== FUNCTIONS ======================
 
   //function - create user
-  async function createUser(nom, prenoms, sexe, email, role, mdp, mdp_confirm) {
+  async function signUp(nom, prenoms, sexe, email, mdp, mdp_confirm) {
     try {
-      const response = await apiRequest("/user/create_user", {
+      const response = await apiRequest("/user/signup", {
         method: "POST",
         body: {
           nom_utilisateur: nom,
           prenoms_utilisateur: prenoms,
           sexe_utilisateur: sexe,
           email_utilisateur: email,
-          role: role,
           mdp: mdp,
           mdp_confirm: mdp_confirm,
         },
@@ -41,13 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
   //--btn-add-user
   const btnAddUser = document.getElementById("btn-add-user");
   btnAddUser.addEventListener("click", () => {
-    //call api - create user
-    createUser(
+    signUp(
       "s   ",
       "",
       "  masculin",
-      "test@faktiora.mg",
-      "admin",
+      "nantenain@faktiora.mg",
       "123456",
       "123456"
     );

@@ -211,29 +211,12 @@ class UserController extends Controller
             $response = null;
             $json = json_decode(file_get_contents('php://input'), true);
 
-            //loged ?
-            $is_loged_in = Auth::isLogedIn();
-
-            //not loged
-            if (!$is_loged_in->getLoged()) {
-                //redirect to login page
-                header('Location: ' . SITE_URL . '/auth');
-                return;
-            }
-
-            //role - !admin
-            if ($is_loged_in->getRole() !== 'admin') {
-                //redirect to index
-                header('Location: ' . SITE_URL . '/user');
-                return;
-            }
-
             //trim
             foreach ($json as $key => &$value) {
                 if ($key !== 'mdp' && $key !== 'mdp_confirm') {
                     $value = trim($value);
                 }
-                if ($key === 'sexe_utilisateur' || $key === 'role') {
+                if ($key === 'sexe_utilisateur') {
                     $value = strtolower($value);
                 }
             }
@@ -298,15 +281,6 @@ class UserController extends Controller
                 return;
             }
 
-            //role - invalid
-            if (!in_array($json['role'], ['admin', 'caissier'], true)) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.invalids.role', ['field' => $json['role']]);
-
-                echo json_encode($response);
-                return;
-            }
-
             //mdp - empty
             if (empty($json['mdp'])) {
                 $response['message_type'] = 'invalid';
@@ -344,15 +318,14 @@ class UserController extends Controller
 
                 $user_model = new User();
 
-                //create_user
+                //signup
                 $user_model
                     ->setNomUtilisateur($json['nom_utilisateur'])
                     ->setPrenomsUtilisateur($json['prenoms_utilisateur'])
                     ->setSexeUtilisateur($json['sexe_utilisateur'])
                     ->setEmailUtilisateur($json['email_utilisateur'])
-                    ->setRole($json['role'])
                     ->setMdp($json['mdp']);
-                $response = $user_model->createUser();
+                $response = $user_model->signUp();
 
                 echo json_encode($response);
                 return;

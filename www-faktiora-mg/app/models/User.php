@@ -120,7 +120,7 @@ class User extends Database
         return $response;
     }
 
-    //add user
+    //create_user
     public function createUser()
     {
         //response
@@ -158,6 +158,65 @@ class User extends Database
                 'sexe' => $this->sexe_utilisateur,
                 'email' => $this->email_utilisateur,
                 'role' => $this->role,
+                'mdp' => $this->mdp
+            ]);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //success
+            $response['message'] = __('messages.success.create_user');
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $response['message_type'] = 'error';
+            $response['message'] = __('errors.catch.create_user', ['field' => $e->getMessage()]);
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //signup
+    public function signUp()
+    {
+        //response
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+        try {
+            //generate id_utilisateur
+            $response = $this->generateIdUser();
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //email exist ?
+            $response = self::isEmailUserExist($this->email_utilisateur, null);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //found
+            if ($response['found']) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.duplicate.user_email', ['field' => $this->email_utilisateur]);
+
+                return $response;
+            }
+
+            //create user
+            $response = self::executeQuery("INSERT INTO utilisateur (id_utilisateur, nom_utilisateur, prenoms_utilisateur, sexe_utilisateur, email_utilisateur, mdp) VALUES (:id, :nom, :prenoms, :sexe, :email, :mdp)", [
+                'id' => $this->id_utilisateur,
+                'nom' => $this->nom_utilisateur,
+                'prenoms' => $this->prenoms_utilisateur,
+                'sexe' => $this->sexe_utilisateur,
+                'email' => $this->email_utilisateur,
                 'mdp' => $this->mdp
             ]);
             //error
