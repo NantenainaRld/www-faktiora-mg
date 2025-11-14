@@ -137,15 +137,15 @@ class User extends Database
             }
 
             //email exist ?
-            $response = $this->isEmailExist();
+            $response = self::isEmailUserExist($this->email_utilisateur, null);
             //error
             if ($response['message_type'] === 'error') {
                 return $response;
             }
             //found
-            if ($response['message'] === 'found') {
+            if ($response['found']) {
                 $response['message_type'] = 'invalid';
-                $response['data'] = __('messages.invalids.email_exist', ['field' => $this->email_utilisateur]);
+                $response['message'] = __('messages.duplicate.user_email', ['field' => $this->email_utilisateur]);
 
                 return $response;
             }
@@ -169,10 +169,12 @@ class User extends Database
 
             return $response;
         } catch (Throwable $e) {
-            return $response = [
-                'message_type' => 'error',
-                'message' => __('errors.catch.create_user', ['field' => $e->getMessage()])
-            ];
+            error_log($e->getMessage());
+
+            $response['message_type'] = 'error';
+            $response['message'] = __('errors.catch.create_user', ['field' => $e->getMessage()]);
+
+            return $response;
         }
 
         return $response;
@@ -635,7 +637,7 @@ class User extends Database
             'message' => 'success'
         ];
 
-        //first id_utilisateur
+        //generate id_utilisateur
         $this->id_utilisateur = 'U' .
             strval(sprintf("%06d", mt_rand(0, 999999))) .
             substr(
@@ -644,11 +646,11 @@ class User extends Database
                 2
             );
 
-        //regenerate if exist
         try {
+
             $found = true;
             while ($found) {
-                $response = $this->selectQuery("SELECT id_utilisateur FROM utilisateur WHERE id_utilisateur = :id", ['id' => $this->id_utilisateur]);
+                $response = self::isIdUserExist($this->id_utilisateur, null);
 
                 //error
                 if ($response['message_type'] === 'error') {
@@ -656,8 +658,9 @@ class User extends Database
                 }
 
                 //found
-                if (count($response['data']) >= 1) {
-                    //regenerate id
+                if ($response['found']) {
+
+                    //regenerate id_utilisateur
                     $this->id_utilisateur = 'U' .
                         strval(sprintf("%06d", mt_rand(0, 999999))) .
                         substr(
@@ -672,47 +675,20 @@ class User extends Database
                     break;
                 }
             }
+
             return $response;
         } catch (Throwable $e) {
-            return $response = [
-                'message_type' => 'error',
-                'message' => __('errors.catch.user_generate_id', ['field' => $e->getMessage()])
-            ];
+            error_log($e->getMessage());
+
+            $response['message_type'] = 'error';
+            $response['message'] =  __('errors.catch.user_generate_id', ['field' => $e->getMessage()]);
+
+            return $response;
         }
 
         return $response;
     }
-    //email exist?
-    private function isEmailExist()
-    {
-        $response = [
-            'message_type' => 'success',
-            'message' => 'not found'
-        ];
 
-        try {
-            $response = $this->selectQuery("SELECT email_utilisateur FROM 
-            utilisateur WHERE email_utilisateur = :email AND etat_utilisateur != 'supprimé'", ['email' => $this->email_utilisateur]);
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-            //found
-            if (count($response['data']) >= 1) {
-                $response['message'] = 'found';
-                return $response;
-            }
-
-            return $response;
-        } catch (Throwable $e) {
-            return $response = [
-                'message_type' => 'error',
-                'message' => __('errors.catch.user_isEmailExist', ['field' => $e->getMessage()])
-            ];
-        }
-
-        return $response;
-    }
     //user exist ?
     public function isUserExist($id_utilisateur)
     {
@@ -751,44 +727,5 @@ class User extends Database
         }
 
         return $response;
-    }
-    //email exist?
-    private function updateUserIsEmailExist($email_utilisateur, $id_utilisateur)
-    {
-        $response = [
-            'message_type' => 'success',
-            'message' => 'not found'
-        ];
-
-        try {
-            //sql
-            $sql = null;
-            $sql = $this->selectQuery("SELECT email_utilisateur FROM 
-            utilisateur WHERE email_utilisateur = :email AND id_utilisateur != :id", [
-                'email' => $email_utilisateur,
-                'id' => $id_utilisateur
-            ]);
-            //error
-            if ($sql['message_type'] === 'error') {
-                return $sql;
-            }
-            //data
-            else {
-                //found
-                if (count($sql['data'])  >= 1) {
-                    $response['message'] = 'found';
-                    return $response;
-                }
-                //not found
-                else {
-                    return $response;
-                }
-            }
-        } catch (Throwable $e) {
-            return $response = [
-                'message_type' => 'error',
-                'message' => $e->getMessage()
-            ];
-        }
     }
 }

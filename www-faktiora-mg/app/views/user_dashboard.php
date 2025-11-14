@@ -21,8 +21,6 @@
 
     <!-- script - user dashboard  -->
     <script src="<?= SITE_URL ?>/js/users/user-dashboard.js"></script>
-    <!-- script create user  -->
-    <script src="<?= SITE_URL ?>/js/users/create-user.js"></script>
 </body>
 
 </html>

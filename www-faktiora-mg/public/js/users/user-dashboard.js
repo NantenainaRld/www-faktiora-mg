@@ -1,6 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
   //================ FUNCTION ================
 
+  async function createUser(nom, prenoms, sexe, email, role, mdp, mdp_confirm) {
+    try {
+      const response = await apiRequest("/user/create_user", {
+        method: "POST",
+        body: {
+          nom_utilisateur: nom,
+          prenoms_utilisateur: prenoms,
+          sexe_utilisateur: sexe,
+          email_utilisateur: email,
+          role: role,
+          mdp: mdp,
+          mdp_confirm: mdp_confirm,
+        },
+      });
+      console.log(response);
+    } catch (Error) {
+      console.log("Error : " + Error);
+    }
+  }
   //function - filter user
   async function filterUser(from, to) {
     try {
@@ -71,13 +90,14 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    updateByUser(
-      "IDUPDATE",
-      "Nantenaina",
-      "Ed",
-      "féminin",
-      "test@faktiora.mg",
-      ""
+    createUser(
+      "nom",
+      "prenoms",
+      "masculin",
+      "test@faktiora.org",
+      "caissier",
+      "123456",
+      "123456"
     );
   });
 });

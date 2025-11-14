@@ -3,14 +3,8 @@
 // class client controller
 class UserController extends Controller
 {
-    // private $user_model;
-    // public function __construct()
-    // {
-    //     // initialize model
-    //     $this->user_model = $this->loadModel('User');
-    // }
 
-    //---------------------- PAGE ------------------------
+    //========================= PAGES =============================
 
     //page - index
     public function index()
@@ -20,8 +14,6 @@ class UserController extends Controller
     //page - user dashboard
     public function pageUser()
     {
-        // $_SESSION['auth'] = ['id_utilisateur' => "U556488QI"];
-
         $this->render('user_dashboard', ['title' => __('forms.titles.user_dashboard')]);
     }
 
@@ -47,115 +39,145 @@ class UserController extends Controller
     public function createUser()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            header("Content-Type: application/json");
-            $json = json_decode(file_get_contents("php://input"), true);
+            header('Content-Type: application/json');
             $response = null;
+            $json = json_decode(file_get_contents('php://input'), true);
+
+            //loged ?
+            $is_loged_in = Auth::isLogedIn();
+
+            //not loged
+            if (!$is_loged_in->getLoged()) {
+                //redirect to login page
+                header('Location: ' . SITE_URL . '/auth');
+                return;
+            }
+
+            //role - !admin
+            if ($is_loged_in->getRole() !== 'admin') {
+                //redirect to index
+                header('Location: ' . SITE_URL . '/user');
+                return;
+            }
 
             //trim
             foreach ($json as $key => &$value) {
                 if ($key !== 'mdp' && $key !== 'mdp_confirm') {
                     $value = trim($value);
                 }
-            }
-
-            //nom_utilisateur  - empty
-            if (empty($json['nom_utilisateur'])) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.empty.nom')
-                ];
-                echo json_encode($response);
-                return;
-            }
-            //nom_utilisateur - to uppercase
-            $json['nom_utilisateur'] = strtoupper($json['nom_utilisateur']);
-
-            //sexe_utilisateur - invalid
-            if (!in_array($json['sexe_utilisateur'], ['masculin', 'féminin'], true)) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.invalids.sexe', ['field' => $json['sexe_utilisateur']])
-                ];
-                echo json_encode($response);
-                return;
-            }
-
-            //email - empty
-            if (empty($json['email_utilisateur'])) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.empty.email')
-                ];
-                echo json_encode($response);
-                return;
-            }
-            //email - invalid
-            if (!filter_var($json['email_utilisateur'], FILTER_VALIDATE_EMAIL)) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.invalids.email', ['field' => $json['email_utilisateur']])
-                ];
-                echo json_encode($response);
-                return;
-            }
-
-            //role - admin
-            if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
-                //role - invalid
-                if (!in_array($json['role'], ['admin', 'caissier'], true)) {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => __('messages.invalids.role', ['field' => $json['role']])
-                    ];
-                    echo json_encode($response);
-                    return;
+                if ($key === 'sexe_utilisateur' || $key === 'role') {
+                    $value = strtolower($value);
                 }
             }
-            //role - signup
-            else {
-                $json['role'] = 'caissier';
-            }
 
-            // mdp - empty
-            if (empty($json['mdp'])) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.empty.mdp')
-                ];
+            //nom_utilisateur - empty
+            if (empty($json['nom_utilisateur'])) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.empty.nom');
+
                 echo json_encode($response);
                 return;
             }
-            //mdp - < 6
+            //nom_utilisateur - invalid
+            if (strlen($json['nom_utilisateur']) > 100) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.nom');
+
+                echo json_encode($response);
+                return;
+            }
+
+            //prenoms_utilisateur - invalid
+            if (!empty($json['prenoms_utilisateur']) && strlen($json['prenoms_utilisateur']) > 100) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.prenoms');
+
+                echo json_encode($response);
+                return;
+            }
+
+            //sexe - invalid
+            if (!in_array($json['sexe_utilisateur'], ['masculin', 'féminin'], true)) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.sexe', ['field' => $json['sexe_utilisateur']]);
+
+                echo json_encode($response);
+                return;
+            }
+
+            //email_utilisateur - empty
+            if (empty($json['email_utilisateur'])) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.empty.email');
+
+                echo json_encode($response);
+                return;
+            }
+            //email_utilisateur - invalid
+            if (filter_var($json['email_utilisateur'], FILTER_VALIDATE_EMAIL) === false) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.email', ['field' => $json['email_utilisateur']]);
+
+                echo json_encode($response);
+                return;
+            }
+            //email_utilisateur - length > 150
+            if (strlen($json['email_utilisateur']) > 150) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.email_length');
+
+                echo json_encode($response);
+                return;
+            }
+
+            //role - invalid
+            if (!in_array($json['role'], ['admin', 'caissier'], true)) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.role', ['field' => $json['role']]);
+
+                echo json_encode($response);
+                return;
+            }
+
+            //mdp - empty
+            if (empty($json['mdp'])) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.empty.mdp');
+
+                echo json_encode($response);
+                return;
+            }
+            //mdp - invalid
             if (strlen($json['mdp']) < 6) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.invalids.mdp')
-                ];
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.mdp');
+
                 echo json_encode($response);
                 return;
             }
             //mdp_confirm - empty
             if (empty($json['mdp_confirm'])) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.empty.mdp_confirm')
-                ];
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.empty.mdp_confirm');
+
                 echo json_encode($response);
                 return;
             }
-            //mdp_confirm != mdp
+            //mdp_confirm - invalid
             if ($json['mdp_confirm'] !== $json['mdp']) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.invalids.mdp_confirm')
-                ];
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.mdp_confirm');
+
                 echo json_encode($response);
                 return;
             }
 
             try {
-                //create user
-                $user_model = (new User())
+
+                $user_model = new User();
+
+                //create_user
+                $user_model
                     ->setNomUtilisateur($json['nom_utilisateur'])
                     ->setPrenomsUtilisateur($json['prenoms_utilisateur'])
                     ->setSexeUtilisateur($json['sexe_utilisateur'])
@@ -163,13 +185,183 @@ class UserController extends Controller
                     ->setRole($json['role'])
                     ->setMdp($json['mdp']);
                 $response = $user_model->createUser();
+
                 echo json_encode($response);
                 return;
             } catch (Throwable $e) {
-                $response = [
-                    'message_type' => 'error',
-                    'message' => __('errors.catch.create_user', ['field' => $e->getMessage()])
-                ];
+                error_log($e->getMessage());
+
+                $response['message_type'] = 'error';
+                $response['message'] = __('errors.catch.create_user', ['field' => $e->getMessage()]);
+
+                echo json_encode($response);
+                return;
+            }
+
+            echo json_encode($response);
+            return;
+        }
+    }
+
+    //action - signup
+    public function signUp()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            header('Content-Type: application/json');
+            $response = null;
+            $json = json_decode(file_get_contents('php://input'), true);
+
+            //loged ?
+            $is_loged_in = Auth::isLogedIn();
+
+            //not loged
+            if (!$is_loged_in->getLoged()) {
+                //redirect to login page
+                header('Location: ' . SITE_URL . '/auth');
+                return;
+            }
+
+            //role - !admin
+            if ($is_loged_in->getRole() !== 'admin') {
+                //redirect to index
+                header('Location: ' . SITE_URL . '/user');
+                return;
+            }
+
+            //trim
+            foreach ($json as $key => &$value) {
+                if ($key !== 'mdp' && $key !== 'mdp_confirm') {
+                    $value = trim($value);
+                }
+                if ($key === 'sexe_utilisateur' || $key === 'role') {
+                    $value = strtolower($value);
+                }
+            }
+
+            //nom_utilisateur - empty
+            if (empty($json['nom_utilisateur'])) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.empty.nom');
+
+                echo json_encode($response);
+                return;
+            }
+            //nom_utilisateur - invalid
+            if (strlen($json['nom_utilisateur']) > 100) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.nom');
+
+                echo json_encode($response);
+                return;
+            }
+
+            //prenoms_utilisateur - invalid
+            if (!empty($json['prenoms_utilisateur']) && strlen($json['prenoms_utilisateur']) > 100) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.prenoms');
+
+                echo json_encode($response);
+                return;
+            }
+
+            //sexe - invalid
+            if (!in_array($json['sexe_utilisateur'], ['masculin', 'féminin'], true)) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.sexe', ['field' => $json['sexe_utilisateur']]);
+
+                echo json_encode($response);
+                return;
+            }
+
+            //email_utilisateur - empty
+            if (empty($json['email_utilisateur'])) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.empty.email');
+
+                echo json_encode($response);
+                return;
+            }
+            //email_utilisateur - invalid
+            if (filter_var($json['email_utilisateur'], FILTER_VALIDATE_EMAIL) === false) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.email', ['field' => $json['email_utilisateur']]);
+
+                echo json_encode($response);
+                return;
+            }
+            //email_utilisateur - length > 150
+            if (strlen($json['email_utilisateur']) > 150) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.email_length');
+
+                echo json_encode($response);
+                return;
+            }
+
+            //role - invalid
+            if (!in_array($json['role'], ['admin', 'caissier'], true)) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.role', ['field' => $json['role']]);
+
+                echo json_encode($response);
+                return;
+            }
+
+            //mdp - empty
+            if (empty($json['mdp'])) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.empty.mdp');
+
+                echo json_encode($response);
+                return;
+            }
+            //mdp - invalid
+            if (strlen($json['mdp']) < 6) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.mdp');
+
+                echo json_encode($response);
+                return;
+            }
+            //mdp_confirm - empty
+            if (empty($json['mdp_confirm'])) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.empty.mdp_confirm');
+
+                echo json_encode($response);
+                return;
+            }
+            //mdp_confirm - invalid
+            if ($json['mdp_confirm'] !== $json['mdp']) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.mdp_confirm');
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+
+                $user_model = new User();
+
+                //create_user
+                $user_model
+                    ->setNomUtilisateur($json['nom_utilisateur'])
+                    ->setPrenomsUtilisateur($json['prenoms_utilisateur'])
+                    ->setSexeUtilisateur($json['sexe_utilisateur'])
+                    ->setEmailUtilisateur($json['email_utilisateur'])
+                    ->setRole($json['role'])
+                    ->setMdp($json['mdp']);
+                $response = $user_model->createUser();
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage());
+
+                $response['message_type'] = 'error';
+                $response['message'] = __('errors.catch.create_user', ['field' => $e->getMessage()]);
+
                 echo json_encode($response);
                 return;
             }
@@ -680,7 +872,6 @@ class UserController extends Controller
                 return;
             }
 
-            // // echo json_encode($json);
             echo json_encode($response);
             return;
         }

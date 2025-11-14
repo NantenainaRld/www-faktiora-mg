@@ -8,7 +8,6 @@ return [
         'role' => "Rôle invalide : <b>:field</b>",
         'mdp' => "Le mot de passe doît être au moins 6 caractères",
         'mdp_confirm' => "Le mot de passe de confirmation doît être similaire au mot de passe",
-        'email_exist' => "Cette adresse email existe déjà : :field",
         'num_caisse' => "Numéro de caisse invalide : <b>:field</b>",
         'date' => "Date invalide : <b>:field</b>",
         'user_id' => "L'<b>ID</b> utilisateur ne doit pas dépasser de 15 caractères",
