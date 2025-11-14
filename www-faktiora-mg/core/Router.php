@@ -81,8 +81,12 @@ class Router
                     ));
                 }
             } catch (Throwable $e) {
+                error_log($e->getMessage());
+
                 //redirect to error page
                 header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.router', ['field' => $e->getMessage()]));
+
+                return;
             }
         }
 

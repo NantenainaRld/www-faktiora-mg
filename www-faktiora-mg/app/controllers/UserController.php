@@ -15,18 +15,13 @@ class UserController extends Controller
     //page - index
     public function index()
     {
-        //session - !exist
-        if (!isset($_SESSION['user_id'])) {
-            //redirect to login page
-            header('Location: ' . SITE_URL . '/login');
-            return;
-        }
-        //session - exist
         echo "page index";
     }
     //page - user dashboard
     public function pageUser()
     {
+        // $_SESSION['auth'] = ['id_utilisateur' => "U556488QI"];
+
         $this->render('user_dashboard', ['title' => __('forms.titles.user_dashboard')]);
     }
 
@@ -360,90 +355,184 @@ class UserController extends Controller
         return;
     }
 
-    //action - update user
-    public function updateUser()
+    //action - update user by admin
+    public function updateByAdmin()
     {
-        //     if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-        //         header("Content-Type: application/json");
-        //         $json = json_decode(file_get_contents("php://input"), true);
-        //         $response = null;
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            header('Content-Type: application/json');
+            $response = null;
+            $json = json_decode(file_get_contents('php://input'), true);
 
-        //         //trim datas
-        //         $json = [
-        //             'id_utilisateur' => trim($json['id_utilisateur']),
-        //             'nom_utilisateur' => trim($json['nom_utilisateur']),
-        //             'prenoms_utilisateur' => trim($json['prenoms_utilisateur']),
-        //             'sexe_utilisateur' => trim($json['sexe_utilisateur']),
-        //             'role' => trim($json['role']),
-        //             'email_utilisateur' => trim($json['email_utilisateur']),
-        //             'mdp' => $json['mdp'],
-        //         ];
+            //loged ?
+            $is_loged_in = Auth::isLogedIn();
 
-        //         //nom_utilisateur empty
-        //         if (empty($json['nom_utilisateur'])) {
-        //             $response = [
-        //                 'message_type' => 'invalid',
-        //                 'message' => 'Veuiller compléter le champ <b>Nom</b>'
-        //             ];
-        //         }
-        //         //**nom_utilisateur
-        //         else {
-        //             $json['nom_utilisateur'] = strtoupper($json['nom_utilisateur']);
+            //not loged
+            if (!$is_loged_in->getLoged()) {
+                //redirect to login page
+                header('Location: ' . SITE_URL . '/auth');
+                return;
+            }
 
-        //             //sexe_utilisateur error
-        //             if (
-        //                 $json['sexe_utilisateur'] !== 'masculin'
-        //                 && $json['sexe_utilisateur'] !== 'féminin'
-        //             ) {
-        //                 $response = [
-        //                     'message_type' => 'error',
-        //                     'error_message' => "Error : sexe_utilisateur = {$json['sexe_utilisateur']}"
-        //                 ];
-        //             }
-        //             //**sexe_utilisateur
-        //             else {
-        //                 //role error
-        //                 if (
-        //                     $json['role'] !== 'admin' &&
-        //                     $json['role'] !== 'caissier'
-        //                 ) {
-        //                     $response = [
-        //                         'message_type' => 'error',
-        //                         'error_message' => "Error : role = {$json['role']}"
-        //                     ];
-        //                 }
-        //                 //**role
-        //                 else {
-        //                     //email invalid
-        //                     if (!filter_var(
-        //                         $json['email_utilisateur'],
-        //                         FILTER_VALIDATE_EMAIL
-        //                     )) {
-        //                         $response = [
-        //                             'message_type' => 'invalid',
-        //                             'message' => "L'adresse <b>email</b> saisie n'est pas valide ."
-        //                         ];
-        //                     }
-        //                     //**email_utilisateur
-        //                     else {
-        //                         //mdp small
-        //                         if (strlen($json['mdp']) < 6 && $json['mdp'] !== '') {
-        //                             $response = [
-        //                                 'message_type' => 'invalid',
-        //                                 'message' => "Le mot de passe doit être au moins <b>6</b> caratctères ."
-        //                             ];
-        //                         }
-        //                         //**mdp
-        //                         else {
-        //                             $response = $this->user_model->updateUser($json);
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
+            //role - !admin
+            if ($is_loged_in->getRole() !== 'admin') {
+                //redirect to index
+                header('Location: ' . SITE_URL . '/user');
+                return;
+            }
 
-        //         echo json_encode($response);
-        //     }
+            //trim
+            foreach ($json as $key => &$value) {
+                if ($key !== 'mdp') {
+                    $value = trim($value);
+                }
+                if ($key === 'sexe_utilisateur' || $key === 'role') {
+                    $value = strtolower($value);
+                }
+            }
+
+            //id_update - empty
+            if (empty($json['id_update'])) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.empty.user_id');
+
+                echo json_encode($response);
+                return;
+            }
+            //id_utilisateur - invalid
+            if (strlen($json['id_update']) > 15) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.user_id');
+
+                echo json_encode($response);
+                return;
+            }
+
+            //nom_utilisateur - empty
+            if (empty($json['nom_utilisateur'])) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.empty.nom');
+
+                echo json_encode($response);
+                return;
+            }
+            //nom_utilisateur - invalid
+            if (strlen($json['nom_utilisateur']) > 100) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.nom');
+
+                echo json_encode($response);
+                return;
+            }
+
+            //prenoms_utilisateur - invalid
+            if (!empty($json['prenoms_utilisateur']) && strlen($json['prenoms_utilisateur']) > 100) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.prenoms');
+
+                echo json_encode($response);
+                return;
+            }
+
+            //sexe - invalid
+            if (!in_array($json['sexe_utilisateur'], ['masculin', 'féminin'], true)) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.sexe', ['field' => $json['sexe_utilisateur']]);
+
+                echo json_encode($response);
+                return;
+            }
+
+            //email_utilisateur - empty
+            if (empty($json['email_utilisateur'])) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.empty.email');
+
+                echo json_encode($response);
+                return;
+            }
+            //email_utilisateur - invalid
+            if (filter_var($json['email_utilisateur'], FILTER_VALIDATE_EMAIL) === false) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.email', ['field' => $json['email_utilisateur']]);
+
+                echo json_encode($response);
+                return;
+            }
+            //email_utilisateur - length > 150
+            if (strlen($json['email_utilisateur']) > 150) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.email_length');
+
+                echo json_encode($response);
+                return;
+            }
+
+
+            //role - invalid
+            if (!in_array($json['role'], ['admin', 'caissier'], true)) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.role', ['field' => $json['role']]);
+
+                echo json_encode($response);
+                return;
+            }
+
+            //mdp - invalid
+            if (!empty($json['mdp']) && strlen($json['mdp']) < 6) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.mdp');
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+                //find user
+                $response = User::findById($json['id_utilisateur']);
+
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+
+                //not found
+                if (!$response['found']) {
+
+                    $response['message_type'] = 'invalid';
+                    $response['message'] = __('messages.not_found.user_id', ['field' => $json['id_utilisateur']]);
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //update user
+                ($response['model'])->setIdUtilsateur($json['id_utilisateur'])
+                    ->setIdUpdate($json['id_update'])
+                    ->setNomUtilisateur($json['nom_utilisateur'])
+                    ->setPrenomsUtilisateur($json['prenoms_utilisateur'])
+                    ->setSexeUtilisateur($json['sexe_utilisateur'])
+                    ->setEmailUtilisateur($json['email_utilisateur'])
+                    ->setRole($json['role'])
+                    ->setMdp($json['mdp']);
+                $response = $response['model']->updateUser();
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage());
+
+                $response['message_type'] = 'error';
+                $response['message'] = __('errors.catch.user_update', ['field' => $e->getMessage()]);
+
+                echo json_encode($response);
+                return;
+            }
+
+            // echo json_encode($json);
+            echo json_encode($response);
+            return;
+        }
     }
 
     // //action - delete user
