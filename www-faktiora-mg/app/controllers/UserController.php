@@ -514,8 +514,6 @@ class UserController extends Controller
         //filter user
         $response = UserRepositorie::filterUser($params);
 
-        // echo json_encode($search_user);
-
         echo json_encode($response);
         return;
     }
@@ -699,7 +697,6 @@ class UserController extends Controller
         }
     }
 
-
     //action - update user by admin
     public function updateByUser()
     {
@@ -850,17 +847,18 @@ class UserController extends Controller
         }
     }
 
-    // //action - delete user
-    // public function deleteUser()
-    // {
-    //     if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    //         header('Content-Type: application/json');
-    //         $json = json_decode(file_get_contents("php://input"), true);
-    //         $json['id_utilisateur'] = trim($json['id_utilisateur']);
+    //action - delete account
+    public function deleteAccount()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+            header('Content-Type: application/json');
+            $response = null;
+            $json = json_decode(file_get_contents('php://input'), true);
 
-    //         echo json_encode($this->user_model->deleteUser($json));
-    //     }
-    // }
+
+            return $response;
+        }
+    }
 
     //---------------------PRIVATE FUNCTION---------------------
 }

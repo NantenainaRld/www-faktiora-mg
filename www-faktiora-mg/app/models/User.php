@@ -113,8 +113,12 @@ class User extends Database
                 return $response;
             }
         } catch (Throwable $e) {
+            error_log($e->getMessage());
+
             $response['message_type'] = 'error';
             $response['message'] = __('errors.catch.create_default_admin', ['field' => $e->getMessage()]);
+
+            return $response;
         }
 
         return $response;
