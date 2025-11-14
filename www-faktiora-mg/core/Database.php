@@ -28,6 +28,8 @@ class Database
                 'message' => 'success'
             ];
         } catch (PDOException $e) {
+            error_log($e->getMessage());
+
             return [
                 'message_type' => 'error',
                 'message' => __('errors.catch.query', ['field' => $e->getMessage()])
@@ -42,6 +44,8 @@ class Database
             $stm->execute($params);
             return ['message_type' => 'success', 'message' => 'success'];
         } catch (PDOException $e) {
+            error_log($e->getMessage());
+
             return [
                 'message_type' => 'error',
                 'message' => __('errors.catch.query', ['field' => $e->getMessage()])

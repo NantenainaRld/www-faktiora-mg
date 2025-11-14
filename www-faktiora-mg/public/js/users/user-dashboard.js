@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   //function - update user
-  async function updateUser(
+  async function updateByAdmin(
     id,
     id_update,
     nom,
@@ -43,6 +43,26 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - update user
+  async function updateByUser(id, nom, prenoms, sexe, email, mdp) {
+    try {
+      const response = await apiRequest("/user/update_by_user", {
+        method: "PUT",
+        body: {
+          id_utilisateur: id,
+          nom_utilisateur: nom,
+          prenoms_utilisateur: prenoms,
+          sexe_utilisateur: sexe,
+          email_utilisateur: email,
+          mdp: mdp,
+        },
+      });
+
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //==================== EVENTS ===================
   const from = document.getElementById("from");
@@ -51,15 +71,13 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    updateUser(
-      "U556488QI",
+    updateByUser(
       "IDUPDATE",
       "Nantenaina",
-      "prenoms",
+      "Ed",
       "féminin",
       "test@faktiora.mg",
-      "admin",
-      "123456"
+      ""
     );
   });
 });

@@ -515,7 +515,7 @@ class UserController extends Controller
                     ->setEmailUtilisateur($json['email_utilisateur'])
                     ->setRole($json['role'])
                     ->setMdp($json['mdp']);
-                $response = $response['model']->updateUser();
+                $response = $response['model']->updateByAdmin();
 
                 echo json_encode($response);
                 return;
@@ -529,7 +529,158 @@ class UserController extends Controller
                 return;
             }
 
-            // echo json_encode($json);
+            echo json_encode($response);
+            return;
+        }
+    }
+
+
+    //action - update user by admin
+    public function updateByUser()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            header('Content-Type: application/json');
+            $response = null;
+            $json = json_decode(file_get_contents('php://input'), true);
+
+            //loged ?
+            $is_loged_in = Auth::isLogedIn();
+
+            //not loged
+            if (!$is_loged_in->getLoged()) {
+                //redirect to login page
+                header('Location: ' . SITE_URL . '/auth');
+                return;
+            }
+
+            //role - !caissier
+            if ($is_loged_in->getRole() !== 'caissier') {
+                //redirect to index
+                header('Location: ' . SITE_URL . '/user');
+                return;
+            }
+
+            //trim
+            foreach ($json as $key => &$value) {
+                if ($key !== 'mdp') {
+                    $value = trim($value);
+                }
+                if ($key === 'sexe_utilisateur' || $key === 'role') {
+                    $value = strtolower($value);
+                }
+            }
+
+            //nom_utilisateur - empty
+            if (empty($json['nom_utilisateur'])) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.empty.nom');
+
+                echo json_encode($response);
+                return;
+            }
+            //nom_utilisateur - invalid
+            if (strlen($json['nom_utilisateur']) > 100) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.nom');
+
+                echo json_encode($response);
+                return;
+            }
+
+            //prenoms_utilisateur - invalid
+            if (!empty($json['prenoms_utilisateur']) && strlen($json['prenoms_utilisateur']) > 100) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.prenoms');
+
+                echo json_encode($response);
+                return;
+            }
+
+            //sexe - invalid
+            if (!in_array($json['sexe_utilisateur'], ['masculin', 'féminin'], true)) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.sexe', ['field' => $json['sexe_utilisateur']]);
+
+                echo json_encode($response);
+                return;
+            }
+
+            //email_utilisateur - empty
+            if (empty($json['email_utilisateur'])) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.empty.email');
+
+                echo json_encode($response);
+                return;
+            }
+            //email_utilisateur - invalid
+            if (filter_var($json['email_utilisateur'], FILTER_VALIDATE_EMAIL) === false) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.email', ['field' => $json['email_utilisateur']]);
+
+                echo json_encode($response);
+                return;
+            }
+            //email_utilisateur - length > 150
+            if (strlen($json['email_utilisateur']) > 150) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.email_length');
+
+                echo json_encode($response);
+                return;
+            }
+
+            //mdp - invalid
+            if (!empty($json['mdp']) && strlen($json['mdp']) < 6) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.mdp');
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+                //find user
+                $response = User::findById($json['id_utilisateur']);
+
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+
+                //not found
+                if (!$response['found']) {
+
+                    $response['message_type'] = 'invalid';
+                    $response['message'] = __('messages.not_found.user_id', ['field' => $json['id_utilisateur']]);
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //update user
+                ($response['model'])->setIdUtilsateur($json['id_utilisateur'])
+                    ->setNomUtilisateur($json['nom_utilisateur'])
+                    ->setPrenomsUtilisateur($json['prenoms_utilisateur'])
+                    ->setSexeUtilisateur($json['sexe_utilisateur'])
+                    ->setEmailUtilisateur($json['email_utilisateur'])
+                    ->setMdp($json['mdp']);
+                $response = $response['model']->updateByUser();
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage());
+
+                $response['message_type'] = 'error';
+                $response['message'] = __('errors.catch.user_update', ['field' => $e->getMessage()]);
+
+                echo json_encode($response);
+                return;
+            }
+
+            // // echo json_encode($json);
             echo json_encode($response);
             return;
         }

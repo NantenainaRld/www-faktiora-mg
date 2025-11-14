@@ -38,7 +38,7 @@ class User extends Database
     //setter - nom_utilisateur
     public function setNomUtilisateur($nom_utilisateur)
     {
-        $this->nom_utilisateur = $nom_utilisateur;
+        $this->nom_utilisateur = strtoupper($nom_utilisateur);
         return $this;
     }
     //setter - prenoms_utilisateur
@@ -178,8 +178,8 @@ class User extends Database
         return $response;
     }
 
-    //update user
-    public function updateUser()
+    //update user by admin
+    public function updateByAdmin()
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 
@@ -242,14 +242,81 @@ class User extends Database
                         'id_user' => $this->id_utilisateur
                     ]
                 );
-                //error
-                if ($response['message_type'] === 'error') {
-                    return $response;
-                }
-
-                $response['message'] = __('messages.success.update_user', ['field' => $this->id_utilisateur]);
+            }
+            //error
+            if ($response['message_type'] === 'error') {
                 return $response;
             }
+
+            $response['message'] = __('messages.success.update_user', ['field' => $this->id_utilisateur]);
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $response['message_type'] = 'error';
+            $response['message'] = __('errors.catch.user_update', ['field' => $e->getMessage()]);
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //update user by user
+    public function updateByUser()
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            //email exist?
+            $response = self::isEmailUserExist($this->email_utilisateur, $this->id_utilisateur);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //found
+            if ($response['found']) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.duplicate.user_email', ['field' => $this->email_utilisateur]);
+
+                return $response;
+            }
+
+            //update user - no password
+            if (empty($this->mdp)) {
+                $response  = $this->executeQuery(
+                    "UPDATE utilisateur SET nom_utilisateur = :nom, prenoms_utilisateur = :prenoms, sexe_utilisateur = :sexe, email_utilisateur = :email WHERE id_utilisateur = :id_user",
+                    [
+                        'nom' => $this->nom_utilisateur,
+                        'prenoms' => $this->prenoms_utilisateur,
+                        'sexe' => $this->sexe_utilisateur,
+                        'email' => $this->email_utilisateur,
+                        'id_user' => $this->id_utilisateur
+                    ]
+                );
+            }
+            //update user - with password
+            else {
+                $response  = $this->executeQuery(
+                    "UPDATE utilisateur SET nom_utilisateur = :nom, prenoms_utilisateur = :prenoms, sexe_utilisateur = :sexe, email_utilisateur = :email, mdp = :mdp WHERE id_utilisateur = :id_user",
+                    [
+                        'nom' => $this->nom_utilisateur,
+                        'prenoms' => $this->prenoms_utilisateur,
+                        'sexe' => $this->sexe_utilisateur,
+                        'email' => $this->email_utilisateur,
+                        'mdp' => $this->mdp,
+                        'id_user' => $this->id_utilisateur
+                    ]
+                );
+            }
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response['message'] = __('messages.success.update_user', ['field' => $this->id_utilisateur]);
+            return $response;
         } catch (Throwable $e) {
             error_log($e->getMessage());
 
