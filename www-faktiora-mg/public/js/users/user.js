@@ -6,9 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const response = await apiRequest("/user/delete_account", {
         method: "DELETE",
-        body: {
-          id_utilisateur: id,
-        },
       });
       console.log(response);
     } catch (Error) {

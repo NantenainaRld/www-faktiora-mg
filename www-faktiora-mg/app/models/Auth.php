@@ -58,8 +58,8 @@ class Auth extends Database
     {
         $self = new Auth();
 
-        // $_SESSION['auth'] = [];
-        // $_SESSION['auth']['id_utilisateur'] = "U123278VW";
+        $_SESSION['auth'] = [];
+        $_SESSION['auth']['id_utilisateur'] = "U123278VW";
 
         //values - valid
         if (

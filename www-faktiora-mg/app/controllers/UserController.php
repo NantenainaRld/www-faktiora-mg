@@ -855,12 +855,22 @@ class UserController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
             header('Content-Type: application/json');
             $response = null;
-            $json = json_decode(file_get_contents('php://input'), true);
-            $id_utilisateur = trim($json['id_utilisateur']);
+
+            //loged ?
+            $is_loged_in = Auth::isLogedIn();
+            //not loged
+            if (!$is_loged_in->getLoged()) {
+                //redirect to login page
+                header('Location: ' . SITE_URL . '/auth');
+                return;
+            }
+
+            //id_utilisateur
+            $id_utilisateur = trim($_SESSION['auth']['id_utilisateur']);
 
             try {
                 //user exist?
-                $response = User::findById($json['id_utilisateur']);
+                $response = User::findById($id_utilisateur);
                 //error
                 if ($response['message_type'] === 'error') {
                     //redirect to error page
