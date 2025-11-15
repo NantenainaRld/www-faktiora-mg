@@ -887,7 +887,7 @@ class UserController extends Controller
                 //delete account
                 $user_model = new User();
                 $user_model->setIdUtilsateur($id_utilisateur);
-                $response = $user_model->deleteUser();
+                $response = $user_model->deleteAccount();
                 //error
                 if ($response['message_type'] === 'error') {
                     //redirect to error page

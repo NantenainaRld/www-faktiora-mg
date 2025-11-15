@@ -395,7 +395,7 @@ class User extends Database
     }
 
     //delete user
-    public function deleteUser()
+    public function deleteAccount()
     {
         $response = [
             'message_type' => 'success',
@@ -494,69 +494,6 @@ class User extends Database
 
             return $response;
         } catch (Throwable $e) {
-        }
-
-        return $response;
-    }
-
-
-    //login user
-    public function loginUser($json)
-    {
-        $response = [
-            'message_type' => 'success',
-            'message' => 'success'
-        ];
-        try {
-            //get password
-            $response = $this->selectQuery(
-                "SELECT mdp, id_utilisateur FROM utilisateur
-         WHERE email_utilisateur = :email OR id_utilisateur = :id",
-                [
-                    'email' => $json['login'],
-                    'id' => $json['login']
-                ]
-            );
-
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-            //success
-            else {
-                //account not exist
-                if (count($response['data']) <= 0) {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => "Compte avec l'identifiant/email <b>{$json['login']}</b> n'existe pas ."
-                    ];
-                }
-                //account existé
-                else {
-                    //password incorrect
-                    if (!password_verify(
-                        $json['mdp'],
-                        $response['data'][0]['mdp']
-                    )) {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => 'Adresse email/identifiant ou mot de passe incorrect .'
-                        ];
-                    }
-                    //password correct
-                    else {
-                        //session
-                        $_SESSION['id_utilisateur'] =
-                            $response['data'][0]['id_utilisateur'];
-                        $response['message'] = "Loged in";
-                    }
-                }
-            }
-        } catch (Throwable $e) {
-            $response = [
-                'message_type' => 'error',
-                'message' => 'Error : ' . $e->getMessage()
-            ];
         }
 
         return $response;
@@ -801,46 +738,6 @@ class User extends Database
             $response['message'] =  __('errors.catch.user_generate_id', ['field' => $e->getMessage()]);
 
             return $response;
-        }
-
-        return $response;
-    }
-
-    //user exist ?
-    public function isUserExist($id_utilisateur)
-    {
-        $response = [
-            'message_type' => 'success',
-            'message' => 'not found'
-        ];
-
-        try {
-            //sql
-            $sql = null;
-            $sql = $this->selectQuery("SELECT id_utilisateur FROM 
-            utilisateur WHERE id_utilisateur = :id", [
-                'id' => $id_utilisateur
-            ]);
-            //error
-            if ($sql['message_type'] === 'error') {
-                $response = $sql;
-            }
-            //data
-            else {
-                //found
-                if (count($sql['data'])  >= 1) {
-                    $response['message'] = 'found';
-                }
-                //not found
-                else {
-                    $response['message'] = 'not found';
-                }
-            }
-        } catch (Throwable $e) {
-            $response = [
-                'message_type' => 'error',
-                'message' => $e->getMessage()
-            ];
         }
 
         return $response;
