@@ -421,6 +421,45 @@ class User extends Database
         return $response;
     }
 
+    //delete all
+    public static function deleteAll($id_users, $id_utilisateur)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        $placeholers = implode(', ', array_fill(0, count($id_users), '?'));
+        $sql = "UPDATE utilisateur  SET etat_utilisateur = 'supprimé' WHERE id_utilisateur IN ({$placeholers}) AND id_utilisateur != ?";
+
+        $id_users[] = $id_utilisateur;
+
+        try {
+            $response = self::executeQuery($sql, $id_users);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //success
+            //0
+            if ($response['row_count'] === 0) {
+                $response['message'] = __('messages.success.user0_delete_all');
+            }
+            //1
+            elseif ($response['row_count'] === 1) {
+                $response['message'] = __('messages.success.user1_delete_all');
+            }
+            //plur
+            else {
+                $response['message'] = __('messages.success.users_delete_all', ['field' => $response['row_count']]);
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+        }
+
+        return $response;
+    }
+
     //login user
     public function loginUser($json)
     {

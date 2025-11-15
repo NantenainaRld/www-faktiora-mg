@@ -13,6 +13,7 @@ return [
         'user_id' => "L'<b>ID</b> utilisateur ne doit pas dépasser de 15 caractères",
         'nom' => "Le <b>nom</b> d'utilisateur ne doit pas dépasser de 100 caractères",
         'prenoms' => "Le <b>prénoms</b> d'utilisateur ne doit pas dépasser de 100 caractères",
+        'id_users_empty' => "Veuiller séléctionner au moins un utilisateur"
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",
@@ -24,7 +25,10 @@ return [
     ],
     'success' => [
         'create_user' => "Compte crée avec succès",
-        'update_user' => "Les informations de l'utilisateur <b>:field</b> ont été modifiées avec succès"
+        'update_user' => "Les informations de l'utilisateur <b>:field</b> ont été modifiées avec succès",
+        'user0_delete_all' => "Aucun utilisateur n'est supprimé",
+        'user1_delete_all' => "Un utilisateur a été supprimé avec succès",
+        'users_delete_all' => "<b>:field</b> utilisateurs ont été supprimés avec succès",
     ],
     'not_found' => [
         'user_id' => "L'utilisateur avec l'ID <b>:field</b> n'existe pas",

@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   //================ FUNCTION ================
 
+  //function - create user
   async function createUser(nom, prenoms, sexe, email, role, mdp, mdp_confirm) {
     try {
       const response = await apiRequest("/user/create_user", {
@@ -82,6 +83,21 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - delete all
+  async function deleteAll(ids = []) {
+    try {
+      const response = await apiRequest("/user/delete_all", {
+        method: "DELETE",
+        body: {
+          id_users: ids,
+        },
+      });
+
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //==================== EVENTS ===================
   const from = document.getElementById("from");
@@ -90,14 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    createUser(
-      "nom",
-      "prenoms",
-      "masculin",
-      "test@faktiora.org",
-      "caissier",
-      "123456",
-      "123456"
-    );
+    deleteAll(["U123278VWb", "U123278VW", "U123278VWs"]);
   });
 });

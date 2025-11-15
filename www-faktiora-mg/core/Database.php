@@ -42,7 +42,7 @@ class Database
         try {
             $stm = self::$pdo->prepare($sql);
             $stm->execute($params);
-            return ['message_type' => 'success', 'message' => 'success'];
+            return ['message_type' => 'success', 'message' => 'success', 'row_count' => $stm->rowCount()];
         } catch (PDOException $e) {
             error_log($e->getMessage());
 
