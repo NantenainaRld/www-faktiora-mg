@@ -98,6 +98,21 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - permanent delete all
+  async function permanentDeleteAll(ids = []) {
+    try {
+      const response = await apiRequest("/user/permanent_delete_all", {
+        method: "DELETE",
+        body: {
+          id_users: ids,
+        },
+      });
+
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //==================== EVENTS ===================
   const from = document.getElementById("from");
@@ -106,6 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    deleteAll(["U123278VWb", "U123278VW", "U123278VWs"]);
+    permanentDeleteAll(["U123278VWb", "U123278VW", "U123278VWs"]);
   });
 });

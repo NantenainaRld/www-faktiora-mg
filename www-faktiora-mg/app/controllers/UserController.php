@@ -969,5 +969,59 @@ class UserController extends Controller
         }
     }
 
+    //action - permanent delete all
+    public function permanentDeleteAll()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+            header('Content-Type: application/json');
+            $response = null;
+            $json = json_decode(file_get_contents('php://input'), true);
+
+            //loged ?
+            $is_loged_in = Auth::isLogedIn();
+            //not loged
+            if (!$is_loged_in->getLoged()) {
+                //redirect to login page
+                header('Location: ' . SITE_URL . '/auth');
+                return;
+            }
+            //role - not admin
+            if ($is_loged_in->getRole() !== 'admin') {
+                //redirect to user index
+                header('Location: ' . SITE_URL . '/user');
+                return;
+            }
+
+            //trim
+            $id_users = array_map(fn($x) => trim($x), $json['id_users']);
+
+            //id_users - empty
+            if (count($id_users) <= 0) {
+                $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.id_users_empty')];
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+                //delete all
+                $response = (User::permanentDeleteAll($id_users, $is_loged_in->getIdUtilisateur()));
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage());
+
+                $response = ['message_type' => 'error', 'message' => __('errors.catch.user_delete_all', ['field' => $e->getMessage()])];
+
+                echo json_encode($response);
+                return;
+            }
+
+            echo json_encode($response);
+            return;
+        }
+    }
+
     //---------------------PRIVATE FUNCTION---------------------
 }
