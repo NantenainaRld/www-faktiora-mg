@@ -9,15 +9,16 @@ return [
         'create_user' => DEBUG ? "Erreur de création du compte : :field" : "Erreur de création du compte",
         'user_findById' => DEBUG ? "Erreur dans user/findyById : :field" : "Une erreur est survenue lors de  la vérification de l'ID d'utilisateur",
         'user_generate_id' => DEBUG ? "Erreur de génération de l'ID d'utilisateur : :field" : "Une erreur est servenue lors de la création du compte",
-        'user_isEmailExist' => DEBUG ? "Erreur dans utilisateur/isEmailExist : :field" : "Une erreur est survenue dans la vérification de l'adresse email",
+        'user_isEmailExist' => DEBUG ? "Erreur dans user/isEmailExist : :field" : "Une erreur est survenue lors de la vérification de l'adresse email",
         'user_repositorie_filter_user' => DEBUG ? "Erreur dans user_repositorie/filterUser : :field" : 'Une erreur est survenue lors de listage des utilisateurs',
-        'caisse_findById' => DEBUG ? "Erreur dans caisse/findById : :field" : "Une erreur est survenue lors de la vérification de numéro de caisse",
         'auth_isLogedIn' => DEBUG ? "Erreur dans auth/isLogedIn : :field" : "Une erreur est survenue",
         'user_update' => DEBUG ? "Erreur dans user/update : :field" : "Une erreur est survenue lors de la modification des informations d'utilisateur",
         'user_isIdUserExist' => DEBUG ? "Erreur dans user/isIdUserExist : :field" : "Une erreur est survenue",
         'user_isEmailUserExist' => DEBUG ? "Erreur dans user/isEmailUserExist : :field" : "Une erreur est survenue",
         "user_delete_account" => DEBUG ? "Erreur de suppréssion du compte : :field" : "Erreur de suppréssion du compte",
-        'user_delete_all' => DEBUG ? "Erreur dans user/deleteAll : :field" : "Erreur de suppréssion des utilisateurs"
+        'user_delete_all' => DEBUG ? "Erreur dans user/deleteAll : :field" : "Erreur de suppréssion des utilisateurs",
+        'caisse_create_caisse' => DEBUG ? "Erreur dans caisse/createCaisse : :field" : "Erreur lors de la création du caisse",
+        'caisse_isNumCaisseExist' => DEBUG ? "Erreur dans caisse/isNumCaisseExist : :field" : "Une erreur est survenue lors de la vérification de numéro de caisse"
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

@@ -2,14 +2,14 @@ document.addEventListener("DOMContentLoaded", () => {
   //=================== FUNCTIONS =============
 
   //function - add caisse
-  async function addCaisse() {
+  async function createCaisse(num_caisse, solde, seuil) {
     try {
-      const response = await apiRequest("/caisse/add_caisse", {
+      const response = await apiRequest("/caisse/create_caisse", {
         method: "POST",
         body: {
-          num_caisse: 2,
-          solde: 150000,
-          seuil: "10000    ",
+          num_caisse: num_caisse,
+          solde: solde,
+          seuil: seuil,
         },
       });
       console.log(response);
@@ -115,6 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    affectCaisse();
+    createCaisse(4, "   1", "  1");
   });
 });

@@ -511,7 +511,7 @@ class User extends Database
         try {
             $user_model = new User();
 
-            $response = $user_model->selectQuery("SELECT * FROM utilisateur WHERE id_utilisateur  = :id", ['id' => $id]);
+            $response = self::selectQuery("SELECT * FROM utilisateur WHERE id_utilisateur  = :id", ['id' => $id]);
 
             //error
             if ($response['message_type'] === 'error') {
@@ -573,9 +573,8 @@ class User extends Database
         }
 
         try {
-            $self = new User();
 
-            $response = $self->selectQuery($sql, $params);
+            $response = self::selectQuery($sql, $params);
 
             //error
             if ($response['message_type'] === 'error') {
@@ -617,9 +616,8 @@ class User extends Database
         }
 
         try {
-            $self = new User();
 
-            $response = $self->selectQuery($sql, $params);
+            $response = self::selectQuery($sql, $params);
 
             //error
             if ($response['message_type'] === 'error') {
@@ -657,8 +655,7 @@ class User extends Database
 
         try {
             //count admin
-            $user = new self();
-            $response = $user->selectQuery("SELECT COUNT(id_utilisateur) as nb_admin FROM utilisateur WHERE etat_utilisateur != 'supprimé' AND role ='admin'");
+            $response = self::selectQuery("SELECT COUNT(id_utilisateur) as nb_admin FROM utilisateur WHERE etat_utilisateur != 'supprimé' AND role ='admin'");
 
             //error
             if ($response['message_type'] === 'error') {

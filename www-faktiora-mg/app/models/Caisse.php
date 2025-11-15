@@ -21,17 +21,17 @@ class Caisse extends Database
         $this->num_caisse = $num_caisse;
         return $this;
     }
-    //setter - sodle
+    //setter - solde
     public function setSolde($solde)
     {
         $this->solde = $solde;
-        return $solde;
+        return $this;
     }
     //setter - seuil
     public function setSeuil($seuil)
     {
         $this->seuil = $seuil;
-        return $seuil;
+        return $this;
     }
     //setter - seuil
     public function  seteEtatCaisse($etat_caisse)
@@ -41,12 +41,64 @@ class Caisse extends Database
     }
 
 
-    //===================== PUBLIC FUNCTION ================
+    //===================== PUBLIC FUNCTION =============================
+
+    // add caisse
+    public function createCaisse()
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+            //num_caisse exist?
+            $response = self::isNumCaisseExist($this->num_caisse, false);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //found
+            if ($response['found']) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.duplicate.num_caisse', ['field' => $this->num_caisse]);
+
+                return $response;
+            }
+
+            //create caisse
+            $response = self::executeQuery("INSERT INTO caisse (num_caisse, solde, seuil) VALUES (:num_caisse, :solde, :seuil) ", [
+                'num_caisse' => $this->num_caisse,
+                'solde' => $this->solde,
+                'seuil' => $this->seuil
+            ]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //success
+            else {
+                $response['message'] = __('messages.success.create_caisse', ['field' => $this->num_caisse]);
+
+                return $response;
+            }
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $response['message_type'] = 'error';
+            $response['message'] = __('errors.catch.caisse_create_caisse', ['field' => $e->getMessage()]);
+
+            return $response;
+        }
+
+        return $response;
+    }
 
     //static - find by id
     public static function findById($num_caisse)
     {
-        $response = ['message_type' => 'success', 'message' => 'not found'];
+        $response = ['message_type' => 'success', 'message' => 'success',];
 
         try {
             //find caisse
@@ -88,55 +140,7 @@ class Caisse extends Database
         return $response;
     }
 
-    // add caisse
-    public function addCaisse($json)
-    {
-        $response = [
-            'message_type' => 'success',
-            'message' => 'success'
-        ];
 
-        try {
-            //num_caisse exist?
-            $response = $this->isNumCaisseExist($json['num_caisse']);
-
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-            //success
-            else {
-                //found
-                if ($response['message'] === 'found') {
-                    $response['message_type'] = 'invalid';
-                    $response['message'] = "Cet numéro de caisse existe déjà .";
-                }
-                //not found
-                else {
-                    //add caisse
-                    $response = $this->executeQuery("INSERT INTO caisse (num_caisse, solde, seuil) VALUES (:num_caisse, :solde, :seuil)", [
-                        'num_caisse' => $json['num_caisse'],
-                        'solde' => $json['solde'],
-                        'seuil' => $json['seuil']
-                    ]);
-
-                    //error
-                    if ($response['message_type'] === 'error') {
-                        return $response;
-                    }
-                    //success
-                    else {
-                        $response['message'] = "Noveau caisse ajoutée avec succès .";
-                    }
-                }
-            }
-        } catch (Throwable $e) {
-            $response['message'] = 'error';
-            $response['message_type'] = "Error : " . $e->getMessage();
-        }
-
-        return $response;
-    }
     //update caisse
     public function updateCaisse($json)
     {
@@ -584,41 +588,55 @@ class Caisse extends Database
         return $response;
     }
 
-    //================= PRIVATE FUNCTION ======================
+    //===================== PRIVATE FUNCTION ======================
 
-    //num_caisse exist?
-    private function isNumCaisseExist($num_caisse)
+    //static - is num_caisse exist?
+    private static function isNumCaisseExist($num_caisse, $exclude = null)
     {
         $response  = [
             'message_type' => 'success',
-            'message' => 'not found'
+            'message' => 'success',
+            'found' => false
         ];
+
+        $sql = "SELECT num_caisse FROM caisse WHERE num_caisse = :num ";
+        $params = ['num' => $num_caisse];
+
+        if ($exclude) {
+            $sql .= "AND num_caisse != :num_caisse";
+            $params['num_caisse'] = $exclude;
+        }
+
         try {
-            //num_caisse
-            $response = $this->selectQuery("SELECT num_caisse FROM caisse WHERE num_caisse = :num_caisse", ['num_caisse' => $num_caisse]);
+            $response = self::selectQuery($sql, $params);
 
             //error
             if ($response['message_type'] === 'error') {
                 return $response;
             }
-            //success
-            else {
-                //found
-                if (count($response['data']) >= 1) {
-                    $response['message'] = 'found';
-                }
-                //not found
-                else {
-                    $response['message'] = 'not found';
-                }
+
+            //not found
+            if (count($response['data']) <= 0) {
+                $response['found'] = false;
             }
+            //not found
+            else {
+                $response['found'] = true;
+            }
+
+            return $response;
         } catch (Throwable $e) {
+            error_log($e->getMessage());
+
             $response['message_type'] = 'error';
-            $response['message'] = 'Error : ' . $e->getMessage();
+            $response['message'] = __('errors.catch.caisse_isNumCaisseExist', ['field' => $e->getMessage()]);
+
+            return $response;
         }
 
         return $response;
     }
+
     //num_caisse tab exist?
     private function numTabExist($tab)
     {
