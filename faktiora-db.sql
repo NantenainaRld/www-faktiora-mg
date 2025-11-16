@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 07, 2025 at 07:20 AM
+-- Generation Time: Nov 16, 2025 at 05:47 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -49,6 +49,14 @@ CREATE TABLE `autre_entree` (
   `num_caisse` int(11) DEFAULT NULL COMMENT 'Caisse foreign key'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `autre_entree`
+--
+
+INSERT INTO `autre_entree` (`id_ae`, `libelle_ae`, `date_ae`, `montant_ae`, `etat_ae`, `id_utilisateur`, `num_caisse`) VALUES
+('1', 'xx', '2025-11-10 03:17:13', 0.00, 'actif', NULL, NULL),
+('xxx', 'xx', '2015-11-25 03:17:13', 550.00, 'actif', NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -59,8 +67,18 @@ CREATE TABLE `caisse` (
   `num_caisse` int(11) NOT NULL COMMENT 'Caisse ID',
   `solde` decimal(15,2) NOT NULL DEFAULT 0.00 COMMENT 'Caisse initial fund',
   `seuil` decimal(15,2) NOT NULL DEFAULT 0.00 COMMENT 'Caisse recent fund',
-  `etat_caisse` enum('actif','supprimé') NOT NULL DEFAULT 'actif'
+  `etat_caisse` enum('libre','supprimé','occupé') NOT NULL DEFAULT 'libre'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `caisse`
+--
+
+INSERT INTO `caisse` (`num_caisse`, `solde`, `seuil`, `etat_caisse`) VALUES
+(3, 0.00, 0.00, 'occupé'),
+(4, 0.00, 0.00, 'supprimé'),
+(5, 15000.00, 10000.00, 'libre'),
+(7, 15000.00, 10000.00, 'libre');
 
 -- --------------------------------------------------------
 
@@ -107,6 +125,13 @@ CREATE TABLE `facture` (
   `id_client` varchar(15) DEFAULT NULL COMMENT 'CLient foreign key'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `facture`
+--
+
+INSERT INTO `facture` (`num_facture`, `date_facture`, `etat_facture`, `num_caisse`, `id_utilisateur`, `id_client`) VALUES
+('test', '2025-11-16 06:29:48', 'actif', 7, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -120,6 +145,15 @@ CREATE TABLE `ligne_caisse` (
   `id_utilisateur` varchar(15) DEFAULT NULL,
   `num_caisse` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ligne_caisse`
+--
+
+INSERT INTO `ligne_caisse` (`id_lc`, `date_debut`, `date_fin`, `id_utilisateur`, `num_caisse`) VALUES
+(2, '2025-11-10 13:25:01', '2025-11-19 08:51:22', 'U123278VW', 7),
+(4, '2025-11-10 10:25:47', NULL, 'U123278VW', 3),
+(5, '2025-11-10 10:25:47', '2025-11-12 07:40:53', '000000', 7);
 
 -- --------------------------------------------------------
 
@@ -144,7 +178,7 @@ CREATE TABLE `ligne_ds` (
 CREATE TABLE `ligne_facture` (
   `id_lf` int(11) NOT NULL COMMENT 'Ligne facture ID',
   `quantite_produit` int(11) NOT NULL DEFAULT 1 COMMENT 'Ligne facture amount product',
-  `id_facture` varchar(20) DEFAULT NULL COMMENT 'Facture fk',
+  `num_facture` varchar(20) DEFAULT NULL COMMENT 'Facture fk',
   `id_produit` varchar(15) DEFAULT NULL COMMENT 'Produit fk'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -177,9 +211,17 @@ CREATE TABLE `utilisateur` (
   `role` enum('admin','caissier') NOT NULL DEFAULT 'caissier' COMMENT 'User role',
   `mdp` varchar(200) NOT NULL COMMENT 'User password',
   `mdp_oublie` varchar(200) DEFAULT NULL COMMENT 'User forgot password',
-  `etat_utilisateur` enum('connecté','déconnecté','supprimé') NOT NULL DEFAULT 'déconnecté',
-  `dernier_session` datetime DEFAULT NULL
+  `etat_utilisateur` enum('supprimé','connecté','déconnecté') NOT NULL DEFAULT 'déconnecté',
+  `dernier_session` datetime DEFAULT '1700-01-01 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `utilisateur`
+--
+
+INSERT INTO `utilisateur` (`id_utilisateur`, `nom_utilisateur`, `prenoms_utilisateur`, `sexe_utilisateur`, `email_utilisateur`, `role`, `mdp`, `mdp_oublie`, `etat_utilisateur`, `dernier_session`) VALUES
+('000000', 'admin', NULL, 'masculin', 'admin@faktiora.mg', 'admin', '$2y$10$dXsBPIveIwTawqI5RYm.JeZK/BdilM4ZoayDHFVvqD4ayoVA.fbwK', NULL, 'déconnecté', '1700-01-01 00:00:00'),
+('U123278VW', 'S', '', 'masculin', 'nantenain@faktiora.mg', 'admin', '$2y$10$.H4oNKM5lRtaNmd5TA6SWOsu3vGiAe4T/ab44nGXh10/ObOq4NvGS', NULL, 'connecté', '1700-01-01 00:00:00');
 
 --
 -- Indexes for dumped tables
@@ -197,7 +239,7 @@ ALTER TABLE `article`
 ALTER TABLE `autre_entree`
   ADD PRIMARY KEY (`id_ae`),
   ADD KEY `fk_user` (`id_utilisateur`),
-  ADD KEY `fk_caisse` (`num_caisse`);
+  ADD KEY `fk_caisse_ae` (`num_caisse`);
 
 --
 -- Indexes for table `caisse`
@@ -227,7 +269,7 @@ ALTER TABLE `facture`
   ADD PRIMARY KEY (`num_facture`),
   ADD KEY `fk_user_01` (`id_utilisateur`),
   ADD KEY `fk_client` (`id_client`),
-  ADD KEY `fk_caisse_00` (`num_caisse`);
+  ADD KEY `fk_caisse_facture` (`num_caisse`);
 
 --
 -- Indexes for table `ligne_caisse`
@@ -250,7 +292,7 @@ ALTER TABLE `ligne_ds`
 --
 ALTER TABLE `ligne_facture`
   ADD PRIMARY KEY (`id_lf`),
-  ADD KEY `fk_facture` (`id_facture`),
+  ADD KEY `fk_facture` (`num_facture`),
   ADD KEY `fk_produit` (`id_produit`);
 
 --
@@ -265,7 +307,6 @@ ALTER TABLE `produit`
 --
 ALTER TABLE `utilisateur`
   ADD PRIMARY KEY (`id_utilisateur`),
-  ADD UNIQUE KEY `user.email` (`email_utilisateur`),
   ADD KEY `role.user` (`role`);
 
 --
@@ -273,10 +314,16 @@ ALTER TABLE `utilisateur`
 --
 
 --
+-- AUTO_INCREMENT for table `caisse`
+--
+ALTER TABLE `caisse`
+  MODIFY `num_caisse` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Caisse ID', AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT for table `ligne_caisse`
 --
 ALTER TABLE `ligne_caisse`
-  MODIFY `id_lc` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_lc` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `ligne_ds`
@@ -298,7 +345,7 @@ ALTER TABLE `ligne_facture`
 -- Constraints for table `autre_entree`
 --
 ALTER TABLE `autre_entree`
-  ADD CONSTRAINT `fk_caisse` FOREIGN KEY (`num_caisse`) REFERENCES `caisse` (`num_caisse`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_caisse_ae` FOREIGN KEY (`num_caisse`) REFERENCES `caisse` (`num_caisse`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_user` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
@@ -312,7 +359,7 @@ ALTER TABLE `demande_sortie`
 -- Constraints for table `facture`
 --
 ALTER TABLE `facture`
-  ADD CONSTRAINT `fk_caisse_00` FOREIGN KEY (`num_caisse`) REFERENCES `caisse` (`num_caisse`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `fk_caisse_facture` FOREIGN KEY (`num_caisse`) REFERENCES `caisse` (`num_caisse`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_client` FOREIGN KEY (`id_client`) REFERENCES `client` (`id_client`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_user_01` FOREIGN KEY (`id_utilisateur`) REFERENCES `utilisateur` (`id_utilisateur`) ON DELETE SET NULL ON UPDATE CASCADE;
 
@@ -334,7 +381,7 @@ ALTER TABLE `ligne_ds`
 -- Constraints for table `ligne_facture`
 --
 ALTER TABLE `ligne_facture`
-  ADD CONSTRAINT `fk_facture` FOREIGN KEY (`id_facture`) REFERENCES `facture` (`num_facture`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_facture` FOREIGN KEY (`num_facture`) REFERENCES `facture` (`num_facture`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_produit` FOREIGN KEY (`id_produit`) REFERENCES `produit` (`id_produit`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
