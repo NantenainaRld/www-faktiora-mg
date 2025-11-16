@@ -329,8 +329,12 @@ LEFT JOIN produit p ON
 
             return $response;
         } catch (Throwable $e) {
+            error_log($e->getMessage());
+
             $response['message_type'] = 'error';
             $response['message'] = __('errors.catch.user_repositorie_filter_user', ['field' => $e->getMessage()]);
+
+            return $response;
         }
 
         return $response;

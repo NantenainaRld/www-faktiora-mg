@@ -17,11 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
-  //function - filter caisse
-  async function filterCaisse() {
+  //function- filter caisse
+  async function filterCaisse(from, to) {
     try {
       const response = await apiRequest(
-        "/caisse/filter_caisse&search_caisse=6&by=nb_sorties&order_by=desc&from=202&to=22&per=week&month=4&year=2026&type=!null"
+        `/caisse/filter_caisse?status=all&order_by=nb_transactions&arrange=DESC&date_by=month_year&per=week&from=${from}&to=${to}&month=11&year=2025&search_caisse=`
       );
       console.log(response);
     } catch (error) {
@@ -112,9 +112,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   //=================== EVENTS =================
+  const from = document.getElementById("from");
+  const to = document.getElementById("to");
+
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    createCaisse(4, "   1", "  1");
+    filterCaisse(from.value, to.value);
   });
 });

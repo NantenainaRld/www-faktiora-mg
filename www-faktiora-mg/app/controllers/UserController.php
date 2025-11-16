@@ -504,7 +504,7 @@ class UserController extends Controller
                 return;
             }
             //num_caisse - not found
-            if ($response['message'] === 'not found') {
+            if (!$response['found']) {
                 $response['message_type'] = 'invalid';
                 $response['message'] = __('messages.not_found.num_caisse', ['field' => $num_caisse]);
 
