@@ -63,7 +63,7 @@ class CaisseController extends Controller
             }
 
             //solde - empty
-            if (empty($json['solde']) && $json['solde'] !== "0") {
+            if ($json['solde'] === '') {
                 $response = ['message_type' => 'invalid', 'message' => __('messages.empty.solde')];
 
                 echo json_encode($response);
@@ -79,7 +79,7 @@ class CaisseController extends Controller
             }
 
             //seuil - empty
-            if (empty($json['seuil']) && $json['seuil'] !== '0') {
+            if ($json['seuil'] === '') {
                 $response = ['message_type' => 'invalid', 'message' => __('messages.empty.seuil')];
 
                 echo json_encode($response);
@@ -122,7 +122,6 @@ class CaisseController extends Controller
                 return;
             }
 
-            // echo json_encode($json);
             echo json_encode($response);
             return;
         }
@@ -361,78 +360,143 @@ class CaisseController extends Controller
     }
 
     //action - update caisse
-    // public function updateCaisse()
-    // {
-    //     if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-    //         header('Content-TYpe: application/json');
-    //         $json = json_decode(file_get_contents('php://input'), true);
-    //         $response = null;
+    public function updateCaisse()
+    {
+        header('Content-Type: application/json');
+        $response = null;
 
-    //         //trim
-    //         $json = array_map(fn($x) => trim($x), $json);
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
 
-    //         //numca_isse INT ?
-    //         $num_caisse = filter_var($json['num_caisse'], FILTER_VALIDATE_INT);
+        //role - not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to index
+            header("Location: " . SITE_URL . '/user');
+            return;
+        }
 
-    //         //invalid num_caisse
-    //         if ($num_caisse === false || $num_caisse < 0) {
-    //             $response = [
-    //                 'message_type' => 'invalid',
-    //                 'message' => "Le numéro de caisse choisi est invalide : " . $json['num_caisse']
-    //             ];
-    //         }
-    //         //valid num_caisse
-    //         else {
-    //             //update_num_caisse INT?
-    //             $update_num_caisse = filter_var($json['update_num_caisse'], FILTER_VALIDATE_INT);
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            $json = json_decode(file_get_contents('php://input'), true);
 
-    //             //invalid update num_caisse
-    //             if ($update_num_caisse === false || $update_num_caisse < 0) {
-    //                 $response = [
-    //                     'message_type' => 'invalid',
-    //                     'message' => "Le numéro de caisse doit être des nombres entiers supérieurs ou égaux à 0 ."
-    //                 ];
-    //             }
-    //             //valid update num_caisse
-    //             else {
-    //                 //solde && seuil FLOAT ?
-    //                 $solde = filter_var($json['solde'], FILTER_VALIDATE_FLOAT);
-    //                 $seuil = filter_var($json['seuil'], FILTER_VALIDATE_FLOAT);
+            //trim
+            $json = array_map(fn($x) => trim($x), $json);
 
-    //                 //invalid solde && seuil
-    //                 if ($solde === false || $seuil === false || $solde < 0 || $seuil < 0) {
-    //                     $response = [
-    //                         'message_type' => 'invalid',
-    //                         'message' => "Le solde et le seuil doivent être des valeurs décimaux supérieurs ou égaux à 0 . "
-    //                     ];
-    //                 }
-    //                 //valid solde && seuil
-    //                 else {
-    //                     //solde < seuil
-    //                     if ($solde < $seuil) {
-    //                         $response = [
-    //                             'message_type' => 'invalid',
-    //                             'message' => "Le solde doit être supérieur ou égal au seuil ."
-    //                         ];
-    //                     }
-    //                     //solde >= seuil
-    //                     else {
-    //                         $params = [
-    //                             'num_caisse' => $num_caisse,
-    //                             'update_num_caisse' => $update_num_caisse,
-    //                             'solde' => $solde,
-    //                             'seuil' => $seuil,
-    //                             'id_utilisateur' => $json['id_utilisateur']
-    //                         ];
-    //                         $response = $this->caisse_model->updateCaisse($params);
-    //                     }
-    //                 }
-    //             }
-    //         }
+            //num_caisse_update - invalid
+            $num_caisse_update = filter_var($json['num_caisse_update'], FILTER_VALIDATE_INT);
+            if ($num_caisse_update === false || $num_caisse_update < 0) {
+                $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.num_caisse')];
 
-    //         echo json_encode($response);
-    //     }
-    // }
+                echo json_encode($response);
+                return;
+            }
+
+            //solde - empty
+            if ($json['solde'] === '') {
+                $response = ['message_type' => 'invalid', 'message' => __('messages.empty.solde')];
+
+                echo json_encode($response);
+                return;
+            }
+            //solde - invalid
+            $solde = filter_var($json['solde'], FILTER_VALIDATE_FLOAT);
+            if ($solde === false || $solde < 0) {
+                $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.solde')];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //seuil - empty
+            if ($json['seuil'] === '') {
+                $response = ['message_type' => 'invalid', 'message' => __('messages.empty.seuil')];
+
+                echo json_encode($response);
+                return;
+            }
+            //seuil - invalid
+            $seuil = filter_var($json['seuil'], FILTER_VALIDATE_FLOAT);
+            if ($seuil === false || $seuil < 0) {
+                $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.seuil')];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //solde < seuil
+            if ($solde < $seuil) {
+                $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.solde_seuil')];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //num_caisse - invalid
+            $num_caisse = filter_var($json['num_caisse'], FILTER_VALIDATE_INT);
+            if ($num_caisse === false || $num_caisse < 0) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.not_found.num_caisse', ['field' => $json['num_caisse']])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+                //num_caisse exist
+                $response = Caisse::findById($num_caisse);
+                //error
+                if ($response['message_type'] === 'error') {
+
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.num_caisse', ['field' => $json['num_caisse']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //update caisse
+                ($response['model'])->setNumCaisse($num_caisse)
+                    ->setNumCaisseUpdate($num_caisse_update)
+                    ->setSolde($solde)
+                    ->setSeuil($seuil);
+                $response = $response['model']->updateCaisse();
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage());
+
+                $response = ['message_type' => 'error', 'message' => __('errors.catch.caisse_update_caisse', ['field' => $e->getMessage()])];
+
+                echo json_encode($response);
+                return;
+            }
+
+            echo json_encode($response);
+            return;
+        }
+
+        echo  json_encode($response);
+        return;
+    }
+
+    //action - update solde
+
+
     // //action - update solde && seuil
     // public function updateSoldeSeuil()
     // {

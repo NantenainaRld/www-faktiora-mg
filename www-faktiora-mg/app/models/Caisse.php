@@ -4,6 +4,7 @@ class Caisse extends Database
 {
 
     private $num_caisse = null;
+    private $num_caisse_update = null;
     private $solde = 0;
     private $seuil = 0;
     private $etat_caisse = 'actif';
@@ -19,6 +20,12 @@ class Caisse extends Database
     public function setNumCaisse($num_caisse)
     {
         $this->num_caisse = $num_caisse;
+        return $this;
+    }
+    //setter - num_caisse_update
+    public function setNumCaisseUpdate($num_caisse_update)
+    {
+        $this->num_caisse_update = $num_caisse_update;
         return $this;
     }
     //setter - solde
@@ -95,6 +102,61 @@ class Caisse extends Database
         return $response;
     }
 
+    //update caisse
+    public function updateCaisse()
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+            // num_caisse_update exist?
+            $response = self::isNumCaisseExist($this->num_caisse_update, $this->num_caisse);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //found
+            if ($response['found']) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.duplicate.num_caisse', ['field' => $this->num_caisse_update]);
+
+                return $response;
+            }
+
+            //update caisse
+            $response = self::executeQuery("UPDATE caisse SET num_caisse = :num, solde = :solde, seuil = :seuil WHERE num_caisse = :num_caisse", [
+                'num' => $this->num_caisse_update,
+                'solde' => $this->solde,
+                'seuil' => $this->seuil,
+                'num_caisse' => $this->num_caisse
+            ]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //success
+            else {
+                $response['message'] = __('messages.success.caisse_update_caisse', ['field' => $this->num_caisse]);
+
+                return $response;
+            }
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $response['message_type'] = 'error';
+            $response['message'] = __('errors.catch.caisse_update_caisse', ['field' => $e->getMessage()]);
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //update solde
+
     //static - find by id
     public static function findById($num_caisse)
     {
@@ -127,6 +189,9 @@ class Caisse extends Database
                 $caisse_model->etat_caisse = $response['data'][0]['etat_caisse'];
 
                 $response['data'] = [];
+
+                $response['model'] = $caisse_model;
+
                 return $response;
             }
         } catch (Throwable $e) {
@@ -140,122 +205,6 @@ class Caisse extends Database
 
         return $response;
     }
-
-
-    //update caisse
-    // public function updateCaisse($json)
-    // {
-    //     $response = [
-    //         'message_type' => 'success',
-    //         'message' => 'success'
-    //     ];
-
-    //     try {
-    //         //num_caisse exist ?
-    //         $response = $this->isNumCaisseExist($json['num_caisse']);
-
-    //         //error
-    //         if ($response['message_type'] === 'error') {
-    //             return $response;
-    //         }
-    //         //success
-    //         else {
-    //             //not found
-    //             if ($response['message'] === 'not found') {
-    //                 $response['message_type'] = 'invalid';
-    //                 $response['message'] = "La caisse choisie (numéro <b>{$json['num_caisse']}</b> n'existe pas .";
-    //             }
-    //             //found
-    //             else {
-    //                 //num_caisse_update exist?
-    //                 $response = $this->isUpdateNumCaisseExist(
-    //                     $json['update_num_caisse'],
-    //                     $json['num_caisse']
-    //                 );
-
-    //                 //error
-    //                 if ($response['message_type'] === 'error') {
-    //                     return $response;
-    //                 }
-    //                 //success
-    //                 else {
-    //                     //found
-    //                     if ($response['message'] === 'found') {
-    //                         $response['message_type'] = 'invalid';
-    //                         $response['message'] = "Le numéro du caisse <b>{$json['update_num_caisse']}</b> existe déjà .";
-    //                     }
-    //                     //not found
-    //                     else {
-    //                         //id_utilisateur empty
-    //                         if (empty($json['id_utilisateur'])) {
-    //                             //update caisse
-    //                             $response = $this->executeQuery("UPDATE caisse SET num_caisse = :update_num_caisse, solde = :solde, seuil = :seuil WHERE num_caisse = :num_caisse", [
-    //                                 'update_num_caisse' => $json['num_caisse_update'],
-    //                                 'solde' => $json['solde'],
-    //                                 'seuil' => $json['seuil'],
-    //                                 'num_caisse' => $json['num_caisse']
-    //                             ]);
-
-    //                             //error
-    //                             if ($response['message_type'] === 'error') {
-    //                                 return $response;
-    //                             }
-    //                             //success
-    //                             else {
-    //                                 $response['message_type'] = 'success';
-    //                                 $response['message'] = "Les informations du caisse numéro <b>{$json['num_caisse']}</b> ont été modifiées avec succès .";
-    //                             }
-    //                         }
-    //                         //id_utilisateur not empty
-    //                         else {
-    //                             //user exist?
-    //                             $user_model = new User();
-    //                             $response = $user_model->isUserExist($json['id_utilisateur']);
-
-    //                             //error
-    //                             if ($response['message_type'] === 'error') {
-    //                                 return $response;
-    //                             }
-    //                             //success
-    //                             else {
-    //                                 //not found
-    //                                 if ($response['message'] === 'not found') {
-    //                                     $response['message'] = "L'utilisateur avec l'ID <b>{$json['id_utilisateur']}</b> n'existe pas .";
-    //                                 }
-    //                                 //found
-    //                                 else {
-    //                                     //update caisse
-    //                                     $response = $this->executeQuery("UPDATE caisse SET num_caisse = :update_num_caisse, solde = :solde, seuil = :seuil, id_utilisateur = :id WHERE num_caisse = :num_caisse", [
-    //                                         'update_num_caisse' => $json['update_num_caisse'],
-    //                                         'solde' => $json['solde'],
-    //                                         'seuil' => $json['seuil'],
-    //                                         'id' => $json['id_utilisateur'],
-    //                                         'num_caisse' => $json['num_caisse']
-    //                                     ]);
-
-    //                                     //error
-    //                                     if ($response['message_type'] === 'error') {
-    //                                         return $response;
-    //                                     }
-    //                                     //success
-    //                                     else {
-    //                                         $response['message_type'] = 'success';
-    //                                         $response['message'] = "Les informations du caisse numéro <b>{$json['num_caisse']}</b> ont été modifiées avec succès .";
-    //                                     }
-    //                                 }
-    //                             }
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     } catch (Throwable $e) {
-    //         $response['message_type'] = 'error';
-    //         $response['message'] = 'Error :  ' . $e->getMessage();
-    //     }
-
-    //     return $response;
-    // }
 
     // //update solde seuil
     // public function updateSoldeSeuil($params)

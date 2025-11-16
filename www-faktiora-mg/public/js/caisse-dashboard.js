@@ -45,11 +45,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await apiRequest("/caisse/update_caisse", {
         method: "PUT",
         body: {
-          num_caisse: 6,
-          update_num_caisse: 9,
-          solde: 588,
-          seuil: 288,
-          id_utilisateur: "U087962YH",
+          num_caisse: "2",
+          num_caisse_update: "7",
+          solde: "  15000",
+          seuil: " 10000",
         },
       });
       console.log(response);
@@ -57,6 +56,8 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
+  //function - update solde
+
   //function - update solde && seuil
   async function updateSoldeSeuil() {
     const nums = [];
@@ -131,6 +132,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    filterLigneCaisse(fromLs.value, toLs.value);
+    updateCaisse();
   });
 });

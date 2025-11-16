@@ -20,7 +20,8 @@ return [
         'caisse_create_caisse' => DEBUG ? "Erreur dans caisse/createCaisse : :field" : "Erreur lors de la création du caisse",
         'caisse_isNumCaisseExist' => DEBUG ? "Erreur dans caisse/isNumCaisseExist : :field" : "Une erreur est survenue lors de la vérification de numéro de caisse",
         'caisse_repositorie_filter_caisse' => DEBUG ? "Erreur dans caisse_repositorie/filterCaisse : :field" : "Une erreur est survenue lors de listage des caisses",
-        'filter_ligne_caisse' => DEBUG ? "Erreur dans caisse/filterLigneCaisse : :field" : "Une erreur est survenue lors de listage des lignes de caisse"
+        'filter_ligne_caisse' => DEBUG ? "Erreur dans caisse/filterLigneCaisse : :field" : "Une erreur est survenue lors de listage des lignes de caisse",
+        'caisse_update_caisse' => DEBUG ? "Erreur dans caisse/updateCaisse : :field" : "Une erreur est survenue lors de la modifications des informations du caisse"
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

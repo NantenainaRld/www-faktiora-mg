@@ -523,27 +523,28 @@ class UserController extends Controller
     //action - update user by admin
     public function updateByAdmin()
     {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged ?
+        $is_loged_in = Auth::isLogedIn();
+
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+
+        //role - !admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to index
+            header('Location: ' . SITE_URL . '/user');
+            return;
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-            header('Content-Type: application/json');
-            $response = null;
             $json = json_decode(file_get_contents('php://input'), true);
-
-            //loged ?
-            $is_loged_in = Auth::isLogedIn();
-
-            //not loged
-            if (!$is_loged_in->getLoged()) {
-                //redirect to login page
-                header('Location: ' . SITE_URL . '/auth');
-                return;
-            }
-
-            //role - !admin
-            if ($is_loged_in->getRole() !== 'admin') {
-                //redirect to index
-                header('Location: ' . SITE_URL . '/user');
-                return;
-            }
 
             //trim
             foreach ($json as $key => &$value) {
@@ -563,7 +564,7 @@ class UserController extends Controller
                 echo json_encode($response);
                 return;
             }
-            //id_utilisateur - invalid
+            //id_update - invalid
             if (strlen($json['id_update']) > 15) {
                 $response['message_type'] = 'invalid';
                 $response['message'] = __('messages.invalids.user_id');

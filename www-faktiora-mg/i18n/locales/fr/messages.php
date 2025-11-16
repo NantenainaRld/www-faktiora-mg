@@ -35,7 +35,8 @@ return [
         'user0_delete_all' => "Aucun utilisateur n'est supprimé",
         'user1_delete_all' => "Un utilisateur a été supprimé avec succès",
         'users_delete_all' => "<b>:field</b> utilisateurs ont été supprimés avec succès",
-        'create_caisse' => "Caisse numéro <b>:field</b> crée avec succès"
+        'create_caisse' => "Caisse numéro <b>:field</b> crée avec succès",
+        'caisse_update_caisse' => "Les informations du caisse numéro <b>:field</b> ont été modifiées avec succès"
     ],
     'not_found' => [
         'user_id' => "L'utilisateur avec l'ID <b>:field</b> n'existe pas",
