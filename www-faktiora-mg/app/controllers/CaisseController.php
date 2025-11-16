@@ -273,6 +273,93 @@ class CaisseController extends Controller
         return;
     }
 
+    //action - filter ligne caisse
+    public function filterLigneCaisse()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //role - not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to index
+            header("Location: " . SITE_URL . '/user');
+            return;
+        }
+
+        //num_caisse
+        $num_caisse = trim($_GET['num_caisse'] ?? '');
+        //num_caisse - empty
+        if ($num_caisse === '') {
+            $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.caisse_not_selected')];
+
+            echo json_encode($response);
+            return;
+        }
+        //num_caisse exist ?
+        $response = Caisse::findById($num_caisse);
+        //error
+        if ($response['message_type'] === 'error') {
+            echo json_encode($response);
+            return;
+        }
+        //num_caisse - not found
+        if (!$response['found']) {
+            $response['message_type'] = 'invalid';
+            $response['message'] = __('messages.not_found.num_caisse', ['field' => $num_caisse]);
+
+            echo  json_encode($response);
+            return;
+        }
+
+        //id_utilisateur
+        $id_utilisateur = trim($_GET['id_utilisateur'] ?? '');
+
+        //from
+        $f = trim($_GET['from'] ?? '');
+        $from = (!empty($f)) ? DateTime::createFromFormat('Y-m-d\TH:i', $f) : '';
+        //from - invalid
+        if ($from === false) {
+            $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.date', ['field' => $f])];
+
+            echo json_encode($response);
+            return;
+        }
+        $from = ($from !== '') ? $from->format('Y-m-d H:i:s') : '';
+        //to
+        $t = trim($_GET['to'] ?? '');
+        $to = (!empty($t)) ? DateTime::createFromFormat('Y-m-d\TH:i', $t) : '';
+        //to - invalid
+        if ($to === false) {
+            $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.date', ['field' => $t])];
+
+            echo json_encode($response);
+            return;
+        }
+        $to = ($to !== '') ? $to->format('Y-m-d H:i:s') : '';
+        //parametters
+        $params = [
+            'num_caisse' => $num_caisse,
+            'id_utilisateur' => $id_utilisateur,
+            'from' => $from,
+            'to' => $to
+        ];
+
+        // filter ligne caisse
+        $response = LigneCaisse::filterLigneCaisse($params);
+
+        echo json_encode($response);
+        return;
+    }
+
     //action - update caisse
     // public function updateCaisse()
     // {

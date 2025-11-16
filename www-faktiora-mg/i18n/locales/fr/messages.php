@@ -16,7 +16,8 @@ return [
         'num_caisse' => "Le numéro du caisse doît être des nombres entiers supérieurs ou égaux à 0",
         'solde' => "Le solde doît être des valeurs décimaux supérieures ou égaux à 0",
         'seuil' => "Le seuil doît être des valeurs décimaux supérieures ou égaux à 0",
-        'solde_seuil' => "Le solde ne doît pas en dessous de seuil"
+        'solde_seuil' => "Le solde ne doît pas en dessous de seuil",
+        'caisse_not_selected' => "Veuiller séléctionner une caisse"
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",

@@ -28,6 +28,17 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
+  //function - filter ligne_caisse
+  async function filterLigneCaisse(fromLs, toLs) {
+    try {
+      const response = await apiRequest(
+        `/caisse/filter_ligne_caisse?num_caisse=2&id_utilisateur=&from=${fromLs}&to=${toLs}`
+      );
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   //function - update caisse
   async function updateCaisse() {
     try {
@@ -114,10 +125,12 @@ document.addEventListener("DOMContentLoaded", () => {
   //=================== EVENTS =================
   const from = document.getElementById("from");
   const to = document.getElementById("to");
+  const fromLs = document.getElementById("from-ls");
+  const toLs = document.getElementById("to-ls");
 
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    filterCaisse(from.value, to.value);
+    filterLigneCaisse(fromLs.value, toLs.value);
   });
 });

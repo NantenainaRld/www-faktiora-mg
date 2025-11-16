@@ -41,7 +41,7 @@ class Caisse extends Database
     }
 
 
-    //===================== PUBLIC FUNCTION =============================
+    //=========================== PUBLIC FUNCTION =============================
 
     // add caisse
     public function createCaisse()

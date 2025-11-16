@@ -17,6 +17,8 @@
     <?= "caisse dashboard"; ?>
     <input type="date" id="from">
     <input type="date" id="to">
+    <input type="datetime-local" id="from-ls">
+    <input type="datetime-local" id="to-ls">
     <button id='btn-test'>Test</button>
     <!-- script js -->
     <script src="<?= SITE_URL ?>/js/caisse-dashboard.js"></script>
