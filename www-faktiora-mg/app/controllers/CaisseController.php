@@ -494,107 +494,136 @@ class CaisseController extends Controller
         return;
     }
 
-    //action - update solde
+    //action - delete all caisse
+    public function deleteAll()
+    {
+        header('Content-Type: application/json');
+        $response = null;
 
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
 
-    // //action - update solde && seuil
-    // public function updateSoldeSeuil()
-    // {
-    //     if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-    //         header('Content-Type: application/json');
-    //         $response  = null;
-    //         $json = json_decode(file_get_contents("php://input"), true);
+        //role - not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to index
+            header("Location: " . SITE_URL . '/user');
+            return;
+        }
 
-    //         $nums = $json['nums'];
-    //         //trim values
-    //         $json = [
-    //             'solde' => trim($json['solde']),
-    //             'seuil' => trim($json['seuil'])
-    //         ];
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            $json = json_decode(file_get_contents('php://input'), true);
 
-    //         $nums = array_map(fn($x) => trim($x), $nums);
+            $nums_caisse = array_values(array_map(fn($x) => trim($x), $json['nums_caisse']));
 
-    //         //no selection
-    //         if (count($nums) <= 0) {
-    //             $response = [
-    //                 'message_type' => 'invalid',
-    //                 'message' => "Aucune caisse n'est séléctionnée ."
-    //             ];
-    //         }
-    //         //selection
-    //         else {
-    //             // filter values (char and negatif)
-    //             $invalidNum = array_values(array_filter($nums, function ($x) {
-    //                 $val = filter_var($x, FILTER_VALIDATE_INT);
-    //                 return $val === false || $val < 0;
-    //             }));
+            //nums_caisse - empty
+            if (count($nums_caisse) <= 0) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.caisse_nums_caisse_empty')
+                ];
 
-    //             //invalid num
-    //             if (count($invalidNum) >= 1) {
-    //                 //sing
-    //                 if (count($invalidNum) === 1) {
-    //                     $response = [
-    //                         'message_type' => 'invalid',
-    //                         'message' => "Numéro de caisse invalide : " . $invalidNum[0]
-    //                     ];
-    //                 }
-    //                 //plur
-    //                 else {
-    //                     $response = [
-    //                         'message_type' => 'invalid',
-    //                         'message' => "Numéros de caisse invalides : " . implode(', ', $invalidNum)
-    //                     ];
-    //                 }
-    //             }
-    //             //valid num
-    //             else {
-    //                 //invalid solde && seuil
-    //                 if (filter_var($json['solde'], FILTER_VALIDATE_FLOAT) === false || filter_var($json['seuil'], FILTER_VALIDATE_FLOAT) === false) {
-    //                     $response = [
-    //                         'message_type' => 'invalid',
-    //                         'message' => "Valeurs de solde ou seuil entrées sont invalides."
-    //                     ];
-    //                 }
-    //                 //valid solde && seuil
-    //                 else {
-    //                     //< 0
-    //                     if ($json['solde'] < 0 || $json['seuil'] < 0) {
-    //                         $response = [
-    //                             'message_type' => 'invalid',
-    //                             'message' => "Valeurs de solde et seuil doient être supérieur ou égal à 0."
-    //                         ];
-    //                     }
-    //                     //>0
-    //                     else {
-    //                         //solde < seuil
-    //                         if ($json['solde'] < $json['seuil']) {
-    //                             $response = [
-    //                                 'message_type' => 'invalid',
-    //                                 'message' => "Le solde doit être supérieur ou égal au seuil."
-    //                             ];
-    //                         }
-    //                         //solde >= seuil
-    //                         else {
-    //                             //convert to int
-    //                             $nums  = array_map('intval', $nums);
-    //                             $params = [
-    //                                 'nums' => $nums,
-    //                                 'solde' => $json['solde'],
-    //                                 'seuil' => $json['seuil']
-    //                             ];
+                echo json_encode($response);
+                return;
+            }
 
-    //                             //update caisses
-    //                             $response = $this->caisse_model->updateSoldeSeuil($params);
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
+            try {
 
-    //         echo json_encode($response);
-    //     }
-    // }
-    // //action - free caisse
+                //delete all caisse
+                $response = Caisse::deleteAll($nums_caisse);
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.catch.caisse_deleteAll', ['field' => $e->getMessage()])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            echo json_encode($response);
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
+
+    //permanent delete all caisse
+    public function permanentDeleteAll()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //role - not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to index
+            header("Location: " . SITE_URL . '/user');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            $json = json_decode(file_get_contents('php://input'), true);
+
+            $nums_caisse = array_values(array_map(fn($x) => trim($x), $json['nums_caisse']));
+
+            //nums_caisse - empty
+            if (count($nums_caisse) <= 0) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.caisse_nums_caisse_empty')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+
+                //permanent delete all caisse
+                $response = Caisse::permanentdeleteAll($nums_caisse);
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.catch.caisse_deleteAll', ['field' => $e->getMessage()])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            echo json_encode($response);
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
+
     // public function freeCaisse()
     // {
     //     if ($_SERVER['REQUEST_METHOD'] === 'PUT') {

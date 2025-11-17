@@ -40,15 +40,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   //function - update caisse
-  async function updateCaisse() {
+  async function updateCaisse(num_caisse, num_caisse_update, solde, seuil) {
     try {
       const response = await apiRequest("/caisse/update_caisse", {
         method: "PUT",
         body: {
-          num_caisse: "2",
-          num_caisse_update: "7",
-          solde: "  15000",
-          seuil: " 10000",
+          num_caisse: num_caisse,
+          num_caisse_update: num_caisse_update,
+          solde: solde,
+          seuil: seuil,
         },
       });
       console.log(response);
@@ -56,19 +56,13 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
-  //function - update solde
-
-  //function - update solde && seuil
-  async function updateSoldeSeuil() {
-    const nums = [];
-
+  //function - delete all caisse
+  async function deleteAll(nums_caisse = []) {
     try {
-      const response = await apiRequest("/caisse/update_solde_seuil", {
+      const response = await apiRequest("/caisse/delete_all", {
         method: "PUT",
         body: {
-          solde: 500,
-          seuil: 500,
-          nums: nums,
+          nums_caisse: nums_caisse,
         },
       });
       console.log(response);
@@ -76,6 +70,21 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
+  //function - permanent delete all caisse
+  async function permanentDeleteAll(nums_caisse = []) {
+    try {
+      const response = await apiRequest("/caisse/permanent_delete_all", {
+        method: "PUT",
+        body: {
+          nums_caisse: nums_caisse,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   //function - free caisse (remove user)
   async function freeCaisse() {
     // const nums = [58, 8];
@@ -132,6 +141,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    updateCaisse();
+    permanentDeleteAll([4, 5]);
   });
 });

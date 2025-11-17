@@ -40,27 +40,28 @@ class UserController extends Controller
     //action - create user
     public function createUser()
     {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged ?
+        $is_loged_in = Auth::isLogedIn();
+
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+
+        //role - !admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to index
+            header('Location: ' . SITE_URL . '/user');
+            return;
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            header('Content-Type: application/json');
-            $response = null;
             $json = json_decode(file_get_contents('php://input'), true);
-
-            //loged ?
-            $is_loged_in = Auth::isLogedIn();
-
-            //not loged
-            if (!$is_loged_in->getLoged()) {
-                //redirect to login page
-                header('Location: ' . SITE_URL . '/auth');
-                return;
-            }
-
-            //role - !admin
-            if ($is_loged_in->getRole() !== 'admin') {
-                //redirect to index
-                header('Location: ' . SITE_URL . '/user');
-                return;
-            }
 
             //trim
             foreach ($json as $key => &$value) {
@@ -703,27 +704,28 @@ class UserController extends Controller
     //action - update user by admin
     public function updateByUser()
     {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged ?
+        $is_loged_in = Auth::isLogedIn();
+
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+
+        //role - !caissier
+        if ($is_loged_in->getRole() !== 'caissier') {
+            //redirect to index
+            header('Location: ' . SITE_URL . '/user');
+            return;
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-            header('Content-Type: application/json');
-            $response = null;
             $json = json_decode(file_get_contents('php://input'), true);
-
-            //loged ?
-            $is_loged_in = Auth::isLogedIn();
-
-            //not loged
-            if (!$is_loged_in->getLoged()) {
-                //redirect to login page
-                header('Location: ' . SITE_URL . '/auth');
-                return;
-            }
-
-            //role - !caissier
-            if ($is_loged_in->getRole() !== 'caissier') {
-                //redirect to index
-                header('Location: ' . SITE_URL . '/user');
-                return;
-            }
 
             //trim
             foreach ($json as $key => &$value) {
@@ -934,28 +936,29 @@ class UserController extends Controller
         }
     }
 
-    //action - delete all
+    //action - delete all user
     public function deleteAll()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-            header('Content-Type: application/json');
-            $response = null;
-            $json = json_decode(file_get_contents('php://input'), true);
+        header('Content-Type: application/json');
+        $response = null;
 
-            //loged ?
-            $is_loged_in = Auth::isLogedIn();
-            //not loged
-            if (!$is_loged_in->getLoged()) {
-                //redirect to login page
-                header('Location: ' . SITE_URL . '/auth');
-                return;
-            }
-            //role - not admin
-            if ($is_loged_in->getRole() !== 'admin') {
-                //redirect to user index
-                header('Location: ' . SITE_URL . '/user');
-                return;
-            }
+        //loged ?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+        //role - not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to user index
+            header('Location: ' . SITE_URL . '/user');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+            $json = json_decode(file_get_contents('php://input'), true);
 
             //trim
             $id_users = array_map(fn($x) => trim($x), $json['id_users']);
@@ -995,28 +998,29 @@ class UserController extends Controller
         }
     }
 
-    //action - permanent delete all
+    //action - permanent delete all user
     public function permanentDeleteAll()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-            header('Content-Type: application/json');
-            $response = null;
-            $json = json_decode(file_get_contents('php://input'), true);
+        header('Content-Type: application/json');
+        $response = null;
 
-            //loged ?
-            $is_loged_in = Auth::isLogedIn();
-            //not loged
-            if (!$is_loged_in->getLoged()) {
-                //redirect to login page
-                header('Location: ' . SITE_URL . '/auth');
-                return;
-            }
-            //role - not admin
-            if ($is_loged_in->getRole() !== 'admin') {
-                //redirect to user index
-                header('Location: ' . SITE_URL . '/user');
-                return;
-            }
+        //loged ?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+        //role - not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to user index
+            header('Location: ' . SITE_URL . '/user');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+            $json = json_decode(file_get_contents('php://input'), true);
 
             //trim
             $id_users = array_map(fn($x) => trim($x), $json['id_users']);

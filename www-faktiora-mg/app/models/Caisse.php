@@ -155,7 +155,108 @@ class Caisse extends Database
         return $response;
     }
 
-    //update solde
+    //delete all caisse
+    public static function deleteAll($nums_caisse)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        $placeholders = implode(', ', array_fill(0, count($nums_caisse), '?'));
+        $sql = "UPDATE caisse SET etat_caisse = 'supprimé' WHERE num_caisse IN ({$placeholders}) ";
+
+        try {
+
+            $response = self::executeQuery($sql, $nums_caisse);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //success
+            //0
+            if ($response['row_count'] === 0) {
+                $response['message'] = __('messages.success.caisse_deleteAll_0');
+
+                return $response;
+            }
+            //1
+            elseif ($response['row_count'] === 1) {
+                $response['message'] = __('messages.success.caisse_deleteAll_1');
+
+                return $response;
+            }
+            //plur
+            else {
+                $response['message'] = __('messages.success.caisse_deleteAll_plur', ['field' => $response['row_count']]);
+
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __('errors.catch.caisse_deleteAll', ['field' => $e->getMessage()])
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+    //permanent delete all caisse
+    public static function permanentDeleteAll($nums_caisse)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        $placeholders = implode(', ', array_fill(0, count($nums_caisse), '?'));
+        $sql = "DELETE FROM caisse WHERE num_caisse IN ({$placeholders}) ";
+
+        try {
+
+            $response = self::executeQuery($sql, $nums_caisse);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //success
+            //0
+            if ($response['row_count'] === 0) {
+                $response['message'] = __('messages.success.caisse_deleteAll_0');
+
+                return $response;
+            }
+            //1
+            elseif ($response['row_count'] === 1) {
+                $response['message'] = __('messages.success.caisse_deleteAll_1');
+
+                return $response;
+            }
+            //plur
+            else {
+                $response['message'] = __('messages.success.caisse_deleteAll_plur', ['field' => $response['row_count']]);
+
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __('errors.catch.caisse_deleteAll', ['field' => $e->getMessage()])
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
 
     //static - find by id
     public static function findById($num_caisse)
@@ -469,118 +570,35 @@ class Caisse extends Database
         return $response;
     }
 
-    //num_caisse tab exist?
-    private function numTabExist($tab)
-    {
-        $response  = [
-            'message_type' => 'success',
-            'message' => 'success'
-        ];
+    // //update solde
+    // public function updateSolde($num_caisse, $solde, $type)
+    // {
+    //     $response = [
+    //         'message_type' => 'success',
+    //         'message' => 'success'
+    //     ];
 
-        try {
-            //placaeholders
-            $placeholders = str_repeat('?, ', count($tab) - 1) . '?';
-            //exist
-            $response = $this->selectQuery("SELECT num_caisse FROM caisse WHERE num_caisse IN ({$placeholders})", $tab);
+    //     try {
+    //         //increase
+    //         if ($type === 'increase') {
+    //             $response = $this->executeQuery("UPDATE caisse SET solde = solde + :solde WHERE num_caisse = :um_caisse", [
+    //                 'solde' => $solde,
+    //                 'num_caisse' => $num_caisse
+    //             ]);
+    //         }
+    //         //decrease
+    //         else {
+    //             $response = $this->executeQuery("UPDATE caisse SET solde = solde - :solde WHERE num_caisse = :um_caisse", [
+    //                 'solde' => $solde,
+    //                 'num_caisse' => $num_caisse
+    //             ]);
+    //         }
+    //         // $response
+    //     } catch (Throwable $e) {
+    //         $response['message_type'] = 'error';
+    //         $response['message'] = 'Error : ' . $e->getMessage();
+    //     }
 
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-            //success
-            else {
-                //tab founds
-                $founds = array_column($response['data'], 'num_caisse');
-                //tab not found
-                $notFounds = array_values(array_diff($tab, $founds));
-
-                // $response['message'] = $tab;
-                // not found
-                if (count($notFounds) >= 1) {
-                    $response['message_type'] = 'invalid';
-
-                    //sing
-                    if (count($notFounds) === 1) {
-                        $response['message'] = "Numéro de caisse non trouvé : " . $notFounds[0];
-                    }
-                    //plur
-                    else {
-                        $response['message'] = "Numéros de caisse non trouvés : " . implode(', ', $notFounds);
-                    }
-                }
-            }
-        } catch (Throwable $e) {
-            $response['message_type'] = 'error';
-            $response['message'] = 'Error : ' . $e->getMessage();
-        }
-
-        return $response;
-    }
-    //num_caisse update exist ?
-    private function isUpdateNumCaisseExist($update_num_caisse, $num_caisse)
-    {
-        $response  = [
-            'message_type' => 'success',
-            'message' => 'not found'
-        ];
-        try {
-            //num_caisse
-            $response = $this->selectQuery("SELECT num_caisse FROM caisse WHERE num_caisse = :update_num_caisse AND num_caisse != :num_caisse", [
-                'update_num_caisse' => $update_num_caisse,
-                'num_caisse' => $num_caisse
-            ]);
-
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-            //success
-            else {
-                //found
-                if (count($response['data']) >= 1) {
-                    $response['message'] = 'found';
-                }
-                //not found
-                else {
-                    $response['message'] = 'not found';
-                }
-            }
-        } catch (Throwable $e) {
-            $response['message_type'] = 'error';
-            $response['message'] = 'Error : ' . $e->getMessage();
-        }
-
-        return $response;
-    }
-    //update solde
-    public function updateSolde($num_caisse, $solde, $type)
-    {
-        $response = [
-            'message_type' => 'success',
-            'message' => 'success'
-        ];
-
-        try {
-            //increase
-            if ($type === 'increase') {
-                $response = $this->executeQuery("UPDATE caisse SET solde = solde + :solde WHERE num_caisse = :um_caisse", [
-                    'solde' => $solde,
-                    'num_caisse' => $num_caisse
-                ]);
-            }
-            //decrease
-            else {
-                $response = $this->executeQuery("UPDATE caisse SET solde = solde - :solde WHERE num_caisse = :um_caisse", [
-                    'solde' => $solde,
-                    'num_caisse' => $num_caisse
-                ]);
-            }
-            // $response
-        } catch (Throwable $e) {
-            $response['message_type'] = 'error';
-            $response['message'] = 'Error : ' . $e->getMessage();
-        }
-
-        return $response;
-    }
+    //     return $response;
+    // }
 }
