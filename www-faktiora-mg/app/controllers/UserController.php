@@ -853,18 +853,19 @@ class UserController extends Controller
     //action - delete account
     public function deleteAccount()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-            header('Content-Type: application/json');
-            $response = null;
+        header('Content-Type: application/json');
+        $response = null;
 
-            //loged ?
-            $is_loged_in = Auth::isLogedIn();
-            //not loged
-            if (!$is_loged_in->getLoged()) {
-                //redirect to login page
-                header('Location: ' . SITE_URL . '/auth');
-                return;
-            }
+        //loged ?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
             //id_utilisateur
             $id_utilisateur = trim($is_loged_in->getIdUtilisateur());
@@ -882,6 +883,23 @@ class UserController extends Controller
                 if (!$response['found']) {
                     //redirect to error page
                     header('Location: ' . SITE_URL . '/error?messages=' . __('messages.not_found.user_id', ['field' => $id_utilisateur]));
+                    return;
+                }
+
+                //permanent delete default admin
+                if ($is_loged_in->getIdUtilisateur() === '000000') {
+                    $response = User::deleteDefaultAdmin();
+
+                    //error
+                    if ($response['message_type'] === 'error') {
+                        //redirect to error page
+                        header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.user_delete_account', ['field' => $response['message']]));
+                        return;
+                    }
+
+                    session_destroy();
+                    //redirect to login page
+                    header('Location: ' . SITE_URL . '/auth');
                     return;
                 }
 
