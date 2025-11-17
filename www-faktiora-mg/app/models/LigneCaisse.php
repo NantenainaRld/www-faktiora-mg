@@ -104,6 +104,36 @@ class LigneCaisse extends Database
         return $response;
     }
 
+    //quit caisse
+    public function quitCaisse()
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            //add date fin
+            $response = self::executeQuery("UPDATE ligne_caisse SET date_fin = NOW() WHERE id_utilisateur = :id AND date_fin IS NULL ", ['id' => $this->id_utilisateur]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __('errors.catch.caisse_quitCaisse', ['field' => $e->getMessage()])
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //static - filter ligne caisse
     public static function filterLigneCaisse($params)
     {

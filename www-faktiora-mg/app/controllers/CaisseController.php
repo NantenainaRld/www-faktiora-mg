@@ -761,6 +761,55 @@ class CaisseController extends Controller
         return;
     }
 
+    //action - quit caisse
+    public function quitCaisse()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+        //role - !caissier
+        if ($is_loged_in->getRole() !== 'caissier') {
+            //redirect to user index
+            header('Location: ' . SITE_URL . '/user');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            try {
+
+                //quit caisse
+                $caisse_model = new Caisse();
+                $response = $caisse_model->quitCaisse($is_loged_in->getIdUtilisateur());
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.catch.caisse_quitCaisse', ['field' => $e->getMessage()])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+        }
+
+        echo json_encode($response);
+        return;
+    }
+
+    //
+
     // public function freeCaisse()
     // {
     //     if ($_SERVER['REQUEST_METHOD'] === 'PUT') {

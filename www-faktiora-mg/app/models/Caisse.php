@@ -273,6 +273,13 @@ class Caisse extends Database
 
         try {
 
+            //quit caisse
+            $response = $this->quitCaisse($id_utilisateur);
+            //error
+            if ($response['message_type'] == 'error') {
+                return $response;
+            }
+
             //update etat_caisse to occupé
             $response = self::executeQuery("UPDATE caisse SET etat_caisse = 'occupé' WHERE num_caisse = :num_caisse ", ['num_caisse' => $this->num_caisse]);
             //error
@@ -300,6 +307,47 @@ class Caisse extends Database
             $response = [
                 'message_type' => 'invalid',
                 'message' => __('errors.catch.caisse_occupCaisse', ['field' => $e->getMessage()])
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //quit caisse
+    public function quitCaisse($id_utilisateur)
+    {
+        $response = ['message_type' => 'success', 'messae' => 'success'];
+
+        try {
+
+            //update etat_caisse to libre
+            $response = self::executeQuery("UPDATE caisse SET etat_caisse = 'libre' WHERE num_caisse IN (SELECT DISTINCT num_caisse FROM ligne_caisse WHERE id_utilisateur = :id AND date_fin IS NULL) ", ['id' => $id_utilisateur]);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //add date_fin ligne caisse
+            $ligne_caisse = (new LigneCaisse)
+                ->setIdUtilsateur($id_utilisateur);
+            $response = $ligne_caisse->quitCaisse();
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //success
+            $response['message'] = __('messages.success.caisse_quitCaisse');
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __('errors.catch.caisse_quitCaisse', ['field' => $e->getMessage()])
             ];
 
             return $response;

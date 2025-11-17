@@ -27,11 +27,23 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
+  //
+  //function - quit caisse
+  async function quitCaisse() {
+    try {
+      const response = await apiRequest("/caisse/quit_caisse", {
+        method: "PUT",
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   //======================== EVENTS ====================
 
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    occupCaisse(3);
+    // occupCaisse(7);
   });
 });
