@@ -394,7 +394,7 @@ class User extends Database
         return $response;
     }
 
-    //delete user
+    //delete account
     public function deleteAccount()
     {
         $response = [
@@ -404,6 +404,33 @@ class User extends Database
 
         try {
             $response = self::executeQuery("UPDATE utilisateur SET etat_utilisateur = 'supprimé' WHERE id_utilisateur = :id", ['id' => $this->id_utilisateur]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            $response['message_type'] = 'error';
+            $response['message'] = __('errors.catch.user_delete_account', ['field' => $e->getMessage()]);
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //delete default admin
+    public static function deleteDefaultAdmin()
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+            $response = self::executeQuery("DELETE from utilisateur WHERE id_utilisateur = '000000' ");
 
             //error
             if ($response['message_type'] === 'error') {

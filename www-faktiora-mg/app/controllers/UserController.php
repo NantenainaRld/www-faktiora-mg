@@ -951,6 +951,13 @@ class UserController extends Controller
             }
 
             try {
+                // permanent delete default admin
+                if ($is_loged_in->getIdUtilisateur() !== '000000' && in_array('000000', $id_users)) {
+                    $response = User::deleteDefaultAdmin();
+
+                    $id_users = array_values(array_diff($id_users, ['000000']));
+                }
+
                 //delete all
                 $response = (User::deleteAll($id_users, $is_loged_in->getIdUtilisateur()));
 

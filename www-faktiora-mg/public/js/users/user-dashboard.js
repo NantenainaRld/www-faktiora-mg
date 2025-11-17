@@ -121,6 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    permanentDeleteAll(["U123278VWb", "U123278VW", "U123278VWs"]);
+    deleteAll(["U123278VP", "000000", "U123278VW"]);
   });
 });
