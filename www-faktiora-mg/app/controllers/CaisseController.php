@@ -559,7 +559,7 @@ class CaisseController extends Controller
         return;
     }
 
-    //permanent delete all caisse
+    //action - permanent delete all caisse
     public function permanentDeleteAll()
     {
         header('Content-Type: application/json');
@@ -616,6 +616,143 @@ class CaisseController extends Controller
                 return;
             }
 
+            echo json_encode($response);
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
+
+    //action - occup caiss
+    public function occupCaisse()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $json = json_decode(file_get_contents('php://input'), true);
+            //trim
+            $json = array_map(fn($x) => trim($x), $json);
+
+            $id_utilisateur = null;
+
+            //role - admin
+            if ($is_loged_in->getRole() === 'admin') {
+                $id_utilisateur = $json['id_utilisateur'];
+
+                //id_utilisateur - empty
+                if ($id_utilisateur === '') {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.empty.user_id')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+            }
+            //role - caisier
+            else {
+                $id_utilisateur = $is_loged_in->getIdUtilisateur();
+            }
+
+            try {
+
+                //find user
+                $response = User::findById($id_utilisateur);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.user_id', ['field' => $id_utilisateur])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //role - !caissier
+                if ($response['model']->getRole() !== 'caissier') {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.caisse_occupCaisse')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //find caisse
+                $response = Caisse::findById($json['num_caisse']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.num_caisse', ['field' => $json['num_caisse']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //caisse - deleted
+                if ($response['model']->getEtatCaisse() === 'supprimé') {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.caisse_occupCaisse_deleted', ['field' => $json['num_caisse']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //caisse - occuped
+                if ($response['model']->getEtatCaisse() === 'occupé') {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.caisse_occupCaisse_occuped', ['field' => $json['num_caisse']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //occup caisse
+                $caisse_model = (new Caisse())->setNumCaisse($json['num_caisse']);
+                $response = $caisse_model->occupCaisse($id_utilisateur);
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage());
+
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('errors.catch.caisse_occupCaisse', ['field' => $e->getMessage()])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            // echo json_encode($json);
             echo json_encode($response);
             return;
         }

@@ -19,8 +19,6 @@ class User extends Database
         parent::__construct();
     }
 
-    //================== GETTERS ============================
-
     //================== SETTERS ============================
 
     //setter - id_utilisateur
@@ -75,7 +73,15 @@ class User extends Database
     // public function setMdpOublie($mdp_oublie)
     // {
     //     return $this->nom_utilisateur = $nom_utilisateur;
-    // }
+    // 
+
+    //================== GETTERS ========================
+
+    //getter - role
+    public function getRole()
+    {
+        return $this->role;
+    }
 
     //==================  PUBLIC FUNCTION ====================
 

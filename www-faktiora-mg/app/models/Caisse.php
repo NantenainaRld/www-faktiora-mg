@@ -47,6 +47,14 @@ class Caisse extends Database
         return $this;
     }
 
+    //========================== GETTERS ============================
+
+    //getter - etat_caisse
+    public function getEtatCaisse()
+    {
+        return $this->etat_caisse;
+    }
+
 
     //=========================== PUBLIC FUNCTION =============================
 
@@ -250,6 +258,48 @@ class Caisse extends Database
             $response = [
                 'message_type' => 'error',
                 'message' => __('errors.catch.caisse_deleteAll', ['field' => $e->getMessage()])
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //occup caisse
+    public function occupCaisse($id_utilisateur)
+    {
+        $response = ['message_type' => 'success', 'messae' => 'success'];
+
+        try {
+
+            //update etat_caisse to occupé
+            $response = self::executeQuery("UPDATE caisse SET etat_caisse = 'occupé' WHERE num_caisse = :num_caisse ", ['num_caisse' => $this->num_caisse]);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //add ligne caisse
+            $ligne_caisse = (new LigneCaisse)
+                ->setIdUtilsateur($id_utilisateur)
+                ->setNumCaisse($this->num_caisse);
+            $response = $ligne_caisse->createLigneCaisse();
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //success
+            $response['message'] = __('messages.success.caisse_occupCaisse', ['field' => $this->num_caisse]);
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $response = [
+                'message_type' => 'invalid',
+                'message' => __('errors.catch.caisse_occupCaisse', ['field' => $e->getMessage()])
             ];
 
             return $response;

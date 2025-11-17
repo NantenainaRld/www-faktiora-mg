@@ -20,7 +20,10 @@ return [
         'seuil' => "Le seuil doît être des valeurs décimaux supérieures ou égaux à 0",
         'solde_seuil' => "Le solde ne doît pas en dessous de seuil",
         'caisse_not_selected' => "Veuiller séléctionner une caisse",
-        'caisse_nums_caisse_empty' => "Veuiller séléctionner au moins une caisse"
+        'caisse_nums_caisse_empty' => "Veuiller séléctionner au moins une caisse",
+        'caisse_occupCaisse' => "Seule les caissiers peuvent occuper les caisses",
+        'caisse_occupCaisse_deleted' => "La caisse choisie est déjà supprimée : <b>:field</b>",
+        'caisse_occupCaisse_occuped' => "La caisse choisie est encore occupée : <b>:field</b>",
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",
@@ -46,6 +49,7 @@ return [
         'user_deconnectAll_0' => "Aucun utilisateur n'est déconnecté",
         'user_deconnectAll_1' => "Un utilisateur a été déconnectés avec succès",
         'user_deconnectAll_plur' => "<b>:field</b> utilisateurs ont été déconnecté avec succès",
+        'caisse_occupCaisse' => "Caisse numéro <b>:field</b> occupée avec succès"
     ],
     'not_found' => [
         'user_id' => "L'utilisateur avec l'ID <b>:field</b> n'existe pas",

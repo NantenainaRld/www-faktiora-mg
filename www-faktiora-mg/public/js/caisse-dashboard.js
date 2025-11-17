@@ -84,6 +84,21 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
+  //function - occup caisse
+  async function occupCaisse(num_caisse, id_utilisateur = null) {
+    try {
+      const response = await apiRequest("/caisse/occup_caisse", {
+        method: "POST",
+        body: {
+          num_caisse: num_caisse,
+          id_utilisateur: id_utilisateur,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   //function - free caisse (remove user)
   async function freeCaisse() {
@@ -102,21 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
-  //function - affect caisse
-  async function affectCaisse() {
-    try {
-      const response = await apiRequest("/caisse/affect_caisse", {
-        method: "PUT",
-        body: {
-          num_caisse: 58,
-          id_utilisateur: "U087962YH",
-        },
-      });
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+
   //=================== EVENTS =================
   const from = document.getElementById("from");
   const to = document.getElementById("to");
@@ -125,5 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //btn-test
   const btnTest = document.getElementById("btn-test");
-  btnTest.addEventListener("click", () => {});
+  btnTest.addEventListener("click", () => {
+    occupCaisse(3, "U123278VP");
+  });
 });

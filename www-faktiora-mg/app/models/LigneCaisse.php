@@ -72,6 +72,38 @@ class LigneCaisse extends Database
 
     //======================== PUBLIC FUNCTION =====================
 
+    //create ligne caisse
+    public function createLigneCaisse()
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            $response = self::executeQuery("INSERT INTO ligne_caisse (date_debut, id_utilisateur, num_caisse) VALUES (NOW(), :id, :num) ", [
+                'id' => $this->id_utilisateur,
+                'num' => $this->num_caisse
+            ]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __('errors.catch.ligne_caisse_createLigneCaisse', ['field' => $e->getMessage()])
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //static - filter ligne caisse
     public static function filterLigneCaisse($params)
     {
