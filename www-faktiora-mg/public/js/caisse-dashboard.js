@@ -84,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
+  //
 
   //function - free caisse (remove user)
   async function freeCaisse() {
@@ -93,21 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const response = await apiRequest("/caisse/free_caisse", {
         method: "PUT",
-        body: {
-          nums: nums,
-        },
-      });
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  //function - delete caisse
-  async function deleteCaisse() {
-    const nums = [8, 9];
-    try {
-      const response = await apiRequest("/caisse/delete_caisse", {
-        method: "DELETE",
         body: {
           nums: nums,
         },

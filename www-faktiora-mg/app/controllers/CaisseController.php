@@ -675,58 +675,6 @@ class CaisseController extends Controller
     //         echo json_encode($response);
     //     }
     // }
-    // //action - delete caisse
-    // public function deleteCaisse()
-    // {
-    //     if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    //         header('Content-Type: application/json');
-    //         $json = json_decode(file_get_contents('php://input'), true);
-    //         $response = null;
-
-    //         //no selection
-    //         if (count($json['nums']) <= 0) {
-    //             $response = [
-    //                 'message_type' => 'invalid',
-    //                 'message' => "Aucune caisse n'est séléctionnée ."
-    //             ];
-    //         }
-    //         //selection
-    //         else {
-    //             //trim
-    //             $json = array_map(fn($x) => trim($x), $json['nums']);
-
-    //             //filter invalid num
-    //             $invalidNums = array_values(array_filter(($json), function ($x) {
-    //                 $val = filter_var($x, FILTER_VALIDATE_INT);
-    //                 return $val === false || $val < 0;
-    //             }));
-
-    //             //invalid num_caisse
-    //             if (count($invalidNums) >= 1) {
-    //                 //sing
-    //                 if (count($invalidNums) === 1) {
-    //                     $response = [
-    //                         'message_type' => 'invalid',
-    //                         'message' => "Numéro de caisse invalide : " . $invalidNums[0]
-    //                     ];
-    //                 }
-    //                 //plur
-    //                 else {
-    //                     $response = [
-    //                         'message_type' => 'invalid',
-    //                         'message' => "Numéros de caisse invalides : " . implode(', ', $invalidNums)
-    //                     ];
-    //                 }
-    //             }
-    //             //valid num_caisse
-    //             else {
-    //                 $response = $this->caisse_model->deleteCaisse($json);
-    //             }
-    //         }
-
-    //         echo json_encode($response);
-    //     }
-    // }
     // //action - affect caisse
     // public function affectCaisse()
     // {
