@@ -100,6 +100,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  //
+
   //function - free caisse (remove user)
   async function freeCaisse() {
     // const nums = [58, 8];

@@ -12,11 +12,26 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("Error : " + Error);
     }
   }
+  //function - occup caisse
+  async function occupCaisse(num_caisse) {
+    try {
+      const response = await apiRequest("/caisse/occup_caisse", {
+        method: "POST",
+        body: {
+          num_caisse: num_caisse,
+          id_utilisateur: "",
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   //======================== EVENTS ====================
 
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    deleteAccount("U123278VW");
+    occupCaisse(3);
   });
 });

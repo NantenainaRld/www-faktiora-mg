@@ -701,7 +701,7 @@ class UserController extends Controller
         }
     }
 
-    //action - update user by admin
+    //action - update user by user
     public function updateByUser()
     {
         header('Content-Type: application/json');
