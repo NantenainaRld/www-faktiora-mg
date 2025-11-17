@@ -50,7 +50,10 @@ return [
         'user_deconnectAll_1' => "Un utilisateur a été déconnectés avec succès",
         'user_deconnectAll_plur' => "<b>:field</b> utilisateurs ont été déconnecté avec succès",
         'caisse_occupCaisse' => "Caisse numéro <b>:field</b> occupée avec succès",
-        'caisse_quitCaisse' => "Caisse libérée avec succès"
+        'caisse_quitCaisse' => "Caisse libérée avec succès",
+        'caisse_freeCaisse_0' => "Aucune caisse n'est libérée",
+        'caisse_freeCaisse_1' => "Une caisse a été libérée avec succès",
+        'caisse_freeCaisse_plur' => "<b>:field</b> caisses ont été libérées avec succès",
     ],
     'not_found' => [
         'user_id' => "L'utilisateur avec l'ID <b>:field</b> n'existe pas",

@@ -134,6 +134,38 @@ class LigneCaisse extends Database
         return $response;
     }
 
+    //free caisse
+    public static function freeCaisse($nums_caisse)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+        $placeholders = implode(', ', array_fill(0, count($nums_caisse), '?'));
+        $sql = "UPDATE ligne_caisse SET date_fin = NOW() WHERE num_caisse IN ({$placeholders}) AND date_fin IS NULL ";
+
+        try {
+
+            //add date fin
+            $response = self::executeQuery($sql, $nums_caisse);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __('errors.catch.caisse_freeCaisse', ['field' => $e->getMessage()])
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //static - filter ligne caisse
     public static function filterLigneCaisse($params)
     {

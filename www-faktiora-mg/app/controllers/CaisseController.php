@@ -808,96 +808,64 @@ class CaisseController extends Controller
         return;
     }
 
-    //
+    //action - free caisse
+    public function freeCaisse()
+    {
+        header('Content-Type: application/json');
+        $response = null;
 
-    // public function freeCaisse()
-    // {
-    //     if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-    //         header('Content-Type: application/json');
-    //         $json = json_decode(file_get_contents("php://input"), true);
-    //         $response = null;
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+        //role - !admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to user index
+            header('Location: ' . SITE_URL . '/user');
+            return;
+        }
 
-    //         //no selection
-    //         if (count($json['nums']) <= 0) {
-    //             $response = [
-    //                 'message_type' => 'invalid',
-    //                 'message' => "Aucune caisse n'est séléctionnée ."
-    //             ];
-    //         }
-    //         //selection
-    //         else {
-    //             //trim
-    //             $json = array_map(fn($x) => trim($x), $json['nums']);
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            $json = json_decode(file_get_contents('php://input'), true);
+            //trim
+            $nums_caisse = array_values(array_map(fn($x) => trim($x), $json['nums_caisse']));
 
-    //             // filter values (char and negatif)
-    //             $invalidNum = array_values(array_filter($json, function ($x) {
-    //                 $val = filter_var($x, FILTER_VALIDATE_INT);
-    //                 return $val === false || $val < 0;
-    //             }));
+            //nums_caisse - empty
+            if (count($nums_caisse) <= 0) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.caisse_nums_caisse_empty')
+                ];
 
-    //             //invalid num_caisse
-    //             if (count($invalidNum) >= 1) {
-    //                 //sing
-    //                 if (count($invalidNum) === 1) {
-    //                     $response = [
-    //                         'message_type' => 'invalid',
-    //                         'message' => "Numéro de caisse invalide : " . $invalidNum[0]
-    //                     ];
-    //                 }
-    //                 //plur
-    //                 else {
-    //                     $response = [
-    //                         'message_type' => 'invalid',
-    //                         'message' => "Numéros de caisse invalides : " . implode(', ', $invalidNum)
-    //                     ];
-    //                 }
-    //             }
-    //             //valid num_caisse
-    //             else {
-    //                 $response = $this->caisse_model->freeCaisse($json);
-    //             }
-    //         }
+                echo json_encode($response);
+                return;
+            }
 
-    //         echo json_encode($response);
-    //     }
-    // }
-    // //action - affect caisse
-    // public function affectCaisse()
-    // {
-    //     if ($_SERVER['REQUEST_METHOD'] === "PUT") {
-    //         header('Content-Type: application/json');
-    //         $json = json_decode(file_get_contents("php://input"), true);
-    //         $response = null;
+            try {
 
-    //         //trim
-    //         $json = array_map(fn($x) => trim($x), $json);
+                //free caisse
+                $response = Caisse::freeCaisse($nums_caisse);
 
-    //         //num_caisse INT ?
-    //         $num_caisse = filter_var($json['num_caisse'], FILTER_VALIDATE_INT);
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage());
 
-    //         //num_caisse invalid
-    //         if ($num_caisse === false || $num_caisse < 0) {
-    //             $response = [
-    //                 'message_type' => 'invalid',
-    //                 'message' => "Numéro de caisse invalide : " .  $num_caisse
-    //             ];
-    //         }
-    //         //num_caisse valid
-    //         else {
-    //             //id_utilisateur - empty
-    //             if (empty($json['id_utilisateur'])) {
-    //                 $response = [
-    //                     'message_type' => 'invalid',
-    //                     'message' => "Veuiller entrer le numéro de l'utilisateur ."
-    //                 ];
-    //             }
-    //             //if_utilisateur -
-    //             else {
-    //                 $response = $this->caisse_model->affectCaisse($json);
-    //             }
-    //         }
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.catch.caisse_freeCaisse', ['field' => $e->getMessage()])
+                ];
 
-    //         echo json_encode($response);
-    //     }
-    // }
+                echo json_encode($response);
+                return;
+            }
+        }
+
+        echo json_encode($response);
+        return;
+    }
 }

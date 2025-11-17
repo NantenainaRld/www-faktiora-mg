@@ -356,6 +356,67 @@ class Caisse extends Database
         return $response;
     }
 
+    //static - free caisse
+    public static function freeCaisse($nums_caisse)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        $placeholders = implode(', ', array_fill(0, count($nums_caisse), '?'));
+        $sql = "UPDATE caisse SET etat_caisse = 'libre' WHERE num_caisse IN ({$placeholders}) AND etat_caisse = 'occupé' ";
+
+        try {
+
+            // update etat caisse to libre
+            $response = self::executeQuery($sql, $nums_caisse);
+            //row_count
+            $row_count = $response['row_count'];
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //add date finin ligne caisse
+            $response = LigneCaisse::freeCaisse($nums_caisse);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //success
+            //0
+            if ($row_count === 0) {
+                $response['message'] = __('messages.success.caisse_freeCaisse_0');
+
+                return $response;
+            }
+            //1
+            elseif ($row_count === 1) {
+                $response['message'] = __('messages.success.caisse_freeCaisse_1');
+
+                return $response;
+            }
+            //plur
+            else {
+                $response['message'] = __('messages.success.caisse_freeCaisse_plur', ['field' => $row_count]);
+
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __('errors.catch.caisse_freeCaisse', ['field' => $e->getMessage()])
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //static - find by id
     public static function findById($num_caisse)
     {
@@ -405,84 +466,6 @@ class Caisse extends Database
         return $response;
     }
 
-    // //affect caisse
-    // public function affectCaisse($json)
-    // {
-    //     $response = [
-    //         'message_type' => 'success',
-    //         'message' => 'success'
-    //     ];
-
-    //     try {
-    //         //num_caisse exist?
-    //         $response = $this->isNumCaisseExist($json['num_caisse']);
-
-    //         //error
-    //         if ($response['message_type'] === 'error') {
-    //             return $response;
-    //         }
-    //         //success
-    //         else {
-    //             //not found
-    //             if ($response['message'] === 'not found') {
-    //                 $response['message'] = "Numéro de caisse non trouvé : " . $json['num_caisse'];
-    //             }
-    //             //found
-    //             else {
-    //                 //user exist?
-    //                 $user_model = new User();
-    //                 $response = $user_model->isUserExist($json['id_utilisateur']);
-
-    //                 //error
-    //                 if ($response['message_type'] === 'error') {
-    //                     return $response;
-    //                 }
-    //                 //success
-    //                 else {
-    //                     //not found
-    //                     if ($response['message'] === 'not found') {
-    //                         $response['message'] = "Utilisateur avec l'ID : <b>"  . $json['id_utilisateur'] . "</b> n'existe pas .";
-    //                     }
-    //                     //found
-    //                     else {
-    //                         //affect caisse
-    //                         $response = $this->executeQuery("UPDATE caisse SET id_utilisateur = :id WHERE num_caisse = :num_caisse", [
-    //                             'id' => $json['id_utilisateur'],
-    //                             'num_caisse' => $json['num_caisse']
-    //                         ]);
-
-    //                         //error
-    //                         if ($response['message_type'] === 'error') {
-    //                             return $response;
-    //                         }
-    //                         //success
-    //                         else {
-    //                             //move user to the selected caisse
-    //                             $response = $this->executeQuery("UPDATE caisse SET id_utilisateur = NULL WHERE id_utilisateur = :id AND num_caisse != :num_caisse", [
-    //                                 'id' => $json['id_utilisateur'],
-    //                                 'num_caisse' => $json['num_caisse']
-    //                             ]);
-
-    //                             //error
-    //                             if ($response['message_type'] === 'error') {
-    //                                 return $response;
-    //                             }
-    //                             //success
-    //                             else {
-    //                                 $response['message'] = "L'utilisateur <b>" . $json['id_utilisateur'] . "</b> a été mis au caisse numéro <b>" . $json['num_caisse'] . "</b>";
-    //                             }
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     } catch (Throwable $e) {
-    //         $response['message_type'] = 'error';
-    //         $response['message'] = 'Error : ' . $e->getMessage();
-    //     }
-
-    //     return $response;
-    // }
 
     //===================== PRIVATE FUNCTION ======================
 

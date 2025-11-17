@@ -100,18 +100,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  //
-
-  //function - free caisse (remove user)
-  async function freeCaisse() {
-    // const nums = [58, 8];
-    const nums = [8, 9];
-
+  //function - free caisse
+  async function freeCaisse(nums_caisse = []) {
     try {
       const response = await apiRequest("/caisse/free_caisse", {
         method: "PUT",
         body: {
-          nums: nums,
+          nums_caisse: nums_caisse,
         },
       });
       console.log(response);
@@ -129,6 +124,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    occupCaisse(3, "U123278VP");
+    freeCaisse([3, 7]);
   });
 });
