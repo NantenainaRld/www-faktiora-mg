@@ -13,6 +13,8 @@ return [
         'nom' => "Le <b>nom</b> d'utilisateur ne doit pas dépasser de 100 caractères",
         'prenoms' => "Le <b>prénoms</b> d'utilisateur ne doit pas dépasser de 100 caractères",
         'id_users_empty' => "Veuiller séléctionner au moins un utilisateur",
+        //
+        'user_ids_user_empty' => "Veuiller séléctionner au moins un utilisateur",
         'num_caisse' => "Le numéro du caisse doît être des nombres entiers supérieurs ou égaux à 0",
         'solde' => "Le solde doît être des valeurs décimaux supérieures ou égaux à 0",
         'seuil' => "Le seuil doît être des valeurs décimaux supérieures ou égaux à 0",
@@ -41,6 +43,9 @@ return [
         'caisse_deleteAll_0' => "Aucune caisse n'est supprimée",
         'caisse_deleteAll_1' => "Une caisse a été supprimée avec succès",
         'caisse_deleteAll_plur' => "<b>:field</b> caisses ont été supprimées avec succès",
+        'user_deconnectAll_0' => "Aucun utilisateur n'est déconnecté",
+        'user_deconnectAll_1' => "Un utilisateur a été déconnectés avec succès",
+        'user_deconnectAll_plur' => "<b>:field</b> utilisateurs ont été déconnecté avec succès",
     ],
     'not_found' => [
         'user_id' => "L'utilisateur avec l'ID <b>:field</b> n'existe pas",

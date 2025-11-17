@@ -16,13 +16,14 @@ return [
         'user_isIdUserExist' => DEBUG ? "Erreur dans user/isIdUserExist : :field" : "Une erreur est survenue",
         'user_isEmailUserExist' => DEBUG ? "Erreur dans user/isEmailUserExist : :field" : "Une erreur est survenue",
         "user_delete_account" => DEBUG ? "Erreur de suppréssion du compte : :field" : "Erreur de suppréssion du compte",
-        'user_delete_all' => DEBUG ? "Erreur dans user/deleteAll : :field" : "Erreur de suppréssion des utilisateurs",
+        'user_deleteAll' => DEBUG ? "Erreur dans user/deleteAll : :field" : "Erreur de suppréssion des utilisateurs",
         'caisse_create_caisse' => DEBUG ? "Erreur dans caisse/createCaisse : :field" : "Erreur lors de la création du caisse",
         'caisse_isNumCaisseExist' => DEBUG ? "Erreur dans caisse/isNumCaisseExist : :field" : "Une erreur est survenue lors de la vérification de numéro de caisse",
         'caisse_repositorie_filter_caisse' => DEBUG ? "Erreur dans caisse_repositorie/filterCaisse : :field" : "Une erreur est survenue lors de listage des caisses",
         'filter_ligne_caisse' => DEBUG ? "Erreur dans caisse/filterLigneCaisse : :field" : "Une erreur est survenue lors de listage des lignes de caisse",
         'caisse_update_caisse' => DEBUG ? "Erreur dans caisse/updateCaisse : :field" : "Une erreur est survenue lors de la modifications des informations du caisse",
-        'caisse_deleteAll' => DEBUG ? "Erreur dans caisse/deleteAll : :field" : "Une erreur est survenue lors de la suppréssion des caisses"
+        'caisse_deleteAll' => DEBUG ? "Erreur dans caisse/deleteAll : :field" : "Une erreur est survenue lors de la suppréssion des caisses",
+        'user_deconnectAll' => DEBUG ? "Erreur dans user/deconnectAll : :field" : "Une erreur est survenue lors de la déconnection des utilisateurs"
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

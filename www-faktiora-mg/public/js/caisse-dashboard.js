@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function permanentDeleteAll(nums_caisse = []) {
     try {
       const response = await apiRequest("/caisse/permanent_delete_all", {
-        method: "PUT",
+        method: "DELETE",
         body: {
           nums_caisse: nums_caisse,
         },
@@ -84,7 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
-  //
 
   //function - free caisse (remove user)
   async function freeCaisse() {
@@ -126,7 +125,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //btn-test
   const btnTest = document.getElementById("btn-test");
-  btnTest.addEventListener("click", () => {
-    permanentDeleteAll([4, 5]);
-  });
+  btnTest.addEventListener("click", () => {});
 });

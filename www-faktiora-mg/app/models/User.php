@@ -482,6 +482,14 @@ class User extends Database
 
             return $response;
         } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __('errors.catch.user_deleteAll', ['field' => $e->getMessage()])
+            ];
+
+            return $response;
         }
 
         return $response;
@@ -521,6 +529,62 @@ class User extends Database
 
             return $response;
         } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __('errors.catch.user_deleteAll', ['field' => $e->getMessage()])
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //deconnect all user
+    public static function deconnectAll($ids_user, $id_utilisateur)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        $placeholers = implode(', ', array_fill(0, count($ids_user), '?'));
+        $sql = "UPDATE utilisateur SET etat_utilisateur = 'déconnecté' WHERE id_utilisateur IN ({$placeholers}) AND etat_utilisateur = 'connecté' AND id_utilisateur != ? ";
+
+        //push id user in the end
+        array_push($ids_user, $id_utilisateur);
+
+        try {
+            $response = self::executeQuery($sql, $ids_user);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //success
+            //0
+            if ($response['row_count'] === 0) {
+                $response['message'] = __('messages.success.user_deconnectAll_0');
+            }
+            //1
+            elseif ($response['row_count'] === 1) {
+                $response['message'] = __('messages.success.user_deconnectAll_1');
+            }
+            //plur
+            else {
+                $response['message'] = __('messages.success.user_deconnectAll_plur', ['field' => $response['row_count']]);
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __('errors.catch.user_deconnectAll', ['field' => $e->getMessage()])
+            ];
+
+            return $response;
         }
 
         return $response;

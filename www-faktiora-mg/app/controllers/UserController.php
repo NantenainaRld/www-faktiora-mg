@@ -926,6 +926,8 @@ class UserController extends Controller
                 echo json_encode($response);
                 return;
             } catch (Throwable $e) {
+                error_log($e->getMessage());
+
                 //redirect to error page
                 header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.user_delete_account', ['field' => $e->getMessage()]));
                 return;
@@ -957,7 +959,7 @@ class UserController extends Controller
             return;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
             $json = json_decode(file_get_contents('php://input'), true);
 
             //trim
@@ -987,7 +989,7 @@ class UserController extends Controller
             } catch (Throwable $e) {
                 error_log($e->getMessage());
 
-                $response = ['message_type' => 'error', 'message' => __('errors.catch.user_delete_all', ['field' => $e->getMessage()])];
+                $response = ['message_type' => 'error', 'message' => __('errors.catch.user_deleteAll', ['field' => $e->getMessage()])];
 
                 echo json_encode($response);
                 return;
@@ -1042,7 +1044,7 @@ class UserController extends Controller
             } catch (Throwable $e) {
                 error_log($e->getMessage());
 
-                $response = ['message_type' => 'error', 'message' => __('errors.catch.user_delete_all', ['field' => $e->getMessage()])];
+                $response = ['message_type' => 'error', 'message' => __('errors.catch.user_deleteAll', ['field' => $e->getMessage()])];
 
                 echo json_encode($response);
                 return;
@@ -1051,6 +1053,64 @@ class UserController extends Controller
             echo json_encode($response);
             return;
         }
+    }
+
+    //action - deconnect all user
+    public function deconnectAll()
+    {
+        $response = null;
+
+        //loged ?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+        //role - not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to user index
+            header('Location: ' . SITE_URL . '/user');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            $json = json_decode(file_get_contents('php://input'), true);
+
+            //trim
+            $ids_user = array_map(fn($x) => trim($x), $json['ids_user']);
+
+            //id_users - empty
+            if (count($ids_user) <= 0) {
+                $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.user_ids_user_empty')];
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+
+                //deconnect all user
+                $response = User::deconnectAll($ids_user, $is_loged_in->getIdUtilisateur());
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.catch.user_deconnectAll', ['field' => $e->getMessage()])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+        }
+
+        echo json_encode($response);
+        return;
     }
 
     //---------------------PRIVATE FUNCTION---------------------

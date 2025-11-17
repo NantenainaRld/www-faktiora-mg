@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function deleteAll(ids = []) {
     try {
       const response = await apiRequest("/user/delete_all", {
-        method: "DELETE",
+        method: "PUT",
         body: {
           id_users: ids,
         },
@@ -113,6 +113,20 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - deconnect all
+  async function deconnectAll(ids_user = []) {
+    try {
+      const response = await apiRequest("/user/deconnect_all", {
+        method: "PUT",
+        body: {
+          ids_user: ids_user,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   //==================== EVENTS ===================
   const from = document.getElementById("from");
@@ -120,5 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //btn test
   const btnTest = document.getElementById("btn-test");
-  btnTest.addEventListener("click", () => {});
+  btnTest.addEventListener("click", () => {
+    // deconnectAll(["U123278VW", "U123278VP", "U123278VR"]);
+  });
 });

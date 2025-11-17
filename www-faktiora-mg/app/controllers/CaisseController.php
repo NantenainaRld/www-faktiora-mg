@@ -581,7 +581,7 @@ class CaisseController extends Controller
             return;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+        if ($_SERVER['REQUEST_METHOD'] === '') {
             $json = json_decode(file_get_contents('php://input'), true);
 
             $nums_caisse = array_values(array_map(fn($x) => trim($x), $json['nums_caisse']));
