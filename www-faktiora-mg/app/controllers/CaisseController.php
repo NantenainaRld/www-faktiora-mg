@@ -3,12 +3,6 @@
 // class client controller
 class CaisseController extends Controller
 {
-    private $caisse_model;
-    public function __construct()
-    {
-        //initialize model
-        $this->caisse_model = $this->loadModel('Caisse');
-    }
 
     //=============================== PAGE ==================================
 

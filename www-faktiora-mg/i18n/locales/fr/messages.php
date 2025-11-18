@@ -24,6 +24,10 @@ return [
         'caisse_occupCaisse' => "Seule les caissiers peuvent occuper les caisses",
         'caisse_occupCaisse_deleted' => "La caisse choisie est déjà supprimée : <b>:field</b>",
         'caisse_occupCaisse_occuped' => "La caisse choisie est encore occupée : <b>:field</b>",
+        'entree_id_ae' => "L'ID de l'autre entrée ne doît pas dépasser de 20 caractères",
+        'libelle' => "Le libellé ne doît pas dépasser de 100 caractères",
+        'montant' => "Le montant doît être des valeurs décimaux supérieurs ou égaux à 0",
+        'user_caisse_not_found' => "Vous n'êtes pas encore sur une caisse"
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",
@@ -34,6 +38,8 @@ return [
         'user_id' => "L'<b>ID</b> d'utilisateur est réquis",
         'solde' => "Le champ <b>solde</b> est réquis",
         'seuil' => "Le champ <b>seuil</b> est réquis",
+        'libelle' => "Le champ libellé est réquis",
+        'montant' => "Le champ <b>montant</b> est réquis"
     ],
     'success' => [
         'create_user' => "Compte crée avec succès",

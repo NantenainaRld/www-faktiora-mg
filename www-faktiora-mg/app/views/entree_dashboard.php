@@ -10,7 +10,7 @@
         const SITE_URL = "<?= SITE_URL ?>";
     </script>
     <!-- helper js  -->
-    <script src="<?= SITE_URL ?>/js/helper.js"></script>
+    <script src="<?= SITE_URL ?>/js/helpers/helper.js"></script>
 </head>
 
 <body>

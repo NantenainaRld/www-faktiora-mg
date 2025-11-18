@@ -1,5 +1,6 @@
 <?php
 
+//CLASS - caisse
 class Caisse extends Database
 {
 
