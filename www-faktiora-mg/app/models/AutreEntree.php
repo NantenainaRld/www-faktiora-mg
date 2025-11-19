@@ -58,4 +58,114 @@ class AutreEntree extends Database
     //====================== PUBLIC FUNCTION =======================
 
     //create autre entree
+    public function createAutreEntree()
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            //id_ae - empty
+            if ($this->id_ae === '') {
+                //generate id_ae
+            }
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __('errors.catch.entree_createAutreEntree', ['field' => $e->getMessage()])
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+
+    //====================== PRIVATE FUNCTION ===========================s
+
+    //is id_ae exist ?
+    private static function isIdAeExist($id_ae, $exclude = null)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+            'found' => false
+        ];
+        $sql = "SELECT id_ae FROM autre_entree WHERE id_ae = :id ";
+        $paramsQuery = ['id' => $id_ae];
+
+        //exclude
+        if ($exclude) {
+            $sql .= "AND id_ae != :exclude ";
+        }
+
+        try {
+        } catch (Throwable $e) {
+            // error_log()
+        }
+
+        return $response;
+    }
+
+    //generate id_ae
+    private function generateIdUser()
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        //generate id_ae
+        $this->id_utilisateur = 'AE' .
+            strval(sprintf("%06d", mt_rand(0, 999999))) .
+            substr(
+                str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+                0,
+                2
+            );
+
+        try {
+
+            $found = true;
+            while ($found) {
+                // $response = self::isIdUserExist($this->id_utilisateur, null);
+
+                //error
+                if ($response['message_type'] === 'error') {
+                    return $response;
+                }
+
+                //found
+                if ($response['found']) {
+
+                    //regenerate id_utilisateur
+                    $this->id_utilisateur = 'U' .
+                        strval(sprintf("%06d", mt_rand(0, 999999))) .
+                        substr(
+                            str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+                            0,
+                            2
+                        );
+                }
+                //not found
+                else {
+                    $found = false;
+                    break;
+                }
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+
+            $response['message_type'] = 'error';
+            $response['message'] =  __('errors.catch.user_generate_id', ['field' => $e->getMessage()]);
+
+            return $response;
+        }
+
+        return $response;
+    }
 }

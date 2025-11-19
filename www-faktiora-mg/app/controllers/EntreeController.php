@@ -142,6 +142,7 @@ class EntreeController extends Controller
                     ->setDateAe($json['date_ae'])
                     ->setIdUtilsateur($response['model']->getIdUtilisateur())
                     ->setNumCaisse($response['model']->getNumCaisse());
+                $response = $autre_entree_model->createAutreEntree();
 
                 echo json_encode($response);
                 return;
