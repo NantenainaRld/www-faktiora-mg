@@ -244,6 +244,11 @@ class UserController extends Controller
             echo json_encode($response);
             return;
         }
+        //redirect to user index
+        else {
+            header('Location: ' . SITE_URL . '/user');
+            return;
+        }
     }
 
     //action - signup
@@ -416,6 +421,11 @@ class UserController extends Controller
             echo json_encode($response);
             return;
         }
+        //redirect to signup page
+        else {
+            header('Location: ' . SITE_URL . '/auth/page_signup');
+            return;
+        }
     }
 
     //action - filter user
@@ -423,6 +433,21 @@ class UserController extends Controller
     {
         header('Content-Type: application/json');
         $response = null;
+
+        //is loged in ?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+        //not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to user index
+            header('Location: ' . SITE_URL . '/user');
+            return;
+        }
 
         //defaults
         $status_default = ['connected', 'disconnected', 'deleted'];
@@ -458,6 +483,7 @@ class UserController extends Controller
         $status = strtolower(trim($_GET['status'] ?? 'all'));
         $status = in_array($status, $status_default, true) ? $status : 'all';
 
+
         //role
         $role = strtolower(trim($_GET['role'] ?? 'all'));
         $role = in_array($role, $role_default, true) ? $role : 'all';
@@ -470,25 +496,16 @@ class UserController extends Controller
         $order_by = strtolower(trim($_GET['order_by'] ?? 'name'));
         $order_by = in_array($order_by, $order_by_default, true) ? $order_by : 'name';
         $order_by = ($order_by === 'name') ? 'u.nom_utilisateur' : $order_by;
-        //arrange
+        // //arrange
         $arrange = strtoupper(trim($_GET['arrange'] ?? 'ASC'));
         $arrange = in_array($arrange, $arrange_default, true) ? $arrange : 'ASC';
 
         //num_caisse
         $num_caisse = trim($_GET['num_caisse'] ?? 'all');
         $num_caisse = ($num_caisse !== 'all') ? filter_var($num_caisse, FILTER_VALIDATE_INT) : $num_caisse;
-        //num_caisse - string
-        if ($num_caisse === false) {
+        //num_caisse - invalid
+        if ($num_caisse === false || $num_caisse < 0) {
             $num_caisse = 'all';
-        }
-        //num_caisse - int
-        else {
-            if ($num_caisse < 0) {
-                $response = ['message_type' => 'invalid', __('messages.invalids.num_caisse', ['field' => $num_caisse])];
-
-                echo json_encode($response);
-                return;
-            }
         }
 
         //date_by
@@ -501,51 +518,63 @@ class UserController extends Controller
         $from = trim($_GET['from'] ?? '');
         //to
         $to = trim($_GET['to'] ?? '');
-        //from && to - empty
         if ($date_by === 'between') {
-            if (empty($from) && empty($to)) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.empty.from_to');
+            //from && to - empty
+            if ($from == '' && $to === '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.from_to')
+                ];
 
                 echo json_encode($response);
                 return;
             }
-            //from - !empty
-            if (!empty($from)) {
 
-                //from - invalid
-                if (DateTime::createFromFormat("Y-m-d", $from) === false) {
-                    $response['message_type'] = 'invalid';
-                    $response['message'] = __('messages.invalids.date', ['field' => $from]);
+            //from not empty - invalid
+            if ($from !== '' && DateTime::createFromFormat("Y-m-d", $from) === false) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date', ['field' => $from])
+                ];
 
-                    echo json_encode($response);
-                    return;
-                }
+                echo json_encode($response);
+                return;
             }
-            //to - !empty
-            if (!empty($to)) {
-                //from - invalid
-                if (DateTime::createFromFormat("Y-m-d", $to) === false) {
-                    $response['message_type'] = 'invalid';
-                    $response['message'] = __('messages.invalids.date', ['field' => $to]);
 
-                    echo json_encode($response);
-                    return;
-                }
+            //from not empty - invalid
+            if ($to !== '' && DateTime::createFromFormat("Y-m-d", $to) === false) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date', ['field' => $to])
+                ];
+
+                echo json_encode($response);
+                return;
             }
+
+            //from > to
+            $from = new DateTime($from);
+            $to  = new DateTime($to);
+            if ($from > $to) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.from_to')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            $from = $from->format("Y-m-d");
+            $to = $to->format("Y-m-d");
         }
         //month
         $month = trim($_GET['month'] ?? 'none');
         $month = filter_var($month, FILTER_VALIDATE_INT);
-        if ($month === false || ($month < 1 || $month > 12)) {
-            $month = 'none';
-        }
+        $month = ($month === false || ($month < 1 || $month > 12)) ? 'none' : $month;
         //year
         $year = trim($_GET['year'] ?? 2025);
         $year = filter_var($year, FILTER_VALIDATE_INT);
-        if ($year === false || ($year < 1700 || $year > 2500)) {
-            $year = 2025;
-        }
+        $year =  ($year === false || ($year < 1700 || $year > 2500)) ? ((new DateTime())->format('Y')) : $year;
 
         //sarch_user
         $search_user = trim($_GET['search_user'] ?? '');
@@ -565,25 +594,6 @@ class UserController extends Controller
             'year' => $year,
             'search_user' => $search_user
         ];
-
-        //num_caisse exist?
-        if ($num_caisse !== 'all') {
-            $response = Caisse::findById($num_caisse);
-            //error
-            if ($response['message_type'] === 'error') {
-
-                echo json_encode($response);
-                return;
-            }
-            //num_caisse - not found
-            if (!$response['found']) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.not_found.num_caisse', ['field' => $num_caisse]);
-
-                echo json_encode($response);
-                return;
-            }
-        }
 
         //filter user
         $response = UserRepositorie::filterUser($params);

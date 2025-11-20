@@ -22,10 +22,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   //function - filter user
-  async function filterUser(from, to) {
+  async function filterUser(
+    status,
+    role,
+    sexe,
+    order_by,
+    arrange,
+    date_by,
+    per,
+    num_caisse,
+    from,
+    to,
+    month,
+    year,
+    search_user
+  ) {
     try {
       const response = await apiRequest(
-        `/user/filter_user?status=all&role=all&sexe=all&order_by=nb_transactions&arrange=DESC&num_caisse=all&date_by=month_year&per=week&from=${from}&to=${to}&month=11&year=2015&search_user=`
+        `/user/filter_user?status=${status}&role=${role}&sexe=${sexe}&order_by=${order_by}&arrange=${arrange}&num_caisse=${num_caisse}&date_by=${date_by}&per=${per}&from=${from}&to=${to}&month=${month}&year=${year}&search_user=${search_user}`
       );
       console.log(response);
     } catch (e) {
@@ -135,14 +149,20 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    createUser(
-      "nom",
-      "prenoms",
-      "féminin",
-      "caissier@faktiora.mg",
-      "admin",
-      "123456",
-      "123456"
+    filterUser(
+      "all",
+      "all",
+      "masculin",
+      "nb_transactions",
+      "ASC",
+      "month_year",
+      "week",
+      "all",
+      " 2025-11-01",
+      " 2025-11-20",
+      " 11",
+      "2025",
+      "nan"
     );
   });
 });
