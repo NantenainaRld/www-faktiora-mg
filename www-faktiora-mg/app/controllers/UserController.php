@@ -1039,11 +1039,10 @@ class UserController extends Controller
             return;
         }
     }
-    //
+
     //action - delete account
     public function deleteAccount()
     {
-        header('Content-Type: application/json');
         $response = null;
 
         //loged ?
@@ -1057,50 +1056,16 @@ class UserController extends Controller
 
         if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
-            //id_utilisateur
-            $id_utilisateur = trim($is_loged_in->getIdUtilisateur());
-
             try {
-                //user exist?
-                $response = User::findById($id_utilisateur);
-                //error
-                if ($response['message_type'] === 'error') {
-                    //redirect to error page
-                    header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.user_delete_account', ['field' => $response['message']]));
-                    return;
-                }
-                //not found
-                if (!$response['found']) {
-                    //redirect to error page
-                    header('Location: ' . SITE_URL . '/error?messages=' . __('messages.not_found.user_id', ['field' => $id_utilisateur]));
-                    return;
-                }
-
-                //permanent delete default admin
-                if ($is_loged_in->getIdUtilisateur() === '000000') {
-                    $response = User::deleteDefaultAdmin();
-
-                    //error
-                    if ($response['message_type'] === 'error') {
-                        //redirect to error page
-                        header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.user_delete_account', ['field' => $response['message']]));
-                        return;
-                    }
-
-                    session_destroy();
-                    //redirect to login page
-                    header('Location: ' . SITE_URL . '/auth');
-                    return;
-                }
 
                 //delete account
                 $user_model = new User();
-                $user_model->setIdUtilsateur($id_utilisateur);
+                $user_model->setIdUtilsateur($is_loged_in->getIdUtilisateur());
                 $response = $user_model->deleteAccount();
                 //error
                 if ($response['message_type'] === 'error') {
                     //redirect to error page
-                    header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.user_delete_account', ['field' => $response['message']]));
+                    header('Location: ' . SITE_URL . '/error?messages=' . $response['message']);
                     return;
                 }
                 //success
@@ -1110,18 +1075,33 @@ class UserController extends Controller
                     header('Location: ' . SITE_URL . '/auth');
                     return;
                 }
-
-                echo json_encode($response);
                 return;
             } catch (Throwable $e) {
-                error_log($e->getMessage());
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.user_deleteAccount',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
 
                 //redirect to error page
-                header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.user_delete_account', ['field' => $e->getMessage()]));
+                header('Location: ' . SITE_URL . '/error?messages=' . $response['message']);
                 return;
             }
 
             echo json_encode($response);
+            return;
+        }
+        //redirect to user index
+        else {
+            header('Location: ' . SITE_URL . '/user');
             return;
         }
     }

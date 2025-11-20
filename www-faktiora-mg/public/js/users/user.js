@@ -63,12 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    updateAccount(
-      "Anarana",
-      "prenoms",
-      "féminin",
-      "test@faktiora.mg",
-      "12345678"
-    );
+    deleteAccount();
   });
 });

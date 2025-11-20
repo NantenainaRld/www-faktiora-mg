@@ -128,8 +128,7 @@ class User extends Database
             //not found
             if (!$response['found']) {
                 //create default admin
-                $response = parent::executeQuery("INSERT INTO utilisateur (id_utilisateur, nom_utilisateur, sexe_utilisateur, email_utilisateur, role, mdp) VALUES (:id, :nom, :sexe, :email, :role, :mdp)", [
-                    'id' => "10000",
+                $response = parent::executeQuery("INSERT INTO utilisateur (nom_utilisateur, sexe_utilisateur, email_utilisateur, role, mdp) VALUES (:nom, :sexe, :email, :role, :mdp)", [
                     'nom' => 'admin',
                     'email' => 'admin@faktiora.mg',
                     'sexe' => 'masculin',
@@ -536,37 +535,26 @@ class User extends Database
                 return $response;
             }
 
-            return $response;
-        } catch (Throwable $e) {
-            $response['message_type'] = 'error';
-            $response['message'] = __('errors.catch.user_delete_account', ['field' => $e->getMessage()]);
-
-            return $response;
-        }
-
-        return $response;
-    }
-
-    //delete default admin
-    public static function deleteDefaultAdmin()
-    {
-        $response = [
-            'message_type' => 'success',
-            'message' => 'success'
-        ];
-
-        try {
-            $response = self::executeQuery("DELETE from utilisateur WHERE id_utilisateur = '000000' ");
-
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
+            $response = [
+                'message_type' => 'success',
+                'message' => __('messages.success.user_deleteAccount')
+            ];
 
             return $response;
         } catch (Throwable $e) {
-            $response['message_type'] = 'error';
-            $response['message'] = __('errors.catch.user_delete_account', ['field' => $e->getMessage()]);
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.user_deleteAccount',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
 
             return $response;
         }
