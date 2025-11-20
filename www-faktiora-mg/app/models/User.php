@@ -77,6 +77,36 @@ class User extends Database
 
     //================== GETTERS ========================
 
+    //getter - id_utilisateur
+    public function getIdUtilisateur()
+    {
+        return $this->id_utilisateur;
+    }
+
+    //getter - nom_utilisateur
+    public function getNomUtilisateur()
+    {
+        return $this->nom_utilisateur;
+    }
+
+    //getter - prenoms_utilisateur
+    public function getPrenomsUtilisateur()
+    {
+        return $this->prenoms_utilisateur;
+    }
+
+    //getter - sexe_utilisateur
+    public function getSexeUtilisateur()
+    {
+        return $this->sexe_utilisateur;
+    }
+
+    //getter - email_utilisateur
+    public function getEmailUtilisateur()
+    {
+        return $this->email_utilisateur;
+    }
+
     //getter - role
     public function getRole()
     {
@@ -709,9 +739,14 @@ class User extends Database
                 $user_model->etat_utilisateur = $response['data'][0]['etat_utilisateur'];
                 $user_model->dernier_session = $response['data'][0]['dernier_session'];
 
-                $response['model'] = $user_model;
 
-                $response['data'] = [];
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'model' => $user_model,
+                    'found' => true
+                ];
+
                 return $response;
             }
             //not found
@@ -721,11 +756,22 @@ class User extends Database
 
                 return $response;
             }
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
 
-            $response['message_type'] = 'error';
-            $response['message'] = __('errors.catch.user_findById', ['field' => $e->getMessage()]);
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.user_findById',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
 
             return $response;
         }

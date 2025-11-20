@@ -623,12 +623,73 @@ class UserController extends Controller
             return;
         }
 
+        //list caissier
         $response = User::listCaissier();
 
         echo json_encode($response);
         return;
     }
 
+    //action - account info
+    public function accountInfo()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //is loged in ?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+        //not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to user index
+            header('Location: ' . SITE_URL . '/user');
+            return;
+        }
+
+        //user exist?
+        $response = User::findById($is_loged_in->getIdUtilisateur());
+        //error
+        if ($response['message_type'] === 'error') {
+            echo json_encode($response);
+            return;
+        }
+        //not found
+        if (!$response['found']) {
+            $response = [
+                'message_type' => 'invalid',
+                'message' => __(
+                    'messages.not_found.user_id',
+                    ['field' => $is_loged_in->getIdUtilisateur()]
+                )
+            ];
+
+            echo json_encode($response);
+            return;
+        }
+
+        //account info
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+            'data' => [
+                'id_utilisateur' => $response['model']->getIdUtilisateur(),
+                'nom_utilisateur' => $response['model']->getNomUtilisateur(),
+                'prenoms_utilisateur' => $response['model']->getPrenomsUtilisateur(),
+                'sexe_utilisateur' => $response['model']->getSexeUtilisateur(),
+                'email_utilisateur' => $response['model']->getEmailUtilisateur(),
+                'role' => $response['model']->getRole()
+            ]
+        ];
+
+        echo json_encode($response);
+        return;
+    }
+    //
 
     //action - update user by admin
     public function updateByAdmin()

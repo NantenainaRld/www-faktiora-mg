@@ -55,6 +55,15 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - account info
+  async function accountInfo() {
+    try {
+      const response = await apiRequest("/user/account_info", {});
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
   //function - update user
   async function updateByAdmin(
     id,
@@ -158,6 +167,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    listCaissier();
+    accountInfo();
   });
 });

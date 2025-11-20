@@ -12,8 +12,8 @@ return [
         'mdp' => "Le mot de passe doît être au moins 6 caractères",
         'mdp_confirm' => "Le mot de passe de confirmation doît être similaire au mot de passe",
         'from_to' => "La date de début ne doît pas dépasser la date fin",
-        //
         'date' => "Date invalide : <b>:field</b>",
+        //
         'user_id' => "L'<b>ID</b> utilisateur ne doit pas dépasser de 15 caractères",
         'id_users_empty' => "Veuiller séléctionner au moins un utilisateur",
         'user_ids_user_empty' => "Veuiller séléctionner au moins un utilisateur",
