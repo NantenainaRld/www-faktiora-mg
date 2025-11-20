@@ -602,6 +602,34 @@ class UserController extends Controller
         return;
     }
 
+    //action - list caissier
+    public function listCaissier()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //is loged in ?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+        //not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to user index
+            header('Location: ' . SITE_URL . '/user');
+            return;
+        }
+
+        $response = User::listCaissier();
+
+        echo json_encode($response);
+        return;
+    }
+
+
     //action - update user by admin
     public function updateByAdmin()
     {

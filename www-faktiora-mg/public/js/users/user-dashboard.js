@@ -46,6 +46,15 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - list caissier
+  async function listCaissier() {
+    try {
+      const response = await apiRequest("/user/list_caissier", {});
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
   //function - update user
   async function updateByAdmin(
     id,
@@ -149,20 +158,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    filterUser(
-      "all",
-      "all",
-      "masculin",
-      "nb_transactions",
-      "ASC",
-      "month_year",
-      "week",
-      "all",
-      " 2025-11-01",
-      " 2025-11-20",
-      " 11",
-      "2025",
-      "nan"
-    );
+    listCaissier();
   });
 });
