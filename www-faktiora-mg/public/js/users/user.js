@@ -1,6 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
   //====================== FUNCTIONS =====================
 
+  //function - update account
+  async function updateAccount(nom, prenoms, sexe, email, mdp) {
+    try {
+      const response = await apiRequest("/user/update_account", {
+        method: "PUT",
+        body: {
+          nom_utilisateur: nom,
+          prenoms_utilisateur: prenoms,
+          sexe_utilisateur: sexe,
+          email_utilisateur: email,
+          mdp: mdp,
+        },
+      });
+
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
   //function - delete account
   async function deleteAccount(id) {
     try {
@@ -44,6 +63,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    // occupCaisse(7);
+    updateAccount(
+      "Anarana",
+      "prenoms",
+      "féminin",
+      "test@faktiora.mg",
+      "12345678"
+    );
   });
 });

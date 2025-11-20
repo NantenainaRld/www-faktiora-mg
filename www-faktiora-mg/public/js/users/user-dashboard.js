@@ -65,22 +65,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   //function - update user
-  async function updateByAdmin(
-    id,
-    id_update,
-    nom,
-    prenoms,
-    sexe,
-    email,
-    role,
-    mdp
-  ) {
+  async function updateByAdmin(id, nom, prenoms, sexe, email, role, mdp) {
     try {
       const response = await apiRequest("/user/update_by_admin", {
         method: "PUT",
         body: {
           id_utilisateur: id,
-          id_update: id_update,
           nom_utilisateur: nom,
           prenoms_utilisateur: prenoms,
           sexe_utilisateur: sexe,
@@ -167,6 +157,14 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    accountInfo();
+    updateByAdmin(
+      " 10001 ",
+      "Anarana",
+      "prenoms",
+      "féminin",
+      "nantenaina@faktiora.mg",
+      "caissier",
+      "12345678"
+    );
   });
 });

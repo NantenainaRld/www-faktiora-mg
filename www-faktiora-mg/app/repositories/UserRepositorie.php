@@ -315,20 +315,6 @@ class UserRepositorie extends Database
                 if ($response['data'][$i]['minutes_ago'] <= 0) {
                     $response['data'][$i]['last_time'] = '-';
                 }
-                //role - admin
-                if ($data['role'] === 'admin') {
-                    $response['data'][$i]['nb_ae'] = "-";
-                    $response['data'][$i]['nb_factures'] = "-";
-                    $response['data'][$i]['nb_entrees'] = "-";
-                    $response['data'][$i]['nb_sorties'] = "-";
-                    $response['data'][$i]['nb_transactions'] = "-";
-                    $response['data'][$i]['total_ae'] = "-";
-                    $response['data'][$i]['total_factures'] = "-";
-                    $response['data'][$i]['total_entrees'] = "-";
-                    $response['data'][$i]['total_sorties'] = "-";
-                    $response['data'][$i]['total_transactions'] = "-";
-                    $response['data'][$i]['num_caisse'] = "-";
-                }
                 $i++;
             }
 

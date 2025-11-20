@@ -7,7 +7,6 @@ return [
         'query' => DEBUG ? "Erreur de requête : :field" : "Erreur de connection au serveur.",
         //user - create default admin
         'user_createDefaultAdmin' => DEBUG ? "Erreur dans user/createDefaultAdmin : :field" : "Une erreur est survenue lors de la création du compte admin par défaut",
-        'user_generate_id' => DEBUG ? "Erreur de génération de l'ID d'utilisateur : :field" : "Une erreur est servenue lors de la création du compte",
         //auth - is loged in
         'auth_isLogedIn' => DEBUG ? "Erreur dans auth/isLogedIn : :field" : "Une erreur est survenue",
         //user - create user
@@ -20,6 +19,7 @@ return [
         'user_listCaissier' => DEBUG ? "Erreur dans user/listCaissier : :field" : "Une erreur est survenue lors de listage des caissiers",
         //user find by id
         'user_findById' => DEBUG ? "Erreur dans user/findyById : :field" : "Une erreur est survenue lors de  la vérification de l'ID d'utilisateur",
+        //user update
         'user_update' => DEBUG ? "Erreur dans user/update : :field" : "Une erreur est survenue lors de la modification des informations d'utilisateur",
         'user_isIdUserExist' => DEBUG ? "Erreur dans user/isIdUserExist : :field" : "Une erreur est survenue",
         'user_isEmailUserExist' => DEBUG ? "Erreur dans user/isEmailUserExist : :field" : "Une erreur est survenue",

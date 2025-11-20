@@ -3,7 +3,6 @@
 class User extends Database
 {
     private $id_utilisateur = "";
-    private $id_update = "";
     private $nom_utilisateur = "";
     private $prenoms_utilisateur = "";
     private $sexe_utilisateur = "masculin";
@@ -25,12 +24,6 @@ class User extends Database
     public function setIdUtilsateur($id_utilisateur)
     {
         $this->id_utilisateur = $id_utilisateur;
-        return $this;
-    }
-    //setter - id_update
-    public function setIdUpdate($id_update)
-    {
-        $this->id_update = $id_update;
         return $this;
     }
     //setter - nom_utilisateur
@@ -66,7 +59,7 @@ class User extends Database
     //setter - mdp
     public function setMdp($mdp)
     {
-        $this->mdp = password_hash($mdp, PASSWORD_DEFAULT);
+        $this->mdp = ($mdp === '') ? '' : password_hash($mdp, PASSWORD_DEFAULT);
         return $this;
     }
     //setter - mdp_oublie
@@ -364,19 +357,6 @@ class User extends Database
         $response = ['message_type' => 'success', 'message' => 'success'];
 
         try {
-            //id_update exist?
-            $response = self::isIdUserExist($this->id_update, $this->id_utilisateur);
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-            //found
-            if ($response['found']) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.duplicate.user_id', ['field' => $this->id_update]);
-
-                return $response;
-            }
 
             //email exist?
             $response = self::isEmailUserExist($this->email_utilisateur, $this->id_utilisateur);
@@ -386,55 +366,69 @@ class User extends Database
             }
             //found
             if ($response['found']) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.duplicate.user_email', ['field' => $this->email_utilisateur]);
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.duplicate.user_email', ['field' => $this->email_utilisateur])
+                ];
 
                 return $response;
             }
 
             //update user - no password
-            if (empty($this->mdp)) {
+            if ($this->mdp === '') {
                 $response  = $this->executeQuery(
-                    "UPDATE utilisateur SET id_utilisateur = :id, nom_utilisateur = :nom, prenoms_utilisateur = :prenoms, sexe_utilisateur = :sexe, email_utilisateur = :email, role = :role WHERE id_utilisateur = :id_user",
+                    "UPDATE utilisateur SET nom_utilisateur = :nom, prenoms_utilisateur = :prenoms, sexe_utilisateur = :sexe, email_utilisateur = :email, role = :role WHERE id_utilisateur = :id ",
                     [
-                        'id' => $this->id_update,
                         'nom' => $this->nom_utilisateur,
                         'prenoms' => $this->prenoms_utilisateur,
                         'sexe' => $this->sexe_utilisateur,
                         'email' => $this->email_utilisateur,
                         'role' => $this->role,
-                        'id_user' => $this->id_utilisateur
+                        'id' => $this->id_utilisateur,
                     ]
                 );
             }
             //update user - with password
             else {
                 $response  = $this->executeQuery(
-                    "UPDATE utilisateur SET id_utilisateur = :id, nom_utilisateur = :nom, prenoms_utilisateur = :prenoms, sexe_utilisateur = :sexe, email_utilisateur = :email, role = :role, mdp = :mdp WHERE id_utilisateur = :id_user",
+                    "UPDATE utilisateur SET nom_utilisateur = :nom, prenoms_utilisateur = :prenoms, sexe_utilisateur = :sexe, email_utilisateur = :email, role = :role, mdp = :mdp WHERE id_utilisateur = :id ",
                     [
-                        'id' => $this->id_update,
                         'nom' => $this->nom_utilisateur,
                         'prenoms' => $this->prenoms_utilisateur,
                         'sexe' => $this->sexe_utilisateur,
                         'email' => $this->email_utilisateur,
                         'role' => $this->role,
                         'mdp' => $this->mdp,
-                        'id_user' => $this->id_utilisateur
+                        'id' => $this->id_utilisateur,
                     ]
                 );
             }
+
             //error
             if ($response['message_type'] === 'error') {
                 return $response;
             }
 
-            $response['message'] = __('messages.success.update_user', ['field' => $this->id_utilisateur]);
+            $response = [
+                'message_type' => 'success',
+                'message' => __('messages.success.user_update', ['field' => $this->id_utilisateur])
+            ];
+
             return $response;
         } catch (Throwable $e) {
-            error_log($e->getMessage());
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
 
-            $response['message_type'] = 'error';
-            $response['message'] = __('errors.catch.user_update', ['field' => $e->getMessage()]);
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.user_update',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
 
             return $response;
         }
@@ -442,8 +436,8 @@ class User extends Database
         return $response;
     }
 
-    //update user by user
-    public function updateByUser()
+    //update account
+    public function updateAccount()
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 
@@ -457,51 +451,68 @@ class User extends Database
             }
             //found
             if ($response['found']) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.duplicate.user_email', ['field' => $this->email_utilisateur]);
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.duplicate.user_email', ['field' => $this->email_utilisateur])
+                ];
 
                 return $response;
             }
 
             //update user - no password
-            if (empty($this->mdp)) {
+            if ($this->mdp === '') {
                 $response  = $this->executeQuery(
-                    "UPDATE utilisateur SET nom_utilisateur = :nom, prenoms_utilisateur = :prenoms, sexe_utilisateur = :sexe, email_utilisateur = :email WHERE id_utilisateur = :id_user",
+                    "UPDATE utilisateur SET nom_utilisateur = :nom, prenoms_utilisateur = :prenoms, sexe_utilisateur = :sexe, email_utilisateur = :email WHERE id_utilisateur = :id ",
                     [
                         'nom' => $this->nom_utilisateur,
                         'prenoms' => $this->prenoms_utilisateur,
                         'sexe' => $this->sexe_utilisateur,
                         'email' => $this->email_utilisateur,
-                        'id_user' => $this->id_utilisateur
+                        'role' => $this->role,
+                        'id' => $this->id_utilisateur,
                     ]
                 );
             }
             //update user - with password
             else {
                 $response  = $this->executeQuery(
-                    "UPDATE utilisateur SET nom_utilisateur = :nom, prenoms_utilisateur = :prenoms, sexe_utilisateur = :sexe, email_utilisateur = :email, mdp = :mdp WHERE id_utilisateur = :id_user",
+                    "UPDATE utilisateur SET nom_utilisateur = :nom, prenoms_utilisateur = :prenoms, sexe_utilisateur = :sexe, email_utilisateur = :email, mdp = :mdp WHERE id_utilisateur = :id ",
                     [
                         'nom' => $this->nom_utilisateur,
                         'prenoms' => $this->prenoms_utilisateur,
                         'sexe' => $this->sexe_utilisateur,
                         'email' => $this->email_utilisateur,
                         'mdp' => $this->mdp,
-                        'id_user' => $this->id_utilisateur
+                        'id' => $this->id_utilisateur,
                     ]
                 );
             }
+
             //error
             if ($response['message_type'] === 'error') {
                 return $response;
             }
 
-            $response['message'] = __('messages.success.update_user', ['field' => $this->id_utilisateur]);
+            $response = [
+                'message_type' => 'success',
+                'message' => __('messages.success.user_update', ['field' => $this->id_utilisateur])
+            ];
+
             return $response;
         } catch (Throwable $e) {
-            error_log($e->getMessage());
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
 
-            $response['message_type'] = 'error';
-            $response['message'] = __('errors.catch.user_update', ['field' => $e->getMessage()]);
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.user_update',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
 
             return $response;
         }
@@ -837,49 +848,6 @@ class User extends Database
                         ' - File : ' . $e->getFile()]
                 )
             ];
-
-            return $response;
-        }
-
-        return $response;
-    }
-
-    //is id_utilisateur exist?
-    private static function isIdUserExist($id_utilisateur, $exclude = null)
-    {
-        $response = ['message_type' => 'success', 'message' => 'success', 'found' => false];
-        $sql = "SELECT id_utilisateur FROM utilisateur WHERE id_utilisateur = :id ";
-        $params = ['id' => $id_utilisateur];
-
-        //exclude
-        if ($exclude) {
-            $sql .= "AND id_utilisateur != :id_user";
-            $params['id_user'] = $exclude;
-        }
-
-        try {
-
-            $response = self::selectQuery($sql, $params);
-
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-
-            //found
-            if (count($response['data']) >= 1) {
-                $response['found'] = true;
-            }
-            //not found
-            else {
-                $response['found'] = false;
-            }
-
-            return $response;
-        } catch (Throwable $e) {
-
-            $response['message_type'] = 'error';
-            $response['message'] = __('errors.catch.user_isIdUserExist', ['field' => $e->getMessage()]);
 
             return $response;
         }

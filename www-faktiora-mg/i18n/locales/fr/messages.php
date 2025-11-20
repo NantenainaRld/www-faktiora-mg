@@ -46,7 +46,8 @@ return [
     'success' => [
         //user - create user
         'user_createUser' => "Compte crée avec succès",
-        'update_user' => "Les informations de l'utilisateur <b>:field</b> ont été modifiées avec succès",
+        //user - update user
+        'user_update' => "Les informations de l'utilisateur <b>:field</b> ont été modifiées avec succès",
         'user0_delete_all' => "Aucun utilisateur n'est supprimé",
         'user1_delete_all' => "Un utilisateur a été supprimé avec succès",
         'users_delete_all' => "<b>:field</b> utilisateurs ont été supprimés avec succès",
