@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await apiRequest("/user/delete_all", {
         method: "PUT",
         body: {
-          id_users: ids,
+          ids_user: ids,
         },
       });
 
@@ -157,14 +157,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    updateByAdmin(
-      " 10001 ",
-      "Anarana",
-      "prenoms",
-      "féminin",
-      "nantenaina@faktiora.mg",
-      "caissier",
-      "12345678"
-    );
+    deleteAll([10000, 10001, 10002, 10003]);
   });
 });

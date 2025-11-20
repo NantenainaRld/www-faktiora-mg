@@ -14,8 +14,7 @@ return [
         'from_to' => "La date de début ne doît pas dépasser la date fin",
         'date' => "Date invalide : <b>:field</b>",
         //
-        'user_id' => "L'<b>ID</b> utilisateur ne doit pas dépasser de 15 caractères",
-        'id_users_empty' => "Veuiller séléctionner au moins un utilisateur",
+        //user - ids_user empty
         'user_ids_user_empty' => "Veuiller séléctionner au moins un utilisateur",
         'num_caisse' => "Le numéro du caisse doît être des nombres entiers supérieurs ou égaux à 0",
         'solde' => "Le solde doît être des valeurs décimaux supérieures ou égaux à 0",
@@ -50,9 +49,12 @@ return [
         'user_update' => "Les informations de l'utilisateur <b>:field</b> ont été modifiées avec succès",
         //user - delete account
         'user_deleteAccount' => "Compte supprimé avec succès",
-        'user0_delete_all' => "Aucun utilisateur n'est supprimé",
-        'user1_delete_all' => "Un utilisateur a été supprimé avec succès",
-        'users_delete_all' => "<b>:field</b> utilisateurs ont été supprimés avec succès",
+        //user - delete all 0
+        'user_deleteAll_0' => "Aucun utilisateur n'est supprimé",
+        //user - delete all 1
+        'user_deleteAll_1' => "Un utilisateur a été supprimé avec succès",
+        //user - delete all plur
+        'user_deleteAll_plur' => "<b>:field</b> utilisateurs ont été supprimés avec succès",
         'create_caisse' => "Caisse numéro <b>:field</b> crée avec succès",
         'caisse_update_caisse' => "Les informations du caisse numéro <b>:field</b> ont été modifiées avec succès",
         'caisse_deleteAll_0' => "Aucune caisse n'est supprimée",
