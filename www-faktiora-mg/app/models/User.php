@@ -226,12 +226,6 @@ class User extends Database
             'message' => 'success'
         ];
         try {
-            //generate id_utilisateur
-            $response = $this->generateIdUser();
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
 
             //email exist ?
             $response = self::isEmailUserExist($this->email_utilisateur, null);
@@ -241,15 +235,19 @@ class User extends Database
             }
             //found
             if ($response['found']) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.duplicate.user_email', ['field' => $this->email_utilisateur]);
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __(
+                        'messages.duplicate.user_email',
+                        ['field' => $this->email_utilisateur]
+                    )
+                ];
 
                 return $response;
             }
 
             //create user
-            $response = self::executeQuery("INSERT INTO utilisateur (id_utilisateur, nom_utilisateur, prenoms_utilisateur, sexe_utilisateur, email_utilisateur, mdp) VALUES (:id, :nom, :prenoms, :sexe, :email, :mdp)", [
-                'id' => $this->id_utilisateur,
+            $response = self::executeQuery("INSERT INTO utilisateur (nom_utilisateur, prenoms_utilisateur, sexe_utilisateur, email_utilisateur, mdp) VALUES (:nom, :prenoms, :sexe, :email, :mdp)", [
                 'nom' => $this->nom_utilisateur,
                 'prenoms' => $this->prenoms_utilisateur,
                 'sexe' => $this->sexe_utilisateur,
@@ -260,15 +258,27 @@ class User extends Database
             if ($response['message_type'] === 'error') {
                 return $response;
             }
-            //success
-            $response['message'] = __('messages.success.create_user');
+
+            $response = [
+                'message_type' => 'success',
+                'message' => __('messages.success.user_createUser')
+            ];
 
             return $response;
         } catch (Throwable $e) {
-            error_log($e->getMessage());
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
 
-            $response['message_type'] = 'error';
-            $response['message'] = __('errors.catch.create_user', ['field' => $e->getMessage()]);
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.user_createUser',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
 
             return $response;
         }

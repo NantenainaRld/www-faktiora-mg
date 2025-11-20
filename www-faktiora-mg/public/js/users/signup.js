@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //======================== FUNCTIONS ======================
 
-  //function - create user
+  //function - signup
   async function signUp(nom, prenoms, sexe, email, mdp, mdp_confirm) {
     try {
       const response = await apiRequest("/user/signup", {
@@ -36,13 +36,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  //--------------------------------EVENTS-------------------
+  //======================== EVENTS =====================
+
   //--btn-add-user
   const btnAddUser = document.getElementById("btn-add-user");
   btnAddUser.addEventListener("click", () => {
     signUp(
-      "s   ",
-      "",
+      "Nantenaina   ",
+      "Edouardo",
       "  masculin",
       "nantenain@faktiora.mg",
       "123456",
