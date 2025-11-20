@@ -23,19 +23,18 @@ require_once CONFIG_PATH . '/config.php';
 require_once SERVICE_PAH . '/TranslationService.php';
 //charge helper
 require_once CORE_PATH . '/helper.php';
+// charge autoload
+require_once CORE_PATH . '/Autoload.php';
 
 //time_zone
 $time_zone = $_COOKIE['time_zone'] ?? 'Indian/Antananarivo';
 define('TIME_ZONE', $time_zone);
 
-//initialize translation
-TranslationService::init();
-
-// charge autoload
-require_once CORE_PATH . '/Autoload.php';
-
 // Autoload
 Autoload::register();
+
+//initialize translation
+TranslationService::init();
 
 // Router
 $router = new Router();

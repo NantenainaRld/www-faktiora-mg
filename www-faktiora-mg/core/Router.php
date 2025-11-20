@@ -30,12 +30,16 @@ class Router
         //page error
         if ($this->controller === 'Error') {
             require_once APP_PATH . '/views/error.php';
+
+            return;
         }
         //change lang
         elseif ($this->controller === 'Lang') {
             //get lang
             $lang = trim($_GET['lang'] ?? 'fr');
             TranslationService::setLang($lang);
+
+            return;
         }
         //no error
         else {

@@ -66,7 +66,7 @@ class User extends Database
     //setter - mdp
     public function setMdp($mdp)
     {
-        $this->mdp = (!empty($mdp)) ? password_hash($mdp, PASSWORD_DEFAULT) : '';
+        $this->mdp = password_hash($mdp, PASSWORD_DEFAULT);
         return $this;
     }
     //setter - mdp_oublie
@@ -85,8 +85,8 @@ class User extends Database
 
     //==================  PUBLIC FUNCTION ====================
 
-    //create default admin account
-    public function createDefaultAdmin()
+    //static - create default admin account
+    public static function createDefaultAdmin()
     {
         $response = [
             'message_type' => "success",
@@ -101,28 +101,45 @@ class User extends Database
             if ($response['message_type'] === 'error') {
                 return $response;
             }
-            //success
-            else {
-                //not found
-                if ($response['message'] === 'not found') {
-                    //create default admin
-                    return self::executeQuery("INSERT INTO utilisateur (id_utilisateur, nom_utilisateur, sexe_utilisateur, email_utilisateur, role, mdp) VALUES (:id, :nom, :sexe, :email, :role, :mdp)", [
-                        'id' => "000000",
-                        'nom' => 'admin',
-                        'email' => 'admin@faktiora.mg',
-                        'sexe' => 'masculin',
-                        'role' => 'admin',
-                        'mdp' => password_hash('admin', PASSWORD_DEFAULT)
-                    ]);
+
+            //not found
+            if (!$response['found']) {
+                //create default admin
+                $response = parent::executeQuery("INSERT INTO utilisateur (id_utilisateur, nom_utilisateur, sexe_utilisateur, email_utilisateur, role, mdp) VALUES (:id, :nom, :sexe, :email, :role, :mdp)", [
+                    'id' => "10000",
+                    'nom' => 'admin',
+                    'email' => 'admin@faktiora.mg',
+                    'sexe' => 'masculin',
+                    'role' => 'admin',
+                    'mdp' => password_hash('admin', PASSWORD_DEFAULT)
+                ]);
+
+                //error
+                if ($response['message_type'] === 'error') {
+                    return $response;
                 }
-
-                return $response;
             }
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
 
-            $response['message_type'] = 'error';
-            $response['message'] = __('errors.catch.create_default_admin', ['field' => $e->getMessage()]);
+            $response = [
+                'message_type' => "success",
+                'message' => 'Default user created'
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.user_createDefaultAdmin',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
 
             return $response;
         }
@@ -130,23 +147,17 @@ class User extends Database
         return $response;
     }
 
-    //create_user
+    //create_user by admin
     public function createUser()
     {
-        //response
         $response = [
             'message_type' => 'success',
             'message' => 'success'
         ];
-        try {
-            //generate id_utilisateur
-            $response = $this->generateIdUser();
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
 
-            //email exist ?
+        try {
+
+            //email user exist ?
             $response = self::isEmailUserExist($this->email_utilisateur, null);
             //error
             if ($response['message_type'] === 'error') {
@@ -154,15 +165,19 @@ class User extends Database
             }
             //found
             if ($response['found']) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.duplicate.user_email', ['field' => $this->email_utilisateur]);
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __(
+                        'messages.duplicate.user_email',
+                        ['field' => $this->email_utilisateur]
+                    )
+                ];
 
                 return $response;
             }
 
             //create user
-            $response = self::executeQuery("INSERT INTO utilisateur (id_utilisateur, nom_utilisateur, prenoms_utilisateur, sexe_utilisateur, email_utilisateur, role, mdp) VALUES (:id, :nom, :prenoms, :sexe, :email, :role, :mdp)", [
-                'id' => $this->id_utilisateur,
+            $response = parent::executeQuery("INSERT INTO utilisateur (nom_utilisateur, prenoms_utilisateur, sexe_utilisateur, email_utilisateur, role, mdp) VALUES (:nom, :prenoms, :sexe, :email, :role, :mdp)", [
                 'nom' => $this->nom_utilisateur,
                 'prenoms' => $this->prenoms_utilisateur,
                 'sexe' => $this->sexe_utilisateur,
@@ -174,15 +189,27 @@ class User extends Database
             if ($response['message_type'] === 'error') {
                 return $response;
             }
-            //success
-            $response['message'] = __('messages.success.create_user');
+
+            $response = [
+                'message_type' => 'success',
+                'message' => __('messages.success.user_createUser')
+            ];
 
             return $response;
         } catch (Throwable $e) {
-            error_log($e->getMessage());
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
 
-            $response['message_type'] = 'error';
-            $response['message'] = __('errors.catch.create_user', ['field' => $e->getMessage()]);
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.user_createUser',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
 
             return $response;
         }
@@ -656,6 +683,69 @@ class User extends Database
 
     //====================== PRIVATE FUNCTION ====================
 
+    //static - is email_utilisateur exist?
+    private static function isEmailUserExist($email_utilisateur, $exclude = null)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+            'found' => false
+        ];
+        $sql = "SELECT email_utilisateur FROM utilisateur WHERE email_utilisateur = :email ";
+        $paramsQuery = ['email' => $email_utilisateur];
+
+        //exclude
+        if ($exclude) {
+            $sql .= "AND id_utilisateur != :exclude";
+            $paramsQuery['exclude'] = $exclude;
+        }
+
+        try {
+
+            $response = parent::selectQuery($sql, $paramsQuery);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //found
+            if (count($response['data']) >= 1) {
+                $response['found'] = true;
+            }
+            //not found
+            else {
+                $response['found'] = false;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+                'found' => $response['found']
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.user_isEmailUserExist',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //is id_utilisateur exist?
     private static function isIdUserExist($id_utilisateur, $exclude = null)
     {
@@ -699,22 +789,17 @@ class User extends Database
         return $response;
     }
 
-    //is email_utilisateur exist?
-    private static function isEmailUserExist($email_utilisateur, $exclude = null)
+    //is admin exist ?
+    private static function isAdminExist()
     {
-        $response = ['message_type' => 'success', 'message' => 'success', 'found' => false];
-        $sql = "SELECT email_utilisateur FROM utilisateur WHERE email_utilisateur = :email AND etat_utilisateur != 'supprimé' ";
-        $params = ['email' => $email_utilisateur];
-
-        //exclude
-        if ($exclude) {
-            $sql .= "AND id_utilisateur != :id_user";
-            $params['id_user'] = $exclude;
-        }
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+            'found' => false
+        ];
 
         try {
-
-            $response = self::selectQuery($sql, $params);
+            $response = parent::selectQuery("SELECT COUNT(id_utilisateur) AS nb_admin FROM utilisateur WHERE etat_utilisateur != 'supprimé' AND role = 'admin' ");
 
             //error
             if ($response['message_type'] === 'error') {
@@ -722,7 +807,7 @@ class User extends Database
             }
 
             //found
-            if (count($response['data']) >= 1) {
+            if ($response['data'][0]['nb_admin'] >= 1) {
                 $response['found'] = true;
             }
             //not found
@@ -730,106 +815,27 @@ class User extends Database
                 $response['found'] = false;
             }
 
-            return $response;
-        } catch (Throwable $e) {
-
-            $response['message_type'] = 'error';
-            $response['message'] = __('errors.catch.user_isEmailUserExist', ['field' => $e->getMessage()]);
-
-            return $response;
-        }
-
-        return $response;
-    }
-
-    //is admin exist ?
-    private static function isAdminExist()
-    {
-        $response = [
-            'message_type' => 'success',
-            'message' => 'not found'
-        ];
-
-        try {
-            //count admin
-            $response = self::selectQuery("SELECT COUNT(id_utilisateur) as nb_admin FROM utilisateur WHERE etat_utilisateur != 'supprimé' AND role ='admin'");
-
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-            //success
-            else {
-                //exist
-                if ($response['data'][0]['nb_admin'] >= 1) {
-                    $response['message'] = 'found';
-                }
-                //not exist
-                else {
-                    $response['message'] = 'not found';
-                }
-            }
-        } catch (Throwable $e) {
-            $response['message_type'] = 'error';
-            $response['message'] = __('errors.catch.create_default_admin', ['field' => $e->getMessage()]);
-        }
-
-        return $response;
-    }
-
-    //generate id_utilisateur
-    private function generateIdUser()
-    {
-        $response = [
-            'message_type' => 'success',
-            'message' => 'success'
-        ];
-
-        //generate id_utilisateur
-        $this->id_utilisateur = 'U' .
-            strval(sprintf("%06d", mt_rand(0, 999999))) .
-            substr(
-                str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
-                0,
-                2
-            );
-
-        try {
-
-            $found = true;
-            while ($found) {
-                $response = self::isIdUserExist($this->id_utilisateur, null);
-
-                //error
-                if ($response['message_type'] === 'error') {
-                    return $response;
-                }
-
-                //found
-                if ($response['found']) {
-
-                    //regenerate id_utilisateur
-                    $this->id_utilisateur = 'U' .
-                        strval(sprintf("%06d", mt_rand(0, 999999))) .
-                        substr(
-                            str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
-                            0,
-                            2
-                        );
-                }
-                //not found
-                else {
-                    $found = false;
-                    break;
-                }
-            }
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+                'found' => $response['found']
+            ];
 
             return $response;
         } catch (Throwable $e) {
-            error_log($e->getMessage());
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
 
-            $response['message_type'] = 'error';
-            $response['message'] =  __('errors.catch.user_generate_id', ['field' => $e->getMessage()]);
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.user_createDefaultAdmin',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
 
             return $response;
         }

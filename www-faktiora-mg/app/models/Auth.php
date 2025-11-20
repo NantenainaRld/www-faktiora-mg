@@ -59,7 +59,7 @@ class Auth extends Database
         $self = new Auth();
 
         // $_SESSION['auth'] = [];
-        // $_SESSION['auth']['id_utilisateur'] = "U123278VW";
+        // $_SESSION['auth']['id_utilisateur'] = 10000;
 
         //values - valid
         if (
@@ -70,7 +70,7 @@ class Auth extends Database
             $self->id_utilisateur = trim($_SESSION['auth']['id_utilisateur']);
 
             try {
-                $response = $self->selectQuery("SELECT id_utilisateur, role FROM utilisateur WHERE id_utilisateur = :id AND etat_utilisateur = 'connecté'", ['id' => $self->id_utilisateur]);
+                $response = $self->selectQuery("SELECT id_utilisateur, role FROM utilisateur WHERE id_utilisateur = :id AND etat_utilisateur = 'connecté' ", ['id' => $self->id_utilisateur]);
 
                 //error
                 if ($response['message_type'] === 'error') {
@@ -95,6 +95,10 @@ class Auth extends Database
 
                 return $self;
             } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
                 //redirect to error page
                 header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.auth_isLogedIn', ['field' => $e->getMessage()]));
 

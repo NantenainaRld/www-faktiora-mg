@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   //================ FUNCTION ================
 
-  //function - create user
+  //function - create user by admin
   async function createUser(nom, prenoms, sexe, email, role, mdp, mdp_confirm) {
     try {
       const response = await apiRequest("/user/create_user", {
@@ -135,6 +135,14 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    // deconnectAll(["U123278VW", "U123278VP", "U123278VR"]);
+    createUser(
+      "nom",
+      "prenoms",
+      "féminin",
+      "caissier@faktiora.mg",
+      "admin",
+      "123456",
+      "123456"
+    );
   });
 });

@@ -21,23 +21,24 @@ class UserController extends Controller
 
     //========================== ACIONS ==========================
 
-    //create default admin account
+    //action - create default admin account
     public static function createDefaultAdmin()
     {
-        //create deffault admin
-        $user_model = new User();
-        $response = $user_model->createDefaultAdmin();
+        //create default admin
+        $response = User::createDefaultAdmin();
 
         //error
         if ($response['message_type'] === 'error') {
             //redirect to error page
             header('Location: ' . SITE_URL . '/error?messages=' . $response['message']);
+
+            return;
         }
 
         return;
     }
 
-    //action - create user
+    //action - create user by admin
     public function createUser()
     {
         header('Content-Type: application/json');
@@ -75,25 +76,31 @@ class UserController extends Controller
 
             //nom_utilisateur - empty
             if (empty($json['nom_utilisateur'])) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.empty.nom');
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.nom')
+                ];
 
                 echo json_encode($response);
                 return;
             }
             //nom_utilisateur - invalid
             if (strlen($json['nom_utilisateur']) > 100) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.invalids.nom');
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.nom')
+                ];
 
                 echo json_encode($response);
                 return;
             }
 
-            //prenoms_utilisateur - invalid
-            if (!empty($json['prenoms_utilisateur']) && strlen($json['prenoms_utilisateur']) > 100) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.invalids.prenoms');
+            //prenoms_utilisateur not empty - invalid
+            if ($json['prenoms_utilisateur'] !== '' && strlen($json['prenoms_utilisateur']) > 100) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.prenoms')
+                ];
 
                 echo json_encode($response);
                 return;
@@ -101,8 +108,10 @@ class UserController extends Controller
 
             //sexe - invalid
             if (!in_array($json['sexe_utilisateur'], ['masculin', 'féminin'], true)) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.invalids.sexe', ['field' => $json['sexe_utilisateur']]);
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.sexe', ['field' => $json['sexe_utilisateur']])
+                ];
 
                 echo json_encode($response);
                 return;
@@ -110,24 +119,33 @@ class UserController extends Controller
 
             //email_utilisateur - empty
             if (empty($json['email_utilisateur'])) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.empty.email');
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.email')
+                ];
 
                 echo json_encode($response);
                 return;
             }
             //email_utilisateur - invalid
             if (filter_var($json['email_utilisateur'], FILTER_VALIDATE_EMAIL) === false) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.invalids.email', ['field' => $json['email_utilisateur']]);
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __(
+                        'messages.invalids.email',
+                        ['field' => $json['email_utilisateur']]
+                    )
+                ];
 
                 echo json_encode($response);
                 return;
             }
             //email_utilisateur - length > 150
             if (strlen($json['email_utilisateur']) > 150) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.invalids.email_length');
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.email_length')
+                ];
 
                 echo json_encode($response);
                 return;
@@ -135,8 +153,13 @@ class UserController extends Controller
 
             //role - invalid
             if (!in_array($json['role'], ['admin', 'caissier'], true)) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.invalids.role', ['field' => $json['role']]);
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __(
+                        'messages.invalids.role',
+                        ['field' => $json['role']]
+                    )
+                ];
 
                 echo json_encode($response);
                 return;
@@ -144,32 +167,40 @@ class UserController extends Controller
 
             //mdp - empty
             if (empty($json['mdp'])) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.empty.mdp');
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.mdp')
+                ];
 
                 echo json_encode($response);
                 return;
             }
             //mdp - invalid
             if (strlen($json['mdp']) < 6) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.invalids.mdp');
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.mdp')
+                ];
 
                 echo json_encode($response);
                 return;
             }
             //mdp_confirm - empty
             if (empty($json['mdp_confirm'])) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.empty.mdp_confirm');
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.mdp_confirm')
+                ];
 
                 echo json_encode($response);
                 return;
             }
             //mdp_confirm - invalid
             if ($json['mdp_confirm'] !== $json['mdp']) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.invalids.mdp_confirm');
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.mdp_confirm')
+                ];
 
                 echo json_encode($response);
                 return;
@@ -192,10 +223,19 @@ class UserController extends Controller
                 echo json_encode($response);
                 return;
             } catch (Throwable $e) {
-                error_log($e->getMessage());
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
 
-                $response['message_type'] = 'error';
-                $response['message'] = __('errors.catch.create_user', ['field' => $e->getMessage()]);
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.user_createUser',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
 
                 echo json_encode($response);
                 return;

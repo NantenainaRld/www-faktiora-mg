@@ -2,18 +2,19 @@
 
 return [
     'invalids' => [
+        //
+        'nom' => "Le <b>nom</b> d'utilisateur ne doit pas dépasser de 100 caractères",
+        'prenoms' => "Le <b>prénoms</b> d'utilisateur ne doit pas dépasser de 100 caractères",
         'sexe' => "Sexe invalide : <b>:field</b>",
         'email' => "Adresse email invalide : <b>:field</b>",
         'email_length' => "L'adresse <b>email</b> ne doit pas dépasser de 150 caractères",
         'role' => "Rôle invalide : <b>:field</b>",
         'mdp' => "Le mot de passe doît être au moins 6 caractères",
         'mdp_confirm' => "Le mot de passe de confirmation doît être similaire au mot de passe",
+        //
         'date' => "Date invalide : <b>:field</b>",
         'user_id' => "L'<b>ID</b> utilisateur ne doit pas dépasser de 15 caractères",
-        'nom' => "Le <b>nom</b> d'utilisateur ne doit pas dépasser de 100 caractères",
-        'prenoms' => "Le <b>prénoms</b> d'utilisateur ne doit pas dépasser de 100 caractères",
         'id_users_empty' => "Veuiller séléctionner au moins un utilisateur",
-        //
         'user_ids_user_empty' => "Veuiller séléctionner au moins un utilisateur",
         'num_caisse' => "Le numéro du caisse doît être des nombres entiers supérieurs ou égaux à 0",
         'solde' => "Le solde doît être des valeurs décimaux supérieures ou égaux à 0",
@@ -42,7 +43,8 @@ return [
         'montant' => "Le champ <b>montant</b> est réquis"
     ],
     'success' => [
-        'create_user' => "Compte crée avec succès",
+        //user - create user
+        'user_createUser' => "Compte crée avec succès",
         'update_user' => "Les informations de l'utilisateur <b>:field</b> ont été modifiées avec succès",
         'user0_delete_all' => "Aucun utilisateur n'est supprimé",
         'user1_delete_all' => "Un utilisateur a été supprimé avec succès",
@@ -66,8 +68,9 @@ return [
         'num_caisse' => "Numéro de caisse n'existe pas : <b>:field</b>"
     ],
     'duplicate' => [
+        //user - email
+        'user_email' => "L'adresse email <b>:field</b> existe déjà",
         'user_id' => "L'ID d'utilisateur <b>:field</b> existe déjà",
-        'user_email' => "L'adresse email <b>:field</b> est déjà utilisée avec un utilisateur actif. Veuiller modifier",
         'num_caisse' => "Le numéro de caisse <b>:field</b> existe déjà"
     ]
 ];

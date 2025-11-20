@@ -1,5 +1,6 @@
 <?php
 
+///CLASS - autoload
 class Autoload
 {
     // autocharge all classess
@@ -21,7 +22,7 @@ class Autoload
             APP_PATH . "/repositories/{$class_name}.php"
         ];
 
-        // foreach paths
+        //foreach paths
         foreach ($possible_paths as $file) {
             // file found
             if (file_exists($file)) {
@@ -29,14 +30,16 @@ class Autoload
                 return;
             }
         }
-        // class not found
+
+        //class not found
         if (defined('DEBUG') && DEBUG) {
             error_log("Autoload : class not found : " . $class_name);
-            throw new Exception("Autoload : class not found : " . $class_name);
-        }
-        //page error
-        else {
-            header('Location: ' . SITE_URL . '/error?message="Une erreur est survenue');
+            return throw new Exception("Autoload : class not found : " . $class_name);
+        } else {
+            //page error
+            header('Location: ' . SITE_URL . '/error?message=' .
+                __('errors.not_found.class', ['field' => $class_name]));
+            return;
         }
     }
 }
