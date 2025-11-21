@@ -17,15 +17,26 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
-  //function- filter caisse
-  async function filterCaisse(from, to) {
+  //function - filter caisse
+  async function filterCaisse(
+    status,
+    order_by,
+    arrange,
+    date_by,
+    per,
+    from,
+    to,
+    month,
+    year,
+    search_caisse
+  ) {
     try {
       const response = await apiRequest(
-        `/caisse/filter_caisse?status=all&order_by=nb_transactions&arrange=DESC&date_by=month_year&per=week&from=${from}&to=${to}&month=11&year=2025&search_caisse=`
+        `/caisse/filter_caisse?status=${status}&order_by=${order_by}&arrange=${arrange}&date_by=${date_by}&per=${per}&from=${from}&to=${to}&month=${month}&year=${year}&search_caisse=${search_caisse}`
       );
       console.log(response);
-    } catch (error) {
-      console.error(error);
+    } catch (e) {
+      console.error(e);
     }
   }
   //function - filter ligne_caisse
@@ -124,6 +135,17 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    freeCaisse([3, 7]);
+    filterCaisse(
+      "status",
+      "nb_transactions",
+      "DESC",
+      "per",
+      "month",
+      "from",
+      "to",
+      "04",
+      "2025",
+      "1"
+    );
   });
 });

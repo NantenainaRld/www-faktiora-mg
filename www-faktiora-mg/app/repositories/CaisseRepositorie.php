@@ -13,7 +13,7 @@ class CaisseRepositorie extends Database
     public static function filterCaisse($params)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
-        //sql
+        $paramsQuery = [];
         $sql = "SELECT
             c.num_caisse,
             c.solde,
@@ -58,7 +58,7 @@ class CaisseRepositorie extends Database
                         0
                     ) AS total_transactions
                 FROM
-                    caisse c LEFT JOIN ligne_caisse lc ON lc.num_caisse = c.num_caisse AND lc.date_fin IS NULL LEFT JOIN utilisateur u ON u.id_utilisateur = lc.id_utilisateur ";
+                    caisse c LEFT JOIN ligne_caisse lc ON lc.num_caisse = c.num_caisse LEFT JOIN utilisateur u ON u.id_utilisateur = lc.id_utilisateur ";
 
         //date_by - 
         switch ($params['date_by']) {
@@ -66,104 +66,107 @@ class CaisseRepositorie extends Database
             //date_by - all
             case 'all':
                 $sql .= "LEFT JOIN facture f ON
-                    f.num_caisse = c.num_caisse
+            f.num_caisse = c.num_caisse 
         LEFT JOIN ligne_facture lf ON
-            lf.num_facture = f.num_facture
+            lf.id_facture = f.id_facture
         LEFT JOIN produit p ON
             p.id_produit = lf.id_produit 
             LEFT JOIN autre_entree ae ON
-            ae.num_caisse = c.num_caisse 
+            ae.num_caisse = c.num_caisse
             LEFT JOIN demande_sortie ds ON
-            ds.num_caisse = c.num_caisse
+            ds.num_caisse = c.num_caisse 
             LEFT JOIN ligne_ds lds ON
             lds.id_ds = ds.id_ds ";
                 break;
-            // date_by - per
+            //date_by - per
             case 'per':
-                //per - 
                 switch ($params['per']) {
 
                     //per - DAY
                     case 'DAY':
                         $sql .= "LEFT JOIN facture f ON
-                            f.num_caisse = c.num_caisse AND DATE(f.date_facture) = CURDATE()
-                LEFT JOIN ligne_facture lf ON
-                    lf.num_facture = f.num_facture
-                LEFT JOIN produit p ON
-                    p.id_produit = lf.id_produit 
-                    LEFT JOIN autre_entree ae ON
-                    ae.num_caisse = c.num_caisse AND DATE(ae.date_ae)  = CURDATE() 
-                    LEFT JOIN demande_sortie ds ON
-                    ds.num_caisse = c.num_caisse AND DATE(ds.date_ds) = CURDATE() 
-                    LEFT JOIN ligne_ds lds ON
-                    lds.id_ds = ds.id_ds ";
+            f.num_caisse = c.num_caisse AND DATE(f.date_facture) = CURDATE() 
+        LEFT JOIN ligne_facture lf ON
+            lf.id_facture = f.id_facture
+        LEFT JOIN produit p ON
+            p.id_produit = lf.id_produit 
+            LEFT JOIN autre_entree ae ON
+            ae.num_caisse = c.num_caisse AND DATE(ae.date_ae) = CURDATE() 
+            LEFT JOIN demande_sortie ds ON
+            ds.num_caisse = c.num_caisse AND DATE(ds.date_ds) = CURDATE() 
+            LEFT JOIN ligne_ds lds ON
+            lds.id_ds = ds.id_ds ";
                         break;
                     //per - !DAY
                     default:
                         $sql .= "LEFT JOIN facture f ON
-                            f.num_caisse = c.num_caisse AND {$params['per']}(f.date_facture) = {$params['per']}(CURDATE()) 
-                LEFT JOIN ligne_facture lf ON
-                    lf.num_facture = f.num_facture
-                LEFT JOIN produit p ON
-                    p.id_produit = lf.id_produit 
-                    LEFT JOIN autre_entree ae ON
-                    ae.num_caisse = c.num_caisse AND {$params['per']}(ae.date_ae)  = {$params['per']}(CURDATE()) 
-                    LEFT JOIN demande_sortie ds ON
-                    ds.num_caisse = c.num_caisse AND {$params['per']}(ds.date_ds) = {$params['per']}(CURDATE()) 
-                    LEFT JOIN ligne_ds lds ON
-                    lds.id_ds = ds.id_ds ";
+                                    f.num_caisse = c.num_caisse AND {$params['per']}(f.date_facture) = {$params['per']}(CURDATE()) 
+                        LEFT JOIN ligne_facture lf ON
+                            lf.id_facture = f.id_facture
+                        LEFT JOIN produit p ON
+                            p.id_produit = lf.id_produit 
+                            LEFT JOIN autre_entree ae ON
+                            ae.num_caisse = c.num_caisse AND {$params['per']}(ae.date_ae)  = {$params['per']}(CURDATE()) 
+                            LEFT JOIN demande_sortie ds ON
+                            ds.num_caisse = c.num_caisse AND {$params['per']}(ds.date_ds) = {$params['per']}(CURDATE()) 
+                            LEFT JOIN ligne_ds lds ON
+                            lds.id_ds = ds.id_ds ";
                         break;
                 }
                 break;
             //date_by - between
             case 'between':
                 //from - empty
-                if (empty($params['from'])) {
+                if ($params['from'] === '') {
                     //to - !empty
                     $sql .= "LEFT JOIN facture f ON
-                            f.num_caisse = c.num_caisse AND DATE(f.date_facture) <= '{$params['to']}'
+                            f.num_caisse = c.num_caisse AND DATE(f.date_facture) <= :to
                 LEFT JOIN ligne_facture lf ON
-                    lf.num_facture = f.num_facture
+                    lf.id_facture = f.id_facture
                 LEFT JOIN produit p ON
                     p.id_produit = lf.id_produit 
                     LEFT JOIN autre_entree ae ON
-                    ae.num_caisse = c.num_caisse AND DATE(ae.date_ae) <= '{$params['to']}' 
+                    ae.num_caisse = c.num_caisse AND DATE(ae.date_ae) <= :to 
                     LEFT JOIN demande_sortie ds ON
-                    ds.num_caisse = c.num_caisse AND DATE(ds.date_ds) <= '{$params['to']}' 
+                    ds.num_caisse = c.num_caisse AND DATE(ds.date_ds) <= :to 
                     LEFT JOIN ligne_ds lds ON
                     lds.id_ds = ds.id_ds ";
+                    $paramsQuery['to'] = $params['to'];
                 }
                 //from - !empty
                 else {
                     //to - empty
-                    if (empty($params['to'])) {
+                    if ($params['to'] === '') {
                         $sql .= "LEFT JOIN facture f ON
-                            f.num_caisse = c.num_caisse AND DATE(f.date_facture) >= '{$params['from']}'
-                LEFT JOIN ligne_facture lf ON
-                    lf.num_facture = f.num_facture
-                LEFT JOIN produit p ON
-                    p.id_produit = lf.id_produit 
-                    LEFT JOIN autre_entree ae ON
-                    ae.num_caisse = c.num_caisse AND DATE(ae.date_ae) >= '{$params['from']}' 
-                    LEFT JOIN demande_sortie ds ON
-                    ds.num_caisse = c.num_caisse AND DATE(ds.date_ds) >= '{$params['from']}' 
-                    LEFT JOIN ligne_ds lds ON
-                    lds.id_ds = ds.id_ds ";
+                                f.num_caisse = c.num_caisse AND DATE(f.date_facture) >= :from
+                    LEFT JOIN ligne_facture lf ON
+                        lf.id_facture = f.id_facture
+                    LEFT JOIN produit p ON
+                        p.id_produit = lf.id_produit 
+                        LEFT JOIN autre_entree ae ON
+                        ae.num_caisse = c.num_caisse AND DATE(ae.date_ae) >= :from 
+                        LEFT JOIN demande_sortie ds ON
+                        ds.num_caisse = c.num_caisse AND DATE(ds.date_ds) >= :from
+                        LEFT JOIN ligne_ds lds ON
+                        lds.id_ds = ds.id_ds ";
+                        $paramsQuery['from'] = $params['from'];
                     }
                     //to - !empty
                     else {
                         $sql .= "LEFT JOIN facture f ON
-                                                    f.num_caisse = c.num_caisse AND DATE(f.date_facture) BETWEEN '{$params['from']}' AND '{$params['to']}' 
-                                        LEFT JOIN ligne_facture lf ON
-                                            lf.num_facture = f.num_facture
-                                        LEFT JOIN produit p ON
-                                            p.id_produit = lf.id_produit 
-                                            LEFT JOIN autre_entree ae ON
-                                            ae.num_caisse = c.num_caisse AND DATE(ae.date_ae) BETWEEN '{$params['from']}' AND '{$params['to']}'  
-                                            LEFT JOIN demande_sortie ds ON
-                                            ds.num_caisse = c.num_caisse AND DATE(ds.date_ds) BETWEEN '{$params['from']}' AND '{$params['to']}'  
-                                            LEFT JOIN ligne_ds lds ON
-                                            lds.id_ds = ds.id_ds ";
+                                f.num_caisse = c.num_caisse AND DATE(f.date_facture) BETWEEN :from AND :to 
+                    LEFT JOIN ligne_facture lf ON
+                        lf.id_facture = f.id_facture
+                    LEFT JOIN produit p ON
+                        p.id_produit = lf.id_produit 
+                        LEFT JOIN autre_entree ae ON
+                        ae.num_caisse = c.num_caisse AND DATE(ae.date_ae) BETWEEN :from AND :to 
+                        LEFT JOIN demande_sortie ds ON
+                        ds.num_caisse = c.num_caisse AND DATE(ds.date_ds) BETWEEN :from AND :to 
+                        LEFT JOIN ligne_ds lds ON
+                        lds.id_ds = ds.id_ds ";
+                        $paramsQuery['from'] = $params['from'];
+                        $paramsQuery['to'] = $params['to'];
                     }
                 }
                 break;
@@ -171,35 +174,38 @@ class CaisseRepositorie extends Database
             case 'month_year':
                 //month - none
                 if ($params['month'] === 'none') {
-                    //year
+                    //year - 
                     $sql .= "LEFT JOIN facture f ON
-                            f.num_caisse = c.num_caisse AND YEAR(f.date_facture) = {$params['year']}
-                LEFT JOIN ligne_facture lf ON
-                    lf.num_facture = f.num_facture
-                LEFT JOIN produit p ON
-                    p.id_produit = lf.id_produit 
-                    LEFT JOIN autre_entree ae ON
-                    ae.num_caisse = c.num_caisse AND YEAR(ae.date_ae) = {$params['year']} 
-                    LEFT JOIN demande_sortie ds ON
-                    ds.num_caisse = c.num_caisse AND YEAR(ds.date_ds) = {$params['year']} 
-                    LEFT JOIN ligne_ds lds ON
-                    lds.id_ds = ds.id_ds ";
+                                f.num_caisse = c.num_caisse AND YEAR(f.date_facture) = :year
+                    LEFT JOIN ligne_facture lf ON
+                        lf.id_facture = f.id_facture
+                    LEFT JOIN produit p ON
+                        p.id_produit = lf.id_produit 
+                        LEFT JOIN autre_entree ae ON
+                        ae.num_caisse = c.num_caisse AND YEAR(ae.date_ae) = :year 
+                        LEFT JOIN demande_sortie ds ON
+                        ds.num_caisse = c.num_caisse AND YEAR(ds.date_ds) = :year 
+                        LEFT JOIN ligne_ds lds ON
+                        lds.id_ds = ds.id_ds ";
+                    $paramsQuery['year'] = $params['year'];
                 }
                 //month - !none
                 else {
-                    //mont && year
+                    //year -
                     $sql .= "LEFT JOIN facture f ON
-                            f.num_caisse = c.num_caisse AND MONTH(f.date_facture) = {$params['month']} AND YEAR(f.date_facture) = {$params['year']}
+                            f.num_caisse = c.num_caisse AND MONTH(f.date_facture) = :month AND YEAR(f.date_facture) = :year
                 LEFT JOIN ligne_facture lf ON
-                    lf.num_facture = f.num_facture
+                    lf.id_facture = f.id_facture
                 LEFT JOIN produit p ON
                     p.id_produit = lf.id_produit 
                     LEFT JOIN autre_entree ae ON
-                    ae.num_caisse = c.num_caisse AND MONTH(ae.date_ae) = {$params['month']} AND YEAR(ae.date_ae) = {$params['year']} 
+                    ae.num_caisse = c.num_caisse AND MONTH(ae.date_ae) = :month AND YEAR(ae.date_ae) = :year 
                     LEFT JOIN demande_sortie ds ON
-                    ds.num_caisse = c.num_caisse AND MONTH(ds.date_ds) = {$params['month']} AND YEAR(ds.date_ds) = {$params['year']} 
+                    ds.num_caisse = c.num_caisse AND MONTH(ds.date_ds) = :month AND YEAR(ds.date_ds) = :year
                     LEFT JOIN ligne_ds lds ON
                     lds.id_ds = ds.id_ds ";
+                    $paramsQuery['month'] = $params['month'];
+                    $paramsQuery['year'] = $params['year'];
                 }
                 break;
         }
@@ -211,13 +217,24 @@ class CaisseRepositorie extends Database
         if ($params['status'] === 'all') {
             $sql .= "AND c.etat_caisse != 'supprimé' ";
         }
-        //status - no deleted
-        elseif ($params['status'] !== 'deleted') {
-            $sql .= "AND c.etat_caisse = '{$params['status']}' ";
+        //status - free
+        elseif ($params['status'] === 'libre') {
+            $sql .= "AND c.etat_caisse != 'libre' ";
+        }
+        //status - occuped
+        elseif ($params['status'] === 'occupé') {
+            $sql .= "AND c.etat_caisse != 'occupé' ";
+        }
+        //status - deleted
+        else {
+            $sql .= "AND c.etat_caisse = 'supprimé' ";
         }
 
         //search_caisse
-        $sql .= "AND (c.num_caisse LIKE '%{$params['search_caisse']}%' OR u.id_utilisateur LIKE '%{$params['search_caisse']}%') ";
+        if ($params['search_caisse'] !== '') {
+            $sql .= "AND (c.num_caisse LIKE :search OR u.id_utilisateur LIKE :search) ";
+            $paramsQuery['search'] = "%" . $params['search_caisse'] . "%";
+        }
 
         //group by
         $sql .= "GROUP BY c.num_caisse ";
@@ -226,15 +243,15 @@ class CaisseRepositorie extends Database
         $sql .= "ORDER BY {$params['order_by']} {$params['arrange']} ";
 
         try {
-            //filter user
-            $response = self::selectQuery($sql);
+
+            $response = parent::selectQuery($sql, $paramsQuery);
 
             //error
             if ($response['message_type'] === 'error') {
                 return $response;
             }
 
-            //nb_caisse
+            //nb_user
             $nb_caisse = count($response['data']);
             $nb_free = 0;
             $nb_occuped = 0;
@@ -242,27 +259,40 @@ class CaisseRepositorie extends Database
             $i = 0;
             foreach ($response['data'] as $data) {
                 //count free
-                if ($response['data'][$i]['etat_caisse'] === 'libre') {
+                if ($data['etat_caisse'] === 'libre') {
                     $nb_free++;
                 }
                 //count occuped
-                elseif ($response['data'][$i]['etat_caisse'] === 'occupé') {
+                else {
                     $nb_occuped++;
                 }
                 $i++;
             }
 
-            //final
-            $response['nb_caisse'] = $nb_caisse;
-            $response['nb_free'] = $nb_free;
-            $response['nb_occuped'] = $nb_occuped;
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+                'data' => $response['data'],
+                'nb_caisse' => $nb_caisse,
+                'nb_free' => $nb_free,
+                'nb_occuped' => $nb_occuped,
+            ];
 
             return $response;
         } catch (Throwable $e) {
-            error_log($e->getMessage());
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
 
-            $response['message_type'] = 'error';
-            $response['message'] = __('errors.catch.caisse_repositorie_filter_caisse', ['field' => $e->getMessage()]);
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_filterCaisse',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
 
             return $response;
         }

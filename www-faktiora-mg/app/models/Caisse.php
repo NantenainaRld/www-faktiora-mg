@@ -8,7 +8,6 @@ class Caisse extends Database
     private $num_caisse_update = null;
     private $solde = 0;
     private $seuil = 0;
-    private $etat_caisse = 'actif';
 
     public function __construct()
     {
@@ -41,20 +40,14 @@ class Caisse extends Database
         $this->seuil = $seuil;
         return $this;
     }
-    //setter - seuil
-    public function  setEtatCaisse($etat_caisse)
-    {
-        $this->etat_caisse = $etat_caisse;
-        return $this;
-    }
 
     //========================== GETTERS ============================
 
-    //getter - etat_caisse
-    public function getEtatCaisse()
-    {
-        return $this->etat_caisse;
-    }
+    // //getter - etat_caisse
+    // public function getEtatCaisse()
+    // {
+    //     return $this->etat_caisse;
+    // }
 
 
     //=========================== PUBLIC FUNCTION =============================
@@ -68,22 +61,28 @@ class Caisse extends Database
         ];
 
         try {
+
             //num_caisse exist?
-            $response = self::isNumCaisseExist($this->num_caisse, false);
+            $response = self::isNumCaisseExist($this->num_caisse, null);
             //error
             if ($response['message_type'] === 'error') {
                 return $response;
             }
             //found
             if ($response['found']) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.duplicate.num_caisse', ['field' => $this->num_caisse]);
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __(
+                        'messages.duplicate.caisse_num_caisse',
+                        ['field' => $this->num_caisse]
+                    )
+                ];
 
                 return $response;
             }
 
             //create caisse
-            $response = self::executeQuery("INSERT INTO caisse (num_caisse, solde, seuil) VALUES (:num_caisse, :solde, :seuil) ", [
+            $response = parent::executeQuery("INSERT INTO caisse (num_caisse, solde, seuil) VALUES (:num_caisse, :solde, :seuil) ", [
                 'num_caisse' => $this->num_caisse,
                 'solde' => $this->solde,
                 'seuil' => $this->seuil
@@ -93,17 +92,30 @@ class Caisse extends Database
             if ($response['message_type'] === 'error') {
                 return $response;
             }
-            //success
-            else {
-                $response['message'] = __('messages.success.create_caisse', ['field' => $this->num_caisse]);
 
-                return $response;
-            }
+            $response = [
+                'message_type' => 'success',
+                'message' =>  __(
+                    'messages.success.caisse_createCaisse',
+                    ['field' => $this->num_caisse]
+                )
+            ];
+
+            return $response;
         } catch (Throwable $e) {
-            error_log($e->getMessage());
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
 
-            $response['message_type'] = 'error';
-            $response['message'] = __('errors.catch.caisse_create_caisse', ['field' => $e->getMessage()]);
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_createCaisse',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
 
             return $response;
         }
@@ -483,12 +495,13 @@ class Caisse extends Database
         $params = ['num' => $num_caisse];
 
         if ($exclude) {
-            $sql .= "AND num_caisse != :num_caisse";
-            $params['num_caisse'] = $exclude;
+            $sql .= "AND num_caisse != :exclude";
+            $params['exclude'] = $exclude;
         }
 
         try {
-            $response = self::selectQuery($sql, $params);
+
+            $response = parent::selectQuery($sql, $params);
 
             //error
             if ($response['message_type'] === 'error') {
@@ -504,12 +517,27 @@ class Caisse extends Database
                 $response['found'] = true;
             }
 
+            $response  = [
+                'message_type' => 'success',
+                'message' => 'success',
+                'found' => $response['found']
+            ];
+
             return $response;
         } catch (Throwable $e) {
-            error_log($e->getMessage());
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
 
-            $response['message_type'] = 'error';
-            $response['message'] = __('errors.catch.caisse_isNumCaisseExist', ['field' => $e->getMessage()]);
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_isNumCaisseExist',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
 
             return $response;
         }

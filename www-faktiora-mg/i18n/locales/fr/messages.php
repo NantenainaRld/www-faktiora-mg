@@ -13,13 +13,14 @@ return [
         'mdp_confirm' => "Le mot de passe de confirmation doît être similaire au mot de passe",
         'from_to' => "La date de début ne doît pas dépasser la date fin",
         'date' => "Date invalide : <b>:field</b>",
-        //
-        //user - ids_user empty
-        'user_ids_user_empty' => "Veuiller séléctionner au moins un utilisateur",
-        'num_caisse' => "Le numéro du caisse doît être des nombres entiers supérieurs ou égaux à 0",
         'solde' => "Le solde doît être des valeurs décimaux supérieures ou égaux à 0",
         'seuil' => "Le seuil doît être des valeurs décimaux supérieures ou égaux à 0",
         'solde_seuil' => "Le solde ne doît pas en dessous de seuil",
+        //
+        //user - ids_user empty
+        'user_ids_user_empty' => "Veuiller séléctionner au moins un utilisateur",
+        //caisse - num_caisse
+        'caisse_num_caisse' => "Le numéro du caisse doît être des nombres entiers supérieurs ou égaux à 0",
         'caisse_not_selected' => "Veuiller séléctionner une caisse",
         'caisse_nums_caisse_empty' => "Veuiller séléctionner au moins une caisse",
         'caisse_occupCaisse' => "Seule les caissiers peuvent occuper les caisses",
@@ -36,8 +37,8 @@ return [
         'mdp' => "Le champ <b>mot de passe</b> est réquis",
         'mdp_confirm' => "Veuiller confirmer le mot de passe",
         'from_to' => "Veuiller entrer une date de debut ou fin, ou les deux",
-        'user_id' => "L'<b>ID</b> d'utilisateur est réquis",
         'solde' => "Le champ <b>solde</b> est réquis",
+        'user_id' => "L'<b>ID</b> d'utilisateur est réquis",
         'seuil' => "Le champ <b>seuil</b> est réquis",
         'libelle' => "Le champ libellé est réquis",
         'montant' => "Le champ <b>montant</b> est réquis"
@@ -55,14 +56,18 @@ return [
         'user_deleteAll_1' => "Un utilisateur a été supprimé avec succès",
         //user - delete all plur
         'user_deleteAll_plur' => "<b>:field</b> utilisateurs ont été supprimés avec succès",
-        'create_caisse' => "Caisse numéro <b>:field</b> crée avec succès",
+        //user - deconnect all 0
+        'user_deconnectAll_0' => "Aucun utilisateur n'est déconnecté",
+        //user - deconnect all 1
+        'user_deconnectAll_1' => "Un utilisateur a été déconnectés avec succès",
+        //user - deconnect all plur
+        'user_deconnectAll_plur' => "<b>:field</b> utilisateurs ont été déconnecté avec succès",
+        //caisse - create caisse
+        'caisse_createCaisse' => "Caisse numéro <b>:field</b> crée avec succès",
         'caisse_update_caisse' => "Les informations du caisse numéro <b>:field</b> ont été modifiées avec succès",
         'caisse_deleteAll_0' => "Aucune caisse n'est supprimée",
         'caisse_deleteAll_1' => "Une caisse a été supprimée avec succès",
         'caisse_deleteAll_plur' => "<b>:field</b> caisses ont été supprimées avec succès",
-        'user_deconnectAll_0' => "Aucun utilisateur n'est déconnecté",
-        'user_deconnectAll_1' => "Un utilisateur a été déconnectés avec succès",
-        'user_deconnectAll_plur' => "<b>:field</b> utilisateurs ont été déconnecté avec succès",
         'caisse_occupCaisse' => "Caisse numéro <b>:field</b> occupée avec succès",
         'caisse_quitCaisse' => "Caisse libérée avec succès",
         'caisse_freeCaisse_0' => "Aucune caisse n'est libérée",
@@ -76,7 +81,7 @@ return [
     'duplicate' => [
         //user - email
         'user_email' => "L'adresse email <b>:field</b> existe déjà",
-        'user_id' => "L'ID d'utilisateur <b>:field</b> existe déjà",
-        'num_caisse' => "Le numéro de caisse <b>:field</b> existe déjà"
+        //caisse - num_caisse
+        'caisse_num_caisse' => "Le numéro de caisse <b>:field</b> existe déjà"
     ]
 ];

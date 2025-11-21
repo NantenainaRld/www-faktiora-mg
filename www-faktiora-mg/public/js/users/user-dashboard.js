@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await apiRequest("/user/permanent_delete_all", {
         method: "DELETE",
         body: {
-          id_users: ids,
+          ids_user: ids,
         },
       });
 
@@ -157,6 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    deleteAll([10000, 10001, 10002, 10003]);
+    // deconnectAll([10000, 10001, 10005, 10003]);
+    deconnectAll([1045000, 10004, 10005, 10003]);
   });
 });

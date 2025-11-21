@@ -27,13 +27,17 @@ return [
         "user_deleteAccount" => DEBUG ? "Erreur dans user/deleteAccount : :field" : "Une erreur est surenue lors de suppréssion du compte",
         //user - delete all
         'user_deleteAll' => DEBUG ? "Erreur dans user/deleteAll : :field" : "Une erreur est survenue lors de suppréssion des utilisateurs",
-        'caisse_create_caisse' => DEBUG ? "Erreur dans caisse/createCaisse : :field" : "Erreur lors de la création du caisse",
+        //user - deconnect all
+        'user_deconnectAll' => DEBUG ? "Erreur dans user/deconnectAll : :field" : "Une erreur est survenue lors de la déconnection des utilisateurs",
+        //caisse - create caisse
+        'caisse_createCaisse' => DEBUG ? "Erreur dans caisse/createCaisse : :field" : "Erreur lors de la création de caisse",
+        //caisse - is num caisse exist
         'caisse_isNumCaisseExist' => DEBUG ? "Erreur dans caisse/isNumCaisseExist : :field" : "Une erreur est survenue lors de la vérification de numéro de caisse",
-        'caisse_repositorie_filter_caisse' => DEBUG ? "Erreur dans caisse_repositorie/filterCaisse : :field" : "Une erreur est survenue lors de listage des caisses",
+        //caisse - filter caisse
+        'caisse_filterCaisse' => DEBUG ? "Erreur dans caisse/filterCaisse : :field" : "Une erreur est survenue lors de listage des caisses",
         'filter_ligne_caisse' => DEBUG ? "Erreur dans caisse/filterLigneCaisse : :field" : "Une erreur est survenue lors de listage des lignes de caisse",
         'caisse_update_caisse' => DEBUG ? "Erreur dans caisse/updateCaisse : :field" : "Une erreur est survenue lors de la modifications des informations du caisse",
         'caisse_deleteAll' => DEBUG ? "Erreur dans caisse/deleteAll : :field" : "Une erreur est survenue lors de la suppréssion des caisses",
-        'user_deconnectAll' => DEBUG ? "Erreur dans user/deconnectAll : :field" : "Une erreur est survenue lors de la déconnection des utilisateurs",
         'caisse_occupCaisse' => DEBUG ? "Erruer dans caisse/occupCaisse : :field" : "Une erreur est survenue lors de l'occupation du caisse",
         'ligne_caisse_createLigneCaisse' => DEBUG ? "Erreur dans lingneCaisse/createLigneCaisse : :field" : "Une erreur est survenue lors de la création de ligne de caisse",
         'caisse_quitCaisse' => DEBUG ? "Erreur dans caisse/quitCaisse : :field" : "Une erreur est survenue lors de libération de la caisse",

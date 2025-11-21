@@ -269,7 +269,7 @@ class User extends Database
             }
 
             //create user
-            $response = self::executeQuery("INSERT INTO utilisateur (nom_utilisateur, prenoms_utilisateur, sexe_utilisateur, email_utilisateur, mdp) VALUES (:nom, :prenoms, :sexe, :email, :mdp)", [
+            $response = parent::executeQuery("INSERT INTO utilisateur (nom_utilisateur, prenoms_utilisateur, sexe_utilisateur, email_utilisateur, mdp) VALUES (:nom, :prenoms, :sexe, :email, :mdp)", [
                 'nom' => $this->nom_utilisateur,
                 'prenoms' => $this->prenoms_utilisateur,
                 'sexe' => $this->sexe_utilisateur,
@@ -375,7 +375,7 @@ class User extends Database
 
             //update user - no password
             if ($this->mdp === '') {
-                $response  = $this->executeQuery(
+                $response  = parent::executeQuery(
                     "UPDATE utilisateur SET nom_utilisateur = :nom, prenoms_utilisateur = :prenoms, sexe_utilisateur = :sexe, email_utilisateur = :email, role = :role WHERE id_utilisateur = :id ",
                     [
                         'nom' => $this->nom_utilisateur,
@@ -389,7 +389,7 @@ class User extends Database
             }
             //update user - with password
             else {
-                $response  = $this->executeQuery(
+                $response  = parent::executeQuery(
                     "UPDATE utilisateur SET nom_utilisateur = :nom, prenoms_utilisateur = :prenoms, sexe_utilisateur = :sexe, email_utilisateur = :email, role = :role, mdp = :mdp WHERE id_utilisateur = :id ",
                     [
                         'nom' => $this->nom_utilisateur,
@@ -460,7 +460,7 @@ class User extends Database
 
             //update user - no password
             if ($this->mdp === '') {
-                $response  = $this->executeQuery(
+                $response  = parent::executeQuery(
                     "UPDATE utilisateur SET nom_utilisateur = :nom, prenoms_utilisateur = :prenoms, sexe_utilisateur = :sexe, email_utilisateur = :email WHERE id_utilisateur = :id ",
                     [
                         'nom' => $this->nom_utilisateur,
@@ -474,7 +474,7 @@ class User extends Database
             }
             //update user - with password
             else {
-                $response  = $this->executeQuery(
+                $response  = parent::executeQuery(
                     "UPDATE utilisateur SET nom_utilisateur = :nom, prenoms_utilisateur = :prenoms, sexe_utilisateur = :sexe, email_utilisateur = :email, mdp = :mdp WHERE id_utilisateur = :id ",
                     [
                         'nom' => $this->nom_utilisateur,
@@ -528,7 +528,7 @@ class User extends Database
         ];
 
         try {
-            $response = self::executeQuery("UPDATE utilisateur SET etat_utilisateur = 'supprimé' WHERE id_utilisateur = :id", ['id' => $this->id_utilisateur]);
+            $response = parent::executeQuery("UPDATE utilisateur SET etat_utilisateur = 'supprimé' WHERE id_utilisateur = :id", ['id' => $this->id_utilisateur]);
 
             //error
             if ($response['message_type'] === 'error') {
@@ -574,7 +574,7 @@ class User extends Database
 
         try {
 
-            $response = self::executeQuery($sql, $ids_user);
+            $response = parent::executeQuery($sql, $ids_user);
 
             //error
             if ($response['message_type'] === 'error') {
@@ -623,17 +623,17 @@ class User extends Database
     }
 
     //permanent delete all
-    public static function permanentDeleteAll($id_users, $id_utilisateur)
+    public static function permanentDeleteAll($ids_user, $id_utilisateur)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 
-        $placeholers = implode(', ', array_fill(0, count($id_users), '?'));
+        $placeholers = implode(', ', array_fill(0, count($ids_user), '?'));
         $sql = "DELETE FROM utilisateur WHERE id_utilisateur IN ({$placeholers}) AND id_utilisateur != ?";
 
-        $id_users[] = $id_utilisateur;
+        $ids_user[] = $id_utilisateur;
 
         try {
-            $response = self::executeQuery($sql, $id_users);
+            $response = parent::executeQuery($sql, $ids_user);
 
             //error
             if ($response['message_type'] === 'error') {
@@ -643,24 +643,36 @@ class User extends Database
             //success
             //0
             if ($response['row_count'] === 0) {
-                $response['message'] = __('messages.success.user0_delete_all');
+                $response['message'] = __('messages.success.user_deleteAll_0');
             }
             //1
             elseif ($response['row_count'] === 1) {
-                $response['message'] = __('messages.success.user1_delete_all');
+                $response['message'] = __('messages.success.user_deleteAll_1');
             }
             //plur
             else {
-                $response['message'] = __('messages.success.users_delete_all', ['field' => $response['row_count']]);
+                $response['message'] = __('messages.success.user_deleteAll_plur', ['field' => $response['row_count']]);
             }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => $response['message']
+            ];
 
             return $response;
         } catch (Throwable $e) {
-            error_log($e->getMessage());
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
 
             $response = [
                 'message_type' => 'error',
-                'message' => __('errors.catch.user_deleteAll', ['field' => $e->getMessage()])
+                'message' => __(
+                    'errors.catch.user_deleteAll',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
             ];
 
             return $response;
@@ -681,7 +693,8 @@ class User extends Database
         array_push($ids_user, $id_utilisateur);
 
         try {
-            $response = self::executeQuery($sql, $ids_user);
+
+            $response = parent::executeQuery($sql, $ids_user);
 
             //error
             if ($response['message_type'] === 'error') {
@@ -702,13 +715,25 @@ class User extends Database
                 $response['message'] = __('messages.success.user_deconnectAll_plur', ['field' => $response['row_count']]);
             }
 
+            $response = [
+                'message_type' => 'success',
+                'message' => $response['message']
+            ];
+
             return $response;
         } catch (Throwable $e) {
-            error_log($e->getMessage());
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
 
             $response = [
                 'message_type' => 'error',
-                'message' => __('errors.catch.user_deconnectAll', ['field' => $e->getMessage()])
+                'message' => __(
+                    'errors.catch.user_deconnectAll',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
             ];
 
             return $response;

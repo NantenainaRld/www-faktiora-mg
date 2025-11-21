@@ -50,7 +50,10 @@ class CaisseController extends Controller
             //num_caisse - invalid
             $num_caisse = filter_var($json['num_caisse'], FILTER_VALIDATE_INT);
             if ($num_caisse === false || $num_caisse < 0) {
-                $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.num_caisse')];
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.caisse_num_caisse')
+                ];
 
                 echo json_encode($response);
                 return;
@@ -58,7 +61,10 @@ class CaisseController extends Controller
 
             //solde - empty
             if ($json['solde'] === '') {
-                $response = ['message_type' => 'invalid', 'message' => __('messages.empty.solde')];
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.solde')
+                ];
 
                 echo json_encode($response);
                 return;
@@ -66,7 +72,10 @@ class CaisseController extends Controller
             //solde - invalid
             $solde = filter_var($json['solde'], FILTER_VALIDATE_FLOAT);
             if ($solde === false || $solde < 0) {
-                $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.solde')];
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.solde')
+                ];
 
                 echo json_encode($response);
                 return;
@@ -74,7 +83,10 @@ class CaisseController extends Controller
 
             //seuil - empty
             if ($json['seuil'] === '') {
-                $response = ['message_type' => 'invalid', 'message' => __('messages.empty.seuil')];
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.seuil')
+                ];
 
                 echo json_encode($response);
                 return;
@@ -82,7 +94,10 @@ class CaisseController extends Controller
             // seuil- invalid
             $seuil = filter_var($json['seuil'], FILTER_VALIDATE_FLOAT);
             if ($seuil === false || $seuil < 0) {
-                $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.seuil')];
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.seuil')
+                ];
 
                 echo json_encode($response);
                 return;
@@ -90,33 +105,52 @@ class CaisseController extends Controller
 
             //solde < seuil
             if ($solde < $seuil) {
-                $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.solde_seuil')];
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.solde_seuil')
+                ];
 
                 echo json_encode($response);
                 return;
             }
 
             try {
-                $caisse_model = new Caisse();
-                $caisse_model->setNumCaisse($num_caisse)
-                    ->setSolde($solde)
-                    ->setSeuil($seuil);
 
                 //create caisse
+                $caisse_model = new Caisse();
+                $caisse_model
+                    ->setNumCaisse($num_caisse)
+                    ->setSolde($solde)
+                    ->setSeuil($seuil);
                 $response = $caisse_model->createCaisse();
 
                 echo json_encode($response);
                 return;
             } catch (Throwable $e) {
-                error_log($e->getMessage());
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
 
-                $response = ['message_type' => 'error', 'message' => __('errors.catch.caisse_create_caisse', ['field' => $e->getMessage()])];
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.caisse_createCaisse',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
 
                 echo json_encode($response);
                 return;
             }
 
             echo json_encode($response);
+            return;
+        }
+        //redirect to caisse index
+        else {
+            header('Location: ' . SITE_URL . '/caisse');
             return;
         }
 
@@ -130,19 +164,18 @@ class CaisseController extends Controller
         header('Content-Type: application/json');
         $response = null;
 
-        //loged?
+        //is loged in ?
         $is_loged_in = Auth::isLogedIn();
         //not loged
         if (!$is_loged_in->getLoged()) {
-            //redirect to login page
-            header("Location: " . SITE_URL . '/auth');
+            //redirect to login
+            header('Location: ' . SITE_URL . '/auth');
             return;
         }
-
-        //role - not admin
+        //not admin
         if ($is_loged_in->getRole() !== 'admin') {
-            //redirect to index
-            header("Location: " . SITE_URL . '/user');
+            //redirect to user index
+            header('Location: ' . SITE_URL . '/user');
             return;
         }
 
@@ -176,13 +209,13 @@ class CaisseController extends Controller
 
         //status
         $status = strtolower(trim($_GET['status'] ?? 'all'));
-        $status = in_array($status, $status_default) ? $status : 'all';
+        $status = in_array($status, $status_default, true) ? $status : 'all';
 
         //order_by
         $order_by = strtolower(trim($_GET['order_by'] ?? 'num'));
         $order_by = in_array($order_by, $order_by_default, true) ? $order_by : 'num';
         $order_by = ($order_by === 'num') ? 'c.num_caisse' : $order_by;
-        //arrange
+        // //arrange
         $arrange = strtoupper(trim($_GET['arrange'] ?? 'ASC'));
         $arrange = in_array($arrange, $arrange_default, true) ? $arrange : 'ASC';
 
@@ -194,53 +227,65 @@ class CaisseController extends Controller
         $per = in_array($per, $per_default, true) ? $per : 'DAY';
         //from
         $from = trim($_GET['from'] ?? '');
-        // //to
+        //to
         $to = trim($_GET['to'] ?? '');
-        //from && to - empty
         if ($date_by === 'between') {
-            if (empty($from) && empty($to)) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.empty.from_to');
+            //from && to - empty
+            if ($from == '' && $to === '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.from_to')
+                ];
 
                 echo json_encode($response);
                 return;
             }
-            //from - !empty
-            if (!empty($from)) {
 
-                //from - invalid
-                if (DateTime::createFromFormat("Y-m-d", $from) === false) {
-                    $response['message_type'] = 'invalid';
-                    $response['message'] = __('messages.invalids.date', ['field' => $from]);
+            //from not empty - invalid
+            if ($from !== '' && DateTime::createFromFormat("Y-m-d", $from) === false) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date', ['field' => $from])
+                ];
 
-                    echo json_encode($response);
-                    return;
-                }
+                echo json_encode($response);
+                return;
             }
-            //to - !empty
-            if (!empty($to)) {
-                //from - invalid
-                if (DateTime::createFromFormat("Y-m-d", $to) === false) {
-                    $response['message_type'] = 'invalid';
-                    $response['message'] = __('messages.invalids.date', ['field' => $to]);
 
-                    echo json_encode($response);
-                    return;
-                }
+            //from not empty - invalid
+            if ($to !== '' && DateTime::createFromFormat("Y-m-d", $to) === false) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date', ['field' => $to])
+                ];
+
+                echo json_encode($response);
+                return;
             }
+
+            //from > to
+            $from = new DateTime($from);
+            $to  = new DateTime($to);
+            if ($from > $to) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.from_to')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            $from = $from->format("Y-m-d");
+            $to = $to->format("Y-m-d");
         }
         //month
         $month = trim($_GET['month'] ?? 'none');
         $month = filter_var($month, FILTER_VALIDATE_INT);
-        if ($month === false || ($month < 1 || $month > 12)) {
-            $month = 'none';
-        }
+        $month = ($month === false || ($month < 1 || $month > 12)) ? 'none' : $month;
         //year
         $year = trim($_GET['year'] ?? 2025);
         $year = filter_var($year, FILTER_VALIDATE_INT);
-        if ($year === false || ($year < 1700 || $year > 2500)) {
-            $year = 2025;
-        }
+        $year =  ($year === false || ($year < 1700 || $year > 2500)) ? ((new DateTime())->format('Y')) : $year;
 
         //sarch_caisse
         $search_caisse = trim($_GET['search_caisse'] ?? '');
@@ -261,10 +306,10 @@ class CaisseController extends Controller
         //filter caisse
         $response = CaisseRepositorie::filterCaisse($params);
 
-        // echo json_encode($response);
         echo json_encode($response);
         return;
     }
+    //
 
     //action - filter ligne caisse
     public function filterLigneCaisse()

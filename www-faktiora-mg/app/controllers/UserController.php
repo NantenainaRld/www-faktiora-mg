@@ -1138,7 +1138,7 @@ class UserController extends Controller
             //trim
             $ids_user = array_map(fn($x) => trim($x), $json['ids_user']);
 
-            //id_users - empty
+            //ids_user - empty
             if (count($ids_user) <= 0) {
                 $response = [
                     'message_type' => 'invalid',
@@ -1216,26 +1216,43 @@ class UserController extends Controller
             $json = json_decode(file_get_contents('php://input'), true);
 
             //trim
-            $id_users = array_map(fn($x) => trim($x), $json['id_users']);
+            $ids_user = array_map(fn($x) => trim($x), $json['ids_user']);
 
-            //id_users - empty
-            if (count($id_users) <= 0) {
-                $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.id_users_empty')];
+            //ids_user - empty
+            if (count($ids_user) <= 0) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.user_ids_user_empty')
+                ];
 
                 echo json_encode($response);
                 return;
             }
 
             try {
-                //delete all
-                $response = (User::permanentDeleteAll($id_users, $is_loged_in->getIdUtilisateur()));
+
+                //permanent delete all
+                $response = (User::permanentDeleteAll(
+                    $ids_user,
+                    $is_loged_in->getIdUtilisateur()
+                ));
 
                 echo json_encode($response);
                 return;
             } catch (Throwable $e) {
-                error_log($e->getMessage());
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
 
-                $response = ['message_type' => 'error', 'message' => __('errors.catch.user_deleteAll', ['field' => $e->getMessage()])];
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.user_deleteAll',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
 
                 echo json_encode($response);
                 return;
@@ -1244,11 +1261,17 @@ class UserController extends Controller
             echo json_encode($response);
             return;
         }
+        //redirect to user index
+        else {
+            header('Location: ' . SITE_URL . '/user');
+            return;
+        }
     }
 
     //action - deconnect all user
     public function deconnectAll()
     {
+        header('Content-Type: application/json');
         $response = null;
 
         //loged ?
@@ -1274,7 +1297,10 @@ class UserController extends Controller
 
             //id_users - empty
             if (count($ids_user) <= 0) {
-                $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.user_ids_user_empty')];
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.user_ids_user_empty')
+                ];
 
                 echo json_encode($response);
                 return;
@@ -1283,16 +1309,26 @@ class UserController extends Controller
             try {
 
                 //deconnect all user
-                $response = User::deconnectAll($ids_user, $is_loged_in->getIdUtilisateur());
+                $response = User::deconnectAll(
+                    $ids_user,
+                    $is_loged_in->getIdUtilisateur()
+                );
 
                 echo json_encode($response);
                 return;
             } catch (Throwable $e) {
-                error_log($e->getMessage());
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
 
                 $response = [
                     'message_type' => 'error',
-                    'message' => __('errors.catch.user_deconnectAll', ['field' => $e->getMessage()])
+                    'message' => __(
+                        'errors.catch.user_deconnectAll',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
                 ];
 
                 echo json_encode($response);
