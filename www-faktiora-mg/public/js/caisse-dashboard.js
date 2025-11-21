@@ -144,6 +144,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    deleteAll([1, 3, 4]);
+    permanentDeleteAll([1, 3, 4]);
   });
 });
