@@ -157,7 +157,6 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
-
   //function - free caisse
   async function freeCaisse(nums_caisse = []) {
     try {
@@ -181,7 +180,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //btn-test
   const btnTest = document.getElementById("btn-test");
-  btnTest.addEventListener("click", () => {
-    occupCaisse(2, "10004");
-  });
+  btnTest.addEventListener("click", () => {});
 });

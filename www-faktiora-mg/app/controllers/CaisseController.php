@@ -1393,7 +1393,7 @@ class CaisseController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
             $json = json_decode(file_get_contents('php://input'), true);
             //trim
-            $nums_caisse = array_values(array_map(fn($x) => trim($x), $json['nums_caisse']));
+            $nums_caisse = array_map(fn($x) => trim($x), $json['nums_caisse']);
 
             //nums_caisse - empty
             if (count($nums_caisse) <= 0) {
@@ -1414,11 +1414,18 @@ class CaisseController extends Controller
                 echo json_encode($response);
                 return;
             } catch (Throwable $e) {
-                error_log($e->getMessage());
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
 
                 $response = [
                     'message_type' => 'error',
-                    'message' => __('errors.catch.caisse_freeCaisse', ['field' => $e->getMessage()])
+                    'message' => __(
+                        'errors.catch.caisse_freeCaisse',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
                 ];
 
                 echo json_encode($response);

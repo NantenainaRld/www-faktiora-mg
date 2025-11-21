@@ -63,6 +63,7 @@ return [
         'caisse_updateEtatCaisse' => DEBUG ? "Erreur dans caisse/updateEtatCaisse : :field" : "Une erreur est survenue lors de noueau mis à jour d'état de caisse",
         //caisse - quit caisse
         'caisse_quitCaisse' => DEBUG ? "Erreur dans caisse/quitCaisse : :field" : "Une erreur est survenue lors de la libération de caisse",
+        //caisse - free caisse
         'caisse_freeCaisse' => DEBUG ? "Erreur dans caisse/freeCaisse : :field" : "Une erreur est survenue lors de la libération des caisses",
         'entree_createAutreEntree' => DEBUG ? "Erreur dans entree/createAutreEntree : :field" : "Une erreur est survenue lors d'ajout de nouveau autre entrée",
         'ligne_caisse_findCaisse' => DEBUG ? "Erreur dans ligne_caisse/findCaisse : :field" : "Une erreur est survenue lors de la vérification de caisse d'utilisateur"

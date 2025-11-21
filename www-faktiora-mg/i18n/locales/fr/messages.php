@@ -106,8 +106,11 @@ return [
         'caisse_occupCaisse' => "Caisse numéro <b>:field</b> occupée avec succès",
         //caisse - quit caisse
         'caisse_quitCaisse' => "Caisse libérée avec succès",
+        //caisse - free caisse 0
         'caisse_freeCaisse_0' => "Aucune caisse n'est libérée",
+        //caisse - free caisse 1
         'caisse_freeCaisse_1' => "Une caisse a été libérée avec succès",
+        //caisse - free caisse plur
         'caisse_freeCaisse_plur' => "<b>:field</b> caisses ont été libérées avec succès",
     ],
     'not_found' => [
