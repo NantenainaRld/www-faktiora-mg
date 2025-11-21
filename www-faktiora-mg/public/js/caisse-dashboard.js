@@ -50,6 +50,15 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
+  //function - list free caisse
+  async function filterLigneCaisse() {
+    try {
+      const response = await apiRequest("/caisse/list_free_caisse");
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   //function - update caisse
   async function updateCaisse(num_caisse, num_caisse_update, solde, seuil) {
     try {
@@ -135,6 +144,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    updateCaisse("2", "4", "150000", "20000");
+    filterLigneCaisse();
   });
 });

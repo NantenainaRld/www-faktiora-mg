@@ -36,8 +36,8 @@ class CaisseController extends Controller
 
         //role - not admin
         if ($is_loged_in->getRole() !== 'admin') {
-            //redirect to index
-            header("Location: " . SITE_URL . '/user');
+            //redirect tocaisse index
+            header("Location: " . SITE_URL . '/caisse');
             return;
         }
 
@@ -174,8 +174,8 @@ class CaisseController extends Controller
         }
         //not admin
         if ($is_loged_in->getRole() !== 'admin') {
-            //redirect to user index
-            header('Location: ' . SITE_URL . '/user');
+            //redirect to caisse index
+            header('Location: ' . SITE_URL . '/caisse');
             return;
         }
 
@@ -329,8 +329,8 @@ class CaisseController extends Controller
 
         //role - not admin
         if ($is_loged_in->getRole() !== 'admin') {
-            //redirect to index
-            header("Location: " . SITE_URL . '/user');
+            //redirect to caisse index
+            header("Location: " . SITE_URL . '/caisse');
             return;
         }
 
@@ -435,6 +435,35 @@ class CaisseController extends Controller
         return;
     }
 
+    //action - list free caisse
+    public function listFreeCaisse()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //role - not caissier
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to caisse index
+            header("Location: " . SITE_URL . '/caisse');
+            return;
+        }
+
+        //list free caisse
+        $response = Caisse::listFreeCaisse();
+
+        echo json_encode($response);
+        return;
+    }
+
     //action - update caisse
     public function updateCaisse()
     {
@@ -452,8 +481,8 @@ class CaisseController extends Controller
 
         //role - not admin
         if ($is_loged_in->getRole() !== 'admin') {
-            //redirect to index
-            header("Location: " . SITE_URL . '/user');
+            //redirect to caisse index
+            header("Location: " . SITE_URL . '/caisse');
             return;
         }
 

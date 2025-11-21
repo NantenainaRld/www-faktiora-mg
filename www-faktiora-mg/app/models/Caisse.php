@@ -123,6 +123,51 @@ class Caisse extends Database
         return $response;
     }
 
+    //static - list free caisse
+    public static function listFreeCaisse()
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+
+            $response = parent::selectQuery("SELECT num_caisse FROM caisse WHERE etat_caisse = 'libre' ");
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' =>  'success',
+                'data' => $response['data']
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_listFreeCaisse',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //update caisse
     public function updateCaisse()
     {

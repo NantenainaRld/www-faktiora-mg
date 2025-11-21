@@ -628,7 +628,7 @@ class User extends Database
         $response = ['message_type' => 'success', 'message' => 'success'];
 
         $placeholers = implode(', ', array_fill(0, count($ids_user), '?'));
-        $sql = "DELETE FROM utilisateur WHERE id_utilisateur IN ({$placeholers}) AND id_utilisateur != ?";
+        $sql = "DELETE FROM utilisateur WHERE id_utilisateur IN ({$placeholers}) AND id_utilisateur != ? AND etat_utilisateur ='supprimé' ";
 
         $ids_user[] = $id_utilisateur;
 
