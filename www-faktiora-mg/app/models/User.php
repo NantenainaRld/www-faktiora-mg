@@ -106,6 +106,12 @@ class User extends Database
         return $this->role;
     }
 
+    //getter - etat_utilisateur
+    public function getEtatUtilisateur()
+    {
+        return $this->etat_utilisateur;
+    }
+
     //==================  PUBLIC FUNCTION ====================
 
     //static - create default admin account

@@ -118,6 +118,30 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
+  //function - add ligne caisse
+  async function addLigneCaisse(
+    id_lc,
+    num_caisse,
+    id_utilisateur,
+    date_debut,
+    date_fin
+  ) {
+    try {
+      const response = await apiRequest("/caisse/add_ligne_caisse", {
+        method: "POST",
+        body: {
+          id_lc: id_lc,
+          num_caisse: num_caisse,
+          id_utilisateur: id_utilisateur,
+          date_debut: date_debut,
+          date_fin: date_fin,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   //function - occup caisse
   async function occupCaisse(num_caisse, id_utilisateur = null) {
     try {
@@ -158,6 +182,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    deleteAllLigneCaisse([1]);
+    addLigneCaisse("0", "1", "10004", fromLs.value, toLs.value);
   });
 });

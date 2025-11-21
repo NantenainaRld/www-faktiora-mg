@@ -45,10 +45,19 @@ return [
         'caisse_listFreeCaisse' => DEBUG ? "Erreur dans caisse/listFreeCaisse : :field" : "Une erreur est survenue lors de listage des caisses libres",
         //caisse - delete all
         'caisse_deleteAll' => DEBUG ? "Erreur dans caisse/deleteAll : :field" : "Une erreur est survenue lors de la suppréssion des caisses",
-        //caisse - delete all line caisse
+        //caisse - delete all ligne caisse
         'caisse_deleteAllLigneCaisse' => DEBUG ? "Erreur dans caisse/deleteAllLigneCaisse : :field" : "Une erreur est survenue lors de la suppréssion des lignes de caisse",
+        //caisse - add ligne caisse
+        'caisse_addLigneCaisse' => DEBUG ? "Erreur dans caisse/addLigneCaisse : :field" : "Une erreur est survenue lors de l'ajout de ligne caisse",
+        //caisse - find by id ligne caisse
+        'caisse_findByIdLc' => DEBUG ? "Erreur dans caisser/findByIdLc :field" : "Une erreur est survenue lors de la vérification de l'ID de numéro de caisse",
+        //caisse - is date interval exist ?
+        'caisse_isDateIntervalExist' => DEBUG ? "Erreur dans caisse/isDateIntervalExist : :field" : "Une erreur est survenue lors de la vérification des dates de ligne de caisse",
+        //caisse - create ligne caisse
+        'caisse_createLigneCaisse' => DEBUG ? "Erreur dans caissse/createLigneCaisse : :field" : "Une erreur est survenue lors de la création de ligne de caisse",
+        //caisse - close ligne caisse
+        'caisse_closeLigneCaisse' => DEBUG ? "Erreur dans caisse/closeLigneCaisse : :field" : "Une erreur est survenue lors de la clôture de ligne de caisse",
         'caisse_occupCaisse' => DEBUG ? "Erruer dans caisse/occupCaisse : :field" : "Une erreur est survenue lors de l'occupation du caisse",
-        'ligne_caisse_createLigneCaisse' => DEBUG ? "Erreur dans lingneCaisse/createLigneCaisse : :field" : "Une erreur est survenue lors de la création de ligne de caisse",
         'caisse_quitCaisse' => DEBUG ? "Erreur dans caisse/quitCaisse : :field" : "Une erreur est survenue lors de libération de la caisse",
         'caisse_freeCaisse' => DEBUG ? "Erreur dans caisse/freeCaisse : :field" : "Une erreur est survenue lors de la libération des caisses",
         'entree_createAutreEntree' => DEBUG ? "Erreur dans entree/createAutreEntree : :field" : "Une erreur est survenue lors d'ajout de nouveau autre entrée",

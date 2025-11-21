@@ -8,6 +8,7 @@ class Caisse extends Database
     private $num_caisse_update = null;
     private $solde = 0;
     private $seuil = 0;
+    private $etat_caisse = 'libre';
 
     public function __construct()
     {
@@ -43,11 +44,11 @@ class Caisse extends Database
 
     //========================== GETTERS ============================
 
-    // //getter - etat_caisse
-    // public function getEtatCaisse()
-    // {
-    //     return $this->etat_caisse;
-    // }
+    //getter - etat_caisse
+    public function getEtatCaisse()
+    {
+        return $this->etat_caisse;
+    }
 
 
     //=========================== PUBLIC FUNCTION =============================
@@ -353,7 +354,7 @@ class Caisse extends Database
     //occup caisse
     public function occupCaisse($id_utilisateur)
     {
-        $response = ['message_type' => 'success', 'messae' => 'success'];
+        $response = ['message_type' => 'success', 'message' => 'success'];
 
         try {
 
@@ -459,7 +460,7 @@ class Caisse extends Database
                 return $response;
             }
 
-            //add date finin ligne caisse
+            //add date fin ligne caisse
             $response = LigneCaisse::freeCaisse($nums_caisse);
             //error
             if ($response['message_type'] === 'error') {
@@ -534,6 +535,7 @@ class Caisse extends Database
                 $caisse_model->num_caisse = $response['data'][0]['num_caisse'];
                 $caisse_model->solde = $response['data'][0]['solde'];
                 $caisse_model->seuil = $response['data'][0]['seuil'];
+                $caisse_model->etat_caisse = $response['data'][0]['etat_caisse'];
 
                 $response = [
                     'message_type' => 'success',

@@ -29,6 +29,7 @@ require_once CORE_PATH . '/Autoload.php';
 //time_zone
 $time_zone = $_COOKIE['time_zone'] ?? 'Indian/Antananarivo';
 define('TIME_ZONE', $time_zone);
+date_default_timezone_set(TIME_ZONE);
 
 // Autoload
 Autoload::register();

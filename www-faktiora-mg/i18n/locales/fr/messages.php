@@ -16,9 +16,15 @@ return [
         'solde' => "Le solde doît être des valeurs décimaux supérieures ou égaux à 0",
         'seuil' => "Le seuil doît être des valeurs décimaux supérieures ou égaux à 0",
         'solde_seuil' => "Le solde ne doît pas en dessous de seuil",
+        'date_future' => "La date de doît pas être dans le future",
+        'date_fusion' => "Les dates choisies ne sont pas valides (chevauchement des dates)",
         //
         //user - ids_user empty
         'user_ids_user_empty' => "Veuiller séléctionner au moins un utilisateur",
+        //user - id user
+        'user_id_user' => "L'ID d'utilisateur invalide : <b>:field</b>",
+        //user - deleted
+        'user_deleted' => "L'utilisateur avec l'ID <b>:field</b> est déjà supprimé",
         //caisse - num_caisse
         'caisse_num_caisse' => "Le numéro du caisse doît être des nombres entiers supérieurs ou égaux à 0",
         //caisse - not selected
@@ -27,9 +33,13 @@ return [
         'caisse_nums_caisse_empty' => "Veuiller séléctionner au moins une caisse",
         //caisse - ids lc empty
         'caisse_ids_lc_empty' => "Veuiller séléctionner au moins une ligne de caisse",
+        //caisse - id lc
+        'caisse_id_lc' => "Le numéro de ligne caisse doît être des nombres entiers supérieurs ou égaux à 1",
+        //caisse - occuped
+        'caisse_occuped' => "La caisse numéro <b>:field</b> est encore occupéé",
+        //caisse - deleted
+        'caisse_deleted' => "La caisse numéro <b>:field</b> est déjà supprimée",
         'caisse_occupCaisse' => "Seule les caissiers peuvent occuper les caisses",
-        'caisse_occupCaisse_deleted' => "La caisse choisie est déjà supprimée : <b>:field</b>",
-        'caisse_occupCaisse_occuped' => "La caisse choisie est encore occupée : <b>:field</b>",
         'entree_id_ae' => "L'ID de l'autre entrée ne doît pas dépasser de 20 caractères",
         'libelle' => "Le libellé ne doît pas dépasser de 100 caractères",
         'montant' => "Le montant doît être des valeurs décimaux supérieurs ou égaux à 0",
@@ -45,7 +55,8 @@ return [
         'user_id' => "L'<b>ID</b> d'utilisateur est réquis",
         'seuil' => "Le champ <b>seuil</b> est réquis",
         'libelle' => "Le champ libellé est réquis",
-        'montant' => "Le champ <b>montant</b> est réquis"
+        'montant' => "Le champ <b>montant</b> est réquis",
+        'from' => "La date de début est réquis"
     ],
     'success' => [
         //user - create user
@@ -88,6 +99,8 @@ return [
         'caisse_deleteAllLigneCaisse_1' => "Une ligne caisse a été supprimée avec succès",
         //caisse - delete all ligne caisse plur
         'caisse_deleteAllLigneCaisse_plur' => "<b>:field</b> lignes caisse ont été supprimées avec succès",
+        //caisse - add ligne caisse
+        'caisse_addLigneCaisse' => "Ligne caisse ajoutée avec succès",
         'caisse_occupCaisse' => "Caisse numéro <b>:field</b> occupée avec succès",
         'caisse_quitCaisse' => "Caisse libérée avec succès",
         'caisse_freeCaisse_0' => "Aucune caisse n'est libérée",
@@ -95,6 +108,7 @@ return [
         'caisse_freeCaisse_plur' => "<b>:field</b> caisses ont été libérées avec succès",
     ],
     'not_found' => [
+        //user - id
         'user_id' => "L'utilisateur avec l'ID <b>:field</b> n'existe pas",
         //caisse - num_caisse
         'caisse_num_caisse' => "Caisse numéro <b>:field</b> n'existe pas"
@@ -103,6 +117,8 @@ return [
         //user - email
         'user_email' => "L'adresse email <b>:field</b> existe déjà",
         //caisse - num_caisse
-        'caisse_num_caisse' => "Le numéro de caisse <b>:field</b> existe déjà"
+        'caisse_num_caisse' => "Le numéro de caisse <b>:field</b> existe déjà",
+        //caisse - id_lc
+        'caisse_id_lc' => "Le numéro de ligne de caisse <b>:field</b> existe déjà"
     ]
 ];
