@@ -1218,6 +1218,16 @@ class CaisseController extends Controller
                     echo json_encode($response);
                     return;
                 }
+                // user - deleted
+                if ($response['model']->getEtatUtilisateur() === 'supprimé') {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.user_deleted', ['field' => $id_utilisateur])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
 
                 //find caisse
                 $response = Caisse::findById($json['num_caisse']);
@@ -1230,7 +1240,7 @@ class CaisseController extends Controller
                 if (!$response['found']) {
                     $response = [
                         'message_type' => 'invalid',
-                        'message' => __('messages.not_found.num_caisse', ['field' => $json['num_caisse']])
+                        'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
                     ];
 
                     echo json_encode($response);
@@ -1240,7 +1250,7 @@ class CaisseController extends Controller
                 if ($response['model']->getEtatCaisse() === 'supprimé') {
                     $response = [
                         'message_type' => 'invalid',
-                        'message' => __('messages.invalids.caisse_occupCaisse_deleted', ['field' => $json['num_caisse']])
+                        'message' => __('messages.invalids.caisse_deleted', ['field' => $json['num_caisse']])
                     ];
 
                     echo json_encode($response);
@@ -1250,7 +1260,7 @@ class CaisseController extends Controller
                 if ($response['model']->getEtatCaisse() === 'occupé') {
                     $response = [
                         'message_type' => 'invalid',
-                        'message' => __('messages.invalids.caisse_occupCaisse_occuped', ['field' => $json['num_caisse']])
+                        'message' => __('messages.invalids.caisse_occuped', ['field' => $json['num_caisse']])
                     ];
 
                     echo json_encode($response);
@@ -1258,17 +1268,27 @@ class CaisseController extends Controller
                 }
 
                 //occup caisse
-                $caisse_model = (new Caisse())->setNumCaisse($json['num_caisse']);
-                $response = $caisse_model->occupCaisse($id_utilisateur);
+                $ligne_caisse_model = new LigneCaisse();
+                $ligne_caisse_model
+                    ->setIdUtilsateur($id_utilisateur)
+                    ->setNumCaisse($json['num_caisse']);
+                $response = $ligne_caisse_model->occupCaisse();
 
                 echo json_encode($response);
                 return;
             } catch (Throwable $e) {
-                error_log($e->getMessage());
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
 
                 $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('errors.catch.caisse_occupCaisse', ['field' => $e->getMessage()])
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.caisse_occupCaisse',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
                 ];
 
                 echo json_encode($response);
@@ -1277,6 +1297,11 @@ class CaisseController extends Controller
 
             // echo json_encode($json);
             echo json_encode($response);
+            return;
+        }
+        //redirect to caisse index
+        else {
+            header('Location: ' . SITE_URL . '/caisse');
             return;
         }
 
@@ -1300,8 +1325,8 @@ class CaisseController extends Controller
         }
         //role - !caissier
         if ($is_loged_in->getRole() !== 'caissier') {
-            //redirect to user index
-            header('Location: ' . SITE_URL . '/user');
+            //redirect to caisse index
+            header('Location: ' . SITE_URL . '/caisse');
             return;
         }
 
@@ -1309,22 +1334,35 @@ class CaisseController extends Controller
             try {
 
                 //quit caisse
-                $caisse_model = new Caisse();
-                $response = $caisse_model->quitCaisse($is_loged_in->getIdUtilisateur());
+                $ligne_caisse_model = new LigneCaisse();
+                $ligne_caisse_model->setIdUtilsateur($is_loged_in->getIdUtilisateur());
+                $response = $ligne_caisse_model->quitCaisse();
 
                 echo json_encode($response);
                 return;
             } catch (Throwable $e) {
-                error_log($e->getMessage());
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
 
                 $response = [
                     'message_type' => 'error',
-                    'message' => __('errors.catch.caisse_quitCaisse', ['field' => $e->getMessage()])
+                    'message' => __(
+                        'errors.catch.caisse_quitCaisse',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
                 ];
 
                 echo json_encode($response);
                 return;
             }
+        }
+        //redirect to caisse index
+        else {
+            header('Location: ' . SITE_URL . '/caisse');
+            return;
         }
 
         echo json_encode($response);

@@ -23,22 +23,32 @@ class Caisse extends Database
         $this->num_caisse = $num_caisse;
         return $this;
     }
+
     //setter - num_caisse_update
     public function setNumCaisseUpdate($num_caisse_update)
     {
         $this->num_caisse_update = $num_caisse_update;
         return $this;
     }
+
     //setter - solde
     public function setSolde($solde)
     {
         $this->solde = $solde;
         return $this;
     }
+
     //setter - seuil
     public function setSeuil($seuil)
     {
         $this->seuil = $seuil;
+        return $this;
+    }
+
+    //setter - etat_caisse
+    public function setEtatCaisse($etat_caisse)
+    {
+        $this->etat_caisse = $etat_caisse;
         return $this;
     }
 
@@ -343,96 +353,6 @@ class Caisse extends Database
                         ' - Line : ' . $e->getLine() .
                         ' - File : ' . $e->getFile()]
                 )
-            ];
-
-            return $response;
-        }
-
-        return $response;
-    }
-
-    //occup caisse
-    public function occupCaisse($id_utilisateur)
-    {
-        $response = ['message_type' => 'success', 'message' => 'success'];
-
-        try {
-
-            //quit caisse
-            $response = $this->quitCaisse($id_utilisateur);
-            //error
-            if ($response['message_type'] == 'error') {
-                return $response;
-            }
-
-            //update etat_caisse to occupé
-            $response = self::executeQuery("UPDATE caisse SET etat_caisse = 'occupé' WHERE num_caisse = :num_caisse ", ['num_caisse' => $this->num_caisse]);
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-
-            //add ligne caisse
-            $ligne_caisse = (new LigneCaisse)
-                ->setIdUtilsateur($id_utilisateur)
-                ->setNumCaisse($this->num_caisse);
-            $response = $ligne_caisse->createLigneCaisse();
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-
-            //success
-            $response['message'] = __('messages.success.caisse_occupCaisse', ['field' => $this->num_caisse]);
-
-            return $response;
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $response = [
-                'message_type' => 'invalid',
-                'message' => __('errors.catch.caisse_occupCaisse', ['field' => $e->getMessage()])
-            ];
-
-            return $response;
-        }
-
-        return $response;
-    }
-
-    //quit caisse
-    public function quitCaisse($id_utilisateur)
-    {
-        $response = ['message_type' => 'success', 'messae' => 'success'];
-
-        try {
-
-            //update etat_caisse to libre
-            $response = self::executeQuery("UPDATE caisse SET etat_caisse = 'libre' WHERE num_caisse IN (SELECT DISTINCT num_caisse FROM ligne_caisse WHERE id_utilisateur = :id AND date_fin IS NULL) ", ['id' => $id_utilisateur]);
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-
-            //add date_fin ligne caisse
-            $ligne_caisse = (new LigneCaisse)
-                ->setIdUtilsateur($id_utilisateur);
-            $response = $ligne_caisse->quitCaisse();
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-
-            //success
-            $response['message'] = __('messages.success.caisse_quitCaisse');
-
-            return $response;
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $response = [
-                'message_type' => 'error',
-                'message' => __('errors.catch.caisse_quitCaisse', ['field' => $e->getMessage()])
             ];
 
             return $response;

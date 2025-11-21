@@ -63,6 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    deleteAccount();
+    quitCaisse();
   });
 });

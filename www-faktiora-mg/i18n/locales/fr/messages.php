@@ -39,6 +39,7 @@ return [
         'caisse_occuped' => "La caisse numéro <b>:field</b> est encore occupéé",
         //caisse - deleted
         'caisse_deleted' => "La caisse numéro <b>:field</b> est déjà supprimée",
+        //caisse - occupCaisse
         'caisse_occupCaisse' => "Seule les caissiers peuvent occuper les caisses",
         'entree_id_ae' => "L'ID de l'autre entrée ne doît pas dépasser de 20 caractères",
         'libelle' => "Le libellé ne doît pas dépasser de 100 caractères",
@@ -101,7 +102,9 @@ return [
         'caisse_deleteAllLigneCaisse_plur' => "<b>:field</b> lignes caisse ont été supprimées avec succès",
         //caisse - add ligne caisse
         'caisse_addLigneCaisse' => "Ligne caisse ajoutée avec succès",
+        //caisse - occup caisse
         'caisse_occupCaisse' => "Caisse numéro <b>:field</b> occupée avec succès",
+        //caisse - quit caisse
         'caisse_quitCaisse' => "Caisse libérée avec succès",
         'caisse_freeCaisse_0' => "Aucune caisse n'est libérée",
         'caisse_freeCaisse_1' => "Une caisse a été libérée avec succès",

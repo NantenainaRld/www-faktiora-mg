@@ -255,18 +255,35 @@ class LigneCaisse extends Database
 
             //date_debut not empty - date_fin empty
             if ($this->date_debut !== '' && $this->date_fin === '') {
-                //close by id_user
+                //update caisse to free
+                $response = self::updateEtatCaisse($this->id_utilisateur, null);
+                //error
+                if ($response['message_type'] === 'error') {
+                    return $response;
+                }
+                //change caisse to occuped
+                $response = self::updateEtatCaisse(null, $this->num_caisse);
+                //error
+                if ($response['message_type'] === 'error') {
+                    return $response;
+                }
+
+                //close ligne caisse by id_user
                 $response = self::closeLigneCaisse($this->id_utilisateur, null);
                 //error
                 if ($response['message_type'] === 'error') {
                     return $response;
                 }
-                //close by num_caisse
+                //close ligne caisse by num_caisse
                 $response = self::closeLigneCaisse(null, $this->num_caisse);
                 //error
                 if ($response['message_type'] === 'error') {
                     return $response;
                 }
+                //update etat_caisse
+                $caisse_model = new Caisse();
+                // $caisse_model->setNumCaisse($this->num_caisse)
+                //     ->setEtatCaisse($thi);
             }
             //create ligne caisse
             $response = $this->createLigneCaisse();
@@ -453,6 +470,120 @@ class LigneCaisse extends Database
         return $response;
     }
 
+    //occup caisse
+    public function occupCaisse()
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            //update caisse to free
+            $response = self::updateEtatCaisse($this->id_utilisateur, null);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //update caisse to occuped
+            $response = self::updateEtatCaisse(null, $this->num_caisse);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //close caisse by id_user
+            $response = self::closeLigneCaisse($this->id_utilisateur, null);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //close caisse by num_caisse
+            $response = self::closeLigneCaisse(null, $this->num_caisse);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //create ligne caisse
+            $response = $this->createLigneCaisse();
+            //error
+            if ($response['message_type'] == 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => __('messages.success.caisse_occupCaisse', ['field' => $this->num_caisse])
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_occupCaisse',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //quit caisse
+    public function quitCaisse()
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            //update caisse to free
+            $response = self::updateEtatCaisse($this->id_utilisateur, null);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //close caisse by id_user
+            $response = self::closeLigneCaisse($this->id_utilisateur, null);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => __('messages.success.caisse_quitCaisse')
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_quitCaisse',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+        return $response;
+    }
+
     //free caisse
     public static function freeCaisse($nums_caisse)
     {
@@ -622,12 +753,12 @@ class LigneCaisse extends Database
             $sql = "";
             $paramsQuery = [];
 
-            //id_user
+            //close by id_user - olde caisse
             if ($id_utilisateur) {
-                $sql = "UPDATE ligne_caisse SET date_fin = NOW() WHERE id_utilisateur = :id_user AND date_fin IS NULL ";
+                $sql = "UPDATE ligne_caisse SET date_fin = NOW() WHERE num_caisse IN (SELECT num_caisse FROM ligne_caisse WHERE  id_utilisateur = :id_user AND date_fin IS NULL )";
                 $paramsQuery['id_user'] = $id_utilisateur;
             }
-            //num_caisse
+            //close by num_caisse - new caisse
             else {
                 $sql = "UPDATE ligne_caisse SET date_fin = NOW() WHERE num_caisse = :num_caisse AND date_fin IS NULL ";
                 $paramsQuery['num_caisse'] = $num_caisse;
@@ -655,6 +786,61 @@ class LigneCaisse extends Database
                 'message_type' => 'error',
                 'message' => __(
                     'errors.catch.caisse_closeLigneCaisse',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //static - update etat caisse
+    private static function updateEtatCaisse($id_utilisateur = null, $num_caisse = null)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            $sql = "";
+            $paramsQuery = [];
+
+            //change to occuped - new caisse
+            if ($num_caisse) {
+                $sql = "UPDATE caisse SET etat_caisse = 'occupé' WHERE num_caisse = :num_caisse ";
+                $paramsQuery['num_caisse'] = $num_caisse;
+            }
+            //change to free - olde caisse
+            else {
+                $sql = "UPDATE caisse SET etat_caisse = 'libre' WHERE num_caisse IN (SELECT num_caisse FROM ligne_caisse WHERE id_utilisateur = :id_user AND date_fin IS NULL) ";
+                $paramsQuery['id_user'] = $id_utilisateur;
+            }
+
+            $response = parent::executeQuery($sql, $paramsQuery);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success'
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_updateEtatCaisse',
                     ['field' => $e->getMessage() .
                         ' - Line : ' . $e->getLine() .
                         ' - File : ' . $e->getFile()]

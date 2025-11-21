@@ -182,6 +182,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    addLigneCaisse("0", "1", "10004", fromLs.value, toLs.value);
+    occupCaisse(2, "10004");
   });
 });
