@@ -163,6 +163,63 @@ class LigneCaisse extends Database
         return $response;
     }
 
+    //static - delete all ligne caisse
+    public static function deleteAllLigneCaisse($ids_lc)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        $placeholders = implode(', ', array_fill(0, count($ids_lc), '?'));
+        $sql = "DELETE FROM ligne_caisse WHERE id_lc IN ({$placeholders}) AND date_fin IS NOT NULL ";
+
+        try {
+
+            $response = parent::executeQuery($sql, $ids_lc);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //success
+            //0
+            if ($response['row_count'] === 0) {
+                $response['message'] = __('messages.success.caisse_deleteAllLigneCaisse_0');
+            }
+            //1
+            elseif ($response['row_count'] === 1) {
+                $response['message'] = __('messages.success.caisse_deleteAllLigneCaisse_1');
+            }
+            //plur
+            else {
+                $response['message'] = __('messages.success.caisse_deleteAllLigneCaisse_plur', ['field' => $response['row_count']]);
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => $response['message']
+            ];
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_deleteAllLigneCaisse',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //create ligne caisse
     public function createLigneCaisse()
     {

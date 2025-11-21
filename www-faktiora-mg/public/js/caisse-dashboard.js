@@ -104,6 +104,20 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
+  //function - delete all ligne caisse
+  async function deleteAllLigneCaisse(ids_lc = []) {
+    try {
+      const response = await apiRequest("/caisse/delete_all_ligne_caisse", {
+        method: "DELETE",
+        body: {
+          ids_lc: ids_lc,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   //function - occup caisse
   async function occupCaisse(num_caisse, id_utilisateur = null) {
     try {
@@ -144,6 +158,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    permanentDeleteAll([1, 3, 4]);
+    deleteAllLigneCaisse([1]);
   });
 });

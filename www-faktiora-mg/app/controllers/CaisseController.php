@@ -774,7 +774,82 @@ class CaisseController extends Controller
         return;
     }
 
-    //acti
+    //action - delete  all ligne caisse
+    public function deleteAllLigneCaisse()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //role - not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to index
+            header("Location: " . SITE_URL . '/user');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+            $json = json_decode(file_get_contents('php://input'), true);
+
+            $ids_lc = array_map(fn($x) => trim($x), $json['ids_lc']);
+
+            //ids_lc - empty
+            if (count($ids_lc) <= 0) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.caisse_ids_lc_empty')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+
+                //delete all ligne caisse
+                $response = LigneCaisse::deleteAllLigneCaisse($ids_lc);
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.caisse_deleteAllLigneCaisse',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            echo json_encode($response);
+            return;
+        }
+        //redirect to caisse index
+        else {
+            header('Location: ' . SITE_URL . '/caisse');
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
 
     //action - occup caiss
     public function occupCaisse()

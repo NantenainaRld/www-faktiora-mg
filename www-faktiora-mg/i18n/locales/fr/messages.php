@@ -25,6 +25,8 @@ return [
         'caisse_not_selected' => "Veuiller séléctionner une caisse",
         //caisse - nums caisse empty
         'caisse_nums_caisse_empty' => "Veuiller séléctionner au moins une caisse",
+        //caisse - ids lc empty
+        'caisse_ids_lc_empty' => "Veuiller séléctionner au moins une ligne de caisse",
         'caisse_occupCaisse' => "Seule les caissiers peuvent occuper les caisses",
         'caisse_occupCaisse_deleted' => "La caisse choisie est déjà supprimée : <b>:field</b>",
         'caisse_occupCaisse_occuped' => "La caisse choisie est encore occupée : <b>:field</b>",
@@ -80,6 +82,12 @@ return [
         'caisse_deleteAll_1' => "Une caisse a été supprimée avec succès",
         //caisse - delete all plur
         'caisse_deleteAll_plur' => "<b>:field</b> caisses ont été supprimées avec succès",
+        //caisse - delete all ligne caisse 0
+        'caisse_deleteAllLigneCaisse_0' => "Aucune ligne caisse n'est supprimée",
+        //caisse - delete all ligne caisse 1
+        'caisse_deleteAllLigneCaisse_1' => "Une ligne caisse a été supprimée avec succès",
+        //caisse - delete all ligne caisse plur
+        'caisse_deleteAllLigneCaisse_plur' => "<b>:field</b> lignes caisse ont été supprimées avec succès",
         'caisse_occupCaisse' => "Caisse numéro <b>:field</b> occupée avec succès",
         'caisse_quitCaisse' => "Caisse libérée avec succès",
         'caisse_freeCaisse_0' => "Aucune caisse n'est libérée",

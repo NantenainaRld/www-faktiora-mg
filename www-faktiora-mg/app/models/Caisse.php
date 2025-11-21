@@ -291,6 +291,7 @@ class Caisse extends Database
 
         return $response;
     }
+
     //permanent delete all caisse
     public static function permanentDeleteAll($nums_caisse)
     {

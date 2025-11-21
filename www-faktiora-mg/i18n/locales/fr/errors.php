@@ -45,6 +45,8 @@ return [
         'caisse_listFreeCaisse' => DEBUG ? "Erreur dans caisse/listFreeCaisse : :field" : "Une erreur est survenue lors de listage des caisses libres",
         //caisse - delete all
         'caisse_deleteAll' => DEBUG ? "Erreur dans caisse/deleteAll : :field" : "Une erreur est survenue lors de la suppréssion des caisses",
+        //caisse - delete all line caisse
+        'caisse_deleteAllLigneCaisse' => DEBUG ? "Erreur dans caisse/deleteAllLigneCaisse : :field" : "Une erreur est survenue lors de la suppréssion des lignes de caisse",
         'caisse_occupCaisse' => DEBUG ? "Erruer dans caisse/occupCaisse : :field" : "Une erreur est survenue lors de l'occupation du caisse",
         'ligne_caisse_createLigneCaisse' => DEBUG ? "Erreur dans lingneCaisse/createLigneCaisse : :field" : "Une erreur est survenue lors de la création de ligne de caisse",
         'caisse_quitCaisse' => DEBUG ? "Erreur dans caisse/quitCaisse : :field" : "Une erreur est survenue lors de libération de la caisse",
