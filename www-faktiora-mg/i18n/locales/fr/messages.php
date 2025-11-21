@@ -23,6 +23,7 @@ return [
         'caisse_num_caisse' => "Le numéro du caisse doît être des nombres entiers supérieurs ou égaux à 0",
         //caisse - not selected
         'caisse_not_selected' => "Veuiller séléctionner une caisse",
+        //caisse - nums caisse empty
         'caisse_nums_caisse_empty' => "Veuiller séléctionner au moins une caisse",
         'caisse_occupCaisse' => "Seule les caissiers peuvent occuper les caisses",
         'caisse_occupCaisse_deleted' => "La caisse choisie est déjà supprimée : <b>:field</b>",
@@ -73,8 +74,11 @@ return [
         'caisse_filterLigneCaisse_plut' => "<b>:field</b> lignes caisse on été trouvées",
         //caisse  - update caisse
         'caisse_updateCaisse' => "Les informations de caisse numéro <b>:field</b> ont été modifiées avec succès",
+        //caisse - delete all 0
         'caisse_deleteAll_0' => "Aucune caisse n'est supprimée",
+        //caisse - delete all 1
         'caisse_deleteAll_1' => "Une caisse a été supprimée avec succès",
+        //caisse - delete all plur
         'caisse_deleteAll_plur' => "<b>:field</b> caisses ont été supprimées avec succès",
         'caisse_occupCaisse' => "Caisse numéro <b>:field</b> occupée avec succès",
         'caisse_quitCaisse' => "Caisse libérée avec succès",

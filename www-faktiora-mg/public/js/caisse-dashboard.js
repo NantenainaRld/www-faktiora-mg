@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   //function - list free caisse
-  async function filterLigneCaisse() {
+  async function filterFreeCaisse() {
     try {
       const response = await apiRequest("/caisse/list_free_caisse");
       console.log(response);
@@ -144,6 +144,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    filterLigneCaisse();
+    deleteAll([1, 3, 4]);
   });
 });
