@@ -132,6 +132,7 @@ class Caisse extends Database
         ];
 
         try {
+
             // num_caisse_update exist?
             $response = self::isNumCaisseExist($this->num_caisse_update, $this->num_caisse);
             //error
@@ -140,8 +141,10 @@ class Caisse extends Database
             }
             //found
             if ($response['found']) {
-                $response['message_type'] = 'invalid';
-                $response['message'] = __('messages.duplicate.num_caisse', ['field' => $this->num_caisse_update]);
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.duplicate.caisse_num_caisse', ['field' => $this->num_caisse_update])
+                ];
 
                 return $response;
             }
@@ -158,17 +161,27 @@ class Caisse extends Database
             if ($response['message_type'] === 'error') {
                 return $response;
             }
-            //success
-            else {
-                $response['message'] = __('messages.success.caisse_update_caisse', ['field' => $this->num_caisse]);
 
-                return $response;
-            }
+            $response = [
+                'message_type' => 'success',
+                'message' => __('messages.success.caisse_updateCaisse', ['field' => $this->num_caisse])
+            ];
+
+            return $response;
         } catch (Throwable $e) {
-            error_log($e->getMessage());
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
 
-            $response['message_type'] = 'error';
-            $response['message'] = __('errors.catch.caisse_update_caisse', ['field' => $e->getMessage()]);
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_updateCaisse',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
 
             return $response;
         }

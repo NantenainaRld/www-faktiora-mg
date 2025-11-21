@@ -71,7 +71,8 @@ return [
         'caisse_filterLigneCaisse_1' => "Une ligne caisse trouvée",
         //caisse - filter ligne caisse plur
         'caisse_filterLigneCaisse_plut' => "<b>:field</b> lignes caisse on été trouvées",
-        'caisse_update_caisse' => "Les informations du caisse numéro <b>:field</b> ont été modifiées avec succès",
+        //caisse  - update caisse
+        'caisse_updateCaisse' => "Les informations de caisse numéro <b>:field</b> ont été modifiées avec succès",
         'caisse_deleteAll_0' => "Aucune caisse n'est supprimée",
         'caisse_deleteAll_1' => "Une caisse a été supprimée avec succès",
         'caisse_deleteAll_plur' => "<b>:field</b> caisses ont été supprimées avec succès",

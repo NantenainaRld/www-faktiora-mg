@@ -466,7 +466,10 @@ class CaisseController extends Controller
             //num_caisse_update - invalid
             $num_caisse_update = filter_var($json['num_caisse_update'], FILTER_VALIDATE_INT);
             if ($num_caisse_update === false || $num_caisse_update < 0) {
-                $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.num_caisse')];
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.caisse_num_caisse')
+                ];
 
                 echo json_encode($response);
                 return;
@@ -474,7 +477,10 @@ class CaisseController extends Controller
 
             //solde - empty
             if ($json['solde'] === '') {
-                $response = ['message_type' => 'invalid', 'message' => __('messages.empty.solde')];
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.solde')
+                ];
 
                 echo json_encode($response);
                 return;
@@ -482,7 +488,10 @@ class CaisseController extends Controller
             //solde - invalid
             $solde = filter_var($json['solde'], FILTER_VALIDATE_FLOAT);
             if ($solde === false || $solde < 0) {
-                $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.solde')];
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.solde')
+                ];
 
                 echo json_encode($response);
                 return;
@@ -490,7 +499,10 @@ class CaisseController extends Controller
 
             //seuil - empty
             if ($json['seuil'] === '') {
-                $response = ['message_type' => 'invalid', 'message' => __('messages.empty.seuil')];
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.seuil')
+                ];
 
                 echo json_encode($response);
                 return;
@@ -498,7 +510,10 @@ class CaisseController extends Controller
             //seuil - invalid
             $seuil = filter_var($json['seuil'], FILTER_VALIDATE_FLOAT);
             if ($seuil === false || $seuil < 0) {
-                $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.seuil')];
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.seuil')
+                ];
 
                 echo json_encode($response);
                 return;
@@ -506,18 +521,9 @@ class CaisseController extends Controller
 
             //solde < seuil
             if ($solde < $seuil) {
-                $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.solde_seuil')];
-
-                echo json_encode($response);
-                return;
-            }
-
-            //num_caisse - invalid
-            $num_caisse = filter_var($json['num_caisse'], FILTER_VALIDATE_INT);
-            if ($num_caisse === false || $num_caisse < 0) {
                 $response = [
                     'message_type' => 'invalid',
-                    'message' => __('messages.not_found.num_caisse', ['field' => $json['num_caisse']])
+                    'message' => __('messages.invalids.solde_seuil')
                 ];
 
                 echo json_encode($response);
@@ -526,7 +532,7 @@ class CaisseController extends Controller
 
             try {
                 //num_caisse exist
-                $response = Caisse::findById($num_caisse);
+                $response = Caisse::findById($json['num_caisse']);
                 //error
                 if ($response['message_type'] === 'error') {
 
@@ -537,7 +543,7 @@ class CaisseController extends Controller
                 if (!$response['found']) {
                     $response = [
                         'message_type' => 'invalid',
-                        'message' => __('messages.not_found.num_caisse', ['field' => $json['num_caisse']])
+                        'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
                     ];
 
                     echo json_encode($response);
@@ -545,7 +551,7 @@ class CaisseController extends Controller
                 }
 
                 //update caisse
-                ($response['model'])->setNumCaisse($num_caisse)
+                ($response['model'])->setNumCaisse($json['num_caisse'])
                     ->setNumCaisseUpdate($num_caisse_update)
                     ->setSolde($solde)
                     ->setSeuil($seuil);
@@ -554,15 +560,30 @@ class CaisseController extends Controller
                 echo json_encode($response);
                 return;
             } catch (Throwable $e) {
-                error_log($e->getMessage());
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
 
-                $response = ['message_type' => 'error', 'message' => __('errors.catch.caisse_update_caisse', ['field' => $e->getMessage()])];
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.caisse_updateCaisse',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
 
                 echo json_encode($response);
                 return;
             }
 
             echo json_encode($response);
+            return;
+        }
+        //redirect to caisse index
+        else {
+            header('Locations: ' . SITE_URL . '/caisse');
             return;
         }
 

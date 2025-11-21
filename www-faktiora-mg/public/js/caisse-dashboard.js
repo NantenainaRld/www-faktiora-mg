@@ -135,6 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    filterLigneCaisse(" 2", fromLs.value, toLs.value, "4");
+    updateCaisse("2", "4", "150000", "20000");
   });
 });
