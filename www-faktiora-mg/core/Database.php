@@ -52,7 +52,9 @@ class Database
                 'message' => 'success'
             ];
         } catch (PDOException $e) {
-            error_log($e->getMessage());
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
 
             return [
                 'message_type' => 'error',
@@ -78,7 +80,9 @@ class Database
                 'row_count' => $stm->rowCount()
             ];
         } catch (PDOException $e) {
-            error_log($e->getMessage());
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
 
             return [
                 'message_type' => 'error',

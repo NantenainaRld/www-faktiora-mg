@@ -264,19 +264,21 @@ class CaisseController extends Controller
             }
 
             //from > to
-            $from = new DateTime($from);
-            $to  = new DateTime($to);
-            if ($from > $to) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.invalids.from_to')
-                ];
+            if ($from !== '' && $to !== '') {
+                $from = new DateTime($from);
+                $to  = new DateTime($to);
+                if ($from > $to) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.from_to')
+                    ];
 
-                echo json_encode($response);
-                return;
+                    echo json_encode($response);
+                    return;
+                }
+                $from = $from->format("Y-m-d");
+                $to = $to->format("Y-m-d");
             }
-            $from = $from->format("Y-m-d");
-            $to = $to->format("Y-m-d");
         }
         //month
         $month = trim($_GET['month'] ?? 'none');
@@ -309,7 +311,6 @@ class CaisseController extends Controller
         echo json_encode($response);
         return;
     }
-    //
 
     //action - filter ligne caisse
     public function filterLigneCaisse()
@@ -337,7 +338,10 @@ class CaisseController extends Controller
         $num_caisse = trim($_GET['num_caisse'] ?? '');
         //num_caisse - empty
         if ($num_caisse === '') {
-            $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.caisse_not_selected')];
+            $response = [
+                'message_type' => 'invalid',
+                'message' => __('messages.invalids.caisse_not_selected')
+            ];
 
             echo json_encode($response);
             return;
@@ -351,8 +355,10 @@ class CaisseController extends Controller
         }
         //num_caisse - not found
         if (!$response['found']) {
-            $response['message_type'] = 'invalid';
-            $response['message'] = __('messages.not_found.num_caisse', ['field' => $num_caisse]);
+            $response = [
+                'message_type' => 'invalid',
+                'message' => __('messages.not_found.caisse_num_caisse', ['field' => $num_caisse])
+            ];
 
             echo  json_encode($response);
             return;
@@ -362,27 +368,58 @@ class CaisseController extends Controller
         $id_utilisateur = trim($_GET['id_utilisateur'] ?? '');
 
         //from
-        $f = trim($_GET['from'] ?? '');
-        $from = (!empty($f)) ? DateTime::createFromFormat('Y-m-d\TH:i', $f) : '';
-        //from - invalid
-        if ($from === false) {
-            $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.date', ['field' => $f])];
-
-            echo json_encode($response);
-            return;
-        }
-        $from = ($from !== '') ? $from->format('Y-m-d H:i:s') : '';
+        $from = trim($_GET['from'] ?? '');
         //to
-        $t = trim($_GET['to'] ?? '');
-        $to = (!empty($t)) ? DateTime::createFromFormat('Y-m-d\TH:i', $t) : '';
-        //to - invalid
-        if ($to === false) {
-            $response = ['message_type' => 'invalid', 'message' => __('messages.invalids.date', ['field' => $t])];
+        $to = trim($_GET['to'] ?? '');
+        //from not empty - invalid
+        if ($from !== '' &&  DateTime::createFromFormat('Y-m-d\TH:i', $from) === false) {
+            $response = [
+                'message_type' => 'invalid',
+                'message' => __('messages.invalids.date', ['field' => $from])
+            ];
 
             echo json_encode($response);
             return;
         }
-        $to = ($to !== '') ? $to->format('Y-m-d H:i:s') : '';
+        //to not empty - invalid
+        if ($to !== '' && DateTime::createFromFormat('Y-m-d\TH:i', $to) === false) {
+            $response = [
+                'message_type' => 'invalid',
+                'message' => __('messages.invalids.date', ['field' => $to])
+            ];
+
+            echo json_encode($response);
+            return;
+        }
+        //from not empty - format
+        if ($from !== '') {
+            $from = str_replace('T', ' ', $from);
+            $from = new DateTime($from);
+        }
+        //to not empty - format
+        if ($to !== '') {
+            $to = str_replace('T', ' ', $to);
+            $to = new DateTime($to);
+        }
+        //from && to not empty - from > to
+        if ($from !== '' && $to !== '' && $from > $to) {
+            $response = [
+                'message_type' => 'invalid',
+                'message' => __('messages.invalids.from_to')
+            ];
+
+            echo json_encode($response);
+            return;
+        }
+        //from not empty - reformat
+        if ($from !== '') {
+            $from = $from->format('Y-m-d H:i:s');
+        }
+        //to not empty - reformat
+        if ($to !== '') {
+            $to = $to->format('Y-m-d H:i:s');
+        }
+
         //parametters
         $params = [
             'num_caisse' => $num_caisse,
@@ -391,7 +428,7 @@ class CaisseController extends Controller
             'to' => $to
         ];
 
-        // filter ligne caisse
+        //filter ligne caisse
         $response = LigneCaisse::filterLigneCaisse($params);
 
         echo json_encode($response);

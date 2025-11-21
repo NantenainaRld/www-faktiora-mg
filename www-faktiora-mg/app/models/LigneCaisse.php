@@ -72,6 +72,97 @@ class LigneCaisse extends Database
 
     //======================== PUBLIC FUNCTION =====================
 
+    //static - filter ligne caisse
+    public static function filterLigneCaisse($params)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        $sql = "SELECT * FROM ligne_caisse WHERE num_caisse = :num_caisse AND id_utilisateur LIKE :id_utilisateur ";
+        $paramsQuery = [
+            'num_caisse' => $params['num_caisse'],
+            'id_utilisateur' => "%" . $params['id_utilisateur'] . "%"
+        ];
+
+        //from - empty
+        if ($params['from'] === '') {
+            //to - not empty
+            if ($params['to'] !== '') {
+                $sql .= "AND date_debut <= :to ";
+                $paramsQuery['to'] = $params['to'];
+            }
+        }
+        //from - not empty
+        else {
+            //to - empty
+            if ($params['to'] === '') {
+                $sql .= "AND date_debut >= :from ";
+                $paramsQuery['from'] = $params['from'];
+            }
+            //to - not empty
+            else {
+                $sql .= "AND date_debut BETWEEN :from AND :to ";
+                $paramsQuery['from'] = $params['from'];
+                $paramsQuery['to'] = $params['to'];
+            }
+        }
+
+        //group and order by 
+        $sql .= "GROUP BY id_lc ORDER BY id_lc ASC ";
+
+        try {
+
+            $response = parent::selectQuery($sql, $paramsQuery);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //success
+            //0
+            if (count($response['data']) === 0) {
+                $response['message'] = __('messages.success.caisse_filterLigneCaisse_0');
+            }
+            //1
+            elseif (count($response['data']) === 1) {
+                $response['message'] = __('messages.success.caisse_filterLigneCaisse_1');
+            }
+            //plur
+            else {
+                $response['message'] = __(
+                    'messages.success.caisse_filterLigneCaisse_plur',
+                    ['field' => count($response['data'])]
+                );
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => $response['message'],
+                'data' => $response['data']
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_filterLigneCaisse',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //create ligne caisse
     public function createLigneCaisse()
     {
@@ -166,64 +257,6 @@ class LigneCaisse extends Database
         return $response;
     }
 
-    //static - filter ligne caisse
-    public static function filterLigneCaisse($params)
-    {
-        $response = ['message_type' => 'success', 'message' => 'success'];
-
-        $sql = "SELECT * FROM ligne_caisse WHERE num_caisse = :num_caisse AND id_utilisateur LIKE :id_utilisateur ";
-        $paramsQuery = [
-            'num_caisse' => $params['num_caisse'],
-            'id_utilisateur' => "%" . $params['id_utilisateur'] . "%"
-        ];
-
-        //from  - empty
-        if ($params['from'] === '') {
-            //to - not empty
-            if ($params['to'] !== '') {
-                $sql .= "AND date_debut <= :to ";
-                $paramsQuery['to'] = $params['to'];
-            }
-        }
-        //from - not empty
-        else {
-            //to - empty
-            if ($params['to'] === '') {
-                $sql .= "AND date_debut >= :from ";
-                $paramsQuery['from'] = $params['from'];
-            }
-            //to - not empty
-            else {
-                $sql .= "AND date_debut BETWEEN :from AND :to ";
-                $paramsQuery['from'] = $params['from'];
-                $paramsQuery['to'] = $params['to'];
-            }
-        }
-
-        //group and order by 
-        $sql .= "GROUP BY id_lc ORDER BY id_lc ASC ";
-
-        try {
-            $response = self::selectQuery($sql, $paramsQuery);
-
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-
-            return $response;
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $response['message_type'] = 'error';
-            $response['message'] = __('errors.catch.filter_ligne_caisse', ['field' =>
-            $e->getMessage()]);
-
-            return $response;
-        }
-
-        return $response;
-    }
 
     //static - find caisse
     public static function findCaisse($id_utilisateur)

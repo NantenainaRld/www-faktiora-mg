@@ -40,10 +40,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   //function - filter ligne_caisse
-  async function filterLigneCaisse(fromLs, toLs) {
+  async function filterLigneCaisse(num_caisse, fromLs, toLs, id_utilisateur) {
     try {
       const response = await apiRequest(
-        `/caisse/filter_ligne_caisse?num_caisse=2&id_utilisateur=&from=${fromLs}&to=${toLs}`
+        `/caisse/filter_ligne_caisse?num_caisse=${num_caisse}&id_utilisateur=${id_utilisateur}&from=${fromLs}&to=${toLs}`
       );
       console.log(response);
     } catch (error) {
@@ -135,17 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    filterCaisse(
-      "status",
-      "nb_transactions",
-      "DESC",
-      "per",
-      "month",
-      "from",
-      "to",
-      "04",
-      "2025",
-      "1"
-    );
+    filterLigneCaisse(" 2", fromLs.value, toLs.value, "4");
   });
 });

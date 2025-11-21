@@ -21,6 +21,7 @@ return [
         'user_ids_user_empty' => "Veuiller séléctionner au moins un utilisateur",
         //caisse - num_caisse
         'caisse_num_caisse' => "Le numéro du caisse doît être des nombres entiers supérieurs ou égaux à 0",
+        //caisse - not selected
         'caisse_not_selected' => "Veuiller séléctionner une caisse",
         'caisse_nums_caisse_empty' => "Veuiller séléctionner au moins une caisse",
         'caisse_occupCaisse' => "Seule les caissiers peuvent occuper les caisses",
@@ -64,6 +65,12 @@ return [
         'user_deconnectAll_plur' => "<b>:field</b> utilisateurs ont été déconnecté avec succès",
         //caisse - create caisse
         'caisse_createCaisse' => "Caisse numéro <b>:field</b> crée avec succès",
+        //caisse - filter ligne caisse 0 
+        'caisse_filterLigneCaisse_0' => "Aucune ligne caisse trouvée",
+        //caisse - filter ligne caisse 1 
+        'caisse_filterLigneCaisse_1' => "Une ligne caisse trouvée",
+        //caisse - filter ligne caisse plur
+        'caisse_filterLigneCaisse_plut' => "<b>:field</b> lignes caisse on été trouvées",
         'caisse_update_caisse' => "Les informations du caisse numéro <b>:field</b> ont été modifiées avec succès",
         'caisse_deleteAll_0' => "Aucune caisse n'est supprimée",
         'caisse_deleteAll_1' => "Une caisse a été supprimée avec succès",
@@ -76,7 +83,8 @@ return [
     ],
     'not_found' => [
         'user_id' => "L'utilisateur avec l'ID <b>:field</b> n'existe pas",
-        'num_caisse' => "Numéro de caisse n'existe pas : <b>:field</b>"
+        //caisse - num_caisse
+        'caisse_num_caisse' => "Caisse numéro <b>:field</b> n'existe pas"
     ],
     'duplicate' => [
         //user - email

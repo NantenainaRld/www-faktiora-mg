@@ -433,10 +433,14 @@ class Caisse extends Database
     //static - find by id
     public static function findById($num_caisse)
     {
-        $response = ['message_type' => 'success', 'message' => 'success', 'found' => false];
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+            'found' => false
+        ];
 
         try {
-            $response = self::selectQuery("SELECT * FROM caisse WHERE num_caisse = :num_caisse", ['num_caisse' => $num_caisse]);
+            $response = parent::selectQuery("SELECT * FROM caisse WHERE num_caisse = :num_caisse", ['num_caisse' => $num_caisse]);
 
             //error
             if ($response['message_type'] === 'error') {
@@ -459,19 +463,30 @@ class Caisse extends Database
                 $caisse_model->num_caisse = $response['data'][0]['num_caisse'];
                 $caisse_model->solde = $response['data'][0]['solde'];
                 $caisse_model->seuil = $response['data'][0]['seuil'];
-                $caisse_model->etat_caisse = $response['data'][0]['etat_caisse'];
 
-                $response['data'] = [];
-
-                $response['model'] = $caisse_model;
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'found' => $response['found'],
+                    'model' => $caisse_model
+                ];
 
                 return $response;
             }
         } catch (Throwable $e) {
-            error_log($e->getMessage());
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
 
-            $response['message_type'] = 'error';
-            $response['message'] = __('errors.catch.caisse_findById', ['field' => $e->getMessage()]);
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_findById',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
 
             return $response;
         }
