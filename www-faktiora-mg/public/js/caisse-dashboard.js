@@ -171,6 +171,32 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
+  //function - update ligne caisse
+  async function updateLigneCaisse(
+    id_lc,
+    id_update,
+    num_caisse,
+    id_utilisateur,
+    date_debut,
+    date_fin
+  ) {
+    try {
+      const response = await apiRequest("/caisse/update_ligne_caisse", {
+        method: "PUT",
+        body: {
+          id_lc: id_lc,
+          id_update: id_update,
+          num_caisse: num_caisse,
+          id_utilisateur: id_utilisateur,
+          date_debut: date_debut,
+          date_fin: date_fin,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   //=================== EVENTS =================
   const from = document.getElementById("from");
@@ -180,5 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //btn-test
   const btnTest = document.getElementById("btn-test");
-  btnTest.addEventListener("click", () => {});
+  btnTest.addEventListener("click", () => {
+    updateLigneCaisse("2", "85", "2", "10004", fromLs.value, toLs.value);
+  });
 });

@@ -4,6 +4,7 @@
 class LigneCaisse extends Database
 {
     private $id_lc = 0;
+    private $id_update = 0;
     private $date_debut = "";
     private $date_fin = "";
     private $id_utilisateur = "";
@@ -21,6 +22,13 @@ class LigneCaisse extends Database
     public function setIdLc($id_lc)
     {
         $this->id_lc = $id_lc;
+        return $this;
+    }
+
+    //setter - id_update
+    public function setIdUpdate($id_update)
+    {
+        $this->id_update = $id_update;
         return $this;
     }
 
@@ -237,6 +245,22 @@ class LigneCaisse extends Database
 
         try {
 
+            //is id_lc exist ?
+            $response = self::isIdLcExist($this->id_lc, null);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //found
+            if ($response['found']) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.duplicate.caisse_id_lc', ['field' => $this->id_lc])
+                ];
+
+                return $response;
+            }
+
             //is date intervall exist?
             $response = $this->isDateIntervalExist();
             //error
@@ -366,94 +390,6 @@ class LigneCaisse extends Database
                 'message_type' => 'error',
                 'message' => __(
                     'errors.catch.caisse_findByIdLc',
-                    ['field' => $e->getMessage() .
-                        ' - Line : ' . $e->getLine() .
-                        ' - File : ' . $e->getFile()]
-                )
-            ];
-
-            return $response;
-        }
-
-        return $response;
-    }
-
-    //create ligne caisse
-    public function createLigneCaisse()
-    {
-        $response = ['message_type' => 'success', 'message' => 'success'];
-
-        try {
-            $sql = "";
-            $paramsQuery = [];
-
-            //id_lc - empty
-            if ($this->id_lc === 0) {
-                //date_fin - empty
-                if ($this->date_fin === '') {
-                    //date_debut - empty
-                    if ($this->date_debut === '') {
-                        $sql = "INSERT INTO ligne_caisse (date_debut, id_utilisateur, num_caisse) VALUES (NOW(), :id_user, :num_caisse) ";
-                        $paramsQuery['id_user'] = $this->id_utilisateur;
-                        $paramsQuery['num_caisse'] = $this->num_caisse;
-                    }
-                    //date_debut - not empty
-                    else {
-                        $sql = "INSERT INTO ligne_caisse (date_debut, id_utilisateur, num_caisse) VALUES (:date_debut, :id_user, :num_caisse) ";
-                        $paramsQuery['date_debut'] = $this->date_debut;
-                        $paramsQuery['id_user'] = $this->id_utilisateur;
-                        $paramsQuery['num_caisse'] = $this->num_caisse;
-                    }
-                }
-                //date_fin - not empty
-                else {
-                    $sql = "INSERT INTO ligne_caisse (date_debut, date_fin, id_utilisateur, num_caisse) VALUES (:date_debut, :date_fin, :id_user, :num_caisse) ";
-                    $paramsQuery['date_debut'] = $this->date_debut;
-                    $paramsQuery['date_fin'] = $this->date_fin;
-                    $paramsQuery['id_user'] = $this->id_utilisateur;
-                    $paramsQuery['num_caisse'] = $this->num_caisse;
-                }
-            }
-            //id_lc - not empty
-            else {
-                //date_fin - empty
-                if ($this->date_fin === '') {
-                    $sql = "INSERT INTO ligne_caisse (id_lc, date_debut, id_utilisateur, num_caisse) VALUES (:id_lc, :date_debut, :id_user, :num_caisse) ";
-                    $paramsQuery['id_lc'] = $this->id_lc;
-                    $paramsQuery['date_debut'] = $this->date_debut;
-                    $paramsQuery['id_user'] = $this->id_utilisateur;
-                    $paramsQuery['num_caisse'] = $this->num_caisse;
-                }
-                //date_fin - not empty
-                else {
-                    $sql = "INSERT INTO ligne_caisse (id_lc, date_debut, date_fin, id_utilisateur, num_caisse) VALUES (:id_lc, :date_debut, :date_fin, :id_user, :num_caisse) ";
-                    $paramsQuery['id_lc'] = $this->id_lc;
-                    $paramsQuery['date_debut'] = $this->date_debut;
-                    $paramsQuery['date_fin'] = $this->date_fin;
-                    $paramsQuery['id_user'] = $this->id_utilisateur;
-                    $paramsQuery['num_caisse'] = $this->num_caisse;
-                }
-            }
-
-            $response = parent::executeQuery($sql, $paramsQuery);
-
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-
-            $response = ['message_type' => 'success', 'message' => 'success'];
-
-            return $response;
-        } catch (Throwable $e) {
-            error_log($e->getMessage() .
-                ' - Line : ' . $e->getLine() .
-                ' - File : ' . $e->getFile());
-
-            $response = [
-                'message_type' => 'error',
-                'message' => __(
-                    'errors.catch.caisse_createLigneCaisse',
                     ['field' => $e->getMessage() .
                         ' - Line : ' . $e->getLine() .
                         ' - File : ' . $e->getFile()]
@@ -692,7 +628,190 @@ class LigneCaisse extends Database
         return $response;
     }
 
+    //update ligne caisse
+    public function updateLigneCaisse()
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            //is date intervall exist?
+            $response = $this->isDateIntervalExist($this->id_lc);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //exist
+            if ($response['exist']) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date_fusion')
+                ];
+
+                return $response;
+            }
+
+            //is id update exist ?
+            $response = self::isIdLcExist($this->id_update, $this->id_lc);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //found
+            if ($response['found']) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.duplicate.caisse_id_lc', ['field' => $this->id_update])
+                ];
+
+                return $response;
+            }
+
+            $sql = "";
+            $paramsQuery = [];
+
+            //date_fin - empty
+            if ($this->date_fin === '') {
+                $sql = "UPDATE ligne_caisse SET id_lc = :id_update, date_debut = :date_debut WHERE id_lc = :id_lc ";
+                $paramsQuery['id_update'] = $this->id_update;
+                $paramsQuery['date_debut'] = $this->date_debut;
+                $paramsQuery['id_lc'] = $this->id_lc;
+            }
+            //date_fin - not empty
+            else {
+                $sql = "UPDATE ligne_caisse SET id_lc = :id_update, date_debut = :date_debut, date_fin = :date_fin, id_utilisateur = :id_user, num_caisse = :num_caisse WHERE id_lc = :id_lc ";
+                $paramsQuery['id_update'] = $this->id_update;
+                $paramsQuery['date_debut'] = $this->date_debut;
+                $paramsQuery['date_fin'] = $this->date_fin;
+                $paramsQuery['id_user'] = $this->id_utilisateur;
+                $paramsQuery['num_caisse'] = $this->num_caisse;
+                $paramsQuery['id_lc'] = $this->id_lc;
+            }
+
+            //update ligne caisse
+            $response = self::executeQuery($sql, $paramsQuery);
+
+            //error 
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => __('messages.success.caisse_updateLigneCaisse', ['field' => $this->id_lc])
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_updateLigneCaisse',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //========================  PRIVATE FUNCTION =================
+
+    //create ligne caisse
+    private function createLigneCaisse()
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+            $sql = "";
+            $paramsQuery = [];
+
+            //id_lc - empty
+            if ($this->id_lc === 0) {
+                //date_fin - empty
+                if ($this->date_fin === '') {
+                    //date_debut - empty
+                    if ($this->date_debut === '') {
+                        $sql = "INSERT INTO ligne_caisse (date_debut, id_utilisateur, num_caisse) VALUES (NOW(), :id_user, :num_caisse) ";
+                        $paramsQuery['id_user'] = $this->id_utilisateur;
+                        $paramsQuery['num_caisse'] = $this->num_caisse;
+                    }
+                    //date_debut - not empty
+                    else {
+                        $sql = "INSERT INTO ligne_caisse (date_debut, id_utilisateur, num_caisse) VALUES (:date_debut, :id_user, :num_caisse) ";
+                        $paramsQuery['date_debut'] = $this->date_debut;
+                        $paramsQuery['id_user'] = $this->id_utilisateur;
+                        $paramsQuery['num_caisse'] = $this->num_caisse;
+                    }
+                }
+                //date_fin - not empty
+                else {
+                    $sql = "INSERT INTO ligne_caisse (date_debut, date_fin, id_utilisateur, num_caisse) VALUES (:date_debut, :date_fin, :id_user, :num_caisse) ";
+                    $paramsQuery['date_debut'] = $this->date_debut;
+                    $paramsQuery['date_fin'] = $this->date_fin;
+                    $paramsQuery['id_user'] = $this->id_utilisateur;
+                    $paramsQuery['num_caisse'] = $this->num_caisse;
+                }
+            }
+            //id_lc - not empty
+            else {
+                //date_fin - empty
+                if ($this->date_fin === '') {
+                    $sql = "INSERT INTO ligne_caisse (id_lc, date_debut, id_utilisateur, num_caisse) VALUES (:id_lc, :date_debut, :id_user, :num_caisse) ";
+                    $paramsQuery['id_lc'] = $this->id_lc;
+                    $paramsQuery['date_debut'] = $this->date_debut;
+                    $paramsQuery['id_user'] = $this->id_utilisateur;
+                    $paramsQuery['num_caisse'] = $this->num_caisse;
+                }
+                //date_fin - not empty
+                else {
+                    $sql = "INSERT INTO ligne_caisse (id_lc, date_debut, date_fin, id_utilisateur, num_caisse) VALUES (:id_lc, :date_debut, :date_fin, :id_user, :num_caisse) ";
+                    $paramsQuery['id_lc'] = $this->id_lc;
+                    $paramsQuery['date_debut'] = $this->date_debut;
+                    $paramsQuery['date_fin'] = $this->date_fin;
+                    $paramsQuery['id_user'] = $this->id_utilisateur;
+                    $paramsQuery['num_caisse'] = $this->num_caisse;
+                }
+            }
+
+            $response = parent::executeQuery($sql, $paramsQuery);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = ['message_type' => 'success', 'message' => 'success'];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_createLigneCaisse',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
 
     //is date interval exist ?
     private function isDateIntervalExist($exclude = null)
@@ -870,6 +989,68 @@ class LigneCaisse extends Database
                 'message_type' => 'error',
                 'message' => __(
                     'errors.catch.caisse_updateEtatCaisse',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //is id lc exist ?
+    private static function isIdLcExist($id_lc, $exclude = null)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+            'found' => false
+        ];
+        $sql = "SELECT id_lc FROM ligne_caisse WHERE id_lc = :id_lc ";
+        $paramsQuery = ['id_lc' => $id_lc];
+
+        if ($exclude) {
+            $sql .= "AND id_lc != :exclude ";
+            $paramsQuery['exclude'] = $exclude;
+        }
+
+        try {
+
+            $response = parent::selectQuery($sql, $paramsQuery);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //not found
+            if (count($response['data']) <= 0) {
+                $response['found'] = false;
+            }
+            //found
+            else {
+                $response['found'] = true;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+                'found' => $response['found']
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_isIdLcExist',
                     ['field' => $e->getMessage() .
                         ' - Line : ' . $e->getLine() .
                         ' - File : ' . $e->getFile()]

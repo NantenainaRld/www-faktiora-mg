@@ -936,8 +936,8 @@ class CaisseController extends Controller
                 return;
             }
             //from - invalid
-            $json['date_debut'] = DateTime::createFromFormat('Y-m-d\TH:i', $json['date_debut']);
-            if ($json['date_debut'] === false) {
+            $date_debut = DateTime::createFromFormat('Y-m-d\TH:i', $json['date_debut']);
+            if ($date_debut === false) {
                 $response = [
                     'message_type' => 'invalid',
                     'message' => __('messages.invalids.date', ['field' => $json['date_debut']])
@@ -962,7 +962,7 @@ class CaisseController extends Controller
                 $json['date_fin'] = DateTime::createFromFormat('Y-m-d\TH:i', $json['date_fin']);;
             }
             //to not empty - from > to
-            if ($json['date_fin'] !== '' && $json['date_debut'] > $json['date_fin']) {
+            if ($json['date_fin'] !== '' && $date_debut > $json['date_fin']) {
                 $response = [
                     'message_type' => 'invalid',
                     'message' => __('messages.invalids.from_to')
@@ -972,21 +972,17 @@ class CaisseController extends Controller
                 return;
             }
             $date = new DateTime();
-            //from not empty - reformat
-            if ($json['date_debut'] !== '') {
-                //from - future
-                if ($json['date_debut'] > $date) {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => __('messages.invalids.date_future')
-                    ];
+            //from - future
+            if ($date_debut > $date) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date_future')
+                ];
 
-                    echo json_encode($response);
-                    return;
-                }
-
-                $json['date_debut'] = $json['date_debut']->format('Y-m-d H:i:s');
+                echo json_encode($response);
+                return;
             }
+            $json['date_debut'] = $date_debut->format('Y-m-d H:i:s');
             //to not empty - reformat
             if ($json['date_fin'] !== '') {
                 //to - future
@@ -1080,27 +1076,6 @@ class CaisseController extends Controller
 
                     echo json_encode($response);
                     return;
-                }
-
-                //id_lc != 0 - is id_lc exist?
-                if ($json['id_lc'] !== 0) {
-
-                    $response = LigneCaisse::findById($json['id_lc']);
-                    //error
-                    if ($response['message_type'] === 'error') {
-                        echo json_encode($response);
-                        return;
-                    }
-                    //found
-                    if ($response['found']) {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.duplicate.caisse_id_lc', ['field' => $json['id_lc']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
                 }
 
                 //add ligne caisse
@@ -1431,6 +1406,285 @@ class CaisseController extends Controller
                 echo json_encode($response);
                 return;
             }
+        }
+
+        echo json_encode($response);
+        return;
+    }
+
+    //action - update ligne caisse
+    public function updateLigneCaisse()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //role - not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to caisse index
+            header("Location: " . SITE_URL . '/caisse');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            $json = json_decode(file_get_contents('php://input'), true);
+            //trim
+            $json = array_map(fn($x) => trim($x), $json);
+
+            //id_update - invalid
+            $id_update = filter_var($json['id_update'], FILTER_VALIDATE_INT);
+            if ($id_update === false || $id_update < 1) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.caisse_id_lc')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            $json['id_update'] = $id_update;
+
+            //num_caisse - invalid
+            $num_caisse = filter_var($json['num_caisse'], FILTER_VALIDATE_INT);
+            if ($num_caisse === false || $num_caisse < 0) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.caisse_num_caisse')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //id_utilisateur - invalid
+            $id_utilisateur = filter_var($json['id_utilisateur'], FILTER_VALIDATE_INT);
+            if ($id_utilisateur === false || $id_utilisateur < 10000) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.user_id_user', ['field' => $json['id_utilisateur']])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //from - empty
+            if ($json['date_debut'] === '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.from')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //date fin not empty - from empty
+            if ($json['date_debut'] === '' && $json['date_fin'] !== '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.from')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //from - invalid
+            $date_debut = DateTime::createFromFormat('Y-m-d\TH:i', $json['date_debut']);
+            if ($date_debut === false) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date', ['field' => $json['date_debut']])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //to not empty - invalid
+            if ($json['date_fin'] !== '' && DateTime::createFromFormat('Y-m-d\TH:i', $json['date_fin']) === false) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date', ['field' => $json['date_debut']])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //to not empty - format
+            if ($json['date_fin'] !== '') {
+                $json['date_fin'] = DateTime::createFromFormat('Y-m-d\TH:i', $json['date_fin']);;
+            }
+            //to not empty - from > to
+            if ($json['date_fin'] !== '' && $date_debut > $json['date_fin']) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.from_to')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            $date = new DateTime();
+            //from - future
+            if ($date_debut > $date) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date_future')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            $json['date_debut'] = $date_debut->format('Y-m-d H:i:s');
+            //to not empty - reformat
+            if ($json['date_fin'] !== '') {
+                //to - future
+                if ($json['date_fin'] > $date) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date_future')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                $json['date_fin'] = $json['date_fin']->format('Y-m-d H:i:s');
+            }
+
+            try {
+
+                //id_lc exist ?
+                $response = LigneCaisse::findById($json['id_lc']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.caisse_id_lc', ['field' => $json['id_lc']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //to empty - date_fin not empty
+                if ($json['date_fin'] === '' && ($response['model']->getDateFin() !== null && $response['model']->getDateFin() !== '')) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.caisse_date_fin_reopen')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //to empty - id_user modified
+                if ($json['date_fin'] === '' && $response['model']->getIdUtilisateur() !== (int)$json['id_utilisateur']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.caisse_line_open_user_id')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //to empty - num_caisse modified
+                if ($json['date_fin'] === '' && $response['model']->getNumCaisse() !== (int)$json['num_caisse']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.caisse_line_open_num_caisse')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //is num_caisse exist ?
+                $response = Caisse::findById($json['num_caisse']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //is user exist?
+                $response = User::findById($json['id_utilisateur']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.user_id', ['field' => $json['id_utilisateur']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //update ligne caisse
+                $ligne_caisse_model = new LigneCaisse();
+                $ligne_caisse_model
+                    ->setIdLc($json['id_lc'])
+                    ->setIdUpdate($json['id_update'])
+                    ->setDateDebut($json['date_debut'])
+                    ->setDateFin($json['date_fin'])
+                    ->setIdUtilsateur($json['id_utilisateur'])
+                    ->setNumCaisse($json['num_caisse']);
+                $response = $ligne_caisse_model->updateLigneCaisse();
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.caisse_updateLigneCaisse',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            echo json_encode($response);
+            return;
+        }
+        //redirect to caisse index
+        else {
+            header('Location: ' . SITE_URL . '/caisse');
+            return;
         }
 
         echo json_encode($response);

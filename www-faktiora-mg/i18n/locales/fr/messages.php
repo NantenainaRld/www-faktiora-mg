@@ -26,7 +26,7 @@ return [
         //user - deleted
         'user_deleted' => "L'utilisateur avec l'ID <b>:field</b> est déjà supprimé",
         //caisse - num_caisse
-        'caisse_num_caisse' => "Le numéro du caisse doît être des nombres entiers supérieurs ou égaux à 0",
+        'caisse_num_caisse' => "Le numéro de caisse doît être des nombres entiers supérieurs ou égaux à 0",
         //caisse - not selected
         'caisse_not_selected' => "Veuiller séléctionner une caisse",
         //caisse - nums caisse empty
@@ -41,6 +41,13 @@ return [
         'caisse_deleted' => "La caisse numéro <b>:field</b> est déjà supprimée",
         //caisse - occupCaisse
         'caisse_occupCaisse' => "Seule les caissiers peuvent occuper les caisses",
+        //caisse - date_fin reopen
+        'caisse_date_fin_reopen' => "Une ligne fermée ne peut pas réouvrir",
+        //caisse - line open / user id
+        'caisse_line_open_user_id' => "La ligne est encore ouverte, vous ne pouvez pas modifier l'ID d'utilisateur pour le moment",
+        'entree_id_ae' => "L'ID de l'autre entrée ne doît pas dépasser de 20 caractères",
+        //caisse - line open / num_caisse
+        'caisse_line_open_num_caisse' => "La ligne est encore ouverte, vous ne pouvez pas modifier le numéro de caisse pour le moment",
         'entree_id_ae' => "L'ID de l'autre entrée ne doît pas dépasser de 20 caractères",
         'libelle' => "Le libellé ne doît pas dépasser de 100 caractères",
         'montant' => "Le montant doît être des valeurs décimaux supérieurs ou égaux à 0",
@@ -112,12 +119,16 @@ return [
         'caisse_freeCaisse_1' => "Une caisse a été libérée avec succès",
         //caisse - free caisse plur
         'caisse_freeCaisse_plur' => "<b>:field</b> caisses ont été libérées avec succès",
+        //caisse - update ligne caisse
+        'caisse_updateLigneCaisse' => "Ligne caisse numéro <b>:field</b> est modifiée avec succès",
     ],
     'not_found' => [
         //user - id
         'user_id' => "L'utilisateur avec l'ID <b>:field</b> n'existe pas",
         //caisse - num_caisse
-        'caisse_num_caisse' => "Caisse numéro <b>:field</b> n'existe pas"
+        'caisse_num_caisse' => "Caisse numéro <b>:field</b> n'existe pas",
+        //caisse - id lc
+        'caisse_id_lc' => "La ligne caisse numéro <b>:field</b> n'existe pas",
     ],
     'duplicate' => [
         //user - email
@@ -125,6 +136,6 @@ return [
         //caisse - num_caisse
         'caisse_num_caisse' => "Le numéro de caisse <b>:field</b> existe déjà",
         //caisse - id_lc
-        'caisse_id_lc' => "Le numéro de ligne de caisse <b>:field</b> existe déjà"
+        'caisse_id_lc' => "Le numéro de ligne caisse <b>:field</b> existe déjà"
     ]
 ];

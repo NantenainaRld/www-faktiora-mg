@@ -65,6 +65,10 @@ return [
         'caisse_quitCaisse' => DEBUG ? "Erreur dans caisse/quitCaisse : :field" : "Une erreur est survenue lors de la libération de caisse",
         //caisse - free caisse
         'caisse_freeCaisse' => DEBUG ? "Erreur dans caisse/freeCaisse : :field" : "Une erreur est survenue lors de la libération des caisses",
+        //caisse - is id lc exist 
+        'caisse_isIdLcExist' => DEBUG ? "Erreur dans caisse/isIdLcExist : :field" : "Une erreur est survenue",
+        //caisse - update ligne caisse
+        'caisse_updateLigneCaisse' => DEBUG ? "Erreur dans caisse/updateLigneCaisse : :field" : "Une erreur est survenue lors de la modification de ligne caisse",
         'entree_createAutreEntree' => DEBUG ? "Erreur dans entree/createAutreEntree : :field" : "Une erreur est survenue lors d'ajout de nouveau autre entrée",
         'ligne_caisse_findCaisse' => DEBUG ? "Erreur dans ligne_caisse/findCaisse : :field" : "Une erreur est survenue lors de la vérification de caisse d'utilisateur"
     ],
