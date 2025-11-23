@@ -43,6 +43,8 @@ return [
         'caisse_updateCaisse' => DEBUG ? "Erreur dans caisse/updateCaisse : :field" : "Une erreur est survenue lors de la modifications des informations du caisse",
         //caisse - list free caisse
         'caisse_listFreeCaisse' => DEBUG ? "Erreur dans caisse/listFreeCaisse : :field" : "Une erreur est survenue lors de listage des caisses libres",
+        //caisse - list all caisse
+        'caisse_listAllCaisse' => DEBUG ? "Erreur dans caisse/listAllCaisse : :field" : "Une erreur est survenue lors de listage de tous les caisses",
         //caisse - delete all
         'caisse_deleteAll' => DEBUG ? "Erreur dans caisse/deleteAll : :field" : "Une erreur est survenue lors de la suppréssion des caisses",
         //caisse - delete all ligne caisse

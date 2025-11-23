@@ -451,7 +451,7 @@ class CaisseController extends Controller
         }
 
         //role - not caissier
-        if ($is_loged_in->getRole() !== 'admin') {
+        if ($is_loged_in->getRole() !== 'caissier') {
             //redirect to caisse index
             header("Location: " . SITE_URL . '/caisse');
             return;
@@ -1686,6 +1686,35 @@ class CaisseController extends Controller
             header('Location: ' . SITE_URL . '/caisse');
             return;
         }
+
+        echo json_encode($response);
+        return;
+    }
+
+    //action - list all caisse
+    public function listAllCaisse()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //role - not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to caisse index
+            header("Location: " . SITE_URL . '/caisse');
+            return;
+        }
+
+        //list all caisse
+        $response = Caisse::listAllCaisse();
 
         echo json_encode($response);
         return;

@@ -197,6 +197,15 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
+  //function -list all caisse
+  async function listAllCaisse() {
+    try {
+      const response = await apiRequest("/caisse/list_all_caisse");
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //=================== EVENTS =================
   const from = document.getElementById("from");
@@ -207,6 +216,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    updateLigneCaisse("2", "85", "2", "10004", fromLs.value, toLs.value);
+    listAllCaisse();
   });
 });
