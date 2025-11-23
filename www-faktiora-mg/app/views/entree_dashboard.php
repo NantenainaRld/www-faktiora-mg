@@ -15,6 +15,7 @@
 
 <body>
     <?= "entree dashboard"; ?>
+    <input type="datetime-local" id="id">
     <button id='btn-test'>Test</button>
     <!-- script js -->
     <script src="<?= SITE_URL ?>/js/entree-dashboard.js"></script>
