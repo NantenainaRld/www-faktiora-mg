@@ -889,7 +889,7 @@ class LigneCaisse extends Database
     }
 
     //static - close ligne caisse
-    private static function closeLigneCaisse($id_utilisateur = null, $nums_caisse = null)
+    public static function closeLigneCaisse($id_utilisateur = null, $nums_caisse = null)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 

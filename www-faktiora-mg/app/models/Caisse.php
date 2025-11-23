@@ -255,6 +255,14 @@ class Caisse extends Database
 
         try {
 
+            //close all ligne caisse
+            $response = LigneCaisse::closeLigneCaisse(null, $nums_caisse);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //delete all caisse
             $response = parent::executeQuery($sql, $nums_caisse);
 
             //error
@@ -313,6 +321,14 @@ class Caisse extends Database
 
         try {
 
+            //close all ligne caisse
+            $response = LigneCaisse::closeLigneCaisse(null, $nums_caisse);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //permanent delete all
             $response = parent::executeQuery($sql, $nums_caisse);
 
             //error
