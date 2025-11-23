@@ -579,54 +579,6 @@ class LigneCaisse extends Database
     }
 
 
-    //static - find caisse
-    public static function findCaisse($id_utilisateur)
-    {
-        $response = [
-            'message_type' => 'success',
-            'message' => 'success',
-            'found' => false
-        ];
-
-        try {
-            $response = self::selectQuery("SELECT id_utilisateur, num_caisse FROM ligne_caisse WHERE id_utilisateur = :id AND date_fin IS NULL LIMIT 1 ", ['id' => $id_utilisateur]);
-
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-
-            //not found
-            if (count($response['data']) <= 0) {
-                $response['found'] = false;
-            }
-            //found
-            else {
-                $response['found'] = true;
-
-                $ligne_caisse = new LigneCaisse();
-                $ligne_caisse->setIdUtilsateur($response['data'][0]['id_utilisateur'])
-                    ->setNumCaisse($response['data'][0]['num_caisse']);
-
-                $response['model'] = $ligne_caisse;
-                $response['data'] = [];
-
-                return $response;
-            }
-
-            return $response;
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $response = [
-                'message_type' => 'error',
-                'message' => __('errors.catch.ligne_caisse_findCaisse', ['field' => $e->getMessage()])
-            ];
-            return $response;
-        }
-
-        return $response;
-    }
 
     //update ligne caisse
     public function updateLigneCaisse()
@@ -711,6 +663,72 @@ class LigneCaisse extends Database
                 'message_type' => 'error',
                 'message' => __(
                     'errors.catch.caisse_updateLigneCaisse',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //static - find caisse
+    public static function findCaisse($id_utilisateur)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+            'found' => false
+        ];
+
+        try {
+            $response = self::selectQuery("SELECT id_utilisateur, num_caisse FROM ligne_caisse WHERE id_utilisateur = :id AND date_fin IS NULL LIMIT 1 ", ['id' => $id_utilisateur]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //not found
+            if (count($response['data']) <= 0) {
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'found' => false
+                ];
+
+                return $response;
+            }
+            //found
+            else {
+                $ligne_caisse = new LigneCaisse();
+                $ligne_caisse
+                    ->setIdUtilsateur($response['data'][0]['id_utilisateur'])
+                    ->setNumCaisse($response['data'][0]['num_caisse']);
+
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'found' => true,
+                    'model' => $ligne_caisse
+                ];
+
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_findCaisse',
                     ['field' => $e->getMessage() .
                         ' - Line : ' . $e->getLine() .
                         ' - File : ' . $e->getFile()]

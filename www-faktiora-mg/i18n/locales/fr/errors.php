@@ -71,8 +71,10 @@ return [
         'caisse_isIdLcExist' => DEBUG ? "Erreur dans caisse/isIdLcExist : :field" : "Une erreur est survenue",
         //caisse - update ligne caisse
         'caisse_updateLigneCaisse' => DEBUG ? "Erreur dans caisse/updateLigneCaisse : :field" : "Une erreur est survenue lors de la modification de ligne caisse",
+        //caisse - find caisse
+        'caisse_findCaisse' => DEBUG ? "Erreur dans caisse/findCaisse : :field" : "Une erreur est survenue lors de la vérification de caisse d'utilisateur",
+        //caisse - create autre entree
         'entree_createAutreEntree' => DEBUG ? "Erreur dans entree/createAutreEntree : :field" : "Une erreur est survenue lors d'ajout de nouveau autre entrée",
-        'ligne_caisse_findCaisse' => DEBUG ? "Erreur dans ligne_caisse/findCaisse : :field" : "Une erreur est survenue lors de la vérification de caisse d'utilisateur"
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

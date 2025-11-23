@@ -18,6 +18,8 @@ return [
         'solde_seuil' => "Le solde ne doît pas en dessous de seuil",
         'date_future' => "La date de doît pas être dans le future",
         'date_fusion' => "Les dates choisies ne sont pas valides (chevauchement des dates)",
+        'libelle' => "Le libellé ne doit pas dépasser de 100 caractères",
+        'montant' => "Le montant doît être des nombres décimaux supérieurs ou égaux à 1",
         //
         //user - ids_user empty
         'user_ids_user_empty' => "Veuiller séléctionner au moins un utilisateur",
@@ -48,10 +50,9 @@ return [
         'entree_id_ae' => "L'ID de l'autre entrée ne doît pas dépasser de 20 caractères",
         //caisse - line open / num_caisse
         'caisse_line_open_num_caisse' => "La ligne est encore ouverte, vous ne pouvez pas modifier le numéro de caisse pour le moment",
+        //entree - num_ae
+        'entree_num_ae' => "Le numéro d'autre entrée ne doît pas dépasser de 20 caractères",
         'entree_id_ae' => "L'ID de l'autre entrée ne doît pas dépasser de 20 caractères",
-        'libelle' => "Le libellé ne doît pas dépasser de 100 caractères",
-        'montant' => "Le montant doît être des valeurs décimaux supérieurs ou égaux à 0",
-        'user_caisse_not_found' => "Vous n'êtes pas encore sur une caisse"
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",
@@ -62,9 +63,11 @@ return [
         'solde' => "Le champ <b>solde</b> est réquis",
         'user_id' => "L'<b>ID</b> d'utilisateur est réquis",
         'seuil' => "Le champ <b>seuil</b> est réquis",
-        'libelle' => "Le champ libellé est réquis",
         'montant' => "Le champ <b>montant</b> est réquis",
-        'from' => "La date de début est réquis"
+        'from' => "La date de début est réquis",
+        'libelle' => "Le champ libellé est réquis",
+        'date' => "La date est réquise",
+        'montant' => "Le montant est réquis"
     ],
     'success' => [
         //user - create user
@@ -125,6 +128,8 @@ return [
     'not_found' => [
         //user - id
         'user_id' => "L'utilisateur avec l'ID <b>:field</b> n'existe pas",
+        //user - caisse
+        'user_caisse' => "Vous n'êtes pas encore sur une caisse",
         //caisse - num_caisse
         'caisse_num_caisse' => "Caisse numéro <b>:field</b> n'existe pas",
         //caisse - id lc
