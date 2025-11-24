@@ -198,6 +198,112 @@ class AutreEntree extends Database
         return $response;
     }
 
+    //filter autre entree
+    public static function filterAutreEntreAdmin($params)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+        $sql = "SELECT num_ae, libelle_ae, date_ae, montant_ae, etat_ae, id_utilisateur, num_caisse FROM autre_entree ";
+        $paramsQuery = [];
+
+        //where 1=1
+        $sql .= "WHERE 1=1 ";
+
+        //status - active
+        if ($params['status'] === 'active') {
+            $sql .= "AND etat_ae = 'actif' ";
+        }
+        //status - deleted
+        else {
+            $sql .= "AND etat_ae = 'supprimé' ";
+        }
+
+        //num_caisse - !all
+        if ($params['num_caisse'] !== 'all') {
+            $sql .= "AND num_caisse = :num_caisse ";
+            $paramsQuery['num_caisse'] = $params['num_caisse'];
+        }
+
+        //id_user - !all
+        if ($params['id_user'] !== 'all') {
+            $sql .= "AND id_utilisateur = :id_user ";
+            $paramsQuery['id_user'] = $params['id_user'];
+        }
+
+        //from - empty
+        if ($params['from'] === '') {
+            //to - not empty
+            if ($params['to'] !== '') {
+                $sql .= "AND DATE(date_ae) <= :to ";
+                $paramsQuery['to'] = $params['to'];
+            }
+        }
+        //from - not empty
+        else {
+            //to - empty
+            if ($params['to'] === '') {
+                $sql .= "AND DATE(date_ae) >= :from ";
+                $paramsQuery['from'] = $params['from'];
+            }
+            //to - not empty
+            else {
+                $sql .= "AND DATE(date_ae) BETWEEN :from AND :to ";
+                $paramsQuery['from'] = $params['from'];
+                $paramsQuery['to'] = $params['to'];
+            }
+        }
+
+        //search_ae
+        $sql .= "AND num_ae LIKE :search OR libelle_ae LIKE :search ";
+        $paramsQuery['search'] = "%" . $params['search_ae'] . "%";
+
+        //group by and order by
+        $sql .= "GROUP BY id_ae ORDER BY {$params['order_by']} {$params['arrange']} ";
+
+        try {
+
+            $response = self::selectQuery($sql, $paramsQuery);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //count total
+            $total = array_sum(array_column($response['data'], 'montant_ae'));
+
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+                'data' => $response['data'],
+                'nb_ae' => count($response['data']),
+                'total' => $total
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.entree_filterAutreEntreeAdmin',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
 
     //====================== PRIVATE FUNCTION ===========================s
 

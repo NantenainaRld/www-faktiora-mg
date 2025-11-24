@@ -27,20 +27,45 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - filter autre entree admin
+  async function filterAutreEntreeAdmin(
+    status,
+    num_caisse,
+    id_user,
+    order_by,
+    arrange,
+    from,
+    to,
+    search_ae
+  ) {
+    try {
+      const response = await apiRequest(
+        `/entree/filter_autre_entree_admin?status=${status}&num_caisse=${num_caisse}&id_user=${id_user}&order_by=${order_by}&arrange=${arrange}&from=${from}&to=${to}&search_ae=${search_ae}`,
+        {}
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
+  const from = document.getElementById("from");
+  const to = document.getElementById("to");
 
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    createAutreEntree(
-      " test",
-      " apport de caisse",
-      date.value,
-      " 200000",
-      " 10004",
-      "1"
+    filterAutreEntreeAdmin(
+      "active",
+      "all",
+      "10004",
+      "date",
+      "desc",
+      from.value,
+      to.value,
+      "a20"
     );
   });
 });
