@@ -27,8 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
-  //function - filter autre entree admin
-  async function filterAutreEntreeAdmin(
+  //function - filter autre entree
+  async function filterAutreEntree(
     status,
     num_caisse,
     id_user,
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ) {
     try {
       const response = await apiRequest(
-        `/entree/filter_autre_entree_admin?status=${status}&num_caisse=${num_caisse}&id_user=${id_user}&order_by=${order_by}&arrange=${arrange}&from=${from}&to=${to}&search_ae=${search_ae}`,
+        `/entree/filter_autre_entree?status=${status}&num_caisse=${num_caisse}&id_user=${id_user}&order_by=${order_by}&arrange=${arrange}&from=${from}&to=${to}&search_ae=${search_ae}`,
         {}
       );
       console.log(response);
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    filterAutreEntreeAdmin(
+    filterAutreEntree(
       "active",
       "all",
       "10004",
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "desc",
       from.value,
       to.value,
-      "a20"
+      ""
     );
   });
 });

@@ -265,8 +265,8 @@ class EntreeController extends Controller
         return;
     }
 
-    //action - filter autre entree admin
-    public function filterAutreEntreeAdmin()
+    //action - filter autre entree
+    public function filterAutreEntree()
     {
         header('Content-Type: application/json');
         $response = null;
@@ -277,12 +277,6 @@ class EntreeController extends Controller
         if (!$is_loged_in->getLoged()) {
             //redirect to login page
             header("Location: " . SITE_URL . '/auth');
-            return;
-        }
-        //role not admin
-        if ($is_loged_in->getRole() !== 'admin') {
-            //redirect to entree index
-            header('Location: ' . SITE_URL . '/entree');
             return;
         }
 
@@ -300,9 +294,17 @@ class EntreeController extends Controller
         $num_caisse = ($num_caisse === false || $num_caisse < 0) ? 'all' : $num_caisse;
 
         //id_user
-        $id_user = trim($_GET['id_user'] ?? 'all');
-        $id_user = filter_var($id_user, FILTER_VALIDATE_INT);
-        $id_user = ($id_user === false || $id_user < 10000) ? 'all' : $id_user;
+        $id_user = "";
+        //role caissier
+        if ($is_loged_in->getRole() === 'caissier') {
+            $id_user = $is_loged_in->getIdUtilisateur();
+        }
+        //role admin
+        else {
+            $id_user = trim($_GET['id_user'] ?? 'all');
+            $id_user = filter_var($id_user, FILTER_VALIDATE_INT);
+            $id_user = ($id_user === false || $id_user < 10000) ? 'all' : $id_user;
+        }
 
         //oder_by
         $order_by = strtolower(trim($_GET['order_by']) ?? 'num');
@@ -395,7 +397,7 @@ class EntreeController extends Controller
         ];
 
         //filter autre entree
-        $response = AutreEntree::filterAutreEntreAdmin($params);
+        $response = AutreEntree::filterAutreEntree($params);
 
         // echo json_encode($params);
         echo json_encode($response);

@@ -77,8 +77,8 @@ return [
         'entree_createAutreEntree' => DEBUG ? "Erreur dans entree/createAutreEntree : :field" : "Une erreur est survenue lors d'ajout de nouveau autre entrée",
         //entree - is num_ae exist 
         'entree_isNumAeExist' => DEBUG ? "Erreur dans entree/isNumAeExist : :field" : "Une erreur est survenue lors de la vérification de numéro d'autre entrée",
-        //entree - filter autre entree admin
-        'entree_filterAutreEntreeAdmin' => DEBUG ? "Erreur dans entree/filterAutreEntreeAdmin : :field" : "Une erreur est survenue lors de listage des autres entrées",
+        //entree - filter autre entree
+        'entree_filterAutreEntreeAdmin' => DEBUG ? "Erreur dans entree/filterAutreEntree : :field" : "Une erreur est survenue lors de listage des autres entrées",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

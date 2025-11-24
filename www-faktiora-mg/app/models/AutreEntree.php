@@ -199,7 +199,7 @@ class AutreEntree extends Database
     }
 
     //filter autre entree
-    public static function filterAutreEntreAdmin($params)
+    public static function filterAutreEntree($params)
     {
         $response = [
             'message_type' => 'success',
@@ -256,7 +256,7 @@ class AutreEntree extends Database
         }
 
         //search_ae
-        $sql .= "AND num_ae LIKE :search OR libelle_ae LIKE :search ";
+        $sql .= "AND (num_ae LIKE :search OR libelle_ae LIKE :search) ";
         $paramsQuery['search'] = "%" . $params['search_ae'] . "%";
 
         //group by and order by
@@ -291,7 +291,7 @@ class AutreEntree extends Database
             $response = [
                 'message_type' => 'error',
                 'message' => __(
-                    'errors.catch.entree_filterAutreEntreeAdmin',
+                    'errors.catch.entree_filterAutreEntree',
                     ['field' => $e->getMessage() .
                         ' - Line : ' . $e->getLine() .
                         ' - File : ' . $e->getFile()]
