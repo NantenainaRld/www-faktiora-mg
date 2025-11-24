@@ -77,7 +77,8 @@ class Database
             return [
                 'message_type' => 'success',
                 'message' => 'success',
-                'row_count' => $stm->rowCount()
+                'row_count' => $stm->rowCount(),
+                'last_inserted' => self::$pdo->lastInsertId()
             ];
         } catch (PDOException $e) {
             error_log($e->getMessage() .

@@ -124,6 +124,8 @@ return [
         'caisse_freeCaisse_plur' => "<b>:field</b> caisses ont été libérées avec succès",
         //caisse - update ligne caisse
         'caisse_updateLigneCaisse' => "Ligne caisse numéro <b>:field</b> est modifiée avec succès",
+        //entree - add autre entree
+        'entree_createAutreEntree' => "Autre entrée ajoutée avec succès"
     ],
     'not_found' => [
         //user - id
@@ -141,6 +143,8 @@ return [
         //caisse - num_caisse
         'caisse_num_caisse' => "Le numéro de caisse <b>:field</b> existe déjà",
         //caisse - id_lc
-        'caisse_id_lc' => "Le numéro de ligne caisse <b>:field</b> existe déjà"
+        'caisse_id_lc' => "Le numéro de ligne caisse <b>:field</b> existe déjà",
+        //entree - num_ae
+        'entree_num_ae' => "Le numéro d'autre entréé <b>:field</b> existe déjà",
     ]
 ];

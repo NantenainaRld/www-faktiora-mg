@@ -35,12 +35,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
     createAutreEntree(
-      "s",
+      " test",
       " apport de caisse",
       date.value,
       " 200000",
       " 10004",
-      ""
+      "1"
     );
   });
 });

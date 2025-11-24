@@ -73,12 +73,14 @@ return [
         'caisse_updateLigneCaisse' => DEBUG ? "Erreur dans caisse/updateLigneCaisse : :field" : "Une erreur est survenue lors de la modification de ligne caisse",
         //caisse - find caisse
         'caisse_findCaisse' => DEBUG ? "Erreur dans caisse/findCaisse : :field" : "Une erreur est survenue lors de la vérification de caisse d'utilisateur",
-        //caisse - create autre entree
+        //entree - create autre entree
         'entree_createAutreEntree' => DEBUG ? "Erreur dans entree/createAutreEntree : :field" : "Une erreur est survenue lors d'ajout de nouveau autre entrée",
+        //entree - is num_ae exist 
+        'entree_isNumAeExist' => DEBUG ? "Erreur dans entree/isNumAeExist : :field" : "Une erreur est survenue lors de la vérification de numéro d'autre entrée",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",
         'action' => "L'action demandée n'est pas trouvée : :field",
-        'class' => DEBUG ? "Erreur d'autochargement de classe, classe n'est pas trouvé : :field" : "Une erreur est survenue"
+        'class' => DEBUG ? "Erreur d'autochargement de classe, classe n'est pas trouvé : :field" : "Une erreur est survenue",
     ]
 ];

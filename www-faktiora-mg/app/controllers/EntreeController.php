@@ -41,9 +41,9 @@ class EntreeController extends Controller
             $json = array_map(fn($x) => trim($x), $json);
 
             //num_ae
-            $num_ae = "";
+            $num_ae = ($is_loged_in->getRole() === 'admin') ? $json['num_ae'] : '';
             //admin num_ae not empty - invalid
-            if ($is_loged_in->getRole() === 'admin' && $json['num_ae'] !== '' && strlen($json['num_ae']) > 20) {
+            if ($is_loged_in->getRole() === 'admin' && $num_ae !== '' && strlen($num_ae) > 20) {
                 $response = [
                     'message_type' => 'invalid',
                     'message' => __('messages.invalids.entree_num_ae')
@@ -102,7 +102,7 @@ class EntreeController extends Controller
                     return;
                 }
                 $date = new DateTime();
-                //date_ae - futur
+                //date_ae - future
                 if ($date_ae > $date) {
                     $response = [
                         'message_type' => 'invalid',
@@ -164,6 +164,23 @@ class EntreeController extends Controller
                 $num_caisse = "";
                 //role admin
                 if ($is_loged_in->getRole() === 'admin') {
+                    //is num_caisse exist ?
+                    $response = Caisse::findById($json['num_caisse']);
+                    //error
+                    if ($response['message_type'] === 'error') {
+                        echo json_encode($response);
+                        return;
+                    }
+                    //not found
+                    if (!$response['found']) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
                     $num_caisse = $json['num_caisse'];
                 }
                 //role caissier
@@ -206,19 +223,17 @@ class EntreeController extends Controller
                         echo json_encode($response);
                         return;
                     }
-                    //role not caissier
-                    if ($response['model']->getRole() !== 'caissier') {
-                    }
                 }
 
-                // //create autre entree
-                // $autre_entree_model = new AutreEntree();
-                // $autre_entree_model->setIdAe($json['id_ae'])
-                //     ->setLibelleAe($json['libelle_ae'])
-                //     ->setDateAe($json['date_ae'])
-                //     ->setIdUtilsateur($response['model']->getIdUtilisateur())
-                //     ->setNumCaisse($response['model']->getNumCaisse());
-                // $response = $autre_entree_model->createAutreEntree();
+                //create autre entree
+                $autre_entree_model = new AutreEntree();
+                $autre_entree_model
+                    ->setNumAe($num_ae)
+                    ->setLibelleAe($json['libelle_ae'])
+                    ->setDateAe($date_ae)
+                    ->setIdUtilsateur($id_utilisateur)
+                    ->setNumCaisse($num_caisse);
+                $response = $autre_entree_model->createAutreEntree();
 
                 echo json_encode($response);
                 return;
@@ -230,7 +245,7 @@ class EntreeController extends Controller
                 $response = [
                     'message_type' => 'error',
                     'message' => __(
-                        'errors.catch.caisse_createAutreEntree',
+                        'errors.catch.entree_createAutreEntree',
                         ['field' => $e->getMessage() .
                             ' - Line : ' . $e->getLine() .
                             ' - File : ' . $e->getFile()]
