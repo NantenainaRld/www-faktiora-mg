@@ -403,4 +403,28 @@ class EntreeController extends Controller
         echo json_encode($response);
         return;
     }
+
+    //action - list all autre entree
+    public function listAllAutreEntree()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //list all caisse
+        $response = AutreEntree::listAllAutreEntree();
+
+        echo json_encode($response);
+        return;
+    }
+
+    //action - update autre caisse
 }

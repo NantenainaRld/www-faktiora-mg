@@ -198,7 +198,7 @@ class AutreEntree extends Database
         return $response;
     }
 
-    //filter autre entree
+    //static - filter autre entree
     public static function filterAutreEntree($params)
     {
         $response = [
@@ -304,10 +304,54 @@ class AutreEntree extends Database
         return $response;
     }
 
+    //list all autre entree
+    public static function listAllAutreEntree()
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+
+            $response = self::selectQuery("SELECT num_ae , libelle_ae, montant_ae FROM autre_entree ");
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+                'data' => $response['data']
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.entree_listAllAutreEntree',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
 
     //====================== PRIVATE FUNCTION ===========================s
 
-    //is num_ae exist ?
+    //static - is num_ae exist ?
     private static function isNumAeExist($num_ae, $exclude = null)
     {
         $response = [
@@ -368,66 +412,6 @@ class AutreEntree extends Database
                         ' - File : ' . $e->getFile()]
                 )
             ];
-
-            return $response;
-        }
-
-        return $response;
-    }
-
-    //generate id_ae
-    private function generateIdUser()
-    {
-        $response = [
-            'message_type' => 'success',
-            'message' => 'success'
-        ];
-
-        //generate id_ae
-        $this->id_utilisateur = 'AE' .
-            strval(sprintf("%06d", mt_rand(0, 999999))) .
-            substr(
-                str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
-                0,
-                2
-            );
-
-        try {
-
-            $found = true;
-            while ($found) {
-                // $response = self::isIdUserExist($this->id_utilisateur, null);
-
-                //error
-                if ($response['message_type'] === 'error') {
-                    return $response;
-                }
-
-                //found
-                if ($response['found']) {
-
-                    //regenerate id_utilisateur
-                    $this->id_utilisateur = 'U' .
-                        strval(sprintf("%06d", mt_rand(0, 999999))) .
-                        substr(
-                            str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
-                            0,
-                            2
-                        );
-                }
-                //not found
-                else {
-                    $found = false;
-                    break;
-                }
-            }
-
-            return $response;
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
-
-            $response['message_type'] = 'error';
-            $response['message'] =  __('errors.catch.user_generate_id', ['field' => $e->getMessage()]);
 
             return $response;
         }

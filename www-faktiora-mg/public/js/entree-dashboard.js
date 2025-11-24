@@ -48,6 +48,15 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - list all autre entree
+  async function listAllAutreEntree() {
+    try {
+      const response = await apiRequest(`/entree/list_all_autre_entree`);
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -57,15 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    filterAutreEntree(
-      "active",
-      "all",
-      "10004",
-      "date",
-      "desc",
-      from.value,
-      to.value,
-      ""
-    );
+    listAllAutreEntree();
   });
 });
