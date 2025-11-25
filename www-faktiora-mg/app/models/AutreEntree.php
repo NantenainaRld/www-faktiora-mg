@@ -54,6 +54,13 @@ class AutreEntree extends Database
         return $this;
     }
 
+    //setter - etat_ae
+    public function setEtatAe($etat_ae)
+    {
+        $this->etat_ae = $etat_ae;
+        return $this;
+    }
+
     //setter - id_utilisateur
     public function setIdUtilsateur($id_utilisateur)
     {
@@ -66,6 +73,56 @@ class AutreEntree extends Database
     {
         $this->num_caisse = $num_caisse;
         return $this;
+    }
+
+    //====================== GETTERS ===============================
+
+    //getter - id_ae
+    public function getIdAe()
+    {
+        return $this->id_ae;
+    }
+
+    //getter - num_ae
+    public function getNumAe()
+    {
+        return $this->num_ae;
+    }
+
+    //getter - libelle_ae
+    public function getLibelleAe()
+    {
+        return $this->libelle_ae;
+    }
+
+    //getter - date_ae
+    public function getDateAe()
+    {
+        return $this->date_ae;
+    }
+
+    //getter - montant_ae
+    public function getMontantAe()
+    {
+        return $this->montant_ae;
+    }
+
+    //getter - etat_ae
+    public function getEtatAe()
+    {
+        return $this->etat_ae;
+    }
+
+    //getter - id_utilisateur
+    public function getIdUtilisateur()
+    {
+        return $this->id_utilisateur;
+    }
+
+    //getter - num_caisse
+    public function getNumCaisse()
+    {
+        return $this->num_caisse;
     }
 
     //====================== PUBLIC FUNCTION =======================
@@ -101,7 +158,7 @@ class AutreEntree extends Database
         try {
 
             //add autre entree
-            $response = self::executeQuery($sql, $paramsQuery);
+            $response = parent::executeQuery($sql, $paramsQuery);
 
             //error
             if ($response['message_type'] === 'error') {
@@ -111,7 +168,7 @@ class AutreEntree extends Database
             //add num_ae
             $this->id_ae = $response['last_inserted'];
             $this->num_ae = strtoupper("A" . date('Ym') . '-' . $this->id_ae);
-            $response = self::executeQuery("UPDATE autre_entree SET num_ae = :num_ae WHERE id_ae = :id_ae ", [
+            $response = parent::executeQuery("UPDATE autre_entree SET num_ae = :num_ae WHERE id_ae = :id_ae ", [
                 'num_ae' => $this->num_ae,
                 'id_ae' => $this->id_ae
             ]);
@@ -220,7 +277,7 @@ class AutreEntree extends Database
 
         try {
 
-            $response = self::selectQuery($sql, $paramsQuery);
+            $response = parent::selectQuery($sql, $paramsQuery);
 
             //error
             if ($response['message_type'] === 'error') {
@@ -270,7 +327,7 @@ class AutreEntree extends Database
 
         try {
 
-            $response = self::selectQuery("SELECT num_ae , libelle_ae, montant_ae FROM autre_entree ");
+            $response = parent::selectQuery("SELECT num_ae , libelle_ae, montant_ae FROM autre_entree ");
 
             //error
             if ($response['message_type'] === 'error') {
@@ -293,6 +350,141 @@ class AutreEntree extends Database
                 'message_type' => 'error',
                 'message' => __(
                     'errors.catch.entree_listAllAutreEntree',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //static - find by id
+    public static function findById($num_ae)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+            'found' => false
+        ];
+
+        try {
+
+            $response = parent::selectQuery("SELECT * FROM autre_entree WHERE num_ae = :num_ae ", ['num_ae' => $num_ae]);
+
+            //error
+            if ($response['message_type'] == 'error') {
+                return $response;
+            }
+
+            //not found
+            if (count($response['data']) <= 0) {
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'found' => false
+                ];
+
+                return $response;
+            }
+            //found
+            else {
+                $autre_entree_model = new AutreEntree();
+                $autre_entree_model
+                    ->setIdAe($response['data'][0]['id_ae'])
+                    ->setNumAe($response['data'][0]['num_ae'])
+                    ->setLibelleAe($response['data'][0]['libelle_ae'])
+                    ->setDateAe($response['data'][0]['date_ae'])
+                    ->setMontantAe($response['data'][0]['montant_ae'])
+                    ->setEtatAe($response['data'][0]['etat_ae'])
+                    ->setIdUtilsateur($response['data'][0]['id_utilisateur'])
+                    ->setNumCaisse($response['data'][0]['num_caisse']);
+
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'found' => true,
+                    'model' => $autre_entree_model
+                ];
+
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.entree_findById',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //update autre_entree
+    public function updateAutreEntree($role)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+        $sql = "";
+        $paramsQuery = [];
+
+        //role - caissier
+        if ($role === 'caissier') {
+            $sql = "UPDATE autre_entree SET libelle_ae = :libelle WHERE num_ae = :num_ae";
+            $paramsQuery['libelle'] = $this->libelle_ae;
+            $paramsQuery['num_ae'] = $this->num_ae;
+        }
+        //role - admin
+        else {
+            $sql = "UPDATE autre_entree SET libelle_ae = :libelle, date_ae = :date, id_utilisateur = :id_user, num_caisse = :num_caisse WHERE num_ae = :num_ae";
+            $paramsQuery['libelle'] = $this->libelle_ae;
+            $paramsQuery['date'] = $this->date_ae;
+            $paramsQuery['id_user'] = $this->id_utilisateur;
+            $paramsQuery['num_caisse'] = $this->num_caisse;
+            $paramsQuery['num_ae'] = $this->num_ae;
+        }
+
+        try {
+
+            $response = parent::executeQuery($sql, $paramsQuery);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => __(
+                    'messages.success.entree_updateAutreEntree',
+                    ['field' => $this->num_ae]
+                )
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.entree_updateAutreEntree',
                     ['field' => $e->getMessage() .
                         ' - Line : ' . $e->getLine() .
                         ' - File : ' . $e->getFile()]

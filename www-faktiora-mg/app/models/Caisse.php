@@ -568,7 +568,7 @@ class Caisse extends Database
 
         try {
 
-            $response = self::executeQuery($sql, [
+            $response = parent::executeQuery($sql, [
                 'montant' => $montant,
                 'num_caisse' => $num_caisse
             ]);

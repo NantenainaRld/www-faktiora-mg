@@ -55,6 +55,30 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - update autre entree
+  async function updateAutreEntree(
+    num_ae,
+    libelle_ae,
+    date_ae,
+    id_utilisateur,
+    num_caisse
+  ) {
+    try {
+      const response = await apiRequest("/entree/update_autre_entree", {
+        method: "POST",
+        body: {
+          num_ae: num_ae,
+          libelle_ae: libelle_ae,
+          date_ae: date_ae,
+          id_utilisateur: id_utilisateur,
+          num_caisse: num_caisse,
+        },
+      });
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -64,6 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    createAutreEntree("mofo", date.value, "15000", "10004", "2");
+    updateAutreEntree("a202511-19", "ohhatra", date.value, "10004", "2");
   });
 });

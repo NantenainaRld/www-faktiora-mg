@@ -125,7 +125,9 @@ return [
         //caisse - update ligne caisse
         'caisse_updateLigneCaisse' => "Ligne caisse numéro <b>:field</b> est modifiée avec succès",
         //entree - add autre entree
-        'entree_createAutreEntree' => "Autre entrée ajoutée avec succès"
+        'entree_createAutreEntree' => "Autre entrée ajoutée avec succès",
+        //entree - update autre entree
+        'entree_updateAutreEntree' => "Autre entrée numéro <b>:field</b> modifiée avec succès",
     ],
     'not_found' => [
         //user - id
@@ -136,6 +138,8 @@ return [
         'caisse_num_caisse' => "Caisse numéro <b>:field</b> n'existe pas",
         //caisse - id lc
         'caisse_id_lc' => "La ligne caisse numéro <b>:field</b> n'existe pas",
+        //entree - num_ae
+        'entree_num_ae' => "L'autre entrée numéro <b>:field</b> n'existe pas",
     ],
     'duplicate' => [
         //user - email

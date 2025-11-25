@@ -168,6 +168,16 @@ class EntreeController extends Controller
                         echo json_encode($response);
                         return;
                     }
+                    //caisse - deleted
+                    if ($response['model']->getEtatCaisse() === 'supprimé') {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.invalids.caisse_deleted', ['field' => $json['num_caisse']])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
                     $num_caisse = $json['num_caisse'];
                 }
                 //role caissier
@@ -280,18 +290,32 @@ class EntreeController extends Controller
         }
 
         //num_caisse
-        $num_caisse = trim($_GET['num_caisse'] ?? 'all');
-        $num_caisse = filter_var($num_caisse, FILTER_VALIDATE_INT);
-        $num_caisse = ($num_caisse === false || $num_caisse < 0) ? 'all' : $num_caisse;
-
-        //id_user
-        $id_user = "";
+        $num_caisse = 'all';
         //role caissier
         if ($is_loged_in->getRole() === 'caissier') {
-            $id_user = $is_loged_in->getIdUtilisateur();
+            //is user has caisse ?
+            $response = LigneCaisse::findCaisse($is_loged_in->getIdUtilisateur());
+            //error
+            if ($response['message_type'] === 'error') {
+                echo json_encode($response);
+                return;
+            }
+            //found
+            if ($response['found']) {
+                $num_caisse = $response['model']->getNumCaisse();
+            }
         }
         //role admin
         else {
+            $num_caisse = trim($_GET['num_caisse'] ?? 'all');
+            $num_caisse = filter_var($num_caisse, FILTER_VALIDATE_INT);
+            $num_caisse = ($num_caisse === false || $num_caisse < 0) ? 'all' : $num_caisse;
+        }
+
+        //id_user
+        $id_user = 'all';
+        //role - admin
+        if ($is_loged_in->getRole() === 'admin') {
             $id_user = trim($_GET['id_user'] ?? 'all');
             $id_user = filter_var($id_user, FILTER_VALIDATE_INT);
             $id_user = ($id_user === false || $id_user < 10000) ? 'all' : $id_user;
@@ -437,19 +461,6 @@ class EntreeController extends Controller
             //trim
             $json = array_map(fn($x) => trim($x), $json);
 
-            //num_ae
-            $num_ae = ($is_loged_in->getRole() === 'admin') ? $json['num_ae'] : '';
-            //admin num_ae not empty - invalid
-            if ($is_loged_in->getRole() === 'admin' && $num_ae !== '' && strlen($num_ae) > 20) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.invalids.entree_num_ae')
-                ];
-
-                echo json_encode($response);
-                return;
-            }
-
             //libelle_ae - empty
             if ($json['libelle_ae'] === '') {
                 $response = [
@@ -471,20 +482,20 @@ class EntreeController extends Controller
                 return;
             }
 
-            //date_ae
-            $date_ae = "";
-            //role admin date_ae - empty
-            if ($is_loged_in->getRole() === 'admin' && $json['date_ae'] === '') {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.empty.date')
-                ];
-
-                echo json_encode($response);
-                return;
-            }
-            //role admin date_ae - invalid
+            //role admin 
+            $date_ae = '';
             if ($is_loged_in->getRole() === 'admin') {
+                //date_ae - empty
+                if ($json['date_ae'] === '') {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.empty.date')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //date_ae - invalid
                 $date_ae = DateTime::createFromFormat('Y-m-d\TH:i', $json['date_ae']);
                 if ($date_ae === false) {
                     $response = [
@@ -510,37 +521,9 @@ class EntreeController extends Controller
                     return;
                 }
                 $date_ae = $date_ae->format('Y-m-d H:i:s');
-            }
 
-            //montant_ae - empty
-            if ($json['montant_ae'] === '') {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.empty.montant')
-                ];
-
-                echo json_encode($response);
-                return;
-            }
-            //montant_ae - invalid
-            $montant_ae = filter_var($json['montant_ae'], FILTER_VALIDATE_FLOAT);
-            if ($montant_ae === false || $montant_ae < 1) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.invalids.montant')
-                ];
-
-                echo json_encode($response);
-                return;
-            }
-
-            //id_utilisateur
-            $id_utilisateur = "";
-            //role admin
-            if ($is_loged_in->getRole() === 'admin') {
-                $id_utilisateur = $json['id_utilisateur'];
                 //id_utilisateur - empty
-                if ($id_utilisateur === "") {
+                if ($json['id_utilisateur'] === '') {
                     $response = [
                         'message_type' => 'invalid',
                         'message' => __('messages.empty.user_id')
@@ -550,17 +533,12 @@ class EntreeController extends Controller
                     return;
                 }
             }
-            //role caissier
-            else {
-                $id_utilisateur = $is_loged_in->getIdUtilisateur();
-            }
 
             try {
 
-                //num_caisse
-                $num_caisse = "";
                 //role admin
                 if ($is_loged_in->getRole() === 'admin') {
+
                     //is num_caisse exist ?
                     $response = Caisse::findById($json['num_caisse']);
                     //error
@@ -578,12 +556,9 @@ class EntreeController extends Controller
                         echo json_encode($response);
                         return;
                     }
-                    $num_caisse = $json['num_caisse'];
-                }
-                //role caissier
-                else {
-                    //is user hash caisse ?
-                    $response = LigneCaisse::findCaisse($id_utilisateur);
+
+                    //is user exist ?
+                    $response = User::findById($json['id_utilisateur']);
                     //error
                     if ($response['message_type'] === 'error') {
                         echo json_encode($response);
@@ -593,45 +568,52 @@ class EntreeController extends Controller
                     if (!$response['found']) {
                         $response = [
                             'message_type' => 'invalid',
-                            'message' => __('messages.not_found.user_caisse')
+                            'message' => __('messages.not_found.user_id', ['field' => $json['id_utilisateur']])
                         ];
 
                         echo json_encode($response);
                         return;
                     }
-                    $num_caisse = $response['model']->getNumCaisse();
                 }
 
-                //role admin - is user exist ?
-                if ($is_loged_in->getRole() === 'admin') {
-                    $response = User::findById($id_utilisateur);
-                    //error
-                    if ($response['message_type'] === 'error') {
-                        echo json_encode($response);
-                        return;
-                    }
-                    //not found
-                    if (!$response['found']) {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.not_found.user_id', ['field' => $id_utilisateur])
-                        ];
+                //is num_ae exist ?
+                $json['num_ae'] = strtoupper($json['num_ae']);
+                $response = AutreEntree::findById($json['num_ae']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.entree_num_ae', ['field' => $json['num_ae']])
+                    ];
 
-                        echo json_encode($response);
-                        return;
-                    }
+                    echo json_encode($response);
+                    return;
+                }
+                //role caissier - num_ae deleted
+                if ($is_loged_in->getRole() === 'caissier' && $response['model']->getEtatAe() === 'supprimé') {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.entree_num_ae', ['field' => $json['num_ae']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
                 }
 
                 //create autre entree
                 $autre_entree_model = new AutreEntree();
                 $autre_entree_model
-                    ->setNumAe($num_ae)
+                    ->setNumAe($json['num_ae'])
                     ->setLibelleAe($json['libelle_ae'])
-                    ->setMontantAe($montant_ae)
                     ->setDateAe($date_ae)
-                    ->setIdUtilsateur($id_utilisateur)
-                    ->setNumCaisse($num_caisse);
-                $response = $autre_entree_model->createAutreEntree($is_loged_in->getRole());
+                    ->setIdUtilsateur($json['id_utilisateur'])
+                    ->setNumCaisse($json['num_caisse']);
+                $response = $autre_entree_model->updateAutreEntree($is_loged_in->getRole());
 
                 echo json_encode($response);
                 return;
@@ -643,7 +625,7 @@ class EntreeController extends Controller
                 $response = [
                     'message_type' => 'error',
                     'message' => __(
-                        'errors.catch.entree_createAutreEntree',
+                        'errors.catch.entree_updateAutreEntree',
                         ['field' => $e->getMessage() .
                             ' - Line : ' . $e->getLine() .
                             ' - File : ' . $e->getFile()]
@@ -653,13 +635,17 @@ class EntreeController extends Controller
                 echo json_encode($response);
                 return;
             }
-
-            // echo json_encode($json);
-            echo json_encode($response);
+        }
+        //redirect to entree index
+        else {
+            header('Location: ' . SITE_URL . '/entree');
             return;
         }
 
         echo json_encode($response);
         return;
     }
+
+    //action - delete all autre entree
+    public function deleteAllAutreEntree() {}
 }

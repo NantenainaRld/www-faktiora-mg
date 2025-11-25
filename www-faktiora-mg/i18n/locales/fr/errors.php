@@ -83,6 +83,10 @@ return [
         'entree_filterAutreEntreeAdmin' => DEBUG ? "Erreur dans entree/filterAutreEntree : :field" : "Une erreur est survenue lors de listage des autres entrées",
         //entree - list all autre entree
         'entree_listAllAutreEntree' => DEBUG ? "Erreur dans entree/listAllAutreEntree : :field" : "Une erreur est survenue lors de listage de tout les autres entrées",
+        //entree - update autre entree
+        'entree_updateAutreEntree' => DEBUG ? "Erreur dans entree/updateAutreEntree : :field" : "Une erreur est survenue lors de la modification d'autre entrée",
+        //entree - find by id
+        'entree_findById' => DEBUG ? "Erreur dans entree/findById : :field" : "Une erreur est survenue lors de la vérification de numéro d'autre entrée",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",
