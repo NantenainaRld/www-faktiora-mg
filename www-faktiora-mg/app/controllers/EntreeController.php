@@ -275,6 +275,9 @@ class EntreeController extends Controller
         //status
         $status = strtolower(trim($_GET['status'] ?? 'active'));
         $status = ($status === 'deleted') ? 'deleted' : 'active';
+        if ($is_loged_in->getRole() === 'caissier') {
+            $status = 'active';
+        }
 
         //num_caisse
         $num_caisse = trim($_GET['num_caisse'] ?? 'all');
