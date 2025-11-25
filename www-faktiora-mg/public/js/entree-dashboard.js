@@ -65,5 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //btn-test
   const btnTest = document.getElementById("btn-test");
-  btnTest.addEventListener("click", () => {});
+  btnTest.addEventListener("click", () => {
+    // createAutreEntree("", "mofo", date.value, "15000", "10004", "2");
+  });
 });

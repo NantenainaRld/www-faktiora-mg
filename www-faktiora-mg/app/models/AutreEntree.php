@@ -71,7 +71,7 @@ class AutreEntree extends Database
     //====================== PUBLIC FUNCTION =======================
 
     //create autre entree
-    public function createAutreEntree()
+    public function createAutreEntree($role)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
         $sql = "";
@@ -172,10 +172,12 @@ class AutreEntree extends Database
             }
 
             //update caisse - solde
-            $response = Caisse::updateSolde($this->num_caisse, $this->montant_ae, 'increase');
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
+            if ($role === 'caissier') {
+                $response = Caisse::updateSolde($this->num_caisse, $this->montant_ae, 'increase');
+                //error
+                if ($response['message_type'] === 'error') {
+                    return $response;
+                }
             }
 
             $response = [
