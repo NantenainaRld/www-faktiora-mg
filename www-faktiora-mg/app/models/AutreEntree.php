@@ -77,76 +77,28 @@ class AutreEntree extends Database
         $sql = "";
         $paramsQuery = [];
 
-        //num_ae - empty
-        if ($this->num_ae === '') {
-            //date_ae - empty
-            if ($this->date_ae === '') {
-                $sql = "INSERT INTO autre_entree (libelle_ae, date_ae, montant_ae, id_utilisateur, num_caisse) VALUES (:libelle, NOW(), :montant, :id_user, :num_caisse) ";
-                $paramsQuery = [
-                    'libelle' => $this->libelle_ae,
-                    'montant' => $this->montant_ae,
-                    'id_user' => $this->id_utilisateur,
-                    'num_caisse' => $this->num_caisse
-                ];
-            }
+        //date_ae - empty
+        if ($this->date_ae === '') {
+            $sql = "INSERT INTO autre_entree (libelle_ae, date_ae, montant_ae, id_utilisateur, num_caisse) VALUES (:libelle, NOW(), :montant, :id_user, :num_caisse) ";
+            $paramsQuery = [
+                'libelle' => $this->libelle_ae,
+                'montant' => $this->montant_ae,
+                'id_user' => $this->id_utilisateur,
+                'num_caisse' => $this->num_caisse
+            ];
             //date_ae - not empty
-            else {
-                $sql = "INSERT INTO autre_entree (libelle_ae, date_ae, montant_ae, id_utilisateur, num_caisse) VALUES (:libelle, :date_ae, :montant, :id_user, :num_caisse) ";
-                $paramsQuery = [
-                    'libelle' => $this->libelle_ae,
-                    'date_ae' => $this->date_ae,
-                    'montant' => $this->montant_ae,
-                    'id_user' => $this->id_utilisateur,
-                    'num_caisse' => $this->num_caisse
-                ];
-            }
-        }
-        //num_ae - not empty
-        else {
-            //date_ae - empty
-            if ($this->date_ae === '') {
-                $sql = "INSERT INTO autre_entree (num_ae, libelle_ae, date_ae, montant_ae, id_utilisateur, num_caisse) VALUES (:num_ae, :libelle, NOW(), :montant, :id_user, :num_caisse) ";
-                $paramsQuery = [
-                    'num_ae' => $this->num_ae,
-                    'libelle' => $this->libelle_ae,
-                    'montant' => $this->montant_ae,
-                    'id_user' => $this->id_utilisateur,
-                    'num_caisse' => $this->num_caisse
-                ];
-            }
-            //date_ae - not empty
-            else {
-                $sql = "INSERT INTO autre_entree (num_ae, libelle_ae, date_ae, montant_ae, id_utilisateur, num_caisse) VALUES (:num_ae, :libelle, :date_ae, :montant, :id_user, :num_caisse) ";
-                $paramsQuery = [
-                    'num_ae' => $this->num_ae,
-                    'libelle' => $this->libelle_ae,
-                    'date_ae' => $this->date_ae,
-                    'montant' => $this->montant_ae,
-                    'id_user' => $this->id_utilisateur,
-                    'num_caisse' => $this->num_caisse
-                ];
-            }
+        } else {
+            $sql = "INSERT INTO autre_entree (libelle_ae, date_ae, montant_ae, id_utilisateur, num_caisse) VALUES (:libelle, :date_ae, :montant, :id_user, :num_caisse) ";
+            $paramsQuery = [
+                'libelle' => $this->libelle_ae,
+                'date_ae' => $this->date_ae,
+                'montant' => $this->montant_ae,
+                'id_user' => $this->id_utilisateur,
+                'num_caisse' => $this->num_caisse
+            ];
         }
 
         try {
-
-            //num_ae not ampty - is exist ?
-            if ($this->num_ae !== '') {
-                $response = self::isNumAeExist($this->num_ae, null);
-                //error
-                if ($response['message_type'] === 'error') {
-                    return $response;
-                }
-                //found
-                if ($response['found']) {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => __('messages.duplicate.entree_num_ae', ['field' => $this->num_ae])
-                    ];
-
-                    return $response;
-                }
-            }
 
             //add autre entree
             $response = self::executeQuery($sql, $paramsQuery);
@@ -156,28 +108,23 @@ class AutreEntree extends Database
                 return $response;
             }
 
-            //num_ae - empty
-            if ($this->num_ae === '') {
-                //add num_ae
-                $this->id_ae = $response['last_inserted'];
-                $this->num_ae = strtoupper("A" . date('Ym') . '-' . $this->id_ae);
-                $response = self::executeQuery("UPDATE autre_entree SET num_ae = :num_ae WHERE id_ae = :id_ae ", [
-                    'num_ae' => $this->num_ae,
-                    'id_ae' => $this->id_ae
-                ]);
-                //error
-                if ($response['message_type'] === 'error') {
-                    return $response;
-                }
+            //add num_ae
+            $this->id_ae = $response['last_inserted'];
+            $this->num_ae = strtoupper("A" . date('Ym') . '-' . $this->id_ae);
+            $response = self::executeQuery("UPDATE autre_entree SET num_ae = :num_ae WHERE id_ae = :id_ae ", [
+                'num_ae' => $this->num_ae,
+                'id_ae' => $this->id_ae
+            ]);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
             }
 
             //update caisse - solde
-            if ($role === 'caissier') {
-                $response = Caisse::updateSolde($this->num_caisse, $this->montant_ae, 'increase');
-                //error
-                if ($response['message_type'] === 'error') {
-                    return $response;
-                }
+            $response = Caisse::updateSolde($this->num_caisse, $this->montant_ae, 'increase');
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
             }
 
             $response = [

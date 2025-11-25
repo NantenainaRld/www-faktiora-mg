@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //function - create autree entree
   async function createAutreEntree(
-    num_ae,
     libelle_ae,
     date_ae,
     montant_ae,
@@ -14,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await apiRequest("/entree/create_autre_entree", {
         method: "POST",
         body: {
-          num_ae: num_ae,
           libelle_ae: libelle_ae,
           date_ae: date_ae,
           montant_ae: montant_ae,
@@ -66,6 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    // createAutreEntree("", "mofo", date.value, "15000", "10004", "2");
+    createAutreEntree("mofo", date.value, "15000", "10004", "2");
   });
 });
