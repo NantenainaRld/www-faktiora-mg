@@ -156,8 +156,8 @@ class AutreEntree extends Database
                 return $response;
             }
 
-            //num_ae - not empty
-            if ($this->num_ae !== '') {
+            //num_ae - empty
+            if ($this->num_ae === '') {
                 //add num_ae
                 $this->id_ae = $response['last_inserted'];
                 $this->num_ae = strtoupper("A" . date('Ym') . '-' . $this->id_ae);
@@ -169,6 +169,13 @@ class AutreEntree extends Database
                 if ($response['message_type'] === 'error') {
                     return $response;
                 }
+            }
+
+            //update caisse - solde
+            $response = Caisse::updateSolde($this->num_caisse, $this->montant_ae, 'increase');
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
             }
 
             $response = [

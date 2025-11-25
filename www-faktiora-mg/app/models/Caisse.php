@@ -548,6 +548,63 @@ class Caisse extends Database
         return $response;
     }
 
+    //static - update solde
+    public static function updateSolde($num_caisse, $montant, $type)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+        $sql = "";
+
+        //increase
+        if ($type === 'increase') {
+            $sql = "UPDATE caisse SET solde = (solde + :montant) WHERE num_caisse = :num_caisse ";
+        }
+        //decrease
+        else {
+            $sql = "UPDATE caisse SET solde = (solde - :montant) WHERE num_caisse = :num_caisse ";
+        }
+
+        try {
+
+            $response = self::executeQuery($sql, [
+                'montant' => $montant,
+                'num_caisse' => $num_caisse
+            ]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success'
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_updateSolde',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //===================== PRIVATE FUNCTION ======================
 
     //static - is num_caisse exist?
@@ -612,36 +669,4 @@ class Caisse extends Database
 
         return $response;
     }
-
-    // //update solde
-    // public function updateSolde($num_caisse, $solde, $type)
-    // {
-    //     $response = [
-    //         'message_type' => 'success',
-    //         'message' => 'success'
-    //     ];
-
-    //     try {
-    //         //increase
-    //         if ($type === 'increase') {
-    //             $response = $this->executeQuery("UPDATE caisse SET solde = solde + :solde WHERE num_caisse = :um_caisse", [
-    //                 'solde' => $solde,
-    //                 'num_caisse' => $num_caisse
-    //             ]);
-    //         }
-    //         //decrease
-    //         else {
-    //             $response = $this->executeQuery("UPDATE caisse SET solde = solde - :solde WHERE num_caisse = :um_caisse", [
-    //                 'solde' => $solde,
-    //                 'num_caisse' => $num_caisse
-    //             ]);
-    //         }
-    //         // $response
-    //     } catch (Throwable $e) {
-    //         $response['message_type'] = 'error';
-    //         $response['message'] = 'Error : ' . $e->getMessage();
-    //     }
-
-    //     return $response;
-    // }
 }

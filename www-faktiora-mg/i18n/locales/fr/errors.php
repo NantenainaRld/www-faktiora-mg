@@ -73,6 +73,8 @@ return [
         'caisse_updateLigneCaisse' => DEBUG ? "Erreur dans caisse/updateLigneCaisse : :field" : "Une erreur est survenue lors de la modification de ligne caisse",
         //caisse - find caisse
         'caisse_findCaisse' => DEBUG ? "Erreur dans caisse/findCaisse : :field" : "Une erreur est survenue lors de la vérification de caisse d'utilisateur",
+        //caisse - update solde
+        'caisse_updateSolde' => DEBUG ? "Erreur dans caisse/updateSolde : :field" : "Une erreur est survenue lors de mis à jour du solde de caisse",
         //entree - create autre entree
         'entree_createAutreEntree' => DEBUG ? "Erreur dans entree/createAutreEntree : :field" : "Une erreur est survenue lors d'ajout de nouveau autre entrée",
         //entree - is num_ae exist 

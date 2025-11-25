@@ -65,7 +65,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //btn-test
   const btnTest = document.getElementById("btn-test");
-  btnTest.addEventListener("click", () => {
-    listAllAutreEntree();
-  });
+  btnTest.addEventListener("click", () => {});
 });

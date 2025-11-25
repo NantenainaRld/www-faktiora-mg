@@ -15,6 +15,7 @@
 
 <body>
     <?= "entree dashboard"; ?>
+    <input type="datetime-local" id="date">
     <input type="date" id="from">
     <input type="date" id="to">
     <button id='btn-test'>Test</button>

@@ -230,6 +230,7 @@ class EntreeController extends Controller
                 $autre_entree_model
                     ->setNumAe($num_ae)
                     ->setLibelleAe($json['libelle_ae'])
+                    ->setMontantAe($montant_ae)
                     ->setDateAe($date_ae)
                     ->setIdUtilsateur($id_utilisateur)
                     ->setNumCaisse($num_caisse);
