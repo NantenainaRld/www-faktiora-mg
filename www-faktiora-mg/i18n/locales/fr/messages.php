@@ -137,7 +137,9 @@ return [
         //entree - delete all autre entree plur
         'entree_deleteAllAutreEntree_plur' => "<b>:field</b> autres entrées ont été supprimées avec succès",
         //produit - create produit
-        'produit_createProduit' => "Nouveau produit ajouté avec succès"
+        'produit_createProduit' => "Nouveau produit ajouté avec succès",
+        //produit - update produit
+        'produit_updateProduit' => "Produit avec l'ID <b>:field</b> a été modifié avec succès"
     ],
     'not_found' => [
         //user - id
@@ -150,6 +152,8 @@ return [
         'caisse_id_lc' => "La ligne caisse numéro <b>:field</b> n'existe pas",
         //entree - num_ae
         'entree_num_ae' => "L'autre entrée numéro <b>:field</b> n'existe pas",
+        //produit - id_produi
+        'produit_id_produit' => "Le produit avec l'ID <b>:field</b> n'existe pas"
     ],
     'duplicate' => [
         //user - email

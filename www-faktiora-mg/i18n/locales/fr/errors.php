@@ -101,6 +101,10 @@ return [
         'produit_filterProduit' => DEBUG ? "Erreur dans produit/filterProduit : :field" : "Une erreur est survenue lors de listage des produits",
         //produit - list all produit
         'produit_listAllProduit' => DEBUG ? "Erreur dans produit/listAllProduit : :field" : "Une erreur est survenue lors de listage de tout les produits",
+        //produit - update produit
+        'produit_updateProduit' => DEBUG ? "Erreur dans produit/updateProduit : :field" : "Une erreur est survenue lors de la modification de produit",
+        //produit - find by id
+        'produit_findById' => DEBUG ? "Erreur dans produit/findById : :field" : "Une erreur est survenue lors de vérification d'ID de produit",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

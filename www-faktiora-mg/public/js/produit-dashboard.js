@@ -37,6 +37,28 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - update produti
+  async function updateProduit(
+    id_produit,
+    libelle_produit,
+    prix_produit,
+    nb_stock
+  ) {
+    try {
+      const response = await apiRequest("/produit/update_produit", {
+        method: "PUT",
+        body: {
+          id_produit: id_produit,
+          libelle_produit: libelle_produit,
+          prix_produit: prix_produit,
+          nb_stock: nb_stock,
+        },
+      });
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -48,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
   btnTest.addEventListener("click", () => {
     // createProduit("tavoangy", "15000", 34);
     // filterProduit("active", "max", "desc", "2");
-    listAllProduit();
+    // listAllProduit();
+    updateProduit("1", "tavoangy", "15000", 34);
   });
 });

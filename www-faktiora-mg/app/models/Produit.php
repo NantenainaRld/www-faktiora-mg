@@ -133,4 +133,120 @@ class Produit extends Database
 
         return $response;
     }
+
+    //static - find by id
+    public static function findById($id_produit)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+            'found' => false
+        ];
+
+        try {
+
+            $response = parent::selectQuery("SELECT * FROM produit WHERE id_produit = :id ", ['id' => $id_produit]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //not found
+            if (count($response['data']) <= 0) {
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'found' => false
+                ];
+
+                return $response;
+            }
+            //found
+            else {
+                $produit_model = new Produit();
+                $produit_model
+                    ->setIdProduit($response['data'][0]['id_produit'])
+                    ->setLibelleProduit($response['data'][0]['libelle_produit'])
+                    ->setPrixProduit($response['data'][0]['prix_produit'])
+                    ->setNbStock($response['data'][0]['nb_stock'])
+                    ->setEtatProduit($response['data'][0]['etat_produit']);
+
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'found' => true,
+                    'model' => $produit_model
+                ];
+
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.produit_findById',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //update produit 
+    public function updateProduit()
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            $response = parent::executeQuery("UPDATE produit SET libelle_produit = :libelle, prix_produit = :prix, nb_stock = :nb_stock WHERE id_produit = :id ", [
+                'libelle' => $this->libelle_produit,
+                'prix' => $this->prix_produit,
+                'nb_stock' => $this->nb_stock,
+                'id' => $this->id_produit
+            ]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => __('messages.success.produit_updateProduit', ['field' => $this->id_produit])
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.produit_updateProduit',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
 }
