@@ -291,35 +291,14 @@ class EntreeController extends Controller
 
         //num_caisse
         $num_caisse = 'all';
-        //role caissier
-        if ($is_loged_in->getRole() === 'caissier') {
-            //is user has caisse ?
-            $response = LigneCaisse::findCaisse($is_loged_in->getIdUtilisateur());
-            //error
-            if ($response['message_type'] === 'error') {
-                echo json_encode($response);
-                return;
-            }
-            //found
-            if ($response['found']) {
-                $num_caisse = $response['model']->getNumCaisse();
-            }
-        }
-        //role admin
-        else {
-            $num_caisse = trim($_GET['num_caisse'] ?? 'all');
-            $num_caisse = filter_var($num_caisse, FILTER_VALIDATE_INT);
-            $num_caisse = ($num_caisse === false || $num_caisse < 0) ? 'all' : $num_caisse;
-        }
+        $num_caisse = trim($_GET['num_caisse'] ?? 'all');
+        $num_caisse = filter_var($num_caisse, FILTER_VALIDATE_INT);
+        $num_caisse = ($num_caisse === false || $num_caisse < 0) ? 'all' : $num_caisse;
 
         //id_user
-        $id_user = 'all';
-        //role - admin
-        if ($is_loged_in->getRole() === 'admin') {
-            $id_user = trim($_GET['id_user'] ?? 'all');
-            $id_user = filter_var($id_user, FILTER_VALIDATE_INT);
-            $id_user = ($id_user === false || $id_user < 10000) ? 'all' : $id_user;
-        }
+        $id_user = trim($_GET['id_user'] ?? 'all');
+        $id_user = filter_var($id_user, FILTER_VALIDATE_INT);
+        $id_user = ($id_user === false || $id_user < 10000) ? 'all' : $id_user;
 
         //oder_by
         $order_by = strtolower(trim($_GET['order_by']) ?? 'num');
@@ -605,36 +584,6 @@ class EntreeController extends Controller
                         return;
                     }
                 }
-                //role - caissier
-                else {
-                    //is user hash caisse
-                    $response = LigneCaisse::findCaisse($is_loged_in->getIdUtilisateur());
-                    //error
-                    if ($response['message_type'] === 'error') {
-                        echo json_encode($response);
-                        return;
-                    }
-                    //user doesn't have caisse
-                    if (!$response['found']) {
-                        $response = [
-                            'message_type' => 'success',
-                            'message' => __('messages.not_found.user_caisse')
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                    //user num_caisse != num_ae num_caisse
-                    if ($response['model']->getNumCaisse() !== $ae_num_caisse) {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.not_found.entree_num_ae', ['field' => $json['num_ae']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                }
 
                 //create autre entree
                 $autre_entree_model = new AutreEntree();
@@ -867,37 +816,6 @@ class EntreeController extends Controller
                 return;
             }
             $ae_num_caisse = $response['model']->getNumCaisse();
-
-            //role - caissier
-            if ($is_loged_in->getRole() === 'caissier') {
-                //does user has caisse ?
-                $response = LigneCaisse::findCaisse($is_loged_in->getIdUtilisateur());
-                //error
-                if ($response['message_type'] === 'error') {
-                    echo json_encode($response);
-                    return;
-                }
-                //user doesn't have caisse
-                if (!$response['found']) {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => __('messages.not_found.user_caisse')
-                    ];
-
-                    echo json_encode($response);
-                    return;
-                }
-                //user num_caisse != ae num_caisse
-                if ($response['model']->getNumCaisse() !== $ae_num_caisse) {
-                    $response = [
-                        'message_type' => 'invalud',
-                        'message' => __('messages.not_found.entree_num_ae', ['field' => $num_ae])
-                    ];
-
-                    echo json_encode($response);
-                    return;
-                }
-            }
 
             //list connection autre entree
             $autre_entree_model = new AutreEntree();
@@ -1143,7 +1061,7 @@ class EntreeController extends Controller
                     if ($ae_num_caisse !== $num_caisse) {
                         $response = [
                             'message_type' => 'success',
-                            'message' => __('messages.not_found.entree_num_ae', ['field' => $json['num_ae']])
+                            'message' => __('messages.invalids.entree_correctionAutreEntree', ['field' => $json['num_ae']])
                         ];
 
                         echo json_encode($response);

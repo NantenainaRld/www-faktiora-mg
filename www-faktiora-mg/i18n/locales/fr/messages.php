@@ -49,10 +49,10 @@ return [
         'caisse_line_open_user_id' => "La ligne est encore ouverte, vous ne pouvez pas modifier l'ID d'utilisateur pour le moment",
         //caisse - line open / num_caisse
         'caisse_line_open_num_caisse' => "La ligne est encore ouverte, vous ne pouvez pas modifier le numéro de caisse pour le moment",
-        // //entree - num_ae
-        // 'entree_num_ae' => "Le numéro d'autre entrée ne doît pas dépasser de 20 caractères",
         //entree - nums_ae empty
         'entree_nums_ae_empty' => "Veuiller séléctionner au moins une autre entrée",
+        //entree - correction autre entree
+        'entree_correctionAutreEntree' => "Cette autre entrée n'est pas enregistrée sur votre caisse actuelle",
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",
