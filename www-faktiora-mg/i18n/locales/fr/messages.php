@@ -47,12 +47,12 @@ return [
         'caisse_date_fin_reopen' => "Une ligne fermée ne peut pas réouvrir",
         //caisse - line open / user id
         'caisse_line_open_user_id' => "La ligne est encore ouverte, vous ne pouvez pas modifier l'ID d'utilisateur pour le moment",
-        'entree_id_ae' => "L'ID de l'autre entrée ne doît pas dépasser de 20 caractères",
         //caisse - line open / num_caisse
         'caisse_line_open_num_caisse' => "La ligne est encore ouverte, vous ne pouvez pas modifier le numéro de caisse pour le moment",
-        //entree - num_ae
-        'entree_num_ae' => "Le numéro d'autre entrée ne doît pas dépasser de 20 caractères",
-        'entree_id_ae' => "L'ID de l'autre entrée ne doît pas dépasser de 20 caractères",
+        // //entree - num_ae
+        // 'entree_num_ae' => "Le numéro d'autre entrée ne doît pas dépasser de 20 caractères",
+        //entree - nums_ae empty
+        'entree_nums_ae_empty' => "Veuiller séléctionner au moins une autre entrée",
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",
@@ -128,6 +128,12 @@ return [
         'entree_createAutreEntree' => "Autre entrée ajoutée avec succès",
         //entree - update autre entree
         'entree_updateAutreEntree' => "Autre entrée numéro <b>:field</b> modifiée avec succès",
+        //entree - delete all autre entree 0
+        'entree_deleteAllAutreEntree_0' => "Aucune autre entrée n'est supprimée",
+        //entree - delete all autre entree 1
+        'entree_deleteAllAutreEntree_1' => "Une autre entrée a été supprimée avec succès",
+        //entree - delete all autre entree plur
+        'entree_deleteAllAutreEntree_plur' => "<b>:field</b> autres entrées ont été supprimées avec succès"
     ],
     'not_found' => [
         //user - id

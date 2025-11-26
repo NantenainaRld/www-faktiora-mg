@@ -87,6 +87,8 @@ return [
         'entree_updateAutreEntree' => DEBUG ? "Erreur dans entree/updateAutreEntree : :field" : "Une erreur est survenue lors de la modification d'autre entrée",
         //entree - find by id
         'entree_findById' => DEBUG ? "Erreur dans entree/findById : :field" : "Une erreur est survenue lors de la vérification de numéro d'autre entrée",
+        //entree - delete all autre entree
+        'entree_deleteAllAutreEntree' => DEBUG ? "Erreur dans entree/deleteAllAutreEntree : :field" : "Une erreur est survenue lors de la suppréssion des autres entrées",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",
