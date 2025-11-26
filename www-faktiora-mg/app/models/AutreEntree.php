@@ -613,6 +613,99 @@ class AutreEntree extends Database
         return $response;
     }
 
+    //static - connection autre entree
+    public static function connectionAutreEntree($num = "")
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+        $num = strtoupper(trim($num));
+        $libelle = "correction/" . $num;
+        $libelle = "%" . $libelle . "%";
+
+        try {
+
+            $response = parent::selectQuery(
+                "SELECT num_ae, libelle_ae, date_ae, montant_ae FROM autre_entree WHERE (libelle_ae LIKE :libelle ) AND etat_ae !='supprimé' ",
+                ['libelle' => $libelle]
+            );
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.entree_connectionAutreEntree',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //list connection autre entree
+    public function listConnectionAutreEntree()
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            //connection autre entree
+            $response = self::connectionAutreEntree($this->num_ae);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            $autre_entree = $response['data'];
+
+            //connection sortie
+            $response = SortieRepositorie::connectionSortie($this->num_ae);
+            //error
+            if ($response['message_type'] == 'error') {
+                return $response;
+            }
+            $sortie = $response['data'];
+
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+                'autre_entree' => $autre_entree,
+                'sortie' => $sortie
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.entree_listConnectionAutreEntree',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
 
     //====================== PRIVATE FUNCTION ===========================s
 

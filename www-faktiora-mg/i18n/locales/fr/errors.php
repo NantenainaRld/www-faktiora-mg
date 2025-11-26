@@ -89,6 +89,12 @@ return [
         'entree_findById' => DEBUG ? "Erreur dans entree/findById : :field" : "Une erreur est survenue lors de la vérification de numéro d'autre entrée",
         //entree - delete all autre entree
         'entree_deleteAllAutreEntree' => DEBUG ? "Erreur dans entree/deleteAllAutreEntree : :field" : "Une erreur est survenue lors de la suppréssion des autres entrées",
+        //entree- list connection autre entree
+        'entree_listConnectionAutreEntree' => DEBUG ? "Erreur dans entree/listConnectionAutreEntree : :field" : "Une erreur est survenue lors de listage des connections d'autre entrée",
+        //entree - connection autree entree
+        'entree_connectionAutreEntree' => DEBUG ? "Erreur dans entree/connectionAutreEntree : :field" : "Une erreur est survenue lors de listage des connections pour les entrées",
+        //sortie - connection sortie
+        'sortie_connectionSortie' => DEBUG ? "Erreur dans sortie/connectionSortie : :field" : "Une erreur est survenue lors de listage des connections pour les sorties",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

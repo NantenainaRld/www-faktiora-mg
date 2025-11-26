@@ -110,6 +110,17 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - list connection autre entree
+  async function listConnectionAutreEntree(num_ae) {
+    try {
+      const response = await apiRequest(
+        `/entree/list_connection_autre_entree?num_ae=${num_ae}`
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -121,6 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
   btnTest.addEventListener("click", () => {
     // updateAutreEntree("a202511-19", "ohhatra", date.value, "10004", "2");
     // deleteAllAutreEntree(["a202511-18", "a202511-19"]);
-    permanentDeleteAllAutreEntree(["a202511-18", "a202511-19"]);
+    // permanentDeleteAllAutreEntree(["a202511-18", "a202511-19"]);
+    listConnectionAutreEntree("a202511-17");
   });
 });
