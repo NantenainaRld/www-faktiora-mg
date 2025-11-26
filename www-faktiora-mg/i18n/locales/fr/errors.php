@@ -99,6 +99,8 @@ return [
         'produit_createProduit' => DEBUG ? "Erreur dans produit/createProduit : :field" : "Une erreur est survenue lors d'ajout de nouveau produit",
         //produit - filter produit
         'produit_filterProduit' => DEBUG ? "Erreur dans produit/filterProduit : :field" : "Une erreur est survenue lors de listage des produits",
+        //produit - list all produit
+        'produit_listAllProduit' => DEBUG ? "Erreur dans produit/listAllProduit : :field" : "Une erreur est survenue lors de listage de tout les produits",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

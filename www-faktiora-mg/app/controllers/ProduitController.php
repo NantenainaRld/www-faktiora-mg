@@ -153,6 +153,13 @@ class ProduitController extends Controller
         $is_loged_in = Auth::isLogedIn();
         $response = null;
 
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/login');
+            return;
+        }
+
         //defaults
         $order_by_default = ['libelle', 'nb_stock', 'max'];
         $arrange_default = ['ASC', 'DESC'];
@@ -202,6 +209,28 @@ class ProduitController extends Controller
 
         //filter produit
         $response = ProduitRepositorie::filterProduit($params);
+
+        echo json_encode($response);
+        return;
+    }
+
+    //action list all produit
+    public function listAllProduit()
+    {
+        header('Content-Type: application/json');
+        //is loged in
+        $is_loged_in = Auth::isLogedIn();
+        $response = null;
+
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login
+            header('Location: ' . SITE_URL . '/login');
+            return;
+        }
+
+        //list produit all
+        $response = Produit::listProduitAll();
 
         echo json_encode($response);
         return;

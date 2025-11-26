@@ -97,4 +97,40 @@ class Produit extends Database
 
         return $response;
     }
+
+    //static - list produit all
+    public static function listProduitAll()
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            $response = parent::selectQuery("SELECT id_produit, libelle_produit, prix_produit FROM produit WHERE etat_produit != 'supprimé' ");
+
+            //error
+            if ($response['message_type'] == 'error') {
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.produit_listAllProduit',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
 }
