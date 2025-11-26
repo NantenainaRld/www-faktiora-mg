@@ -20,7 +20,7 @@
     <input type="date" id="to">
     <button id='btn-test'>Test</button>
     <!-- script js -->
-    <script src="<?= SITE_URL ?>/js/entree-dashboard.js"></script>
+    <script src="<?= SITE_URL ?>/js/produit-dashboard.js"></script>
 </body>
 
 </html>

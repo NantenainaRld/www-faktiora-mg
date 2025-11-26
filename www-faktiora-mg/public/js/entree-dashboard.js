@@ -160,13 +160,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // deleteAllAutreEntree(["a202511-18", "a202511-19"]);
     // permanentDeleteAllAutreEntree(["a202511-18", "a202511-19"]);
     // listConnectionAutreEntree("a202511-17");
-    correctionAutreEntree(
-      "a202511-17",
-      "libelle",
-      date.value,
-      "122",
-      "10004",
-      "2"
-    );
+    // correctionAutreEntree(
+    //   "a202511-17",
+    //   "libelle",
+    //   date.value,
+    //   "122",
+    //   "10004",
+    //   "2"
+    // );
   });
 });

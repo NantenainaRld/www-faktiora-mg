@@ -19,7 +19,9 @@ return [
         'date_future' => "La date de doît pas être dans le future",
         'date_fusion' => "Les dates choisies ne sont pas valides (chevauchement des dates)",
         'libelle' => "Le libellé ne doit pas dépasser de 100 caractères",
-        'montant' => "Le montant doît être des nombres décimaux supérieurs ou égaux à 1",
+        'montant' => "Le montant doît être des nombres décimaux supérieurs à 0",
+        'prix' => "Le prix doît être des nombres décimaux supérieurs à 0",
+        'nb_stock' => "Le nombre de stock ne doît pas être inférieur à 0",
         //
         //user - ids_user empty
         'user_ids_user_empty' => "Veuiller séléctionner au moins un utilisateur",
@@ -65,9 +67,9 @@ return [
         'seuil' => "Le champ <b>seuil</b> est réquis",
         'montant' => "Le champ <b>montant</b> est réquis",
         'from' => "La date de début est réquis",
-        'libelle' => "Le champ libellé est réquis",
-        'date' => "La date est réquise",
-        'montant' => "Le montant est réquis"
+        'libelle' => "Le champ <b>libellé</b> est réquis",
+        'date' => "La <b>date</b> est réquise",
+        'prix' => "Le <b>prix</b> est réquis"
     ],
     'success' => [
         //user - create user
@@ -133,7 +135,9 @@ return [
         //entree - delete all autre entree 1
         'entree_deleteAllAutreEntree_1' => "Une autre entrée a été supprimée avec succès",
         //entree - delete all autre entree plur
-        'entree_deleteAllAutreEntree_plur' => "<b>:field</b> autres entrées ont été supprimées avec succès"
+        'entree_deleteAllAutreEntree_plur' => "<b>:field</b> autres entrées ont été supprimées avec succès",
+        //produit - create produit
+        'produit_createProduit' => "Nouveau produit ajouté avec succès"
     ],
     'not_found' => [
         //user - id
