@@ -327,7 +327,7 @@ class AutreEntree extends Database
 
         try {
 
-            $response = parent::selectQuery("SELECT num_ae , libelle_ae, montant_ae FROM autre_entree ");
+            $response = parent::selectQuery("SELECT num_ae , libelle_ae, montant_ae FROM autre_entree WHERE etat_ae != 'supprimé' ");
 
             //error
             if ($response['message_type'] === 'error') {

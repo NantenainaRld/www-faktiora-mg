@@ -513,7 +513,7 @@ class Caisse extends Database
 
         try {
 
-            $response = parent::selectQuery("SELECT num_caisse FROM caisse ");
+            $response = parent::selectQuery("SELECT num_caisse FROM caisse WHERE etat_caisse != 'supprimé' ");
 
             //error
             if ($response['message_type'] === 'error') {

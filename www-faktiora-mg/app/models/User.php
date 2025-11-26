@@ -321,7 +321,7 @@ class User extends Database
 
         try {
 
-            $response = parent::selectQuery("SELECT id_utilisateur , CONCAT(nom_utilisateur, ' ', prenoms_utilisateur) AS nom_prenoms FROM utilisateur WHERE role = 'caissier' ");
+            $response = parent::selectQuery("SELECT id_utilisateur , CONCAT(nom_utilisateur, ' ', prenoms_utilisateur) AS nom_prenoms FROM utilisateur WHERE role = 'caissier' AND etat_utilisateur != 'supprimé' ");
 
             //error
             if ($response['message_type'] === 'error') {
