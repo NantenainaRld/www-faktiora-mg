@@ -536,6 +536,36 @@ class EntreeController extends Controller
 
             try {
 
+                //is num_ae exist ?
+                $json['num_ae'] = strtoupper($json['num_ae']);
+                $response = AutreEntree::findById($json['num_ae']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.entree_num_ae', ['field' => $json['num_ae']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //role caissier - num_ae deleted
+                if ($is_loged_in->getRole() === 'caissier' && $response['model']->getEtatAe() === 'supprimé') {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.entree_num_ae', ['field' => $json['num_ae']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                $ae_num_caisse = $response['model']->getNumCaisse();
+
                 //role admin
                 if ($is_loged_in->getRole() === 'admin') {
 
@@ -575,34 +605,35 @@ class EntreeController extends Controller
                         return;
                     }
                 }
+                //role - caissier
+                else {
+                    //is user hash caisse
+                    $response = LigneCaisse::findCaisse($is_loged_in->getIdUtilisateur());
+                    //error
+                    if ($response['message_type'] === 'error') {
+                        echo json_encode($response);
+                        return;
+                    }
+                    //user doesn't have caisse
+                    if (!$response['found']) {
+                        $response = [
+                            'message_type' => 'success',
+                            'message' => __('messages.not_found.user_caisse')
+                        ];
 
-                //is num_ae exist ?
-                $json['num_ae'] = strtoupper($json['num_ae']);
-                $response = AutreEntree::findById($json['num_ae']);
-                //error
-                if ($response['message_type'] === 'error') {
-                    echo json_encode($response);
-                    return;
-                }
-                //not found
-                if (!$response['found']) {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => __('messages.not_found.entree_num_ae', ['field' => $json['num_ae']])
-                    ];
+                        echo json_encode($response);
+                        return;
+                    }
+                    //user num_caisse != num_ae num_caisse
+                    if ($response['model']->getNumCaisse() !== $ae_num_caisse) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.not_found.entree_num_ae', ['field' => $json['num_ae']])
+                        ];
 
-                    echo json_encode($response);
-                    return;
-                }
-                //role caissier - num_ae deleted
-                if ($is_loged_in->getRole() === 'caissier' && $response['model']->getEtatAe() === 'supprimé') {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => __('messages.not_found.entree_num_ae', ['field' => $json['num_ae']])
-                    ];
-
-                    echo json_encode($response);
-                    return;
+                        echo json_encode($response);
+                        return;
+                    }
                 }
 
                 //create autre entree
