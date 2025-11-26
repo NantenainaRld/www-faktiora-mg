@@ -17,6 +17,17 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - filter produit
+  async function filterProduit(status, order_by, arrange, search_produit) {
+    try {
+      const response = await apiRequest(
+        `/produit/filter_produit?status=${status}&order_by=${order_by}&arrange=${arrange}&search_produit=${search_produit}`
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -26,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    createProduit("tavoangy", "15000", 34);
+    // createProduit("tavoangy", "15000", 34);
+    filterProduit("active", "max", "desc", "2");
   });
 });

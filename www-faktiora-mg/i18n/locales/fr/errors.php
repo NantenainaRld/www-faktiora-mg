@@ -97,6 +97,8 @@ return [
         'sortie_connectionSortie' => DEBUG ? "Erreur dans sortie/connectionSortie : :field" : "Une erreur est survenue lors de listage des connections pour les sorties",
         //produit  - create produit
         'produit_createProduit' => DEBUG ? "Erreur dans produit/createProduit : :field" : "Une erreur est survenue lors d'ajout de nouveau produit",
+        //produit - filter produit
+        'produit_filterProduit' => DEBUG ? "Erreur dans produit/filterProduit : :field" : "Une erreur est survenue lors de listage des produits",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

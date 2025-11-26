@@ -134,7 +134,7 @@ class ProduitController extends Controller
             }
 
             // echo json_encode($json);
-            echo json_encode("test");
+            echo json_encode($response);
             return;
         }
         //redirect to produit index
@@ -143,5 +143,67 @@ class ProduitController extends Controller
             header('Location: ' . SITE_URL . '/produit');
             return;
         }
+    }
+
+    //action - filter produit
+    public function filterProduit()
+    {
+        header('Content-Type: application/json');
+        //is loged in
+        $is_loged_in = Auth::isLogedIn();
+        $response = null;
+
+        //defaults
+        $order_by_default = ['libelle', 'nb_stock', 'max'];
+        $arrange_default = ['ASC', 'DESC'];
+
+        //status
+        $status = strtolower(trim($_GET['status'] ?? 'active'));
+        $status = ($status === 'deleted') ? 'deleted' : 'active';
+        if ($is_loged_in->getRole() === 'caissier') {
+            $status = 'active';
+        }
+        switch ($status) {
+            case 'active':
+                $status = 'actif';
+                break;
+            case 'deleted':
+                $status = 'supprimé';
+                break;
+        }
+
+        //order_by
+        $order_by = strtolower(trim($_GET['order_by'] ?? 'libelle'));
+        $order_by = in_array($order_by, $order_by_default, true) ? $order_by : 'libelle';
+        switch ($order_by) {
+            case 'libelle':
+                $order_by = 'p.libelle_produit';
+                break;
+            case 'nb_stock':
+                $order_by = 'p.nb_stock';
+                break;
+            case 'max':
+                $order_by = 'total_produit';
+                break;
+        }
+        //arrange
+        $arrange = strtoupper(trim($_GET['arrange'] ?? 'ASC'));
+        $arrange = in_array($arrange, $arrange_default, true) ? $arrange : 'ASC';
+
+        //search_produit
+        $search_produit = "%" . trim($_GET['search_produit'] ?? '') . "%";
+
+        $params = [
+            'status' => $status,
+            'order_by' => $order_by,
+            'arrange' => $arrange,
+            'search_produit' => $search_produit
+        ];
+
+        //filter produit
+        $response = ProduitRepositorie::filterProduit($params);
+
+        echo json_encode($response);
+        return;
     }
 }
