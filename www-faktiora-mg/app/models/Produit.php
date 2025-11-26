@@ -1,6 +1,4 @@
 <?php
 
-// Model PRODUIT
-class Produit extends Database
-{
-}
+//CLASS - produit
+class Produit extends Database {}
