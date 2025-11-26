@@ -82,12 +82,29 @@ document.addEventListener("DOMContentLoaded", () => {
   //function - delete all autre entree
   async function deleteAllAutreEntree(nums_ae = []) {
     try {
-      const response = await apiRequest("/entree/deleteAllAutreEntree", {
+      const response = await apiRequest("/entree/delete_all_autre_entree", {
         method: "PUT",
         body: {
           nums_ae: nums_ae,
         },
       });
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  //function - permanent delete all autre entree
+  async function permanentDeleteAllAutreEntree(nums_ae = []) {
+    try {
+      const response = await apiRequest(
+        "/entree/permanent_delete_all_autre_entree",
+        {
+          method: "DELETE",
+          body: {
+            nums_ae: nums_ae,
+          },
+        }
+      );
       console.log(response);
     } catch (e) {
       console.error(e);
@@ -103,6 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
     // updateAutreEntree("a202511-19", "ohhatra", date.value, "10004", "2");
-    deleteAllAutreEntree(["a202511-18", "a202511-19"]);
+    // deleteAllAutreEntree(["a202511-18", "a202511-19"]);
+    permanentDeleteAllAutreEntree(["a202511-18", "a202511-19"]);
   });
 });
