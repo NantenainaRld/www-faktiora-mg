@@ -380,4 +380,6 @@ class ProduitController extends Controller
         echo json_encode($response);
         return;
     }
+
+    //action - delete all produit
 }
