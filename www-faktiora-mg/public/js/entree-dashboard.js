@@ -121,6 +121,32 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - correction autre entree
+  async function correctionAutreEntree(
+    num_ae,
+    libelle_ae,
+    date_ae,
+    montant_ae,
+    id_utilisateur,
+    num_caisse
+  ) {
+    try {
+      const response = await apiRequest("/entree/correction_autre_entree", {
+        method: "POST",
+        body: {
+          num_ae: num_ae,
+          libelle_ae: libelle_ae,
+          date_ae: date_ae,
+          montant_ae: montant_ae,
+          id_utilisateur: id_utilisateur,
+          num_caisse: num_caisse,
+        },
+      });
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -133,6 +159,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // updateAutreEntree("a202511-19", "ohhatra", date.value, "10004", "2");
     // deleteAllAutreEntree(["a202511-18", "a202511-19"]);
     // permanentDeleteAllAutreEntree(["a202511-18", "a202511-19"]);
-    listConnectionAutreEntree("a202511-17");
+    // listConnectionAutreEntree("a202511-17");
+    correctionAutreEntree(
+      "a202511-17",
+      "libelle",
+      date.value,
+      "122",
+      "10004",
+      "2"
+    );
   });
 });
