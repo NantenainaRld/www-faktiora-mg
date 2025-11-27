@@ -26,7 +26,7 @@ class Produit extends Database
     //setter - libelle_produit
     public function setLibelleProduit($libelle_produit)
     {
-        $this->libelle_produit = $libelle_produit;
+        $this->libelle_produit = strtolower($libelle_produit);
         return $this;
     }
 

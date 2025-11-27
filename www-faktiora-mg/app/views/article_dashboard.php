@@ -14,10 +14,10 @@
 </head>
 
 <body>
-    <?= "produit dashboard"; ?>
+    <?= "article dashboard"; ?>
     <button id='btn-test'>Test</button>
     <!-- script js -->
-    <script src="<?= SITE_URL ?>/js/produit-dashboard.js"></script>
+    <script src="<?= SITE_URL ?>/js/article-dashboard.js"></script>
 </body>
 
 </html>

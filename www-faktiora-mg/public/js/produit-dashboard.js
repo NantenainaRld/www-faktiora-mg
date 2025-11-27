@@ -92,18 +92,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   //================== EVENTS===================
-  const date = document.getElementById("date");
-  const from = document.getElementById("from");
-  const to = document.getElementById("to");
 
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
     // createProduit("tavoangy", "15000", 34);
-    // filterProduit("active", "max", "desc", "2");
+    // filterProduit("active", "max", "desc", "");
     // listAllProduit();
     // updateProduit("1", "tavoangy", "15000", 34);
     // deleteAllProduit([1, 2]);
-    permanentDeleteAllProduit([1, 2]);
+    // permanentDeleteAllProduit([1, 2]);
   });
 });

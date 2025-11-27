@@ -13,7 +13,7 @@ class ProduitRepositorie extends Database
     public static function filterProduit($params)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
-        $sql = "SELECT p.id_produit, p.libelle_produit, p.prix_produit, p.nb_stock, COUNT(lf.id_produit) AS total_produit FROM produit p LEFT JOIN ligne_facture lf ON lf.id_produit = p.id_produit ";
+        $sql = "SELECT p.id_produit, p.libelle_produit, p.prix_produit, p.nb_stock, COUNT(lf.id_produit) AS total_produit, COALESCE(SUM(lf.prix * lf.quantite_produit), 0) AS total_produit FROM produit p LEFT JOIN ligne_facture lf ON lf.id_produit = p.id_produit ";
         $paramsQuery = [];
 
         //where 1=1

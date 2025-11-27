@@ -156,6 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
+    // filterAutreEntree("active", "all", "all", "num_ae", "ASC", "", "", "");
     // updateAutreEntree("a202511-19", "ohhatra", date.value, "10004", "2");
     // deleteAllAutreEntree(["a202511-18", "a202511-19"]);
     // permanentDeleteAllAutreEntree(["a202511-18", "a202511-19"]);

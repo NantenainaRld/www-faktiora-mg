@@ -107,6 +107,10 @@ return [
         'produit_findById' => DEBUG ? "Erreur dans produit/findById : :field" : "Une erreur est survenue lors de vérification d'ID de produit",
         //produit - delete all produit
         'produit_deleteAllProduit' => DEBUG ? "Erreur dans produit/deleteAllProduit : :field" : "Une erreur est survenue lors de la suppréssion des produits",
+        //article - create article
+        'article_createArticle' => DEBUG ? "Erreur dans article/createArticle : :field" : "Une erreur est survenue lors d'ajout de nouveau article",
+        //article - is libelle article exist
+        'article_isLibelleArticleExist' => DEBUG ? "Erreur dans article/isLibelleArticleExist : :field" : "Une erreur est survenue lors de la vérification d'article",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",
