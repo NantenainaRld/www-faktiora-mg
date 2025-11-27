@@ -26,15 +26,15 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
-  //   //function - list all produit
-  //   async function listAllProduit() {
-  //     try {
-  //       const response = await apiRequest("/produit/list_all_produit");
-  //       console.log(response);
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   }
+  //function - list all article
+  async function listAllArticle() {
+    try {
+      const response = await apiRequest("/article/list_all_article");
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
   //   //function - update produtit
   //   async function updateProduit(
   //     id_produit,
@@ -95,6 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
     // createArticle("achat de capsule");
-    filterArticle("active", "or", "desc", "correction");
+    // filterArticle("active", "or", "desc", "correction");
+    listAllArticle();
   });
 });

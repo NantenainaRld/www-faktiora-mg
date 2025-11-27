@@ -172,4 +172,26 @@ class ArticleController extends Controller
         echo json_encode($response);
         return;
     }
+
+    //action - list all aricle
+    public function listAllArticle()
+    {
+        header('Content-Type: application/json');
+        //is loged in
+        $is_loged_in = Auth::isLogedIn();
+        $response = null;
+
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login
+            header('Location: ' . SITE_URL . '/login');
+            return;
+        }
+
+        //list all article
+        $response = Article::listAllArticle();
+
+        echo json_encode($response);
+        return;
+    }
 }

@@ -98,6 +98,42 @@ class Article extends Database
         return $response;
     }
 
+    //static - list all article
+    public static function listAllArticle()
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            $response = parent::selectQuery("SELECT a.id_article, a.libelle_article, MAX(lds.prix_article) AS prix, MAX(lds.quantite_article) AS quanttie FROM article a LEFT JOIN ligne_ds lds ON lds.id_article = a.id_article WHERE a.etat_article != 'supprimé' GROUP BY a.id_article");
+
+            //error
+            if ($response['message_type'] == 'error') {
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.article_listAllArticle',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //==================== PRIVATE FUNCTION ======================
 
     //static - is libelle article exist ?

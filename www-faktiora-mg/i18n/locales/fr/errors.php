@@ -113,6 +113,8 @@ return [
         'article_isLibelleArticleExist' => DEBUG ? "Erreur dans article/isLibelleArticleExist : :field" : "Une erreur est survenue lors de la vérification d'article",
         //article - filter article
         'article_filterArticle' => DEBUG ? "Erreur dans article/filterArticle : :field" : "Une erreur est survenue lors de listage des articles",
+        //article - list all article
+        'article_listAllArticle' => DEBUG ? "Erreur dans article/listAllArticle : :field" : "Une erreur est survenue lors de listage de tous les articles",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",
