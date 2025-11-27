@@ -100,4 +100,76 @@ class ArticleController extends Controller
             return;
         }
     }
+
+    //action - filter article
+    public function filterArticle()
+    {
+        header('Content-Type: application/json');
+        //is loged in
+        $is_loged_in = Auth::isLogedIn();
+        $response = null;
+
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/login');
+            return;
+        }
+
+        //defaults
+        $order_by_default = ['libelle', 'id', 'total', 'quantite'];
+        $arrange_default = ['ASC', 'DESC'];
+
+        //status
+        $status = strtolower(trim($_GET['status'] ?? 'active'));
+        $status = ($status === 'deleted') ? 'deleted' : 'active';
+        if ($is_loged_in->getRole() === 'caissier') {
+            $status = 'active';
+        }
+        switch ($status) {
+            case 'active':
+                $status = 'actif';
+                break;
+            case 'deleted':
+                $status = 'supprimé';
+                break;
+        }
+
+        //order_by
+        $order_by = strtolower(trim($_GET['order_by'] ?? 'id'));
+        $order_by = in_array($order_by, $order_by_default, true) ? $order_by : 'id';
+        switch ($order_by) {
+            case 'libelle':
+                $order_by = 'a.libelle_article';
+                break;
+            case 'id':
+                $order_by = 'a.id_article';
+                break;
+            case 'total':
+                $order_by = 'total_article';
+                break;
+            case 'quantite':
+                $order_by = 'quantite_article';
+                break;
+        }
+        //arrange
+        $arrange = strtoupper(trim($_GET['arrange'] ?? 'ASC'));
+        $arrange = in_array($arrange, $arrange_default, true) ? $arrange : 'ASC';
+
+        //search_article
+        $search_article = "%" . trim($_GET['search_article'] ?? '') . "%";
+
+        $params = [
+            'status' => $status,
+            'order_by' => $order_by,
+            'arrange' => $arrange,
+            'search_article' => $search_article
+        ];
+
+        //filter article
+        $response = ArticleRepositorie::filterArticle($params);
+
+        echo json_encode($response);
+        return;
+    }
 }

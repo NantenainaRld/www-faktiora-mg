@@ -161,7 +161,7 @@ class ProduitController extends Controller
         }
 
         //defaults
-        $order_by_default = ['libelle', 'nb_stock', 'max'];
+        $order_by_default = ['libelle', 'nb_stock', 'total', 'quantite'];
         $arrange_default = ['ASC', 'DESC'];
 
         //status
@@ -189,7 +189,10 @@ class ProduitController extends Controller
             case 'nb_stock':
                 $order_by = 'p.nb_stock';
                 break;
-            case 'max':
+            case 'quantite':
+                $order_by = 'quantite_produit';
+                break;
+            case 'total':
                 $order_by = 'total_produit';
                 break;
         }

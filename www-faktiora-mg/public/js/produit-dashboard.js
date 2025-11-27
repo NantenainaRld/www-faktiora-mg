@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // createProduit("tavoangy", "15000", 34);
     // filterProduit("active", "max", "desc", "");
     // listAllProduit();
-    updateProduit("1", "capsule", "15000", 34);
+    // updateProduit("1", "capsule", "15000", 34);
     // deleteAllProduit([1, 2]);
     // permanentDeleteAllProduit([1, 2]);
   });

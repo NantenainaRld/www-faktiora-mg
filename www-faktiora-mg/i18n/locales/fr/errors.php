@@ -111,6 +111,8 @@ return [
         'article_createArticle' => DEBUG ? "Erreur dans article/createArticle : :field" : "Une erreur est survenue lors d'ajout de nouveau article",
         //article - is libelle article exist
         'article_isLibelleArticleExist' => DEBUG ? "Erreur dans article/isLibelleArticleExist : :field" : "Une erreur est survenue lors de la vérification d'article",
+        //article - filter article
+        'article_filterArticle' => DEBUG ? "Erreur dans article/filterArticle : :field" : "Une erreur est survenue lors de listage des articles",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",
