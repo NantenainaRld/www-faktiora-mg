@@ -64,23 +64,23 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
-  //   //function - permanent delete all produit
-  //   async function permanentDeleteAllProduit(ids_produit = []) {
-  //     try {
-  //       const response = await apiRequest(
-  //         "/produit/permanent_delete_all_produit",
-  //         {
-  //           method: "DELETE",
-  //           body: {
-  //             ids_produit: ids_produit,
-  //           },
-  //         }
-  //       );
-  //       console.log(response);
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   }
+  //function - permanent delete all article
+  async function permanentDeleteAllArticle(ids_article = []) {
+    try {
+      const response = await apiRequest(
+        "/article/permanent_delete_all_article",
+        {
+          method: "DELETE",
+          body: {
+            ids_article: ids_article,
+          },
+        }
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
 
@@ -91,6 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // filterArticle("active", "or", "desc", "correction");
     // listAllArticle();
     // updateArticle("3", "achat de carburant");
-    deleteAllArticle([3, 2]);
+    // deleteAllArticle([3, 2]);
+    permanentDeleteAllArticle([3, 2]);
   });
 });
