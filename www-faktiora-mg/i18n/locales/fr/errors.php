@@ -119,6 +119,8 @@ return [
         'article_updateArticle' => DEBUG ? "Erreur dans article/updateArticle : :field" : "Une erreur est survenue lors de la modification d'article",
         //article - find by id
         'article_findById' => DEBUG ? "Erreur dans article/findById : :field" : "Une erreur est survenue lors de la vérification d'article",
+        //article - delete all article
+        'article_deleteAllArticle' => DEBUG ? "Erreur dans article/deleteAllArticle : :field" : "Une erreur est survenue lors de la suppréssion des articles",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

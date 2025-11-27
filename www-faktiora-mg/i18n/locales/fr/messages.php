@@ -60,7 +60,9 @@ return [
         //produit - libelle prix
         'produit_libelle_prix' => "Le produit avec le libellé <b>:libelle</b> et prix <b>:prix</b> existe déjà",
         //article - libelle_article 
-        'article_libelle_article' => "L'article avec le libellé <b>:field</b> existe déjà"
+        'article_libelle_article' => "L'article avec le libellé <b>:field</b> existe déjà",
+        //article - ids_article empty
+        'article_ids_article_empty' => "Veuiller séléctionner au moins un article"
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",
@@ -155,7 +157,13 @@ return [
         //article - create article
         'article_createArticle' => "Nouveau article ajouté avec succès",
         //article - update article
-        'article_updateArticle' => "L'article avec l'ID <b>:field</b> a été modifié avec succès"
+        'article_updateArticle' => "L'article avec l'ID <b>:field</b> a été modifié avec succès",
+        //article - delete all article 0
+        'article_deleteAllArticle_0' => "Aucun article n'est supprimé",
+        //article - delete all article 1
+        'article_deleteAllArticle_1' => "Un article a été supprimé avec succès",
+        //article - delete all article plur
+        'article_deleteAllArticle_plur' => "<b>:field</b> ont été supprimés avec succès",
     ],
     'not_found' => [
         //user - id

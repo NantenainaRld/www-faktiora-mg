@@ -263,6 +263,64 @@ class Article extends Database
         return $response;
     }
 
+    //static - delete all article
+    public static function deleteAllArticle($ids_article)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        $placeholders = implode(', ', array_fill(0, count($ids_article), '?'));
+        $sql = "UPDATE article SET etat_article = 'supprimé' WHERE id_article IN ({$placeholders}) ";
+
+        try {
+
+            $response = parent::executeQuery($sql, $ids_article);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //success
+            //0
+            if ($response['row_count'] === 0) {
+                $response['message'] = __('messages.success.article_deleteAllArticle_0');
+            }
+            //1
+            elseif ($response['row_count'] === 1) {
+                $response['message'] = __('messages.success.article_deleteAllArticle_1');
+            }
+            //plur
+            else {
+                $response['message'] = __('messages.success.article_deleteAllArticle_plur', ['field' => $response['row_count']]);
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => $response['message']
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.article_deleteAllArticle',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //==================== PRIVATE FUNCTION ======================
 
     //static - is libelle article exist ?
