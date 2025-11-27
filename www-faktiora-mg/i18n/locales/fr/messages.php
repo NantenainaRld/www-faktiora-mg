@@ -153,7 +153,9 @@ return [
         //produit - delete all produit plur
         'produit_deleteAllProduit_plur' => "<b>:field</b> produits ont été supprimés avec succès",
         //article - create article
-        'article_createArticle' => "Nouveau article ajouté avec succès"
+        'article_createArticle' => "Nouveau article ajouté avec succès",
+        //article - update article
+        'article_updateArticle' => "L'article avec l'ID <b>:field</b> a été modifié avec succès"
     ],
     'not_found' => [
         //user - id
@@ -166,8 +168,10 @@ return [
         'caisse_id_lc' => "La ligne caisse numéro <b>:field</b> n'existe pas",
         //entree - num_ae
         'entree_num_ae' => "L'autre entrée numéro <b>:field</b> n'existe pas",
-        //produit - id_produi
-        'produit_id_produit' => "Le produit avec l'ID <b>:field</b> n'existe pas"
+        //produit - id_produit
+        'produit_id_produit' => "Le produit avec l'ID <b>:field</b> n'existe pas",
+        //article - id_article
+        'article_id_article' => "L'article avec l'ID <b>:field</b> n'existe pas"
     ],
     'duplicate' => [
         //user - email

@@ -194,4 +194,106 @@ class ArticleController extends Controller
         echo json_encode($response);
         return;
     }
+
+    //action - update article
+    public function updateArticle()
+    {
+        header('Content-Type: application/json');
+        //is loged in
+        $is_loged_in = Auth::isLogedIn();
+        $response = null;
+
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login
+            header('Location: ' . SITE_URL . '/login');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            $json = json_decode(file_get_contents('php://input'), true);
+            //trim
+            $json = array_map(fn($x) => trim($x), $json);
+
+            //libelle_article - empty
+            if ($json['libelle_article'] === '') {
+                $response = [
+                    'message_type' => 'success',
+                    'message' => __('messages.empty.libelle')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //ibelle_article - invalid
+            if (strlen($json['libelle_article']) > 100) {
+                $response = [
+                    'message_type' => 'success',
+                    'message' => __('messages.invalids.libelle')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+
+                //is id_article exist ?
+                $response = Article::findById($json['id_article']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.article_id_article', ['field' => $json['id_article']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //update produit 
+                $article_model = new Article();
+                $article_model
+                    ->setIdArticle($json['id_article'])
+                    ->setLibelleArticle($json['libelle_article']);
+                $response = $article_model->updateArticle();
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.article_updateArticle',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            echo json_encode($response);
+            return;
+        }
+        //redirect to article index
+        else {
+            header('Location: ' . SITE_URL . '/article');
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
 }

@@ -115,6 +115,10 @@ return [
         'article_filterArticle' => DEBUG ? "Erreur dans article/filterArticle : :field" : "Une erreur est survenue lors de listage des articles",
         //article - list all article
         'article_listAllArticle' => DEBUG ? "Erreur dans article/listAllArticle : :field" : "Une erreur est survenue lors de listage de tous les articles",
+        //article - update article
+        'article_updateArticle' => DEBUG ? "Erreur dans article/updateArticle : :field" : "Une erreur est survenue lors de la modification d'article",
+        //article - find by id
+        'article_findById' => DEBUG ? "Erreur dans article/findById : :field" : "Une erreur est survenue lors de la vérification d'article",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

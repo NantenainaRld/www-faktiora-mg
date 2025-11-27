@@ -134,6 +134,135 @@ class Article extends Database
         return $response;
     }
 
+    //static - find by id
+    public static function findById($id_article)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+            'found' => false
+        ];
+
+        try {
+
+            $response = parent::selectQuery("SELECT * FROM article WHERE id_article = :id ", ['id' => $id_article]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //not found
+            if (count($response['data']) <= 0) {
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'found' => false
+                ];
+
+                return $response;
+            }
+            //found
+            else {
+                $article_model = new Article();
+                $article_model
+                    ->setIdArticle($response['data'][0]['id_article'])
+                    ->setLibelleArticle($response['data'][0]['libelle_article'])
+                    ->setEtatArticle($response['data'][0]['etat_article']);
+
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'found' => true,
+                    'model' => $article_model
+                ];
+
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.article_findById',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //update article
+    public function updateArticle()
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            //is libelle article exist ?
+            $response = self::isLibelleArticleExist($this->libelle_article, $this->id_article);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //found
+            if ($response['found']) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.article_libelle_article', ['field' => $this->libelle_article])
+                ];
+
+                return $response;
+            }
+
+            //update article
+            $response = parent::executeQuery("UPDATE article SET libelle_article = :libelle WHERE id_article = :id", [
+                'libelle' => $this->libelle_article,
+                'id' => $this->id_article
+            ]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => __('messages.success.article_updateArticle', ['field' => $this->id_article])
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.article_updateArticle',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //==================== PRIVATE FUNCTION ======================
 
     //static - is libelle article exist ?

@@ -35,28 +35,21 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
-  //   //function - update produtit
-  //   async function updateProduit(
-  //     id_produit,
-  //     libelle_produit,
-  //     prix_produit,
-  //     nb_stock
-  //   ) {
-  //     try {
-  //       const response = await apiRequest("/produit/update_produit", {
-  //         method: "PUT",
-  //         body: {
-  //           id_produit: id_produit,
-  //           libelle_produit: libelle_produit,
-  //           prix_produit: prix_produit,
-  //           nb_stock: nb_stock,
-  //         },
-  //       });
-  //       console.log(response);
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   }
+  //function - update article
+  async function updateArticle(id_article, libelle_article) {
+    try {
+      const response = await apiRequest("/article/update_article", {
+        method: "PUT",
+        body: {
+          id_article: id_article,
+          libelle_article: libelle_article,
+        },
+      });
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
   //   //function - delete all produit
   //   async function deleteAllProduit(ids_produit = []) {
   //     try {
@@ -96,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
   btnTest.addEventListener("click", () => {
     // createArticle("achat de capsule");
     // filterArticle("active", "or", "desc", "correction");
-    listAllArticle();
+    // listAllArticle();
+    updateArticle("3", "achat de carburant");
   });
 });
