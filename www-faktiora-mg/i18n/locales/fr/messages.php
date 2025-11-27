@@ -55,6 +55,8 @@ return [
         'entree_nums_ae_empty' => "Veuiller séléctionner au moins une autre entrée",
         //entree - correction autre entree
         'entree_correctionAutreEntree' => "Cette autre entrée n'est pas enregistrée sur votre caisse actuelle",
+        //produit - ids_produit empty
+        'produit_ids_produit_empty' => "Veuiller séléctionner au moins un produit"
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",
@@ -139,7 +141,13 @@ return [
         //produit - create produit
         'produit_createProduit' => "Nouveau produit ajouté avec succès",
         //produit - update produit
-        'produit_updateProduit' => "Produit avec l'ID <b>:field</b> a été modifié avec succès"
+        'produit_updateProduit' => "Produit avec l'ID <b>:field</b> a été modifié avec succès",
+        //produit - delete all produit 0 
+        'produit_deleteAllProduit_0' => "Aucun produit n'est supprimé",
+        //produit - delete all produit 1
+        'produit_deleteAllProduit_1' => "Un produit a été supprimé avec succès",
+        //produit - delete all produit plur
+        'produit_deleteAllProduit_plur' => "<b>:field</b> produits ont été supprimés avec succès",
     ],
     'not_found' => [
         //user - id

@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
-  //function - update produti
+  //function - update produtit
   async function updateProduit(
     id_produit,
     libelle_produit,
@@ -59,6 +59,20 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - delete all produit
+  async function deleteAllProduit(ids_produit = []) {
+    try {
+      const response = await apiRequest("/produit/delete_all_produit", {
+        method: "PUT",
+        body: {
+          ids_produit: ids_produit,
+        },
+      });
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -71,6 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // createProduit("tavoangy", "15000", 34);
     // filterProduit("active", "max", "desc", "2");
     // listAllProduit();
-    updateProduit("1", "tavoangy", "15000", 34);
+    // updateProduit("1", "tavoangy", "15000", 34);
+    deleteAllProduit([1, 2]);
   });
 });

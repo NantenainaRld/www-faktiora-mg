@@ -382,4 +382,79 @@ class ProduitController extends Controller
     }
 
     //action - delete all produit
+    public function deleteAllProduit()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //role - not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to produit index
+            header("Location: " . SITE_URL . '/entree');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            $json = json_decode(file_get_contents('php://input'), true);
+            //trim
+            $ids_produit = array_values(array_map(fn($x) => strtoupper(trim($x)), $json['ids_produit']));
+
+            //ids_produit - empty
+            if (count($ids_produit) <= 0) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.produit_ids_produit_empty')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+
+                //delete all produit
+                $response = Produit::deleteAllProduit($ids_produit);
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.produit_deleteAllProduit',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            echo json_encode($response);
+            return;
+        }
+        //redirect to entree index
+        else {
+            header('Location: ' . SITE_URL . '/entree');
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
 }
