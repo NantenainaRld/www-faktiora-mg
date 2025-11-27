@@ -99,7 +99,7 @@ class Produit extends Database
     }
 
     //static - list produit all
-    public static function listProduitAll()
+    public static function listAllProduit()
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 
@@ -257,6 +257,64 @@ class Produit extends Database
 
         $placeholders = implode(', ', array_fill(0, count($ids_produit), '?'));
         $sql = "UPDATE produit SET etat_produit = 'supprimé' WHERE id_produit IN ({$placeholders}) ";
+
+        try {
+
+            $response = parent::executeQuery($sql, $ids_produit);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //success
+            //0
+            if ($response['row_count'] === 0) {
+                $response['message'] = __('messages.success.produit_deleteAllProduit_0');
+            }
+            //1
+            elseif ($response['row_count'] === 1) {
+                $response['message'] = __('messages.success.produit_deleteAllProduit_1');
+            }
+            //plur
+            else {
+                $response['message'] = __('messages.success.produit_deleteAllProduit_plur', ['field' => $response['row_count']]);
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => $response['message']
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.produit_deleteAllProduit',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //static - permanent delete all produit
+    public static function permanentDeleteAllProduit($ids_produit)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        $placeholders = implode(', ', array_fill(0, count($ids_produit), '?'));
+        $sql = "DELETE FROM produit WHERE id_produit IN ({$placeholders}) AND etat_produit = 'supprimé' ";
 
         try {
 

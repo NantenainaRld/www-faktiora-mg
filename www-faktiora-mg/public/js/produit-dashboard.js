@@ -73,6 +73,23 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - permanent delete all produit
+  async function permanentDeleteAllProduit(ids_produit = []) {
+    try {
+      const response = await apiRequest(
+        "/produit/permanent_delete_all_produit",
+        {
+          method: "DELETE",
+          body: {
+            ids_produit: ids_produit,
+          },
+        }
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -86,6 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // filterProduit("active", "max", "desc", "2");
     // listAllProduit();
     // updateProduit("1", "tavoangy", "15000", 34);
-    deleteAllProduit([1, 2]);
+    // deleteAllProduit([1, 2]);
+    permanentDeleteAllProduit([1, 2]);
   });
 });
