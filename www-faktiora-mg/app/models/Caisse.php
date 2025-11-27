@@ -60,6 +60,17 @@ class Caisse extends Database
         return $this->etat_caisse;
     }
 
+    //getter - solde
+    public function getSolde()
+    {
+        return $this->solde;
+    }
+
+    //getter - seuil
+    public function getSeuil()
+    {
+        return $this->seuil;
+    }
 
     //=========================== PUBLIC FUNCTION =============================
 

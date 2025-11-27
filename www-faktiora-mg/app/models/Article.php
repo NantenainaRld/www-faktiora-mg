@@ -35,6 +35,14 @@ class Article extends Database
         return $this;
     }
 
+    //============================= GETTERS ============================
+
+    //getter - etat_article
+    public function getEtatArticle()
+    {
+        return $this->etat_article;
+    }
+
     //============================== PUBLIC FUNCTION ========================
 
     //create article

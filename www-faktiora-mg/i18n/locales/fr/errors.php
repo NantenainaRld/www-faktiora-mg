@@ -97,7 +97,8 @@ return [
         'sortie_connectionSortie' => DEBUG ? "Erreur dans sortie/connectionSortie : :field" : "Une erreur est survenue lors de listage des connections pour les sorties",
         //sortie - create sortie 
         'sortie_createSortie' => DEBUG ? "Erreur dans sortie/createSortie : :field" : "Une erreur est survenue lors de la création de sortie",
-        //
+        //sortie - create ligne_ds
+        'sortie_createLigneDs' => DEBUG ? "Erreur dans sortie/createLigneDs : :field" : "Une erreur est survenue lors de la création de ligne sortie",
         //produit  - create produit
         'produit_createProduit' => DEBUG ? "Erreur dans produit/createProduit : :field" : "Une erreur est survenue lors d'ajout de nouveau produit",
         //produit - filter produit

@@ -62,7 +62,15 @@ return [
         //article - libelle_article 
         'article_libelle_article' => "L'article avec le libellé <b>:field</b> existe déjà",
         //article - ids_article empty
-        'article_ids_article_empty' => "Veuiller séléctionner au moins un article"
+        'article_ids_article_empty' => "Veuiller séléctionner au moins un article",
+        //article - deleted
+        'article_deleted' => "L'article avec l'ID <b>:field</b> est déjà supprimé",
+        //sortie - prix article
+        'sortie_prix_article' => "Le prix est invalide pour l'article avec l'ID <b>:id_article</b> : :prix_article",
+        //sortie - quantite article
+        'sortie_prix_article' => "La quantité est invalide pour l'article avec l'ID <b>:id_article</b> : :quantite_article",
+        //sortie - reste_solde
+        'sortie_reste_solde' => "Demande de sortie refusée, le seuil de <b>:field</b> n'est pas respecté"
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",
@@ -164,6 +172,10 @@ return [
         'article_deleteAllArticle_1' => "Un article a été supprimé avec succès",
         //article - delete all article plur
         'article_deleteAllArticle_plur' => "<b>:field</b> ont été supprimés avec succès",
+        //sortie - create ligne_ds
+        'sortie_createLigneDs' => "Nouveau ligne sortie ajoutée avec succès",
+        //sortie - create sortie
+        'sortie_createSortie' => "Nouveau sortie ajoutée avec succès"
     ],
     'not_found' => [
         //user - id
