@@ -60,6 +60,32 @@ class Produit extends Database
 
         try {
 
+            //is libelle && prix produit exist ?
+            $response = self::isLibellePrixExist([
+                'libelle_produit' => $this->libelle_produit,
+                'prix_produit' => $this->prix_produit
+            ], null);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //found
+            if ($response['found']) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __(
+                        'messages.invalids.produit_libelle_prix',
+                        [
+                            'libelle' => $this->libelle_produit,
+                            'prix' => $this->prix_produit
+                        ]
+                    )
+                ];
+
+                return $response;
+            }
+
+            //create produit
             $response = parent::executeQuery("INSERT INTO produit (libelle_produit, prix_produit, nb_stock) VALUES (:libelle, :prix, :nb_stock) ", [
                 'libelle' => $this->libelle_produit,
                 'prix' => $this->prix_produit,
@@ -211,6 +237,32 @@ class Produit extends Database
 
         try {
 
+            //is libelle && prix produit exist ?
+            $response = self::isLibellePrixExist([
+                'libelle_produit' => $this->libelle_produit,
+                'prix_produit' => $this->prix_produit
+            ], $this->id_produit);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //found
+            if ($response['found']) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __(
+                        'messages.invalids.produit_libelle_prix',
+                        [
+                            'libelle' => $this->libelle_produit,
+                            'prix' => $this->prix_produit
+                        ]
+                    )
+                ];
+
+                return $response;
+            }
+
+            //update produit
             $response = parent::executeQuery("UPDATE produit SET libelle_produit = :libelle, prix_produit = :prix, nb_stock = :nb_stock WHERE id_produit = :id ", [
                 'libelle' => $this->libelle_produit,
                 'prix' => $this->prix_produit,
@@ -354,6 +406,73 @@ class Produit extends Database
                 'message_type' => 'error',
                 'message' => __(
                     'errors.catch.produit_deleteAllProduit',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+
+    //======================== PRIVATE FUNCTION ========================
+
+    //Sstatic - is libelle && prix exist ?
+    private static function isLibellePrixExist($libelle_prix = [], $exclude = null)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+            'found' => false
+        ];
+        $sql = "SELECT libelle_produit, prix_produit FROM produit WHERE libelle_produit = :libelle AND prix_produit = :prix ";
+        $paramsQuery = [
+            'libelle' => $libelle_prix['libelle_produit'],
+            'prix' => $libelle_prix['prix_produit']
+        ];
+        if ($exclude) {
+            $sql .= "AND id_produit != :exclude";
+            $paramsQuery['exclude'] = $exclude;
+        }
+
+        try {
+
+            $response = parent::selectQuery($sql, $paramsQuery);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //not found
+            if (count($response['data']) <= 0) {
+                $response['found'] = false;
+            }
+            //found
+            else {
+                $response['found'] = true;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+                'found' => $response['found']
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.article_isLibelleArticleExist',
                     ['field' => $e->getMessage() .
                         ' - Line : ' . $e->getLine() .
                         ' - File : ' . $e->getFile()]

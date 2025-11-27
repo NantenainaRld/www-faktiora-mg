@@ -57,8 +57,10 @@ return [
         'entree_correctionAutreEntree' => "Cette autre entrée n'est pas enregistrée sur votre caisse actuelle",
         //produit - ids_produit empty
         'produit_ids_produit_empty' => "Veuiller séléctionner au moins un produit",
+        //produit - libelle prix
+        'produit_libelle_prix' => "Le produit avec le libellé <b>:libelle</b> et prix <b>:prix</b> existe déjà",
         //article - libelle_article 
-        'article_libelle_article' => "L'article avec libellé <b>:field</b> existe déjà"
+        'article_libelle_article' => "L'article avec le libellé <b>:field</b> existe déjà"
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",

@@ -100,7 +100,7 @@ class Article extends Database
 
     //==================== PRIVATE FUNCTION ======================
 
-    //is libelle article exist ?
+    //static - is libelle article exist ?
     private static function isLibelleArticleExist($libelle_article, $exclude = null)
     {
         $response = [
