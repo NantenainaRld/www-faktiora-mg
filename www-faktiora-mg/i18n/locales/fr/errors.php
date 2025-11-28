@@ -109,6 +109,8 @@ return [
         'sortie_ligneDs' => DEBUG ? "Erreur dabs sortie/ligneDs : :field" : "Une erreur est survenue de listage des lignes sorties",
         //sortie - list all demande sortie
         'sortie_listAllDemandeSortie' => DEBUG ? "Erreur dans sortie/listAllDemandeSortie : :field" : "Une erreur est survenue lors de listage de tous les sorties",
+        //sortie - update demande sortie
+        'sortie_updateDemandeSortie' => DEBUG ? "Erreur dans sortie/updateDemandeSortie : :field" : "Une erreur est survenue lors de la modification de sortie",
         //produit  - create produit
         'produit_createProduit' => DEBUG ? "Erreur dans produit/createProduit : :field" : "Une erreur est survenue lors d'ajout de nouveau produit",
         //produit - filter produit

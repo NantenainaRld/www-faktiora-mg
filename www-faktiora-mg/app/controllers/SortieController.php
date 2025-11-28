@@ -622,4 +622,175 @@ class SortieController extends Controller
         echo json_encode($response);
         return;
     }
+
+    //action - update demande sortie
+    public function updateDemandeSortie()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+        //role not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to entree index
+            header('Location: ' . SITE_URL . '/entree');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            $json = json_decode(file_get_contents('php://input'), true);
+            //trim
+            $json = array_map(fn($x) => trim($x), $json);
+
+            //date_ds - empty
+            if ($json['date_ds'] === '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.date')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //date_ds - invalid
+            $date_ds = DateTime::createFromFormat('Y-m-d\TH:i', $json['date_ds']);
+            if ($date_ds === false) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __(
+                        'messages.invalids.date',
+                        ['field' => $json['date_ds']]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            $date = new DateTime();
+            //date_ae - future
+            if ($date_ds > $date) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date_future')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            $date_ds = $date_ds->format('Y-m-d H:i:s');
+
+            //id_utilisateur - empty
+            if ($json['id_utilisateur'] === '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.user_id')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+
+                //is num_ds exist ?
+                $json['num_ds'] = strtoupper($json['num_ds']);
+                $response = DemandeSortie::findById($json['num_ds']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.sortie_num_ds', ['field' => $json['num_ds']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //is num_caisse exist ?
+                $response = Caisse::findById($json['num_caisse']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //is user exist ?
+                $response = User::findById($json['id_utilisateur']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.user_id', ['field' => $json['id_utilisateur']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //update demande sortie
+                $demande_sortie_model = new DemandeSortie();
+                $demande_sortie_model
+                    ->setNumDs($json['num_ds'])
+                    ->setDateDs($json['date_ds'])
+                    ->setIdUtilsateur($json['id_utilisateur'])
+                    ->setNumCaisse($json['num_caisse']);
+                $response = $demande_sortie_model->updateDemandeSortie();
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.sortie_updateDemandeSortie',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+        }
+        //redirect to entree index
+        else {
+            header('Location: ' . SITE_URL . '/entree');
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
 }

@@ -298,4 +298,53 @@ class DemandeSortie extends Database
 
         return $response;
     }
+
+    //update demande_sortie
+    public function updateDemandeSortie()
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            $response = parent::executeQuery("UPDATE demande_sortie SET date_ds = :date, id_utilisateur = :id_user, num_caisse = :num_caisse WHERE num_ds = :num_ds ", [
+                'date' => $this->date_ds,
+                'id_user' => $this->id_utilisateur,
+                'num_caisse' => $this->num_caisse,
+                'num_ds' => $this->num_ds
+            ]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => __(
+                    'messages.success.sortie_updateDemandeSortie',
+                    ['field' => $this->num_ds]
+                )
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.sortie_updateDemandeSortie',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
 }

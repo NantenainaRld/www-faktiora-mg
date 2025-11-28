@@ -175,7 +175,9 @@ return [
         //sortie - create ligne_ds
         'sortie_createLigneDs' => "Nouveau ligne sortie ajoutée avec succès",
         //sortie - create sortie
-        'sortie_createSortie' => "Nouveau sortie ajoutée avec succès"
+        'sortie_createSortie' => "Nouveau sortie ajoutée avec succès",
+        //sortie - update demande sortie 
+        'sortie_updateDemandeSortie' => "Sortie numéro <b>:field</b> est modifiée avec succès"
     ],
     'not_found' => [
         //user - id

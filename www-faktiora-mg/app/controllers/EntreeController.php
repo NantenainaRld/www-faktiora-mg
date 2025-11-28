@@ -420,7 +420,7 @@ class EntreeController extends Controller
         return;
     }
 
-    //action - update autre caisse
+    //action - update autre entree
     public function updateAutreEntree()
     {
         header('Content-Type: application/json');
@@ -543,7 +543,6 @@ class EntreeController extends Controller
                     echo json_encode($response);
                     return;
                 }
-                $ae_num_caisse = $response['model']->getNumCaisse();
 
                 //role admin
                 if ($is_loged_in->getRole() === 'admin') {
@@ -585,7 +584,7 @@ class EntreeController extends Controller
                     }
                 }
 
-                //create autre entree
+                //update autre entree
                 $autre_entree_model = new AutreEntree();
                 $autre_entree_model
                     ->setNumAe($json['num_ae'])

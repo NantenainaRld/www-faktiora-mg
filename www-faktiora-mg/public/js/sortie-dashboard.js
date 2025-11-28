@@ -74,6 +74,28 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - update demande sortie
+  async function updateDemandeSortie(
+    num_ds,
+    date_ds,
+    id_utilisateur,
+    num_caisse
+  ) {
+    try {
+      const response = await apiRequest("/sortie/update_demande_sortie", {
+        method: "PUT",
+        body: {
+          num_ds: num_ds,
+          date_ds: date_ds,
+          id_utilisateur: id_utilisateur,
+          num_caisse: num_caisse,
+        },
+      });
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -112,8 +134,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // );
     // listConnectionSortie("s202511-12");
     // listAllDemandeSortie();
-    listLdsArticle("s202511-12");
-    // updateAutreEntree("a202511-19", "ohhatra", date.value, "10004", "2");
+    // listLdsArticle("s202511-12");
+    updateDemandeSortie("s202511-12", date.value, "10003", "1");
     // deleteAllAutreEntree(["a202511-18", "a202511-19"]);
     // permanentDeleteAllAutreEntree(["a202511-18", "a202511-19"]);
     // correctionAutreEntree(
