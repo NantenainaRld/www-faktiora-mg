@@ -111,6 +111,8 @@ return [
         'sortie_listAllDemandeSortie' => DEBUG ? "Erreur dans sortie/listAllDemandeSortie : :field" : "Une erreur est survenue lors de listage de tous les sorties",
         //sortie - update demande sortie
         'sortie_updateDemandeSortie' => DEBUG ? "Erreur dans sortie/updateDemandeSortie : :field" : "Une erreur est survenue lors de la modification de sortie",
+        //sortie - delete all demande sortie
+        'sortie_deleteAllDemandeSortie' => DEBUG ? "Erreur dans sortie/deleteAllDemandeSortie : :field" : "Une erreur est survenue lors de la suppréssion des sorties",
         //produit  - create produit
         'produit_createProduit' => DEBUG ? "Erreur dans produit/createProduit : :field" : "Une erreur est survenue lors d'ajout de nouveau produit",
         //produit - filter produit

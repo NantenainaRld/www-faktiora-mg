@@ -70,7 +70,9 @@ return [
         //sortie - quantite article
         'sortie_prix_article' => "La quantité est invalide pour l'article avec l'ID <b>:id_article</b> : :quantite_article",
         //sortie - reste_solde
-        'sortie_reste_solde' => "Demande de sortie refusée, le seuil de <b>:field</b> n'est pas respecté"
+        'sortie_reste_solde' => "Demande de sortie refusée, le seuil de <b>:field</b> n'est pas respecté",
+        //sortie - nums ds empty
+        'sortie_nums_ds_empty' => "Veuiller séléctionner au moins une sortie"
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",
@@ -177,7 +179,13 @@ return [
         //sortie - create sortie
         'sortie_createSortie' => "Nouveau sortie ajoutée avec succès",
         //sortie - update demande sortie 
-        'sortie_updateDemandeSortie' => "Sortie numéro <b>:field</b> est modifiée avec succès"
+        'sortie_updateDemandeSortie' => "Sortie numéro <b>:field</b> est modifiée avec succès",
+        //sortie - delet all demande sortie 0
+        'sortie_deleteAllDemandeSortie_0' => "Aucune sortie n'est supprimée",
+        //sortie - delet all demande sortie 1
+        'sortie_deleteAllDemandeSortie_1' => "AUne sortie a été supprimée avec succès",
+        //sortie - delet all demande sortie plur
+        'sortie_deleteAllDemandeSortie_plur' => "<b>:field</b> sorties ont été supprimées avec succès"
     ],
     'not_found' => [
         //user - id
