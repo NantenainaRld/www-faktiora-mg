@@ -23,6 +23,26 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - filter demande sortie
+  async function filterDemandeSortie(
+    status,
+    num_caisse,
+    id_user,
+    order_by,
+    arrange,
+    from,
+    to,
+    search_ds
+  ) {
+    try {
+      const response = await apiRequest(
+        `/sortie/filter_demande_sortie?status=${status}&num_caisse=${num_caisse}&id_user=${id_user}&order_by=${order_by}&arrange=${arrange}&from=${from}&to=${to}&search_ds=${search_ds}`
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -32,24 +52,33 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    createSortie(
-      [
-        {
-          id_article: 4,
-          prix_article: 2500,
-          quantite_article: 2,
-        },
-        {
-          id_article: 1,
-          prix_article: 1500,
-          quantite_article: 2,
-        },
-      ],
-      date.value,
-      10004,
-      1
+    // createSortie(
+    //   [
+    //     {
+    //       id_article: 4,
+    //       prix_article: 2500,
+    //       quantite_article: 2,
+    //     },
+    //     {
+    //       id_article: 1,
+    //       prix_article: 1500,
+    //       quantite_article: 2,
+    //     },
+    //   ],
+    //   date.value,
+    //   10004,
+    //   1
+    // );
+    filterDemandeSortie(
+      "active",
+      "all",
+      "all",
+      "montant",
+      "asc",
+      from.value,
+      to.value,
+      ""
     );
-    // filterAutreEntree("active", "all", "all", "num_ae", "ASC", "", "", "");
     // updateAutreEntree("a202511-19", "ohhatra", date.value, "10004", "2");
     // deleteAllAutreEntree(["a202511-18", "a202511-19"]);
     // permanentDeleteAllAutreEntree(["a202511-18", "a202511-19"]);

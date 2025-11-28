@@ -218,7 +218,7 @@ class AutreEntree extends Database
             'message_type' => 'success',
             'message' => 'success'
         ];
-        $sql = "SELECT num_ae, libelle_ae, date_ae, montant_ae, etat_ae, id_utilisateur, num_caisse FROM autre_entree ";
+        $sql = "SELECT num_ae, libelle_ae, date_ae, montant_ae, id_utilisateur, num_caisse FROM autre_entree ";
         $paramsQuery = [];
 
         //where 1=1
@@ -269,8 +269,10 @@ class AutreEntree extends Database
         }
 
         //search_ae
-        $sql .= "AND (num_ae LIKE :search OR libelle_ae LIKE :search) ";
-        $paramsQuery['search'] = "%" . $params['search_ae'] . "%";
+        if ($params['search_ae'] !== '') {
+            $sql .= "AND (num_ae LIKE :search OR libelle_ae LIKE :search) ";
+            $paramsQuery['search'] = "%" . $params['search_ae'] . "%";
+        }
 
         //group by and order by
         $sql .= "GROUP BY id_ae ORDER BY {$params['order_by']} {$params['arrange']} ";
