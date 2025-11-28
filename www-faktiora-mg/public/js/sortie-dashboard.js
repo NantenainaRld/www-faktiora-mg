@@ -43,6 +43,17 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - list connection sortie
+  async function listConnectionSortie(num_ds) {
+    try {
+      const response = await apiRequest(
+        `/sortie/list_connection_sortie?num_ds=${num_ds}`
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -69,20 +80,20 @@ document.addEventListener("DOMContentLoaded", () => {
     //   10004,
     //   1
     // );
-    filterDemandeSortie(
-      "active",
-      "all",
-      "all",
-      "montant",
-      "asc",
-      from.value,
-      to.value,
-      ""
-    );
+    // filterDemandeSortie(
+    //   "active",
+    //   "all",
+    //   "all",
+    //   "montant",
+    //   "asc",
+    //   from.value,
+    //   to.value,
+    //   ""
+    // );
+    listConnectionSortie("s202511-12");
     // updateAutreEntree("a202511-19", "ohhatra", date.value, "10004", "2");
     // deleteAllAutreEntree(["a202511-18", "a202511-19"]);
     // permanentDeleteAllAutreEntree(["a202511-18", "a202511-19"]);
-    // listConnectionAutreEntree("a202511-17");
     // correctionAutreEntree(
     //   "a202511-17",
     //   "libelle",

@@ -20,7 +20,7 @@ class SortieRepositorie extends Database
         try {
 
             $response = parent::selectQuery(
-                "SELECT ds.num_ds, a.libelle_article, ds.date_ds, lds.prix_article FROM demande_sortie ds JOIN ligne_ds lds ON lds.id_ds = ds.id_ds JOIN article a ON a.id_article = lds.id_article WHERE (a.libelle_article LIKE :libelle ) AND ds.etat_ds !='supprimé' AND a.etat_article != 'supprimé' ",
+                "SELECT ds.num_ds, a.libelle_article, ds.date_ds, lds.prix_article FROM demande_sortie ds JOIN ligne_ds lds ON lds.id_ds = ds.id_ds JOIN article a ON a.id_article = lds.id_article WHERE (a.libelle_article LIKE :libelle ) AND a.etat_article != 'supprimé' ",
                 ['libelle' => $libelle]
             );
 
@@ -142,6 +142,50 @@ class SortieRepositorie extends Database
                 'message_type' => 'error',
                 'message' => __(
                     'errors.catch.sortie_filterDemandeSortie',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //static - ligne ds
+    public static function ligneDs($num_ds)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+        try {
+
+            $response = parent::selectQuery("SELECT lds.id_lds, a.id_article, a.libelle_article, lds.prix_article, lds.quantite_article, (lds.prix_article * lds.quantite_article) AS prix_total FROM ligne_ds lds JOIN article a ON a.id_article = lds.id_article JOIN demande_sortie ds ON ds.id_ds = lds.id_ds WHERE a.etat_article != 'supprimé' AND ds.num_ds = :num_ds AND a.libelle_article NOT LIKE 'correction/%' ", ['num_ds' => $num_ds]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+                'data' => $response['data']
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.sortie_ligneDs',
                     ['field' => $e->getMessage() .
                         ' - Line : ' . $e->getLine() .
                         ' - File : ' . $e->getFile()]

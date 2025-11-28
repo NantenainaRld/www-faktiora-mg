@@ -815,7 +815,6 @@ class EntreeController extends Controller
                 echo json_encode($response);
                 return;
             }
-            $ae_num_caisse = $response['model']->getNumCaisse();
 
             //list connection autre entree
             $autre_entree_model = new AutreEntree();

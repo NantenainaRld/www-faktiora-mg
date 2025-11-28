@@ -191,7 +191,9 @@ return [
         //produit - id_produit
         'produit_id_produit' => "Le produit avec l'ID <b>:field</b> n'existe pas",
         //article - id_article
-        'article_id_article' => "L'article avec l'ID <b>:field</b> n'existe pas"
+        'article_id_article' => "L'article avec l'ID <b>:field</b> n'existe pas",
+        //sortie - num_ds
+        'sortie_num_ds' => "La sortie numéro <b>:field</b> n'existe pas"
     ],
     'duplicate' => [
         //user - email

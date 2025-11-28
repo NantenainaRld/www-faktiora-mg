@@ -90,7 +90,7 @@ return [
         //entree - delete all autre entree
         'entree_deleteAllAutreEntree' => DEBUG ? "Erreur dans entree/deleteAllAutreEntree : :field" : "Une erreur est survenue lors de la suppréssion des autres entrées",
         //entree- list connection autre entree
-        'entree_listConnectionAutreEntree' => DEBUG ? "Erreur dans entree/listConnectionAutreEntree : :field" : "Une erreur est survenue lors de listage des connections d'autre entrée",
+        'entree_listConnectionAutreEntree' => DEBUG ? "Erreur dans entree/listConnectionAutreEntree : :field" : "Une erreur est survenue lors de listage des connections pour cette autre entrée",
         //entree - connection autree entree
         'entree_connectionAutreEntree' => DEBUG ? "Erreur dans entree/connectionAutreEntree : :field" : "Une erreur est survenue lors de listage des connections pour les entrées",
         //sortie - connection sortie
@@ -101,6 +101,12 @@ return [
         'sortie_createLigneDs' => DEBUG ? "Erreur dans sortie/createLigneDs : :field" : "Une erreur est survenue lors de la création de ligne sortie",
         //sortie - filter demande sortie
         'sortie_filterDemandeSortie' => DEBUG ? "Erreur dans sortie/filterDemandeSortie : :field" : "Une erreur est survenue lors de listage des sorties",
+        //sortie - list connection sortie
+        'sortie_listConnectionSortie' => DEBUG ? "Erreur dans sortie/listConectionSortie : :field" : "Une erreur est survenue lors de listage des connections pour cette sortie",
+        //sortie - find by id
+        'sortie_findById' => DEBUG ? "Erreur dans sortie/findById : :field" : "Une erreur est survenue lors de la vérification de numéro de sortie",
+        //sortie - ligne ds
+        'sortie_ligneDs' => DEBUG ? "Erreur dabs sortie/ligneDs : :field" : "Une erreur est survenue de listage des lignes sorties",
         //produit  - create produit
         'produit_createProduit' => DEBUG ? "Erreur dans produit/createProduit : :field" : "Une erreur est survenue lors d'ajout de nouveau produit",
         //produit - filter produit
