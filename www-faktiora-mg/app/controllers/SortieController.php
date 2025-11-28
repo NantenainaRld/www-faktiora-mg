@@ -869,4 +869,80 @@ class SortieController extends Controller
         echo json_encode($response);
         return;
     }
+
+    //action - permanent delete all demande sortie
+    public function permanentDeleteAllDemandeSortie()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //role - not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to sortie index
+            header("Location: " . SITE_URL . '/sortie');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+            $json = json_decode(file_get_contents('php://input'), true);
+
+            $nums_ds = array_values(array_map(fn($x) => strtoupper(trim($x)), $json['nums_ds']));
+
+            //nums_ds - empty
+            if (count($nums_ds) <= 0) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.sortie_nums_ds_empty')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+                //permanent delete all demande sortie
+                $response = DemandeSortie::permanentDeleteAllDemandeSortie($nums_ds);
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.sortie_deleteAllDemandeSortie',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            echo json_encode($response);
+            return;
+        }
+        //redirect to sortie index
+        else {
+            header('Location: ' . SITE_URL . '/sortie');
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
 }

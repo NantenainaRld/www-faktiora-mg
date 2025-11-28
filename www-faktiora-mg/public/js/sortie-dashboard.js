@@ -110,6 +110,23 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - permanent delete all demande sortie
+  async function permanentDeleteAllDemandeSortie(nums_ds = []) {
+    try {
+      const response = await apiRequest(
+        "/sortie/permanent_delete_all_demande_sortie",
+        {
+          method: "DELETE",
+          body: {
+            nums_ds: nums_ds,
+          },
+        }
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
   //================== EVENTS===================
   const date = document.getElementById("date");
   const from = document.getElementById("from");
@@ -149,7 +166,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // listAllDemandeSortie();
     // listLdsArticle("s202511-12");
     // updateDemandeSortie("s202511-12", date.value, "10003", "1");
-    deleteAllDemandeSortie(["s202511-12", "s202511-11"]);
+    // deleteAllDemandeSortie(["s202511-12", "s202511-11"]);
+    permanentDeleteAllDemandeSortie(["s202511-12", "s202511-11"]);
     // permanentDeleteAllAutreEntree(["a202511-18", "a202511-19"]);
     // correctionAutreEntree(
     //   "a202511-17",
