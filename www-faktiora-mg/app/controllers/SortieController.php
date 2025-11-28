@@ -535,4 +535,26 @@ class SortieController extends Controller
         echo json_encode($response);
         return;
     }
+
+    //action - list all demande sortie
+    public function listAllDemandeSortie()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //list all demande sortie
+        $response = SortieRepositorie::listAllDemandeSortie();
+
+        echo json_encode($response);
+        return;
+    }
 }

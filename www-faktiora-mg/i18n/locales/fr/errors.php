@@ -107,6 +107,8 @@ return [
         'sortie_findById' => DEBUG ? "Erreur dans sortie/findById : :field" : "Une erreur est survenue lors de la vérification de numéro de sortie",
         //sortie - ligne ds
         'sortie_ligneDs' => DEBUG ? "Erreur dabs sortie/ligneDs : :field" : "Une erreur est survenue de listage des lignes sorties",
+        //sortie - list all demande sortie
+        'sortie_listAllDemandeSortie' => DEBUG ? "Erreur dans sortie/listAllDemandeSortie : :field" : "Une erreur est survenue lors de listage de tous les sorties",
         //produit  - create produit
         'produit_createProduit' => DEBUG ? "Erreur dans produit/createProduit : :field" : "Une erreur est survenue lors d'ajout de nouveau produit",
         //produit - filter produit

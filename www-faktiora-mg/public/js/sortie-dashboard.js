@@ -54,6 +54,15 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - list all demande sortie
+  async function listAllDemandeSortie() {
+    try {
+      const response = await apiRequest(`/sortie/list_all_demande_sortie`);
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -90,7 +99,8 @@ document.addEventListener("DOMContentLoaded", () => {
     //   to.value,
     //   ""
     // );
-    listConnectionSortie("s202511-12");
+    // listConnectionSortie("s202511-12");
+    listAllDemandeSortie();
     // updateAutreEntree("a202511-19", "ohhatra", date.value, "10004", "2");
     // deleteAllAutreEntree(["a202511-18", "a202511-19"]);
     // permanentDeleteAllAutreEntree(["a202511-18", "a202511-19"]);
