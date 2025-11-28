@@ -557,4 +557,69 @@ class SortieController extends Controller
         echo json_encode($response);
         return;
     }
+    //action - list ligne ds and article
+    public function listLdsArticle()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //num_ds 
+        $num_ds = strtoupper(trim($_GET['num_ds'] ?? ''));
+
+        try {
+
+            //is num_ds exist ?
+            $response = DemandeSortie::findById($num_ds);
+            //error
+            if ($response['message_type'] === 'error') {
+                echo json_encode($response);
+                return;
+            }
+            //not found
+            if (!$response['found']) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.not_found.sortie_num_ds', ['field' => $num_ds])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //list lds article 
+            $response = SortieRepositorie::ligneDs($num_ds);
+
+            echo json_encode($response);
+            return;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.sortie_ligneDs',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            echo json_encode($response);
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
 }

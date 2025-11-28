@@ -63,6 +63,17 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - list lds article
+  async function listLdsArticle(num_ds) {
+    try {
+      const response = await apiRequest(
+        `/sortie/list_lds_article?num_ds=${num_ds}`
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -100,7 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
     //   ""
     // );
     // listConnectionSortie("s202511-12");
-    listAllDemandeSortie();
+    // listAllDemandeSortie();
+    listLdsArticle("s202511-12");
     // updateAutreEntree("a202511-19", "ohhatra", date.value, "10004", "2");
     // deleteAllAutreEntree(["a202511-18", "a202511-19"]);
     // permanentDeleteAllAutreEntree(["a202511-18", "a202511-19"]);
