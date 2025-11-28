@@ -24,7 +24,7 @@ class Article extends Database
     //setter - libelle_article
     public function setLibelleArticle($libelle_article)
     {
-        $this->libelle_article = strtolower($libelle_article);
+        $this->libelle_article = $libelle_article;
         return $this;
     }
 
@@ -46,11 +46,15 @@ class Article extends Database
     //============================== PUBLIC FUNCTION ========================
 
     //create article
-    public function createArticle()
+    public function createArticle($lower = null)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 
         try {
+
+            if ($lower) {
+                $this->libelle_article = strtolower($this->libelle_article);
+            }
 
             //is libelle article exist ?
             $response = self::isLibelleArticleExist($this->libelle_article, null);
@@ -81,7 +85,8 @@ class Article extends Database
 
             $response = [
                 'message_type' => 'success',
-                'message' => __('messages.success.article_createArticle')
+                'message' => __('messages.success.article_createArticle'),
+                'last_inserted' => $response['last_inserted']
             ];
 
             return $response;

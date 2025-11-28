@@ -5,6 +5,7 @@ return [
         'router' => DEBUG ? "Erreur : :field" : "Une erreur est survenue dans le routage.",
         'database' => DEBUG ? "Erreur de connection à la base de donées : :field" : "Erreur de connection à la base de donées.",
         'query' => DEBUG ? "Erreur de requête : :field" : "Erreur de connection au serveur.",
+        'correction' => DEBUG ? "Erreur de correction : :field" : "Une erreur est survenue lors de la correction",
         //user - create default admin
         'user_createDefaultAdmin' => DEBUG ? "Erreur dans user/createDefaultAdmin : :field" : "Une erreur est survenue lors de la création du compte admin par défaut",
         //auth - is loged in

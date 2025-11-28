@@ -990,11 +990,11 @@ class EntreeController extends Controller
                     echo json_encode($response);
                     return;
                 }
-                //num_ae deleted - role caissier
-                if ($is_loged_in->getRole() === 'caissier' && $response['model']->getEtatAe() === 'supprimé') {
+                //num_ae - deleted
+                if ($response['model']->getEtatAe() === 'supprimé') {
                     $response = [
                         'message_type' => 'success',
-                        'message' => __('messages.not_found.entree_num_ae', ['field' => $json['num_ae']])
+                        'message' => __('messages.invalids.entree_ae_deleted', ['field' => $json['num_ae']])
                     ];
 
                     echo json_encode($response);
@@ -1087,7 +1087,7 @@ class EntreeController extends Controller
                     }
                 }
 
-                //create autre entree
+                //correction autre entree
                 $autre_entree_model = new AutreEntree();
                 $autre_entree_model
                     ->setLibelleAe('correction/' . $json['num_ae'] . ' - ' . $json['libelle_ae'])

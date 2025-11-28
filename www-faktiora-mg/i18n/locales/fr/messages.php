@@ -55,6 +55,8 @@ return [
         'entree_nums_ae_empty' => "Veuiller séléctionner au moins une autre entrée",
         //entree - correction autre entree
         'entree_correctionAutreEntree' => "Cette autre entrée n'est pas enregistrée sur votre caisse actuelle",
+        //entree - ae deleted
+        'entree_ae_deleted' => "L'autre entrée numéro <b>:field</b> est déjà supprimée ",
         //produit - ids_produit empty
         'produit_ids_produit_empty' => "Veuiller séléctionner au moins un produit",
         //produit - libelle prix
@@ -72,7 +74,9 @@ return [
         //sortie - reste_solde
         'sortie_reste_solde' => "Demande de sortie refusée, le seuil de <b>:field</b> n'est pas respecté",
         //sortie - nums ds empty
-        'sortie_nums_ds_empty' => "Veuiller séléctionner au moins une sortie"
+        'sortie_nums_ds_empty' => "Veuiller séléctionner au moins une sortie",
+        //sortie - montant ae
+        'sortie_montant_ae' => "Montant invalide: le montant saisi dépasse le montant d'autre entrée"
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",
@@ -175,9 +179,9 @@ return [
         //article - delete all article plur
         'article_deleteAllArticle_plur' => "<b>:field</b> ont été supprimés avec succès",
         //sortie - create ligne_ds
-        'sortie_createLigneDs' => "Nouveau ligne sortie ajoutée avec succès",
+        'sortie_createLigneDs' => "Nouvele ligne sortie ajoutée avec succès",
         //sortie - create sortie
-        'sortie_createSortie' => "Nouveau sortie ajoutée avec succès",
+        'sortie_createSortie' => "Nouvelle sortie ajoutée avec succès",
         //sortie - update demande sortie 
         'sortie_updateDemandeSortie' => "Sortie numéro <b>:field</b> est modifiée avec succès",
         //sortie - delet all demande sortie 0

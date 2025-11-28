@@ -128,7 +128,7 @@ class AutreEntree extends Database
     //====================== PUBLIC FUNCTION =======================
 
     //create autre entree
-    public function createAutreEntree($role)
+    public function createAutreEntree()
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
         $sql = "";
