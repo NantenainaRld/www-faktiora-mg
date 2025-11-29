@@ -49,6 +49,15 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - list all client
+  async function listAllClient() {
+    try {
+      const response = await apiRequest("/client/list_all_client");
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const from = document.getElementById("from");
@@ -64,18 +73,19 @@ document.addEventListener("DOMContentLoaded", () => {
     //   "+261 32 83 294 40",
     //   "adresse"
     // );
-    filterClient(
-      "active",
-      "all",
-      "nb_factures",
-      "desc",
-      "month_year",
-      "week",
-      from.value,
-      to.value,
-      "5",
-      "2025",
-      "oh"
-    );
+    // filterClient(
+    //   "active",
+    //   "all",
+    //   "nb_factures",
+    //   "desc",
+    //   "month_year",
+    //   "week",
+    //   from.value,
+    //   to.value,
+    //   "5",
+    //   "2025",
+    //   "oh"
+    // );
+    listAllClient();
   });
 });

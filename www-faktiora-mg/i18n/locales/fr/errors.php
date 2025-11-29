@@ -146,6 +146,8 @@ return [
         'client_createClient' => DEBUG ? "Erreur dans client/createClient : :field" : "Une erreur est survenue lors d'ajout de client",
         //client - filter client
         'client_filterClient' => DEBUG ? "Erreur dans client/filterClient : :field" : "Une erreur est survenue lors de listage des clients",
+        //client - list all client
+        'client_listAllClient' => DEBUG ? "Erreur dans client/listAllClient : :field" : "Une erreur est survenue lors de listage de tous les clients",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

@@ -341,4 +341,26 @@ class ClientController extends Controller
         echo json_encode($response);
         return;
     }
+
+    //action - list all client
+    public function listAllClient()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //is loged in ?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+
+        //list all client
+        $response = Client::listAllClient();
+
+        echo json_encode($response);
+        return;
+    }
 }
