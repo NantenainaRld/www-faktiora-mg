@@ -142,6 +142,8 @@ return [
         'article_findById' => DEBUG ? "Erreur dans article/findById : :field" : "Une erreur est survenue lors de la vérification d'article",
         //article - delete all article
         'article_deleteAllArticle' => DEBUG ? "Erreur dans article/deleteAllArticle : :field" : "Une erreur est survenue lors de la suppréssion des articles",
+        //client - create client
+        'client_createClient' => DEBUG ? "Erreur dans client/createClient : :field" : "Une erreur est survenue lors d'ajout de client",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

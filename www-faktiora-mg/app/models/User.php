@@ -35,7 +35,7 @@ class User extends Database
     //setter - prenoms_utilisateur
     public function setPrenomsUtilisateur($prenoms_utilisateur)
     {
-        $this->prenoms_utilisateur = $prenoms_utilisateur;
+        $this->prenoms_utilisateur = ucwords($prenoms_utilisateur);
         return $this;
     }
     //setter - sexe_utilisateur

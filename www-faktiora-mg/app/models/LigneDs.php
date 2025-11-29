@@ -9,7 +9,7 @@ class LigneDs extends Database
     private $id_ds = "";
     private $id_article = "";
 
-    public function __cons()
+    public function __construct()
     {
         parent::__construct();
     }

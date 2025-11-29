@@ -22,6 +22,8 @@ return [
         'montant' => "Le montant doît être des nombres décimaux supérieurs à 0",
         'prix' => "Le prix doît être des nombres décimaux supérieurs à 0",
         'nb_stock' => "Le nombre de stock ne doît pas être inférieur à 0",
+        'telephone' => "Téléphone invalide : :field",
+        'adresse' => "L'adresse ne doît pas dépasser de 100 caractères",
         //
         //user - ids_user empty
         'user_ids_user_empty' => "Veuiller séléctionner au moins un utilisateur",
@@ -98,7 +100,7 @@ return [
         'from' => "La date de début est réquis",
         'libelle' => "Le champ <b>libellé</b> est réquis",
         'date' => "La <b>date</b> est réquise",
-        'prix' => "Le <b>prix</b> est réquis"
+        'prix' => "Le <b>prix</b> est réquis",
     ],
     'success' => [
         //user - create user
@@ -196,7 +198,9 @@ return [
         //sortie - delet all demande sortie 1
         'sortie_deleteAllDemandeSortie_1' => "AUne sortie a été supprimée avec succès",
         //sortie - delet all demande sortie plur
-        'sortie_deleteAllDemandeSortie_plur' => "<b>:field</b> sorties ont été supprimées avec succès"
+        'sortie_deleteAllDemandeSortie_plur' => "<b>:field</b> sorties ont été supprimées avec succès",
+        //client - create client
+        'client_createClient' => "Nouveau client ajouté avec succès"
     ],
     'not_found' => [
         //user - id

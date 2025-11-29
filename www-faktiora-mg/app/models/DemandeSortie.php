@@ -10,7 +10,7 @@ class DemandeSortie extends Database
     private $id_utilisateur = "";
     private $num_caisse = "";
 
-    public function __cons()
+    public function __construct()
     {
         parent::__construct();
     }

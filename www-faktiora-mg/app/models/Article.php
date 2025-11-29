@@ -7,7 +7,7 @@ class Article extends Database
     private $libelle_article = "";
     private $etat_article = 'actif';
 
-    public function __cons()
+    public function __construct()
     {
         parent::__construct();
     }
