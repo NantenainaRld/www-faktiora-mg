@@ -85,7 +85,8 @@ return [
         'sortie_deleted' => "La sortie numéro <b>:field</b> est déjà supprimée",
         //sortie - correction demande sortie
         'sortie_correctionDemandeSortie' => "Cette sortie n'est pas enregistrée sur votre caisse actuelle",
-        ''
+        //client - ids client empty
+        'client_ids_client_empty' => "Veuiller séléctionner au moins un client"
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",
@@ -202,7 +203,13 @@ return [
         //client - create client
         'client_createClient' => "Nouveau client ajouté avec succès",
         //client - update client
-        'client_updateClient' => "Les informations du client avec l'ID <b>:field</b> ont été modifiées avec succès"
+        'client_updateClient' => "Les informations du client avec l'ID <b>:field</b> ont été modifiées avec succès",
+        //client - delete all client 0
+        'client_deleteAllClient_0' => "Aucun client n'est supprimé",
+        //client - delete all client 1
+        'client_deleteAllClient_1' => "Un client a été supprimé avec succès",
+        //client - delete all client plur
+        'client_deleteAllClient_plur' => "<b>:field</b> on été supprimés avec succès"
     ],
     'not_found' => [
         //user - id

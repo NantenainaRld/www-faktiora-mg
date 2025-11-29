@@ -84,6 +84,20 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - delete all client
+  async function deleteAllClient(ids_client = []) {
+    try {
+      const response = await apiRequest("/client/delete_all_client", {
+        method: "PUT",
+        body: {
+          ids_client: ids_client,
+        },
+      });
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const from = document.getElementById("from");
@@ -113,13 +127,14 @@ document.addEventListener("DOMContentLoaded", () => {
     //   "oh"
     // );
     // listAllClient();
-    updateClient(
-      "10002",
-      "ralandison",
-      "nantenaina noelly",
-      "féminin",
-      "+261 3",
-      "adresse"
-    );
+    // updateClient(
+    //   "10002",
+    //   "ralandison",
+    //   "nantenaina noelly",
+    //   "féminin",
+    //   "+261 3",
+    //   "adresse"
+    // );
+    deleteAllClient([10002, 10001]);
   });
 });

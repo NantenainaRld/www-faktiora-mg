@@ -152,6 +152,8 @@ return [
         'client_updateClient' => DEBUG ? "Erreur dans client/updateClient : :field" : "Une erreur dans est survenue lors de la modification des informations du client",
         //client - find by id
         'client_findById' => DEBUG ? "Erreur dans client/findById : :field" : "Une erreur est survenue lors de la vérification d'ID de client",
+        //client - delete all client
+        'client_deleteAllClient' => DEBUG ? "Erreur dans client/deleteAllClient : :field" : "Une erreur est survenue lors de la suppréssion des clients",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

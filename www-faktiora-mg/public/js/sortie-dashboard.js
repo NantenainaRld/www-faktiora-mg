@@ -230,13 +230,13 @@ document.addEventListener("DOMContentLoaded", () => {
     //   "10004",
     //   "1"
     // );
-    correctionDemandeSortie(
-      "s202511-21",
-      "achat de table",
-      date.value,
-      "15",
-      "10004",
-      "1"
-    );
+    // correctionDemandeSortie(
+    //   "s202511-21",
+    //   "achat de table",
+    //   date.value,
+    //   "15",
+    //   "10004",
+    //   "1"
+    // );
   });
 });
