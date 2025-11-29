@@ -148,6 +148,10 @@ return [
         'client_filterClient' => DEBUG ? "Erreur dans client/filterClient : :field" : "Une erreur est survenue lors de listage des clients",
         //client - list all client
         'client_listAllClient' => DEBUG ? "Erreur dans client/listAllClient : :field" : "Une erreur est survenue lors de listage de tous les clients",
+        //client - update client 
+        'client_updateClient' => DEBUG ? "Erreur dans client/updateClient : :field" : "Une erreur dans est survenue lors de la modification des informations du client",
+        //client - find by id
+        'client_findById' => DEBUG ? "Erreur dans client/findById : :field" : "Une erreur est survenue lors de la vérification d'ID de client",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

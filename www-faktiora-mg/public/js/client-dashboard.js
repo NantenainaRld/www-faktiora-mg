@@ -58,6 +58,32 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - update_client
+  async function updateClient(
+    id_client,
+    nom_client,
+    prenoms_client,
+    sexe_client,
+    telephone,
+    adresse
+  ) {
+    try {
+      const response = await apiRequest("/client/update_client", {
+        method: "PUT",
+        body: {
+          id_client: id_client,
+          nom_client: nom_client,
+          prenoms_client: prenoms_client,
+          sexe_client: sexe_client,
+          telephone: telephone,
+          adresse: adresse,
+        },
+      });
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const from = document.getElementById("from");
@@ -86,6 +112,14 @@ document.addEventListener("DOMContentLoaded", () => {
     //   "2025",
     //   "oh"
     // );
-    listAllClient();
+    // listAllClient();
+    updateClient(
+      "10002",
+      "ralandison",
+      "nantenaina noelly",
+      "féminin",
+      "+261 3",
+      "adresse"
+    );
   });
 });

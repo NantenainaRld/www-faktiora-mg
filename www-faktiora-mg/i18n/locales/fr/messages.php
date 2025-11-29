@@ -200,7 +200,9 @@ return [
         //sortie - delet all demande sortie plur
         'sortie_deleteAllDemandeSortie_plur' => "<b>:field</b> sorties ont été supprimées avec succès",
         //client - create client
-        'client_createClient' => "Nouveau client ajouté avec succès"
+        'client_createClient' => "Nouveau client ajouté avec succès",
+        //client - update client
+        'client_updateClient' => "Les informations du client avec l'ID <b>:field</b> ont été modifiées avec succès"
     ],
     'not_found' => [
         //user - id
@@ -218,7 +220,9 @@ return [
         //article - id_article
         'article_id_article' => "L'article avec l'ID <b>:field</b> n'existe pas",
         //sortie - num_ds
-        'sortie_num_ds' => "La sortie numéro <b>:field</b> n'existe pas"
+        'sortie_num_ds' => "La sortie numéro <b>:field</b> n'existe pas",
+        //client - id_client
+        'client_id_client' => "Le client avec l'ID <b>:field</b> n'existe pas"
     ],
     'duplicate' => [
         //user - email

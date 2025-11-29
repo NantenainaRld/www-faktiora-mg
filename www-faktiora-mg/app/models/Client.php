@@ -164,4 +164,127 @@ class Client extends Database
 
         return $response;
     }
+
+    //static - find by id
+    public static function findById($id_client)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+            'found' => false
+        ];
+
+        try {
+
+            $response = parent::selectQuery("SELECT * FROM client WHERE id_client = :id ", ['id' => $id_client]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //not found
+            if (count($response['data']) <= 0) {
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'found' => false
+                ];
+
+                return $response;
+            }
+            //found
+            else {
+                $client_model = new Client();
+                $client_model
+                    ->setIdClient($response['data'][0]['id_client'])
+                    ->setNomClient($response['data'][0]['nom_client'])
+                    ->setPrenomsClient($response['data'][0]['prenoms_client'])
+                    ->setSexeClient($response['data'][0]['sexe_client'])
+                    ->setSexeClient($response['data'][0]['telephone'])
+                    ->setAdresse($response['data'][0]['adresse'])
+                    ->setEtatClient($response['data'][0]['etat_client']);
+
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'found' => true,
+                    'model' => $client_model
+                ];
+
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.client_findById',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //update client
+    public function updateClient()
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+
+            $response = parent::executeQuery("UPDATE client SET nom_client = :nom, prenoms_client = :prenoms, sexe_client = :sexe, telephone = :telephone, adresse = :adresse WHERE id_client = :id ", [
+                'nom' => $this->nom_client,
+                'prenoms' => $this->prenoms_client,
+                'sexe' => $this->sexe_client,
+                'telephone' => $this->telephone,
+                'adresse' => $this->adresse,
+                'id' => $this->id_client
+            ]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => __('messages.success.client_updateClient', ['field' => $this->id_client])
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.client_updateClient',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
 }
