@@ -144,6 +144,8 @@ return [
         'article_deleteAllArticle' => DEBUG ? "Erreur dans article/deleteAllArticle : :field" : "Une erreur est survenue lors de la suppréssion des articles",
         //client - create client
         'client_createClient' => DEBUG ? "Erreur dans client/createClient : :field" : "Une erreur est survenue lors d'ajout de client",
+        //client - filter client
+        'client_filterClient' => DEBUG ? "Erreur dans client/filterClient : :field" : "Une erreur est survenue lors de listage des clients",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

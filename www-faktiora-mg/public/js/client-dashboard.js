@@ -25,18 +25,57 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - filter client
+  async function filterClient(
+    status,
+    sexe,
+    order_by,
+    arrange,
+    date_by,
+    per,
+    from,
+    to,
+    month,
+    year,
+    search_client
+  ) {
+    try {
+      const response = await apiRequest(
+        `/client/filter_client?status=${status}&sexe=${sexe}&order_by=${order_by}&arrange=${arrange}&date_by=${date_by}&per=${per}&from=${from}&to=${to}&month=${month}&year=${year}&search_client=${search_client}`,
+        {}
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
+  const from = document.getElementById("from");
+  const to = document.getElementById("to");
 
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    createClient(
-      "ralandison",
-      "nantenaina noelly",
-      "féminin",
-      "+261 32 83 294 40",
-      "adresse"
+    // createClient(
+    //   "ralandison",
+    //   "nantenaina noelly",
+    //   "féminin",
+    //   "+261 32 83 294 40",
+    //   "adresse"
+    // );
+    filterClient(
+      "active",
+      "all",
+      "nb_factures",
+      "desc",
+      "month_year",
+      "week",
+      from.value,
+      to.value,
+      "5",
+      "2025",
+      "oh"
     );
   });
 });

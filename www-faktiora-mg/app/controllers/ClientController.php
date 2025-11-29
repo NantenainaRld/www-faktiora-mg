@@ -151,4 +151,194 @@ class ClientController extends Controller
         echo json_encode($response);
         return;
     }
+
+    //action - filter client
+    public function filterClient()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //is loged in ?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+
+        //defaults
+        $sexe_default = ['masculin', 'féminin'];
+        $order_by_default = [
+            'nb_factures',
+            'name',
+            'id',
+        ];
+        $arrange_default = ['DESC', 'ASC'];
+        $date_by_default = [
+            'per',
+            'between',
+            'month_year'
+        ];
+        $per_default = [
+            'DAY',
+            'WEEK',
+            'MONTH',
+            'YEAR'
+        ];
+
+        // //status
+        $status = strtolower(trim($_GET['status'] ?? 'active'));
+        $status = ($status === 'deleted') ? $status : 'active';
+        $status = ($is_loged_in->getRole() === 'caissier') ? 'active' : $status;
+        switch ($status) {
+            case 'active':
+                $status = 'actif';
+                break;
+            case 'deleted':
+                $status = 'supprimé';
+                break;
+        }
+
+        //sexe
+        $sexe = strtolower(trim($_GET['sexe'] ?? 'all'));
+        $sexe = in_array($sexe, $sexe_default, true) ? $sexe : 'all';
+
+        //order_by
+        $order_by = strtolower(trim($_GET['order_by'] ?? 'name'));
+        $order_by = in_array($order_by, $order_by_default, true) ? $order_by : 'name';
+        $order_by = ($order_by === 'name') ? 'cl.nom_client' : $order_by;
+        $order_by = ($order_by === 'id') ? 'cl.id_client' : $order_by;
+        //arrange
+        $arrange = strtoupper(trim($_GET['arrange'] ?? 'ASC'));
+        $arrange = in_array($arrange, $arrange_default, true) ? $arrange : 'ASC';
+
+        //date_by
+        $date_by = strtolower(trim($_GET['date_by'] ?? 'all'));
+        $date_by = in_array($date_by, $date_by_default, true) ? $date_by : 'all';
+        //per
+        $per = strtoupper(trim($_GET['per'] ?? 'DAY'));
+        $per = in_array($per, $per_default, true) ? $per : 'DAY';
+        //from
+        $from = trim($_GET['from'] ?? '');
+        //to
+        $to = trim($_GET['to'] ?? '');
+        if ($date_by === 'between') {
+            //from && to - empty
+            if ($from === '' && $to === '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.from_to')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            $date = new DateTime();
+
+            //from - not empty
+            if ($from !== '') {
+                $from = DateTime::createFromFormat('Y-m-d', $from);
+                //from - invalid
+                if (!$from) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date', ['field' => $from])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //from - future
+                if ($from > $date) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date_future')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+            }
+
+            //to - not empty
+            if ($to !== '') {
+                $to = DateTime::createFromFormat('Y-m-d', $to);
+                //from - invalid
+                if (!$to) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date', ['field' => $from])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //to - future
+                if ($to > $date) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date_future')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+            }
+
+            //from && to not empty - from > to
+            if ($from !== '' && $to !== '' && $from > $to) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.from_to')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //from not empty- reformat
+            if ($from !== '') {
+                $from = $from->format('Y-m-d');
+            }
+
+            //to not empty - reformat
+            if ($to !== '') {
+                $to = $to->format('Y-m-d');
+            }
+        }
+        //month
+        $month = trim($_GET['month'] ?? 'none');
+        $month = filter_var($month, FILTER_VALIDATE_INT);
+        $month = ($month === false || ($month < 1 || $month > 12)) ? 'none' : $month;
+        //year
+        $year = trim($_GET['year'] ?? date('Y'));
+        $year = filter_var($year, FILTER_VALIDATE_INT);
+        $year =  ($year === false || ($year < 1700 || $year > 2500)) ? ((new DateTime())->format('Y')) : $year;
+
+        //sarch_client
+        $search_client = trim($_GET['search_client'] ?? '');
+
+        $params = [
+            'status' => $status,
+            'sexe' => $sexe,
+            'order_by' => $order_by,
+            'arrange' => $arrange,
+            'date_by' => $date_by,
+            'per' => $per,
+            'from' => $from,
+            'to' => $to,
+            'month' => $month,
+            'year' => $year,
+            'search_client' => $search_client
+        ];
+
+        //filter client
+        $response = ClientRepositorie::filterClient($params);
+
+        // echo json_encode($params);
+        echo json_encode($response);
+        return;
+    }
 }

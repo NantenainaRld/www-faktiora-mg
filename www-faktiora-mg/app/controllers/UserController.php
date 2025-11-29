@@ -466,7 +466,8 @@ class UserController extends Controller
             'total_entrees',
             'total_sorties',
             'total_transactions',
-            'name'
+            'name',
+            'id'
         ];
         $arrange_default = ['DESC', 'ASC'];
         $date_by_default = [
@@ -498,6 +499,7 @@ class UserController extends Controller
         $order_by = strtolower(trim($_GET['order_by'] ?? 'name'));
         $order_by = in_array($order_by, $order_by_default, true) ? $order_by : 'name';
         $order_by = ($order_by === 'name') ? 'u.nom_utilisateur' : $order_by;
+        $order_by = ($order_by === 'id') ? 'u.id_utilisateur' : $order_by;
         // //arrange
         $arrange = strtoupper(trim($_GET['arrange'] ?? 'ASC'));
         $arrange = in_array($arrange, $arrange_default, true) ? $arrange : 'ASC';
@@ -522,7 +524,7 @@ class UserController extends Controller
         $to = trim($_GET['to'] ?? '');
         if ($date_by === 'between') {
             //from && to - empty
-            if ($from == '' && $to === '') {
+            if ($from === '' && $to === '') {
                 $response = [
                     'message_type' => 'invalid',
                     'message' => __('messages.empty.from_to')
@@ -532,32 +534,60 @@ class UserController extends Controller
                 return;
             }
 
-            //from not empty - invalid
-            if ($from !== '' && DateTime::createFromFormat("Y-m-d", $from) === false) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.invalids.date', ['field' => $from])
-                ];
+            $date = new DateTime();
 
-                echo json_encode($response);
-                return;
+            //from - not empty
+            if ($from !== '') {
+                $from = DateTime::createFromFormat('Y-m-d', $from);
+                //from - invalid
+                if (!$from) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date', ['field' => $from])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //from - future
+                if ($from > $date) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date_future')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
             }
 
-            //from not empty - invalid
-            if ($to !== '' && DateTime::createFromFormat("Y-m-d", $to) === false) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.invalids.date', ['field' => $to])
-                ];
+            //to - not empty
+            if ($to !== '') {
+                $to = DateTime::createFromFormat('Y-m-d', $to);
+                //from - invalid
+                if (!$to) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date', ['field' => $from])
+                    ];
 
-                echo json_encode($response);
-                return;
+                    echo json_encode($response);
+                    return;
+                }
+                //to - future
+                if ($to > $date) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date_future')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
             }
 
-            //from > to
-            $from = new DateTime($from);
-            $to  = new DateTime($to);
-            if ($from > $to) {
+            //from && to not empty - from > to
+            if ($from !== '' && $to !== '' && $from > $to) {
                 $response = [
                     'message_type' => 'invalid',
                     'message' => __('messages.invalids.from_to')
@@ -566,15 +596,23 @@ class UserController extends Controller
                 echo json_encode($response);
                 return;
             }
-            $from = $from->format("Y-m-d");
-            $to = $to->format("Y-m-d");
+
+            //from not empty- reformat
+            if ($from !== '') {
+                $from = $from->format('Y-m-d');
+            }
+
+            //to not empty - reformat
+            if ($to !== '') {
+                $to = $to->format('Y-m-d');
+            }
         }
         //month
         $month = trim($_GET['month'] ?? 'none');
         $month = filter_var($month, FILTER_VALIDATE_INT);
         $month = ($month === false || ($month < 1 || $month > 12)) ? 'none' : $month;
         //year
-        $year = trim($_GET['year'] ?? 2025);
+        $year = trim($_GET['year'] ?? date('Y'));
         $year = filter_var($year, FILTER_VALIDATE_INT);
         $year =  ($year === false || ($year < 1700 || $year > 2500)) ? ((new DateTime())->format('Y')) : $year;
 

@@ -231,7 +231,7 @@ class CaisseController extends Controller
         $to = trim($_GET['to'] ?? '');
         if ($date_by === 'between') {
             //from && to - empty
-            if ($from == '' && $to === '') {
+            if ($from === '' && $to === '') {
                 $response = [
                     'message_type' => 'invalid',
                     'message' => __('messages.empty.from_to')
@@ -241,43 +241,77 @@ class CaisseController extends Controller
                 return;
             }
 
-            //from not empty - invalid
-            if ($from !== '' && DateTime::createFromFormat("Y-m-d", $from) === false) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.invalids.date', ['field' => $from])
-                ];
+            $date = new DateTime();
 
-                echo json_encode($response);
-                return;
-            }
-
-            //from not empty - invalid
-            if ($to !== '' && DateTime::createFromFormat("Y-m-d", $to) === false) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.invalids.date', ['field' => $to])
-                ];
-
-                echo json_encode($response);
-                return;
-            }
-
-            //from > to
-            if ($from !== '' && $to !== '') {
-                $from = new DateTime($from);
-                $to  = new DateTime($to);
-                if ($from > $to) {
+            //from - not empty
+            if ($from !== '') {
+                $from = DateTime::createFromFormat('Y-m-d', $from);
+                //from - invalid
+                if (!$from) {
                     $response = [
                         'message_type' => 'invalid',
-                        'message' => __('messages.invalids.from_to')
+                        'message' => __('messages.invalids.date', ['field' => $from])
                     ];
 
                     echo json_encode($response);
                     return;
                 }
-                $from = $from->format("Y-m-d");
-                $to = $to->format("Y-m-d");
+                //from - future
+                if ($from > $date) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date_future')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+            }
+
+            //to - not empty
+            if ($to !== '') {
+                $to = DateTime::createFromFormat('Y-m-d', $to);
+                //from - invalid
+                if (!$to) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date', ['field' => $from])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //to - future
+                if ($to > $date) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date_future')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+            }
+
+            //from && to not empty - from > to
+            if ($from !== '' && $to !== '' && $from > $to) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.from_to')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //from not empty- reformat
+            if ($from !== '') {
+                $from = $from->format('Y-m-d');
+            }
+
+            //to not empty - reformat
+            if ($to !== '') {
+                $to = $to->format('Y-m-d');
             }
         }
         //month
@@ -285,7 +319,7 @@ class CaisseController extends Controller
         $month = filter_var($month, FILTER_VALIDATE_INT);
         $month = ($month === false || ($month < 1 || $month > 12)) ? 'none' : $month;
         //year
-        $year = trim($_GET['year'] ?? 2025);
+        $year = trim($_GET['year'] ?? date('Y'));
         $year = filter_var($year, FILTER_VALIDATE_INT);
         $year =  ($year === false || ($year < 1700 || $year > 2500)) ? ((new DateTime())->format('Y')) : $year;
 
@@ -371,35 +405,57 @@ class CaisseController extends Controller
         $from = trim($_GET['from'] ?? '');
         //to
         $to = trim($_GET['to'] ?? '');
-        //from not empty - invalid
-        if ($from !== '' &&  DateTime::createFromFormat('Y-m-d\TH:i', $from) === false) {
-            $response = [
-                'message_type' => 'invalid',
-                'message' => __('messages.invalids.date', ['field' => $from])
-            ];
 
-            echo json_encode($response);
-            return;
-        }
-        //to not empty - invalid
-        if ($to !== '' && DateTime::createFromFormat('Y-m-d\TH:i', $to) === false) {
-            $response = [
-                'message_type' => 'invalid',
-                'message' => __('messages.invalids.date', ['field' => $to])
-            ];
-
-            echo json_encode($response);
-            return;
-        }
-        //from not empty - format
+        $date = new DateTime();
+        //from - not empty
         if ($from !== '') {
             $from = str_replace('T', ' ', $from);
-            $from = new DateTime($from);
+            $from = DateTime::createFromFormat('Y-m-d H:i', $from);
+            //from - invalid
+            if (!$from) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date', ['field' => $from])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //from - future
+            if ($from > $date) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date_future')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
         }
-        //to not empty - format
+        //to - not empty
         if ($to !== '') {
             $to = str_replace('T', ' ', $to);
-            $to = new DateTime($to);
+            $to = DateTime::createFromFormat('Y-m-d H:i', $to);
+            //from - invalid
+            if (!$to) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date', ['field' => $from])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //to - future
+            if ($to > $date) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date_future')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
         }
         //from && to not empty - from > to
         if ($from !== '' && $to !== '' && $from > $to) {
@@ -411,10 +467,12 @@ class CaisseController extends Controller
             echo json_encode($response);
             return;
         }
-        //from not empty - reformat
+
+        //from not empty- reformat
         if ($from !== '') {
             $from = $from->format('Y-m-d H:i:s');
         }
+
         //to not empty - reformat
         if ($to !== '') {
             $to = $to->format('Y-m-d H:i:s');
