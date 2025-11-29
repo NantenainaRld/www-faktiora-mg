@@ -147,6 +147,32 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - correction demande sortie
+  async function correctionDemandeSortie(
+    num_ds,
+    libelle_ae,
+    date_ae,
+    montant_ae,
+    id_utilisateur,
+    num_caisse
+  ) {
+    try {
+      const response = await apiRequest("/entree/correction_demande_sortie", {
+        method: "POST",
+        body: {
+          num_ds: num_ds,
+          libelle_ae: libelle_ae,
+          date_ae: date_ae,
+          montant_ae: montant_ae,
+          id_utilisateur: id_utilisateur,
+          num_caisse: num_caisse,
+        },
+      });
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -169,5 +195,13 @@ document.addEventListener("DOMContentLoaded", () => {
     //   "10004",
     //   "2"
     // );
+    correctionDemandeSortie(
+      "s202511-22",
+      "achat de bouteille",
+      date.value,
+      "5000",
+      "10004",
+      "2"
+    );
   });
 });

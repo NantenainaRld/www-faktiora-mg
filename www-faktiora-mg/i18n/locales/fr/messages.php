@@ -57,6 +57,8 @@ return [
         'entree_correctionAutreEntree' => "Cette autre entrée n'est pas enregistrée sur votre caisse actuelle",
         //entree - ae deleted
         'entree_ae_deleted' => "L'autre entrée numéro <b>:field</b> est déjà supprimée ",
+        //entree - montant_ds
+        'entree_montant_ds' => "Montant invalide : le montant saisi dépasse le montant total de ce sortie",
         //produit - ids_produit empty
         'produit_ids_produit_empty' => "Veuiller séléctionner au moins un produit",
         //produit - libelle prix
@@ -79,8 +81,9 @@ return [
         'sortie_montant_ae' => "Montant invalide: le montant saisi dépasse le montant d'autre entrée",
         //sortie - deleted
         'sortie_deleted' => "La sortie numéro <b>:field</b> est déjà supprimée",
-        //sortie - correectio demande sortie
-        'sortie_correctionDemandeSortie' => "Cette sortie n'est pas enregistrée sur votre caisse actuelle"
+        //sortie - correction demande sortie
+        'sortie_correctionDemandeSortie' => "Cette sortie n'est pas enregistrée sur votre caisse actuelle",
+        ''
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",

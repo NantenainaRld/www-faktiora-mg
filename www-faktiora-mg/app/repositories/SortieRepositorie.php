@@ -173,7 +173,7 @@ class SortieRepositorie extends Database
             $response = [
                 'message_type' => 'success',
                 'message' => 'success',
-                'data' => $response['data']
+                'data' => $response['data'],
             ];
 
             return $response;
@@ -230,6 +230,50 @@ class SortieRepositorie extends Database
                 'message_type' => 'error',
                 'message' => __(
                     'errors.catch.sortie_listAllDemandeSortie',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //static - ligne ds
+    public static function getMontantDs($num_ds)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+        try {
+
+            $response = parent::selectQuery("SELECT SUM(lds.prix_article * lds.quantite_article) AS montant_ds FROM ligne_ds lds JOIN demande_sortie ds ON ds.id_ds = lds.id_ds WHERE ds.num_ds = :num_ds ", ['num_ds' => $num_ds]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+                'montant_ds' => $response['data'][0]['montant_ds'],
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.sortie_getMontantAe',
                     ['field' => $e->getMessage() .
                         ' - Line : ' . $e->getLine() .
                         ' - File : ' . $e->getFile()]

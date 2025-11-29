@@ -1023,6 +1023,10 @@ class SortieController extends Controller
                 }
                 $json['date_ds'] = $date_ds->format('Y-m-d H:i:s');
             }
+            //role - caissier
+            else {
+                $json['date_ds'] = '';
+            }
 
             //montant - empty
             if ($json['montant'] === '') {
@@ -1340,6 +1344,10 @@ class SortieController extends Controller
                     return;
                 }
                 $json['date_ds'] = $date_ds->format('Y-m-d H:i:s');
+            }
+            //role - caissier
+            else {
+                $json['date_ds'] = '';
             }
 
             //montant - empty

@@ -114,6 +114,8 @@ return [
         'sortie_updateDemandeSortie' => DEBUG ? "Erreur dans sortie/updateDemandeSortie : :field" : "Une erreur est survenue lors de la modification de sortie",
         //sortie - delete all demande sortie
         'sortie_deleteAllDemandeSortie' => DEBUG ? "Erreur dans sortie/deleteAllDemandeSortie : :field" : "Une erreur est survenue lors de la suppréssion des sorties",
+        //sortie - get montant_ae
+        'sortie_getMontantAe' => DEBUG ? "Erreur dans sortie/getMontantAe : :field" : "Une erreur est survenue lors de calcule de montant de sortie",
         //produit  - create produit
         'produit_createProduit' => DEBUG ? "Erreur dans produit/createProduit : :field" : "Une erreur est survenue lors d'ajout de nouveau produit",
         //produit - filter produit

@@ -1128,5 +1128,370 @@ class EntreeController extends Controller
         return;
     }
 
+    //action - correction  demande sortie
+    public function correctionDemandeSortie()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $json = json_decode(file_get_contents('php://input'), true);
+            //trim
+            $json = array_map(fn($x) => trim($x), $json);
+
+            //libelle_ae - empty
+            if ($json['libelle_ae'] === '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.libelle')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //libelle_ae - invalid
+            if (strlen($json['libelle_ae']) > 100) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.libelle')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //date_ae
+            $date_ae = "";
+            //role admin date_ae - empty
+            if ($is_loged_in->getRole() === 'admin' && $json['date_ae'] === '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.date')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //role admin date_ae - invalid
+            if ($is_loged_in->getRole() === 'admin') {
+                $date_ae = DateTime::createFromFormat('Y-m-d\TH:i', $json['date_ae']);
+                if ($date_ae === false) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __(
+                            'messages.invalids.date',
+                            ['field' => $json['date_ae']]
+                        )
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                $date = new DateTime();
+                //date_ae - future
+                if ($date_ae > $date) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date_future')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                $date_ae = $date_ae->format('Y-m-d H:i:s');
+            }
+
+            //montant_ae - empty
+            if ($json['montant_ae'] === '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.montant')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //montant_ae - invalid
+            $montant_ae = filter_var($json['montant_ae'], FILTER_VALIDATE_FLOAT);
+            if ($montant_ae === false || $montant_ae < 1) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.montant')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //id_utilisateur
+            $id_utilisateur = "";
+            //role admin
+            if ($is_loged_in->getRole() === 'admin') {
+                $id_utilisateur = $json['id_utilisateur'];
+                //id_utilisateur - empty
+                if ($id_utilisateur === "") {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.empty.user_id')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+            }
+            //role caissier
+            else {
+                $id_utilisateur = $is_loged_in->getIdUtilisateur();
+            }
+
+            try {
+
+                //does num_ds exist ?
+                $json['num_ds'] = strtoupper(trim($json['num_ds']));
+                $response = DemandeSortie::findById($json['num_ds']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'success',
+                        'message' => __('messages.not_found.sortie_num_ds', ['field' => $json['num_ds']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //num_ds - deleted
+                if ($response['model']->getEtatDs() === 'supprimé') {
+                    $response = [
+                        'message_type' => 'success',
+                        'message' => __('messages.invalids.sortie_deleted', ['field' => $json['num_ds']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                $ds_num_caisse = $response['model']->getNumCaisse();
+
+                //num_caisse
+                $num_caisse = "";
+                //role admin
+                if ($is_loged_in->getRole() === 'admin') {
+                    //is num_caisse exist ?
+                    $response = Caisse::findById($json['num_caisse']);
+                    //error
+                    if ($response['message_type'] === 'error') {
+                        echo json_encode($response);
+                        return;
+                    }
+                    //not found
+                    if (!$response['found']) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                    //caisse - deleted
+                    if ($response['model']->getEtatCaisse() === 'supprimé') {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.invalids.caisse_deleted', ['field' => $json['num_caisse']])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                    $num_caisse = $json['num_caisse'];
+                }
+                //role caissier
+                else {
+                    //is user hash caisse ?
+                    $response = LigneCaisse::findCaisse($id_utilisateur);
+                    //error
+                    if ($response['message_type'] === 'error') {
+                        echo json_encode($response);
+                        return;
+                    }
+                    //not found
+                    if (!$response['found']) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.not_found.user_caisse')
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                    $num_caisse = $response['model']->getNumCaisse();
+                    //ds num_caisse != user num_caisse
+                    if ($ds_num_caisse !== $num_caisse) {
+                        $response = [
+                            'message_type' => 'success',
+                            'message' => __('messages.invalids.sortie_correctionDemandeSortie', ['field' => $json['num_ds']])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                }
+
+                //num_caisse
+                $num_caisse = "";
+                //role admin
+                if ($is_loged_in->getRole() === 'admin') {
+                    //does num_caisse exist ?
+                    $response = Caisse::findById($json['num_caisse']);
+                    //error
+                    if ($response['message_type'] === 'error') {
+                        echo json_encode($response);
+                        return;
+                    }
+                    //not found
+                    if (!$response['found']) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                    //caisse - deleted
+                    if ($response['model']->getEtatCaisse() === 'supprimé') {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.invalids.caisse_deleted', ['field' => $json['num_caisse']])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                    $num_caisse = $json['num_caisse'];
+                }
+                //role caissier
+                else {
+                    //does user hash caisse ?
+                    $response = LigneCaisse::findCaisse($id_utilisateur);
+                    //error
+                    if ($response['message_type'] === 'error') {
+                        echo json_encode($response);
+                        return;
+                    }
+                    //not found
+                    if (!$response['found']) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.not_found.user_caisse')
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                    $num_caisse = $response['model']->getNumCaisse();
+                    //ae num_caisse != user num_caisse
+                    if ($ds_num_caisse !== $num_caisse) {
+                        $response = [
+                            'message_type' => 'success',
+                            'message' => __('messages.invalids.sortie_correctionDemandeSortie', ['field' => $json['num_ds']])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                }
+
+                //role admin - is user exist ?
+                if ($is_loged_in->getRole() === 'admin') {
+                    $response = User::findById($id_utilisateur);
+                    //error
+                    if ($response['message_type'] === 'error') {
+                        echo json_encode($response);
+                        return;
+                    }
+                    //not found
+                    if (!$response['found']) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.not_found.user_id', ['field' => $id_utilisateur])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                }
+
+                //montant_ae > montant_ds
+                $response = SortieRepositorie::getMontantDs($json['num_ds']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                if ($montant_ae > $response['montant_ds']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.entree_montant_ds')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //correction demande sortie
+                $autre_entree_model = new AutreEntree();
+                $autre_entree_model
+                    ->setLibelleAe('correction/' . $json['num_ds'] . ' - ' . $json['libelle_ae'])
+                    ->setMontantAe($montant_ae)
+                    ->setDateAe($date_ae)
+                    ->setIdUtilsateur($id_utilisateur)
+                    ->setNumCaisse($num_caisse);
+                $response = $autre_entree_model->createAutreEntree($is_loged_in->getRole());
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.entree_createAutreEntree',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+        }
+        //redirect to sortie index
+        else {
+            header('Location: ' . SITE_URL . '/sortie');
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
+
     //action - list connection facture
 }
