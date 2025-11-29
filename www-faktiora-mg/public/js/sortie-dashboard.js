@@ -153,6 +153,32 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - correction demande sortie
+  async function correctionDemandeSortie(
+    num_ds,
+    libelle_article,
+    date_ds,
+    montant,
+    id_utilisateur,
+    num_caisse
+  ) {
+    try {
+      const response = await apiRequest("/sortie/correction_demande_sortie", {
+        method: "POST",
+        body: {
+          num_ds: num_ds,
+          libelle_article: libelle_article,
+          date_ds: date_ds,
+          montant: montant,
+          id_utilisateur: id_utilisateur,
+          num_caisse: num_caisse,
+        },
+      });
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -196,9 +222,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // deleteAllDemandeSortie(["s202511-12", "s202511-11"]);
     // permanentDeleteAllDemandeSortie(["s202511-12", "s202511-11"]);
     // permanentDeleteAllAutreEntree(["a202511-18", "a202511-19"]);
-    correctionAutreEntree(
-      "a202511-17",
-      "ajout de remboursement",
+    // correctionAutreEntree(
+    //   "a202511-17",
+    //   "ajout de remboursement",
+    //   date.value,
+    //   "15",
+    //   "10004",
+    //   "1"
+    // );
+    correctionDemandeSortie(
+      "s202511-21",
+      "achat de table",
       date.value,
       "15",
       "10004",

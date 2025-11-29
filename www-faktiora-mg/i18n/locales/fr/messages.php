@@ -76,7 +76,11 @@ return [
         //sortie - nums ds empty
         'sortie_nums_ds_empty' => "Veuiller séléctionner au moins une sortie",
         //sortie - montant ae
-        'sortie_montant_ae' => "Montant invalide: le montant saisi dépasse le montant d'autre entrée"
+        'sortie_montant_ae' => "Montant invalide: le montant saisi dépasse le montant d'autre entrée",
+        //sortie - deleted
+        'sortie_deleted' => "La sortie numéro <b>:field</b> est déjà supprimée",
+        //sortie - correectio demande sortie
+        'sortie_correctionDemandeSortie' => "Cette sortie n'est pas enregistrée sur votre caisse actuelle"
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",

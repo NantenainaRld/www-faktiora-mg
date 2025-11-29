@@ -59,6 +59,20 @@ class DemandeSortie extends Database
         return $this;
     }
 
+    //======================= GETTERS =========================
+
+    //getter - etat_ds
+    public function getEtatDs()
+    {
+        return $this->etat_ds;
+    }
+
+    //getter  - num_caisse
+    public function getNumCaisse()
+    {
+        return $this->num_caisse;
+    }
+
     //======================= PUBLIC FUNCTION ====================
 
     //create demande sortie
