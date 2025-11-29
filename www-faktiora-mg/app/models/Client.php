@@ -68,6 +68,14 @@ class Client extends Database
         return $this;
     }
 
+    //======================== GETTERS ==========================
+
+    //getter - etat_client
+    public function getEtatClient()
+    {
+        return $this->etat_client;
+    }
+
     //========================= PUBLIC FUNCTION ====================
 
     //create client

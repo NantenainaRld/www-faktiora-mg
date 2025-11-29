@@ -61,10 +61,16 @@ return [
         'entree_ae_deleted' => "L'autre entrée numéro <b>:field</b> est déjà supprimée ",
         //entree - montant_ds
         'entree_montant_ds' => "Montant invalide : le montant saisi dépasse le montant total de ce sortie",
+        //entree - quantite produit
+        'entree_quantite_produit' => "La quantite est invalide pour le produit avec l'ID <b>:id_produit</b> : :quantite_produit",
         //produit - ids_produit empty
         'produit_ids_produit_empty' => "Veuiller séléctionner au moins un produit",
         //produit - libelle prix
         'produit_libelle_prix' => "Le produit avec le libellé <b>:libelle</b> et prix <b>:prix</b> existe déjà",
+        //produit - deleted
+        'produit_deleted' => "Le produit avec l'ID <b>:field</b> est déjà supprimé",
+        //produit - nb stock less
+        'produit_nb_stock_less' => "Le nombre de stock n'est pas suffisant pour le produit avec l'ID <b>:id_produit</b>, stock reste : :nb_stock",
         //article - libelle_article 
         'article_libelle_article' => "L'article avec le libellé <b>:field</b> existe déjà",
         //article - ids_article empty
@@ -74,7 +80,7 @@ return [
         //sortie - prix article
         'sortie_prix_article' => "Le prix est invalide pour l'article avec l'ID <b>:id_article</b> : :prix_article",
         //sortie - quantite article
-        'sortie_prix_article' => "La quantité est invalide pour l'article avec l'ID <b>:id_article</b> : :quantite_article",
+        'sortie_quantite_article' => "La quantité est invalide pour l'article avec l'ID <b>:id_article</b> : :quantite_article",
         //sortie - reste_solde
         'sortie_reste_solde' => "Demande de sortie refusée, le seuil de <b>:field</b> n'est pas respecté",
         //sortie - nums ds empty
@@ -86,7 +92,9 @@ return [
         //sortie - correction demande sortie
         'sortie_correctionDemandeSortie' => "Cette sortie n'est pas enregistrée sur votre caisse actuelle",
         //client - ids client empty
-        'client_ids_client_empty' => "Veuiller séléctionner au moins un client"
+        'client_ids_client_empty' => "Veuiller séléctionner au moins un client",
+        //client  - deleted
+        'client_deleted' => "Le client avec l'ID <b>:field</b> est déjà supprimé"
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",
@@ -168,6 +176,10 @@ return [
         'entree_deleteAllAutreEntree_1' => "Une autre entrée a été supprimée avec succès",
         //entree - delete all autre entree plur
         'entree_deleteAllAutreEntree_plur' => "<b>:field</b> autres entrées ont été supprimées avec succès",
+        //entree - create facture
+        'entree_createFacture' => "Nouvelle facture générée avec succès",
+        //entree - create ligne facture
+        'entree_createLigneFacture' => "Nouvelle ligne facture créée avec succès",
         //produit - create produit
         'produit_createProduit' => "Nouveau produit ajouté avec succès",
         //produit - update produit
@@ -209,7 +221,7 @@ return [
         //client - delete all client 1
         'client_deleteAllClient_1' => "Un client a été supprimé avec succès",
         //client - delete all client plur
-        'client_deleteAllClient_plur' => "<b>:field</b> on été supprimés avec succès"
+        'client_deleteAllClient_plur' => "<b>:field</b> on été supprimés avec succès",
     ],
     'not_found' => [
         //user - id

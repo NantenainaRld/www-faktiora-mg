@@ -14,13 +14,13 @@
 </head>
 
 <body>
-    <?= "sortie dashboard"; ?>
+    <?= "facture dashboard"; ?>
     <input type="datetime-local" id="date">
     <input type="date" id="from">
     <input type="date" id="to">
     <button id='btn-test'>Test</button>
     <!-- script js -->
-    <script src="<?= SITE_URL ?>/js/sortie-dashboard.js"></script>
+    <script src="<?= SITE_URL ?>/js/facture-dashboard.js"></script>
 </body>
 
 </html>

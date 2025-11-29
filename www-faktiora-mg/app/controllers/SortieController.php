@@ -70,15 +70,15 @@ class SortieController extends Controller
                     return;
                 }
                 //quantite - invalid
-                $quantite = filter_var($article['quantite_article'], FILTER_VALIDATE_FLOAT);
+                $quantite = filter_var($article['quantite_article'], FILTER_VALIDATE_INT);
                 if ($quantite === false || $quantite <= 0) {
                     $response = [
                         'message_type' => 'invalid',
                         'message' => __(
-                            'messages.invalids.sortie_prix_article',
+                            'messages.invalids.sortie_quantite_article',
                             [
                                 'id_article' => $article['id_article'],
-                                'prix_article' => $article['quantite_article']
+                                'quantite_article' => $article['quantite_article']
                             ]
                         )
                     ];

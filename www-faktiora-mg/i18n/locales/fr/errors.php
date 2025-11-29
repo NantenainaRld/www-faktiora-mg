@@ -94,6 +94,10 @@ return [
         'entree_listConnectionAutreEntree' => DEBUG ? "Erreur dans entree/listConnectionAutreEntree : :field" : "Une erreur est survenue lors de listage des connections pour cette autre entrée",
         //entree - connection autree entree
         'entree_connectionAutreEntree' => DEBUG ? "Erreur dans entree/connectionAutreEntree : :field" : "Une erreur est survenue lors de listage des connections pour les entrées",
+        //entree - create facture
+        'entree_createFacture' => DEBUG ? "Erreur dans entree/createFacture : :field" : "Une erreur est survenue lors de la création de facture",
+        //entree - create ligne facture
+        'entree_createLigneFacture' => DEBUG ? "Erreur dans entree/createLigneFacture : :field" : "Une erreur est survenue lors de la création de ligne facture",
         //sortie - connection sortie
         'sortie_connectionSortie' => DEBUG ? "Erreur dans sortie/connectionSortie : :field" : "Une erreur est survenue lors de listage des connections pour les sorties",
         //sortie - create sortie 
@@ -128,6 +132,8 @@ return [
         'produit_findById' => DEBUG ? "Erreur dans produit/findById : :field" : "Une erreur est survenue lors de vérification d'ID de produit",
         //produit - delete all produit
         'produit_deleteAllProduit' => DEBUG ? "Erreur dans produit/deleteAllProduit : :field" : "Une erreur est survenue lors de la suppréssion des produits",
+        //produit - update nb stock
+        'produit_updateNbStocke' => DEBUG ? "Erreur dans produit/updateNbStock  : :field" : "Une errreur est survenue lors de mis à jour de nombre de stock",
         //article - create article
         'article_createArticle' => DEBUG ? "Erreur dans article/createArticle : :field" : "Une erreur est survenue lors d'ajout de nouveau article",
         //article - is libelle article exist

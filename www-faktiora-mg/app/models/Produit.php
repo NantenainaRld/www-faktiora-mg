@@ -51,6 +51,26 @@ class Produit extends Database
         return $this;
     }
 
+    //========================== GETTERS ==========================
+
+    //getter - prix_produit
+    public function getPrixProduit()
+    {
+        return $this->prix_produit;
+    }
+
+    //getter - nb_stock
+    public function getNbStock()
+    {
+        return $this->nb_stock;
+    }
+
+    //getter - etat_produit
+    public function getEtatProduit()
+    {
+        return $this->etat_produit;
+    }
+
     //========================== PUBLIC FUNCTION =======================
 
     //create produit
@@ -418,6 +438,56 @@ class Produit extends Database
         return $response;
     }
 
+    //static - update nb stock
+    public static function updateNbStock($id_produit, $quantite, $type)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+        $sql = "";
+        if ($type === 'increase') {
+            $sql  = "UPDATE produit SET nb_stock = (nb_stock + :quantite) WHERE id_produit = :id ";
+        } else {
+            $sql  = "UPDATE produit SET nb_stock = (nb_stock - :quantite) WHERE id_produit = :id ";
+        }
+        $paramsQuery = [
+            'quantite' => $quantite,
+            'id' => $id_produit
+        ];
+
+        try {
+
+            $response = parent::executeQuery($sql, $paramsQuery);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response  = [
+                'message_type' => 'success',
+                'message' => 'success'
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.produit_updateNbStock',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
 
     //======================== PRIVATE FUNCTION ========================
 
