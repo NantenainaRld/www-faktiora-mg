@@ -1006,7 +1006,7 @@ class EntreeController extends Controller
                 $num_caisse = "";
                 //role admin
                 if ($is_loged_in->getRole() === 'admin') {
-                    //is num_caisse exist ?
+                    //does num_caisse exist ?
                     $response = Caisse::findById($json['num_caisse']);
                     //error
                     if ($response['message_type'] === 'error') {
@@ -1037,7 +1037,7 @@ class EntreeController extends Controller
                 }
                 //role caissier
                 else {
-                    //is user hash caisse ?
+                    //does user hash caisse ?
                     $response = LigneCaisse::findCaisse($id_utilisateur);
                     //error
                     if ($response['message_type'] === 'error') {
