@@ -98,6 +98,20 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - permanent delete all client
+  async function permanentDeleteAllClient(ids_client = []) {
+    try {
+      const response = await apiRequest("/client/permanent_delete_all_client", {
+        method: "DELETE",
+        body: {
+          ids_client: ids_client,
+        },
+      });
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const from = document.getElementById("from");
@@ -135,6 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //   "+261 3",
     //   "adresse"
     // );
-    deleteAllClient([10002, 10001]);
+    // deleteAllClient([10002, 10001]);
+    permanentDeleteAllClient([10002, 10001]);
   });
 });

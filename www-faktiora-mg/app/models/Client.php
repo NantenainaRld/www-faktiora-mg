@@ -345,4 +345,62 @@ class Client extends Database
 
         return $response;
     }
+
+    //static - permanent delete all client
+    public static function permanentDeleteAllClient($ids_client)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        $placeholders = implode(', ', array_fill(0, count($ids_client), '?'));
+        $sql = "DELETE FROM client WHERE id_client IN ({$placeholders}) AND etat_client = 'supprimé' ";
+
+        try {
+
+            $response = parent::executeQuery($sql, $ids_client);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //success
+            //0
+            if ($response['row_count'] === 0) {
+                $response['message'] = __('messages.success.client_deleteAllClient_0');
+            }
+            //1
+            elseif ($response['row_count'] === 1) {
+                $response['message'] = __('messages.success.client_deleteAllClient_1');
+            }
+            //plur
+            else {
+                $response['message'] = __('messages.success.client_deleteAllClient_plur', ['field' => $response['row_count']]);
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => $response['message']
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.client_deleteAllClient',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
 }
