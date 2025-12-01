@@ -24,6 +24,7 @@ return [
         'nb_stock' => "Le nombre de stock ne doît pas être inférieur à 0",
         'telephone' => "Téléphone invalide : :field",
         'adresse' => "L'adresse ne doît pas dépasser de 100 caractères",
+        'correction_quantite' => "Quantité invalide pour la ligne avec l'ID <b>:field</b> : la quantité de correction ne doît pas supérieure au quantité originale",
         //
         //user - ids_user empty
         'user_ids_user_empty' => "Veuiller séléctionner au moins un utilisateur",
@@ -65,6 +66,14 @@ return [
         'entree_quantite_produit' => "La quantite est invalide pour le produit avec l'ID <b>:id_produit</b> : :quantite_produit",
         //entree - nums_facture empty
         'entree_nums_facture_empty' => "Veuiller séléctionner au moins une facture",
+        //entree - produits empty
+        'entree_produits_empty' => "Veuiller ajouter au moins un produit",
+        //entree - facture id_lf
+        'entree_facture_id_lf' => "La ligne facture avec l'ID <b>:id_lf</b> n'appartient pas au facture numéro <b>:num_facture</b>",
+        //entree - facture lf id_produit
+        'entree_facture_lf_id_produit' => "Le produit avec l'ID <b>:id_produit</b> n'appartient pas au ligne facture avec l'ID <b>:id_lf</b>",
+        //entree - facture deleted
+        'entree_facture_deleted' => "La facture numéro <b>:field</b> est déjà supprimée",
         //produit - ids_produit empty
         'produit_ids_produit_empty' => "Veuiller séléctionner au moins un produit",
         //produit - libelle prix
@@ -93,6 +102,10 @@ return [
         'sortie_deleted' => "La sortie numéro <b>:field</b> est déjà supprimée",
         //sortie - correction demande sortie
         'sortie_correctionDemandeSortie' => "Cette sortie n'est pas enregistrée sur votre caisse actuelle",
+        //sortie - articles empty
+        'sortie_articles_empty' => "Veuiller ajouter au moins un produit",
+        //sortie - correction facture
+        'sortie_correctionFacture' => "Cette facture n'est pas enregistrée sur votre caisse actuelle",
         //client - ids client empty
         'client_ids_client_empty' => "Veuiller séléctionner au moins un client",
         //client  - deleted
@@ -216,12 +229,14 @@ return [
         'sortie_createSortie' => "Nouvelle sortie ajoutée avec succès",
         //sortie - update demande sortie 
         'sortie_updateDemandeSortie' => "Sortie numéro <b>:field</b> est modifiée avec succès",
-        //sortie - delet all demande sortie 0
+        //sortie - delete all demande sortie 0
         'sortie_deleteAllDemandeSortie_0' => "Aucune sortie n'est supprimée",
-        //sortie - delet all demande sortie 1
+        //sortie - delete all demande sortie 1
         'sortie_deleteAllDemandeSortie_1' => "AUne sortie a été supprimée avec succès",
-        //sortie - delet all demande sortie plur
+        //sortie - delete all demande sortie plur
         'sortie_deleteAllDemandeSortie_plur' => "<b>:field</b> sorties ont été supprimées avec succès",
+        //sortie - correction facture not mofidifed
+        'sortie_correctionFacture_not_corrected' => "Aucune correction n'est faite pour cette facture",
         //client - create client
         'client_createClient' => "Nouveau client ajouté avec succès",
         //client - update client
@@ -246,6 +261,8 @@ return [
         'entree_num_ae' => "L'autre entrée numéro <b>:field</b> n'existe pas",
         //entree - num_facture
         'entree_num_facture' => "La facture numéro <b>:field</b> n'existe pas ",
+        //entree - id lf
+        'entree_id_lf' => "La ligne facture avec l'ID <b>:field</b> n'existe pas",
         //produit - id_produit
         'produit_id_produit' => "Le produit avec l'ID <b>:field</b> n'existe pas",
         //article - id_article

@@ -117,7 +117,7 @@ class EntreeRepositorie extends Database
         ];
         try {
 
-            $response = parent::selectQuery("SELECT p.id_produit, p.libelle_produit, p.prix_produit, lf.quantite_produit, lf.prix, (lf.quantite_produit * lf.prix) AS prix_total FROM produit p JOIN ligne_facture lf ON lf.id_produit = p.id_produit JOIN facture f ON f.id_facture = lf.id_facture WHERE f.num_facture = :num_facture AND p.etat_produit != 'suprimé' ", ['num_facture' => $num_facture]);
+            $response = parent::selectQuery("SELECT p.id_produit, p.libelle_produit, p.prix_produit, lf.quantite_produit, lf.prix, (lf.quantite_produit * lf.prix) AS prix_total, lf.id_lf FROM produit p JOIN ligne_facture lf ON lf.id_produit = p.id_produit JOIN facture f ON f.id_facture = lf.id_facture WHERE f.num_facture = :num_facture AND p.etat_produit != 'suprimé' ", ['num_facture' => $num_facture]);
 
             //error
             if ($response['message_type'] === 'error') {

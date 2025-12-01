@@ -68,6 +68,14 @@ class Facture extends Database
         return $this;
     }
 
+    //============================== GETTERS ======================
+
+    //setter - etat_facture
+    public function getEtatFacture()
+    {
+        return $this->etat_facture;
+    }
+
     //============================== PUBLIC FUNCTION ==================
 
     //create facture

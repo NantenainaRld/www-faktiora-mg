@@ -131,6 +131,30 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - correction facture
+  async function correctionFacture(
+    num_facture,
+    lf = [],
+    date_ds,
+    id_utilisateur,
+    num_caisse
+  ) {
+    try {
+      const response = await apiRequest("/sortie/correction_facture", {
+        method: "POST",
+        body: {
+          num_facture: num_facture,
+          lf: lf,
+          date_ds: date_ds,
+          id_utilisateur: id_utilisateur,
+          num_caisse: num_caisse,
+        },
+      });
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -171,23 +195,24 @@ document.addEventListener("DOMContentLoaded", () => {
     // listConnectionFacture("f202511-7");
     // updateFacture("f202511-7", date.value, "10003", "1", "10000");
     // deleteAllFacture(["f202511-7", "f202511-5", "f202511-4"]);
-    permanentDeleteAllFacture(["f202511-7", "f202511-5", "f202511-4"]);
-    // permanentDeleteAllAutreEntree(["a202511-18", "a202511-19"]);
-    // correctionAutreEntree(
-    //   "a202511-17",
-    //   "ajout de remboursement",
-    //   date.value,
-    //   "15",
-    //   "10004",
-    //   "1"
-    // );
-    // correctionDemandeSortie(
-    //   "s202511-21",
-    //   "achat de table",
-    //   date.value,
-    //   "15",
-    //   "10004",
-    //   "1"
-    // );
+    // permanentDeleteAllFacture(["f202511-7", "f202511-5", "f202511-4"]);
+    correctionFacture(
+      "f202511-6",
+      [
+        {
+          id_lf: 6,
+          id_produit: 3,
+          quantite_produit: 1,
+        },
+        {
+          id_lf: 1,
+          id_produit: 1,
+          quantite_produit: 3,
+        },
+      ],
+      date.value,
+      10004,
+      1
+    );
   });
 });

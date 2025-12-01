@@ -1521,9 +1521,22 @@ class EntreeController extends Controller
                 if ($data !== 'produits') {
                     $value = trim($value);
                 } else {
-                    foreach ($value as &$line) {
-                        foreach ($line as $produit => &$prod) {
-                            $prod = trim($prod);
+                    //produits - empty
+                    if (count($json['produits']) <= 0) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.invalids.entree_produits_empty')
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                    //produits - not empty
+                    else {
+                        foreach ($value as &$line) {
+                            foreach ($line as $produit => &$prod) {
+                                $prod = trim($prod);
+                            }
                         }
                     }
                 }

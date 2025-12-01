@@ -17,6 +17,13 @@ class LigneFacture extends Database
     //===================== SETTERS ============================
 
 
+    //setter - id_lf
+    public function setIdLf($id_lf)
+    {
+        $this->id_lf = $id_lf;
+        return $this;
+    }
+
     //setter - prix
     public function setPrix($prix)
     {
@@ -43,6 +50,32 @@ class LigneFacture extends Database
     {
         $this->id_produit = $id_produit;
         return $this;
+    }
+
+    //====================== GETTERS ============================
+
+    //getter - quantite_produit
+    public function getQuantiteProduit()
+    {
+        return $this->quantie_produit;
+    }
+
+    //getter - id_facture
+    public function getIdFacture()
+    {
+        return $this->id_facture;
+    }
+
+    //getter - id_produit
+    public function getIdProduit()
+    {
+        return $this->id_produit;
+    }
+
+    //getter - prix
+    public function getPrix()
+    {
+        return $this->prix;
     }
 
     //====================== PUBLIC FUNCTION ========================
@@ -87,6 +120,77 @@ class LigneFacture extends Database
                 'message_type' => 'error',
                 'message' => __(
                     'errors.catch.entree_createLigneFacture',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //static - find by id
+    public static function findById($id_lf)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+            'found' => false
+        ];
+
+        try {
+
+            $response = parent::selectQuery("SELECT lf.*, f.num_facture FROM ligne_facture lf JOIN facture f ON f.id_facture = lf.id_facture WHERE lf.id_lf = :id ", ['id' => $id_lf]);
+
+            //error
+            if ($response['message_type'] == 'error') {
+                return $response;
+            }
+
+            //not found
+            if (count($response['data']) <= 0) {
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'found' => false
+                ];
+
+                return $response;
+            }
+            //found
+            else {
+                $ligne_facture_model = new LigneFacture();
+                $ligne_facture_model
+                    ->setIdLf($response['data'][0]['id_lf'])
+                    ->setPrix($response['data'][0]['prix'])
+                    ->setQuantiteProduit($response['data'][0]['quantite_produit'])
+                    //id_facture = num_facture
+                    ->setIdFacture($response['data'][0]['num_facture'])
+                    ->setIdProduit($response['data'][0]['id_produit']);
+
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'found' => true,
+                    'model' => $ligne_facture_model
+                ];
+
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.entree_lf_findById',
                     ['field' => $e->getMessage() .
                         ' - Line : ' . $e->getLine() .
                         ' - File : ' . $e->getFile()]

@@ -112,6 +112,8 @@ return [
         'entree_updateFacture' => DEBUG ? "Erreur dans entree/updateFacture : :field" : "Une erreur est survenue lors de la modification de facture",
         //entree - delete all facture
         'entree_deleteAllFacture' => DEBUG ? "Erreur dans entree/deleteAllFacture : :field" : "Une erreur est survenue lors de la suppréssion des factures",
+        //entree - lf find by id
+        'entree_lf_findById' => DEBUG ? "Erreur dans entree_lf/findById : :field" : "Une erreur est survenue lors de la vérification d'ID de ligne facture",
         //sortie - connection sortie
         'sortie_connectionSortie' => DEBUG ? "Erreur dans sortie/connectionSortie : :field" : "Une erreur est survenue lors de listage des connections pour les sorties",
         //sortie - create sortie 
@@ -134,6 +136,8 @@ return [
         'sortie_deleteAllDemandeSortie' => DEBUG ? "Erreur dans sortie/deleteAllDemandeSortie : :field" : "Une erreur est survenue lors de la suppréssion des sorties",
         //sortie - get montant_ae
         'sortie_getMontantAe' => DEBUG ? "Erreur dans sortie/getMontantAe : :field" : "Une erreur est survenue lors de calcule de montant de sortie",
+        //sortie - correction facture
+        'sortie_correctionFacture' => DEBUG ? "Erreur dans sortie/correctionFacture : :field" : "Une erreur est survenue lors de la correction de la facture",
         //produit  - create produit
         'produit_createProduit' => DEBUG ? "Erreur dans produit/createProduit : :field" : "Une erreur est survenue lors d'ajout de nouveau produit",
         //produit - filter produit

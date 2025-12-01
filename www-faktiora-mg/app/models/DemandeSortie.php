@@ -638,4 +638,129 @@ class DemandeSortie extends Database
 
         return $response;
     }
+
+    //correction facture
+    public function correctionFacture(
+        $solde_caisse,
+        $seuil_caisse,
+        $libelle_article,
+        $prix_article,
+        $produits
+    ) {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+
+            //solde_caisse - prix_article < seuil
+            $reste = $solde_caisse - $prix_article;
+            if ($reste < $seuil_caisse) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.sortie_reste_solde', ['field' => $seuil_caisse])
+                ];
+
+                return $response;
+            }
+
+            //create article
+            $article_model = new Article();
+            $article_model
+                ->setLibelleArticle($libelle_article);
+            $response = $article_model->createArticle();
+            //error or invalid
+            if ($response['message_type'] === 'error' || $response['message_type'] === 'invalid') {
+                return $response;
+            }
+            $id_article = $response['last_inserted'];
+
+            //create sortie
+            $sql = "";
+            $paramsQuery = [
+                'id_utilisateur' => $this->id_utilisateur,
+                'num_caisse' => $this->num_caisse
+            ];
+            //date_ds - empty
+            if ($this->date_ds === '') {
+                $sql = "INSERT INTO demande_sortie (date_ds, id_utilisateur, num_caisse) VALUES (NOW(), :id_utilisateur, :num_caisse) ";
+            }
+            //date_ds - not empty
+            else {
+                $sql = "INSERT INTO demande_sortie (date_ds, id_utilisateur, num_caisse) VALUES (:date_ds, :id_utilisateur, :num_caisse) ";
+                $paramsQuery['date_ds'] = $this->date_ds;
+            }
+            $response = parent::executeQuery($sql, $paramsQuery);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            //add num_ds
+            $this->id_ds = $response['last_inserted'];
+            $this->num_ds = 'S' . date('Ym') . '-' . $this->id_ds;
+            $response = parent::executeQuery("UPDATE demande_sortie SET num_ds = :num WHERE id_ds = :id", [
+                'num' => $this->num_ds,
+                'id' => $this->id_ds
+            ]);
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //create ligne_ds
+            $ligne_ds_model = new LigneDs();
+            $ligne_ds_model
+                ->setPrixArticle($prix_article)
+                ->setQuantiteArticle(1)
+                ->setIdDs($this->id_ds)
+                ->setIdArticle($id_article);
+            $ligne_ds_model->createLigneDs();
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //update caisse solde
+            $response = Caisse::updateSolde($this->num_caisse, $prix_article, 'decrease');
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //update nb stock
+            foreach ($produits as $index => $line) {
+                $response = Produit::updateNbStock($line['id_produit'], $line['nb'], 'increase');
+                //errorf
+                if ($response['message_type'] === 'error') {
+                    return $response;
+                }
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => __('messages.success.sortie_createSortie')
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.sortie_correctionFacture',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
 }

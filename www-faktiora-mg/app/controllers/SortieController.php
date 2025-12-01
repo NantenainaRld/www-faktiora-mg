@@ -42,9 +42,22 @@ class SortieController extends Controller
                 if ($data !== 'articles') {
                     $value = trim($value);
                 } else {
-                    foreach ($value as &$line) {
-                        foreach ($line as $article => &$art) {
-                            $art = trim($art);
+                    //articles - empty
+                    if (count($json['articles']) <= 0) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.invalids.sortie_article_empty')
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                    //articles - not empty
+                    else {
+                        foreach ($value as &$line) {
+                            foreach ($line as $article => &$art) {
+                                $art = trim($art);
+                            }
                         }
                     }
                 }
@@ -1288,7 +1301,7 @@ class SortieController extends Controller
             //trim
             $json = array_map(fn($x) => trim($x), $json);
 
-            // //libelle_article - empty
+            //libelle_article - empty
             if ($json['libelle_article'] === '') {
                 $response = [
                     'message_type' => 'invalid',
@@ -1576,6 +1589,448 @@ class SortieController extends Controller
         //redirect to sortie index
         else {
             header('Location: ' . SITE_URL . '/sortie');
+            return;
+        }
+    }
+
+    //action - correction  facture
+    public function correctionFacture()
+    {
+        header('Content-Type: application/json');
+        //is loged in
+        $is_loged_in = Auth::isLogedIn();
+        $response = null;
+
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login
+            header('Location: ' . SITE_URL . '/login');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $json = json_decode(file_get_contents('php://input'), true);
+            //trim
+            foreach ($json as $data => &$value) {
+                if ($data !== 'lf') {
+                    $value = trim($value);
+                } else {
+                    //lf - empty
+                    if (count($json['lf']) <= 0) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.success.sortie_correctionFacture_not_corrected')
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                    //lf - not empty
+                    else {
+                        foreach ($value as &$line) {
+                            foreach ($line as $index => &$lf) {
+                                $lf = trim($lf);
+                            }
+                        }
+                    }
+                }
+            }
+
+            //date_ds
+            $date_ds = "";
+            //date_ds empty - role admin
+            if ($is_loged_in->getRole() === 'admin' && $json['date_ds'] === '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.date')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //date_ds invalid - role admin
+            if ($is_loged_in->getRole() === 'admin') {
+                $date_ds = DateTime::createFromFormat('Y-m-d\TH:i', $json['date_ds']);
+                if (!$date_ds) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __(
+                            'messages.invalids.date',
+                            ['field' => $json['date_ds']]
+                        )
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //date_ds - future
+                $date = new DateTime();
+                if ($date_ds > $date) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date_future')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                $date_ds = $date_ds->format('Y-m-d H:i:s');
+            }
+
+            //id_utilisateur
+            $id_utilisateur = "";
+            //role admin
+            if ($is_loged_in->getRole() === 'admin') {
+                $id_utilisateur = $json['id_utilisateur'];
+                //id_utilisateur - empty
+                if ($id_utilisateur === "") {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.empty.user_id')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+            }
+            //role caissier
+            else {
+                $id_utilisateur = $is_loged_in->getIdUtilisateur();
+            }
+
+            //lf
+            $lf = unserialize(serialize($json['lf']));
+            $json['lf'] = [$json['lf'][0]];
+            $ids_lf = [$json['lf'][0]['id_lf']];
+            foreach ($lf as $index => $line) {
+                // id_lf - exist
+                if (in_array($line['id_lf'], $ids_lf, true)) {
+                    continue;
+                }
+                $ids_lf[] = $line['id_lf'];
+                $json['lf'][] = $line;
+            }
+
+            //does produits valides ?
+            foreach ($json['lf'] as $index => $line) {
+                //quantite - invalid
+                $quantite = filter_var($line['quantite_produit'], FILTER_VALIDATE_INT);
+                if ($quantite === false || $quantite < 0) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __(
+                            'messages.invalids.entree_quantite_produit',
+                            [
+                                'id_produit' => $line['id_produit'],
+                                'quantite_produit' => $line['quantite_produit']
+                            ]
+                        )
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+            }
+
+            try {
+
+                //does num_facture exist ?
+                $json['num_facture'] = strtoupper($json['num_facture']);
+                $response = Facture::findById($json['num_facture']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.entree_num_facture', ['field' => $json['num_facture']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //facture - deleted
+                if ($response['model']->getEtatFacture() === 'supprimé') {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.entree_facture_deleted', ['field' => $json['num_facture']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //does lf valid ?
+                $change = false;
+                $produits = [];
+                foreach ($json['lf'] as $index => $line) {
+                    //does id_lf exist ?
+                    $response = LigneFacture::findById($line['id_lf']);
+                    //error
+                    if ($response['message_type'] === 'error') {
+                        echo json_encode($response);
+                        return;
+                    }
+                    //not found
+                    if (!$response['found']) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.not_found.entree_id_lf', ['field' => $line['id_lf']])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                    //num_facture != lf id facture
+                    if ($json['num_facture'] != $response['model']->getIdFacture()) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.invalids.entree_facture_id_lf', [
+                                'id_lf' => $line['id_lf'],
+                                'num_facture' => $json['num_facture']
+                            ])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                    //id_produit != lf id_produit
+                    if ($line['id_produit'] != $response['model']->getIdProduit()) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.invalids.entree_facture_lf_id_produit', [
+                                'id_produit' => $line['id_produit'],
+                                'id_lf' => $line['id_lf']
+                            ])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                    //change
+                    if ($response['model']->getQuantiteProduit() != $line['quantite_produit']) {
+                        $change = true;
+                        //quantite_produit > lf quantite_produit
+                        if ($line['quantite_produit'] > $response['model']->getQuantiteProduit()) {
+                            $response = [
+                                'message_type' => 'invalid',
+                                'message' => __('messages.invalids.correction_quantite', ['field' => $line['id_lf']])
+                            ];
+
+                            echo json_encode($response);
+                            return;
+                        }
+
+                        //calcul substraction
+                        $p = [
+                            'id_produit' => $line['id_produit'],
+                            'nb' => ($response['model']->getQuantiteProduit() - $line['quantite_produit']),
+                            'prix_produit' => $response['model']->getPrix()
+                        ];
+                        $produits[] = $p;
+                    }
+                    //does produit exist ?
+                    $response = Produit::findById($line['id_produit']);
+                    //error
+                    if ($response['message_type'] === 'error') {
+                        echo json_encode($response);
+                        return;
+                    }
+                    //not found
+                    if (!$response['found']) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.not_found.produit_id_produit', ['field' => $line['id_produit']])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                    //produit - deleted
+                    if ($response['model']->getEtatProduit() === 'supprimé') {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.invalids.produit_deleted', ['field' => $line['id_produit']])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                }
+
+                //not changed
+                if (!$change) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.success.sortie_correctionFacture_not_corrected')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //libelle_article && prix_article
+                $libelle_article = "correction/{$json['num_facture']} - ";
+                $prix_article = 0;
+                foreach ($produits as $index => $line) {
+                    $libelle_article .= "/produit {$line['id_produit']} : -{$line['nb']} ";
+                    $prix_article += $line['prix_produit'] * $line['nb'];
+                }
+
+                //num_caisse
+                $num_caisse = "";
+                //role admin
+                if ($is_loged_in->getRole() === 'admin') {
+                    //does num_caisse exist ?
+                    $response = Caisse::findById($json['num_caisse']);
+                    //error
+                    if ($response['message_type'] === 'error') {
+                        echo json_encode($response);
+                        return;
+                    }
+                    //not found
+                    if (!$response['found']) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                    //caisse - deleted
+                    if ($response['model']->getEtatCaisse() === 'supprimé') {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.invalids.caisse_deleted', ['field' => $json['num_caisse']])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                    $num_caisse = $json['num_caisse'];
+                }
+                //role caissier
+                else {
+                    //is user hash caisse ?
+                    $response = LigneCaisse::findCaisse($id_utilisateur);
+                    //error
+                    if ($response['message_type'] === 'error') {
+                        echo json_encode($response);
+                        return;
+                    }
+                    //not found
+                    if (!$response['found']) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.not_found.user_caisse')
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                    $num_caisse = $response['model']->getNumCaisse();
+                    //facture num_caisse != user num_caisse
+                    if ($json['num_caisse'] != $num_caisse) {
+                        $response = [
+                            'message_type' => 'success',
+                            'message' => __('messages.invalids.sortie_correctionFacture', ['field' => $json['num_facture']])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                }
+
+                //role admin - does user exist ?
+                if ($is_loged_in->getRole() === 'admin') {
+                    $response = User::findById($id_utilisateur);
+                    //error
+                    if ($response['message_type'] === 'error') {
+                        echo json_encode($response);
+                        return;
+                    }
+                    //not found
+                    if (!$response['found']) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.not_found.user_id', ['field' => $id_utilisateur])
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                }
+
+                //find caisse
+                $response = Caisse::findById($num_caisse);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //caisse - deleted
+                if ($response['model']->getEtatCaisse() === 'supprimé') {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.caisse_deleted', ['field' => $json['num_caisse']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                $solde_caisse = $response['model']->getSolde();
+                $seuil_caisse = $response['model']->getSeuil();
+
+                //correction facture
+                $demande_sortie_model = new DemandeSortie();
+                $demande_sortie_model
+                    ->setDateDs($date_ds)
+                    ->setIdUtilsateur($id_utilisateur)
+                    ->setNumCaisse($num_caisse);
+                $response = $demande_sortie_model->correctionFacture($solde_caisse, $seuil_caisse, $libelle_article, $prix_article, $produits);
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.sortie_correctionFacture',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            // echo json_encode($json);
+            echo json_encode($response);
+            return;
+        }
+        //redirect to entree index
+        else {
+            header('Location: ' . SITE_URL . '/entree');
             return;
         }
     }
