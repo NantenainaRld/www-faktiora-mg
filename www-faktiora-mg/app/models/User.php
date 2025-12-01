@@ -10,6 +10,7 @@ class User extends Database
     private $role = "caissier";
     private $mdp = "";
     private $mdp_oublie = null;
+    private $mdp_oublie_expire = "";
     private $etat_utilisateur = 'déconnecté';
     private $dernier_session =  null;
 
@@ -62,11 +63,18 @@ class User extends Database
         $this->mdp = ($mdp === '') ? '' : password_hash($mdp, PASSWORD_DEFAULT);
         return $this;
     }
-    //setter - mdp_oublie
-    // public function setMdpOublie($mdp_oublie)
-    // {
-    //     return $this->nom_utilisateur = $nom_utilisateur;
-    // 
+
+    // setter - mdp_oublie
+    public function setMdpOublie($mdp_oublie)
+    {
+        return $this->mdp_oublie = $mdp_oublie;
+    }
+
+    //setter - mdp_oublie_expire
+    public function setMdpOublieExpire($mdp_oublie_expire)
+    {
+        return $this->mdp_oublie_expire = $mdp_oublie_expire;
+    }
 
     //================== GETTERS ========================
 
@@ -112,6 +120,24 @@ class User extends Database
         return $this->etat_utilisateur;
     }
 
+    //getter - get mdp
+    public function getMdp()
+    {
+        return $this->mdp;
+    }
+
+    //getter - mdp_oublie
+    public function getMdpOublie()
+    {
+        return $this->mdp_oublie;
+    }
+
+    //getter - mdp_oublie_expire
+    public function getMdpOublieExpire()
+    {
+        return $this->mdp_oublie_expire;
+    }
+
     //==================  PUBLIC FUNCTION ====================
 
     //static - create default admin account
@@ -139,7 +165,7 @@ class User extends Database
                     'email' => 'admin@faktiora.mg',
                     'sexe' => 'masculin',
                     'role' => 'admin',
-                    'mdp' => password_hash('admin', PASSWORD_DEFAULT)
+                    'mdp' => password_hash('000000', PASSWORD_DEFAULT)
                 ]);
 
                 //error
@@ -771,7 +797,6 @@ class User extends Database
         $response = [
             'message_type' => 'success',
             'message' => 'success',
-            'found' => false
         ];
 
         try {
@@ -796,7 +821,7 @@ class User extends Database
                 $user_model->role = $response['data'][0]['role'];
                 $user_model->mdp = $response['data'][0]['mdp'];
                 $user_model->mdp_oublie = $response['data'][0]['mdp_oublie'];
-                $user_model->etat_utilisateur = $response['data'][0]['etat_utilisateur'];
+                $user_model->mdp_oublie_expire = $response['dara'][0]['mdp_oublie_expire'];
                 $user_model->dernier_session = $response['data'][0]['dernier_session'];
 
 
@@ -811,7 +836,6 @@ class User extends Database
             }
             //not found
             else {
-                $response['found'] = false;
                 $response['data'] = '';
 
                 return $response;
@@ -839,6 +863,125 @@ class User extends Database
         return $response;
     }
 
+    //static - findyBy email
+    public static function findByEmail($email)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+        ];
+
+        try {
+            $user_model = new User();
+
+            $response = self::selectQuery("SELECT * FROM utilisateur WHERE email_utilisateur  = :email", ['email' => $email]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //found
+            if (count($response['data']) >= 1) {
+                $response['found'] = true;
+
+                $user_model->id_utilisateur = $response['data'][0]['id_utilisateur'];
+                $user_model->nom_utilisateur = $response['data'][0]['nom_utilisateur'];
+                $user_model->prenoms_utilisateur = $response['data'][0]['prenoms_utilisateur'];
+                $user_model->sexe_utilisateur = $response['data'][0]['sexe_utilisateur'];
+                $user_model->email_utilisateur = $response['data'][0]['email_utilisateur'];
+                $user_model->role = $response['data'][0]['role'];
+                $user_model->mdp = $response['data'][0]['mdp'];
+                $user_model->mdp_oublie = $response['data'][0]['mdp_oublie'];
+                $user_model->mdp_oublie_expire = $response['dara'][0]['mdp_oublie_expire'];
+                $user_model->etat_utilisateur = $response['data'][0]['etat_utilisateur'];
+                $user_model->dernier_session = $response['data'][0]['dernier_session'];
+
+
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'model' => $user_model,
+                    'found' => true
+                ];
+
+                return $response;
+            }
+            //not found
+            else {
+                $response['data'] = '';
+
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.user_findByEmail',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //update etat_utilisateur to connected
+    public function updateToConnected()
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+        ];
+
+        try {
+
+            $response = parent::executeQuery("UPDATE utilisateur SET etat_utilisateur = 'connecté' WHERE id_utilisateur = :id ", ['id' => $this->id_utilisateur]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log(
+                $e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile()
+            );
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.auth_loginUser',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //====================== PRIVATE FUNCTION ====================
 
     //static - is email_utilisateur exist?
@@ -847,7 +990,6 @@ class User extends Database
         $response = [
             'message_type' => 'success',
             'message' => 'success',
-            'found' => false
         ];
         $sql = "SELECT email_utilisateur FROM utilisateur WHERE email_utilisateur = :email ";
         $paramsQuery = ['email' => $email_utilisateur];
@@ -873,7 +1015,6 @@ class User extends Database
             }
             //not found
             else {
-                $response['found'] = false;
             }
 
             $response = [
@@ -910,7 +1051,6 @@ class User extends Database
         $response = [
             'message_type' => 'success',
             'message' => 'success',
-            'found' => false
         ];
 
         try {
@@ -927,7 +1067,6 @@ class User extends Database
             }
             //not found
             else {
-                $response['found'] = false;
             }
 
             $response = [

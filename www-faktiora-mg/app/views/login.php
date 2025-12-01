@@ -30,7 +30,7 @@
         <button type="button" id="btn-login">Se connecter</button>
     </form>
     <!-- script js  -->
-    <script src="<?= SITE_URL ?>/js/login.js"></script>
+    <script src="<?= SITE_URL ?>/js/users/login.js"></script>
 </body>
 
 </html>

@@ -10,6 +10,8 @@ return [
         'user_createDefaultAdmin' => DEBUG ? "Erreur dans user/createDefaultAdmin : :field" : "Une erreur est survenue lors de la création du compte admin par défaut",
         //auth - is loged in
         'auth_isLogedIn' => DEBUG ? "Erreur dans auth/isLogedIn : :field" : "Une erreur est survenue",
+        //auth - login
+        'auth_loginUser' => DEBUG ? "Erreur dans auth/loginUser : :field" : "Une erreur est survenue lors de la connexion",
         //user - create user
         'user_createUser' => DEBUG ? "Erreur dans user/createUser : :field" : "Une erreur est survenue lors de la création du compte",
         //user - is email user exist
@@ -30,6 +32,8 @@ return [
         'user_deleteAll' => DEBUG ? "Erreur dans user/deleteAll : :field" : "Une erreur est survenue lors de suppréssion des utilisateurs",
         //user - deconnect all
         'user_deconnectAll' => DEBUG ? "Erreur dans user/deconnectAll : :field" : "Une erreur est survenue lors de la déconnection des utilisateurs",
+        //user - find by email
+        'user_findByEmail' => DEBUG ? "Erreur dans user/findByEmail : :field" : "Une erreur est survenue lors de la vérification d'adresse email d'utilisateur",
         //caisse - create caisse
         'caisse_createCaisse' => DEBUG ? "Erreur dans caisse/createCaisse : :field" : "Erreur lors de la création de caisse",
         //caisse - is num caisse exist

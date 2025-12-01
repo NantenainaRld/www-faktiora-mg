@@ -25,6 +25,7 @@ return [
         'telephone' => "Téléphone invalide : :field",
         'adresse' => "L'adresse ne doît pas dépasser de 100 caractères",
         'correction_quantite' => "Quantité invalide pour la ligne avec l'ID <b>:field</b> : la quantité de correction ne doît pas supérieure au quantité originale",
+        'mdp_incorrect' => "Mot de passe incorrecte",
         //
         //user - ids_user empty
         'user_ids_user_empty' => "Veuiller séléctionner au moins un utilisateur",
@@ -109,7 +110,11 @@ return [
         //client - ids client empty
         'client_ids_client_empty' => "Veuiller séléctionner au moins un client",
         //client  - deleted
-        'client_deleted' => "Le client avec l'ID <b>:field</b> est déjà supprimé"
+        'client_deleted' => "Le client avec l'ID <b>:field</b> est déjà supprimé",
+        //auth - login empty
+        'auth_login_empty' => "Veuiller entrer votre numéro de compte ou email",
+        //auth - password empty
+        'auth_password_empty' => "Veuiller entrer votre mot de passe"
     ],
     'empty' => [
         'nom' => "Le champ <b>nom</b> est réquis",
@@ -253,6 +258,8 @@ return [
         'user_id' => "L'utilisateur avec l'ID <b>:field</b> n'existe pas",
         //user - caisse
         'user_caisse' => "Vous n'êtes pas encore sur une caisse",
+        //user - email
+        'user_email' => "L'utilisateur avec l'adresse email <b>:field</b> n'existe pas",
         //caisse - num_caisse
         'caisse_num_caisse' => "Caisse numéro <b>:field</b> n'existe pas",
         //caisse - id lc

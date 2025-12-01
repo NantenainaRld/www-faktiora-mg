@@ -9,7 +9,6 @@ class UserController extends Controller
     //page - index
     public function index()
     {
-        // echo "page index";
         $this->render('header', ['title' => 'Header']);
         return;
     }

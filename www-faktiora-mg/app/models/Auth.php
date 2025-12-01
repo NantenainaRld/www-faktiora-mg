@@ -3,7 +3,7 @@
 //CLASS - auth
 class Auth extends Database
 {
-    private $id_utilisateur = null;
+    private $id_utilisateur = "";
     private $loged = false;
     private $role;
 
@@ -20,12 +20,14 @@ class Auth extends Database
         $this->id_utilisateur = $id_utilisateur;
         return $this;
     }
+
     //setter - loged
     public function setLoged($loged)
     {
         $this->loged = $loged;
         return $this;
     }
+
     //setter - role
     public function setRole($role)
     {
@@ -57,9 +59,6 @@ class Auth extends Database
     public static function isLogedIn()
     {
         $self = new Auth();
-
-        // $_SESSION['auth'] = [];
-        // $_SESSION['auth']['id_utilisateur'] = 10003;
 
         //values - valid
         if (
