@@ -106,6 +106,8 @@ return [
         'entree_ligneFacture' => DEBUG ? "Erreur dans entree/ligneFacture : :field" : "Une erreur est survenue lors de listage des lignes factures",
         //entree - facture find by id
         'facture_findById' => DEBUG ? "Erreur dans entree_facture/findById : :field" : "Une erreur est survenue lors de la vérification de numérot de facture",
+        //entree - list connection facture
+        'entree_listConnectionFacture' => DEBUG ? "Erreur dans entree/listConnectionFacture : :field" : "Une erreur est survenue lors de listage des connections pour cette facture",
         //sortie - connection sortie
         'sortie_connectionSortie' => DEBUG ? "Erreur dans sortie/connectionSortie : :field" : "Une erreur est survenue lors de listage des connections pour les sorties",
         //sortie - create sortie 

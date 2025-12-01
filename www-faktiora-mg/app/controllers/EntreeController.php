@@ -2051,4 +2051,70 @@ class EntreeController extends Controller
     }
 
     //action - list connection facture
+    public function listConnectionFacture()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //num_facture
+        $num_facture = strtoupper(trim($_GET['num_facture'] ?? ''));
+
+        try {
+
+            //does num_facture exist ?
+            $response = Facture::findById($num_facture);
+            //error
+            if ($response['message_type'] === 'error') {
+                echo json_encode($response);
+                return;
+            }
+            //not found
+            if (!$response['found']) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.not_found.entree_num_facture', ['field' => $num_facture])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //list connection facture
+            $facture_model = new Facture();
+            $facture_model->setNumFacture($num_facture);
+            $response = $facture_model->listConnectionSortie();
+
+            echo json_encode($response);
+            return;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.entree_listConnectionFacture',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            echo json_encode($response);
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
 }

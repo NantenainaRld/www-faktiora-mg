@@ -65,6 +65,17 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - list connection facture
+  async function listConnectionFacture(num_facture) {
+    try {
+      const response = await apiRequest(
+        `/entree/list_connection_facture?num_facture=${num_facture}`
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -100,9 +111,9 @@ document.addEventListener("DOMContentLoaded", () => {
     //   to.value,
     //   ""
     // );
-    // listConnectionSortie("s202511-12");
     // listAllFacture();
-    listLfProduit("f202511-7");
+    // listLfProduit("f202511-7");
+    listConnectionFacture("f202511-7");
     // updateDemandeSortie("s202511-12", date.value, "10003", "1");
     // deleteAllDemandeSortie(["s202511-12", "s202511-11"]);
     // permanentDeleteAllDemandeSortie(["s202511-12", "s202511-11"]);
