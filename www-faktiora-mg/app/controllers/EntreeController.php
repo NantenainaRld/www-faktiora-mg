@@ -2117,4 +2117,194 @@ class EntreeController extends Controller
         echo json_encode($response);
         return;
     }
+
+    //action - update facture
+    public function updateFacture()
+    {
+        header('Content-Type: application/json');
+        //is loged in
+        $is_loged_in = Auth::isLogedIn();
+        $response = null;
+
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login
+            header('Location: ' . SITE_URL . '/login');
+            return;
+        }
+        //role not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to entree index
+            header('Location: ' . SITE_URL . '/entree');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            $json = json_decode(file_get_contents('php://input'), true);
+            //trim
+            $json = array_map(fn($x) => trim($x), $json);
+
+            //date_facture - empty
+            if ($json['date_facture'] === '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.date')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //date_facture - invalid
+            $date_facture = DateTime::createFromFormat('Y-m-d\TH:i', $json['date_facture']);
+            if ($date_facture === false) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __(
+                        'messages.invalids.date',
+                        ['field' => $json['date_facture']]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            $date = new DateTime();
+            //date_facture - future
+            if ($date_facture > $date) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date_future')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            $date_facture = $date_facture->format('Y-m-d H:i:s');
+
+            //id_utilisateur - empty
+            if ($json['id_utilisateur'] === '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.user_id')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+
+                //does num_facture exist ?
+                $json['num_facture'] = strtoupper($json['num_facture']);
+                $response = Facture::findById($json['num_facture']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.entree_num_facture', ['field' => $json['num_facture']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //does num_caisse exist ?
+                $response = Caisse::findById($json['num_caisse']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //does user exist ?
+                $response = User::findById($json['id_utilisateur']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.user_id', ['field' => $json['id_utilisateur']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //does client exist ?
+                $response = Client::findById($json['id_client']);
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.client_id_client', ['field' => $json['id_client']])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+
+                //update facture
+                $facture_model = new Facture();
+                $facture_model
+                    ->setNumFacture($json['num_facture'])
+                    ->setDateFacture($date_facture)
+                    ->setIdUtilsateur($json['id_utilisateur'])
+                    ->setNumCaisse($json['num_caisse'])
+                    ->setIdClient($json['id_client']);
+                $response = $facture_model->updateFacture();
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.entree_updateFacture',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            echo json_encode($response);
+            return;
+        }
+        //redirect to entree index
+        else {
+            header('Location: ' . SITE_URL . '/entree');
+            return;
+        }
+    }
 }

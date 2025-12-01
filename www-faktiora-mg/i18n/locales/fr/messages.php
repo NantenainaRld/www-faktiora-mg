@@ -180,6 +180,8 @@ return [
         'entree_createFacture' => "Nouvelle facture générée avec succès",
         //entree - create ligne facture
         'entree_createLigneFacture' => "Nouvelle ligne facture créée avec succès",
+        //entree - update facture
+        'entree_updateFacture' => "La facture numéro <b>:field</b> est modifiée avec succès",
         //produit - create produit
         'produit_createProduit' => "Nouveau produit ajouté avec succès",
         //produit - update produit

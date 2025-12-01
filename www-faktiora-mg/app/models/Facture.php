@@ -350,4 +350,54 @@ class Facture extends Database
 
         return $response;
     }
+
+    //update facture
+    public function updateFacture()
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+
+        try {
+
+            $response = parent::executeQuery("UPDATE facture SET date_facture = :date , id_utilisateur = :id_user, num_caisse = :num_caisse, id_client = :id_client WHERE num_facture = :num_facture ", [
+                'date' => $this->date_facture,
+                'id_user' => $this->id_utilisateur,
+                'num_caisse' => $this->num_caisse,
+                'id_client' => $this->id_client,
+                'num_facture' => $this->num_facture
+            ]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => __('messages.success.entree_updateFacture', ['field' => $this->num_facture])
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.entree_updateFacture',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
 }
