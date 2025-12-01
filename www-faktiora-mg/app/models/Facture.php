@@ -458,4 +458,62 @@ class Facture extends Database
 
         return $response;
     }
+
+    //static - permanent delete all facture
+    public static function permanentDeleteAllFacture($nums_facture)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        $placeholders = implode(', ', array_fill(0, count($nums_facture), '?'));
+        $sql = "DELETE FROM facture WHERE num_facture IN ({$placeholders}) AND etat_facture = 'supprimé' ";
+
+        try {
+
+            $response = parent::executeQuery($sql, $nums_facture);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //success
+            //0
+            if ($response['row_count'] === 0) {
+                $response['message'] = __('messages.success.entree_deleteAllFacture_0');
+            }
+            //1
+            elseif ($response['row_count'] === 1) {
+                $response['message'] = __('messages.success.entree_deleteAllFacture_1');
+            }
+            //plur
+            else {
+                $response['message'] = __('messages.success.entree_deleteAllFacture_plur', ['field' => $response['row_count']]);
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => $response['message']
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.entree_deleteAllFacture',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
 }

@@ -114,6 +114,23 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - permanent delete all facture
+  async function permanentDeleteAllFacture(nums_facture = []) {
+    try {
+      const response = await apiRequest(
+        "/entree/permanent_delete_all_facture",
+        {
+          method: "PUT",
+          body: {
+            nums_facture: nums_facture,
+          },
+        }
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -153,8 +170,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // listLfProduit("f202511-7");
     // listConnectionFacture("f202511-7");
     // updateFacture("f202511-7", date.value, "10003", "1", "10000");
-    deleteAllFacture(["f202511-7", "f202511-5", "f202511-4"]);
-    // permanentDeleteAllDemandeSortie(["s202511-12", "s202511-11"]);
+    // deleteAllFacture(["f202511-7", "f202511-5", "f202511-4"]);
+    permanentDeleteAllFacture(["f202511-7", "f202511-5", "f202511-4"]);
     // permanentDeleteAllAutreEntree(["a202511-18", "a202511-19"]);
     // correctionAutreEntree(
     //   "a202511-17",
