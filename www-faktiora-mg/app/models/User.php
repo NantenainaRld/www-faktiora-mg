@@ -414,6 +414,23 @@ class User extends Database
                 return $response;
             }
 
+            //role admin
+            if ($this->role === 'admin') {
+                //update caisse to free
+                $response = LigneCaisse::updateEtatCaisse($this->id_utilisateur, null, 'libre');
+                //error
+                if ($response['message_type'] === 'error') {
+                    return $response;
+                }
+
+                //close caisse by id_user
+                $response = LigneCaisse::closeLigneCaisse($this->id_utilisateur, null);
+                //error
+                if ($response['message_type'] === 'error') {
+                    return $response;
+                }
+            }
+
             $response = [
                 'message_type' => 'success',
                 'message' => __('messages.success.user_update', ['field' => $this->id_utilisateur])

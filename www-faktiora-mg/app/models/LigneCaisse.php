@@ -741,6 +741,119 @@ class LigneCaisse extends Database
         return $response;
     }
 
+    //static - close ligne caisse
+    public static function closeLigneCaisse($id_utilisateur = null, $nums_caisse = null)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            $sql = "";
+            $paramsQuery = [];
+
+            //close by id_user - olde caisse
+            if ($id_utilisateur) {
+                $sql = "UPDATE ligne_caisse SET date_fin = NOW() WHERE num_caisse IN (SELECT num_caisse FROM ligne_caisse WHERE  id_utilisateur = :id_user AND date_fin IS NULL )";
+                $paramsQuery['id_user'] = $id_utilisateur;
+            }
+            //close by num_caisse - new caisse
+            else {
+                $placeholders = implode(', ', array_fill(0, count($nums_caisse), '?'));
+                $sql = "UPDATE ligne_caisse SET date_fin = NOW() WHERE num_caisse IN ({$placeholders}) AND date_fin IS NULL ";
+                $paramsQuery = $nums_caisse;
+            }
+
+            $response = parent::executeQuery($sql, $paramsQuery);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success'
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_closeLigneCaisse',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //static - update etat caisse
+    public static function updateEtatCaisse($id_utilisateur = null, $nums_caisse = null, $etat = 'libre')
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            $sql = "";
+            $paramsQuery = [];
+
+            //change to occuped - new caisse
+            if ($nums_caisse) {
+                $placeholders = implode(', ', array_fill(0, count($nums_caisse), '?'));
+                $sql = "UPDATE caisse SET etat_caisse = '{$etat}' WHERE num_caisse IN ({$placeholders}) AND etat_caisse != 'supprimé' ";
+                $paramsQuery = $nums_caisse;
+            }
+            //change to free - old caisse
+            else {
+                $sql = "UPDATE caisse SET etat_caisse = 'libre' WHERE num_caisse IN (SELECT num_caisse FROM ligne_caisse WHERE id_utilisateur = :id_user AND date_fin IS NULL) ";
+                $paramsQuery['id_user'] = $id_utilisateur;
+            }
+
+            $response = parent::executeQuery($sql, $paramsQuery);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+                'row_count' => $response['row_count']
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_updateEtatCaisse',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //========================  PRIVATE FUNCTION =================
 
     //create ligne caisse
@@ -904,119 +1017,6 @@ class LigneCaisse extends Database
         }
 
         return $respone;
-    }
-
-    //static - close ligne caisse
-    public static function closeLigneCaisse($id_utilisateur = null, $nums_caisse = null)
-    {
-        $response = ['message_type' => 'success', 'message' => 'success'];
-
-        try {
-
-            $sql = "";
-            $paramsQuery = [];
-
-            //close by id_user - olde caisse
-            if ($id_utilisateur) {
-                $sql = "UPDATE ligne_caisse SET date_fin = NOW() WHERE num_caisse IN (SELECT num_caisse FROM ligne_caisse WHERE  id_utilisateur = :id_user AND date_fin IS NULL )";
-                $paramsQuery['id_user'] = $id_utilisateur;
-            }
-            //close by num_caisse - new caisse
-            else {
-                $placeholders = implode(', ', array_fill(0, count($nums_caisse), '?'));
-                $sql = "UPDATE ligne_caisse SET date_fin = NOW() WHERE num_caisse IN ({$placeholders}) AND date_fin IS NULL ";
-                $paramsQuery = $nums_caisse;
-            }
-
-            $response = parent::executeQuery($sql, $paramsQuery);
-
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-
-            $response = [
-                'message_type' => 'success',
-                'message' => 'success'
-            ];
-
-            return $response;
-        } catch (Throwable $e) {
-            error_log($e->getMessage() .
-                ' - Line : ' . $e->getLine() .
-                ' - File : ' . $e->getFile());
-
-            $response = [
-                'message_type' => 'error',
-                'message' => __(
-                    'errors.catch.caisse_closeLigneCaisse',
-                    ['field' => $e->getMessage() .
-                        ' - Line : ' . $e->getLine() .
-                        ' - File : ' . $e->getFile()]
-                )
-            ];
-
-            return $response;
-        }
-
-        return $response;
-    }
-
-    //static - update etat caisse
-    private static function updateEtatCaisse($id_utilisateur = null, $nums_caisse = null, $etat = 'libre')
-    {
-        $response = ['message_type' => 'success', 'message' => 'success'];
-
-        try {
-
-            $sql = "";
-            $paramsQuery = [];
-
-            //change to occuped - new caisse
-            if ($nums_caisse) {
-                $placeholders = implode(', ', array_fill(0, count($nums_caisse), '?'));
-                $sql = "UPDATE caisse SET etat_caisse = '{$etat}' WHERE num_caisse IN ({$placeholders}) AND etat_caisse != 'supprimé' ";
-                $paramsQuery = $nums_caisse;
-            }
-            //change to free - old caisse
-            else {
-                $sql = "UPDATE caisse SET etat_caisse = 'libre' WHERE num_caisse IN (SELECT num_caisse FROM ligne_caisse WHERE id_utilisateur = :id_user AND date_fin IS NULL) ";
-                $paramsQuery['id_user'] = $id_utilisateur;
-            }
-
-            $response = parent::executeQuery($sql, $paramsQuery);
-
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-
-            $response = [
-                'message_type' => 'success',
-                'message' => 'success',
-                'row_count' => $response['row_count']
-            ];
-
-            return $response;
-        } catch (Throwable $e) {
-            error_log($e->getMessage() .
-                ' - Line : ' . $e->getLine() .
-                ' - File : ' . $e->getFile());
-
-            $response = [
-                'message_type' => 'error',
-                'message' => __(
-                    'errors.catch.caisse_updateEtatCaisse',
-                    ['field' => $e->getMessage() .
-                        ' - Line : ' . $e->getLine() .
-                        ' - File : ' . $e->getFile()]
-                )
-            ];
-
-            return $response;
-        }
-
-        return $response;
     }
 
     //is id lc exist ?
