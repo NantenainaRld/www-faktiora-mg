@@ -63,6 +63,8 @@ return [
         'entree_montant_ds' => "Montant invalide : le montant saisi dépasse le montant total de ce sortie",
         //entree - quantite produit
         'entree_quantite_produit' => "La quantite est invalide pour le produit avec l'ID <b>:id_produit</b> : :quantite_produit",
+        //entree - nums_facture empty
+        'entree_nums_facture_empty' => "Veuiller séléctionner au moins une facture",
         //produit - ids_produit empty
         'produit_ids_produit_empty' => "Veuiller séléctionner au moins un produit",
         //produit - libelle prix
@@ -182,6 +184,12 @@ return [
         'entree_createLigneFacture' => "Nouvelle ligne facture créée avec succès",
         //entree - update facture
         'entree_updateFacture' => "La facture numéro <b>:field</b> est modifiée avec succès",
+        //entree - delete all facture 0
+        'entree_deleteAllFacture_0' => "Aucune facture n'est supprimée",
+        //entree - delete all facture 1
+        'entree_deleteAllFacture_1' => "Une facture est supprimée avec succès",
+        //entree - delete all facture plur
+        'entree_deleteAllFacture_plur' => "<b>:field</b> factures sont supprimées avec succès",
         //produit - create produit
         'produit_createProduit' => "Nouveau produit ajouté avec succès",
         //produit - update produit

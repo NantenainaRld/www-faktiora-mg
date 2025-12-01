@@ -110,6 +110,8 @@ return [
         'entree_listConnectionFacture' => DEBUG ? "Erreur dans entree/listConnectionFacture : :field" : "Une erreur est survenue lors de listage des connections pour cette facture",
         //entree - update facture
         'entree_updateFacture' => DEBUG ? "Erreur dans entree/updateFacture : :field" : "Une erreur est survenue lors de la modification de facture",
+        //entree - delete all facture
+        'entree_deleteAllFacture' => DEBUG ? "Erreur dans entree/deleteAllFacture : :field" : "Une erreur est survenue lors de la suppréssion des factures",
         //sortie - connection sortie
         'sortie_connectionSortie' => DEBUG ? "Erreur dans sortie/connectionSortie : :field" : "Une erreur est survenue lors de listage des connections pour les sorties",
         //sortie - create sortie 
