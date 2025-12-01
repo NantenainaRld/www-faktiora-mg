@@ -1963,5 +1963,27 @@ class EntreeController extends Controller
         return;
     }
 
+    //action - list all facture
+    public function listAllFacture()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //list all facture
+        $response = Facture::listAllFacture();
+
+        echo json_encode($response);
+        return;
+    }
+
     //action - list connection facture
 }

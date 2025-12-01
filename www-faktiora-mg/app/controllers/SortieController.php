@@ -552,7 +552,7 @@ class SortieController extends Controller
         }
 
         //list all demande sortie
-        $response = SortieRepositorie::listAllDemandeSortie();
+        $response = DemandeSortie::listAllDemandeSortie();
 
         echo json_encode($response);
         return;

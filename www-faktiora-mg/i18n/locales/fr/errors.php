@@ -100,6 +100,8 @@ return [
         'entree_createLigneFacture' => DEBUG ? "Erreur dans entree/createLigneFacture : :field" : "Une erreur est survenue lors de la création de ligne facture",
         //entree - filter facture
         'entree_filterFacture' => DEBUG ? "Erreur dans entree/filterFacture : :field" : "Une erreur est survenue lors de listage des factures",
+        //entree - list all facture
+        'entree_listAllFacture' => DEBUG ? "Erreur dans entree/listAllFacture : :field" : "Une erreur est survenue lors de listage de tous les factures",
         //sortie - connection sortie
         'sortie_connectionSortie' => DEBUG ? "Erreur dans sortie/connectionSortie : :field" : "Une erreur est survenue lors de listage des connections pour les sorties",
         //sortie - create sortie 
