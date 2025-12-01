@@ -25,6 +25,26 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - filter facture
+  async function filterFacture(
+    status,
+    num_caisse,
+    id_user,
+    order_by,
+    arrange,
+    from,
+    to,
+    search_facture
+  ) {
+    try {
+      const response = await apiRequest(
+        `/entree/filter_facture?status=${status}&num_caisse=${num_caisse}&id_user=${id_user}&order_by=${order_by}&arrange=${arrange}&from=${from}&to=${to}&search_facture=${search_facture}`
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -34,32 +54,32 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    createFacture(
-      [
-        {
-          id_produit: 3,
-          quantite_produit: 2,
-        },
-        {
-          id_produit: 1,
-          quantite_produit: 32,
-        },
-      ],
-      date.value,
-      10004,
-      1,
-      10000
-    );
-    // filterDemandeSortie(
-    //   "active",
-    //   "all",
-    //   "all",
-    //   "montant",
-    //   "asc",
-    //   from.value,
-    //   to.value,
-    //   ""
+    // createFacture(
+    //   [
+    //     {
+    //       id_produit: 3,
+    //       quantite_produit: 2,
+    //     },
+    //     {
+    //       id_produit: 1,
+    //       quantite_produit: 32,
+    //     },
+    //   ],
+    //   date.value,
+    //   10004,
+    //   1,
+    //   10000
     // );
+    filterFacture(
+      "active",
+      "all",
+      "all",
+      "num",
+      "desc",
+      from.value,
+      to.value,
+      ""
+    );
     // listConnectionSortie("s202511-12");
     // listAllDemandeSortie();
     // listLdsArticle("s202511-12");

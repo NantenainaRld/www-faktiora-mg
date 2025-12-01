@@ -1803,5 +1803,165 @@ class EntreeController extends Controller
         }
     }
 
+    //action - filter facture
+    public function filterFacture()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //defaults
+        $order_by_default = ['num', 'date', 'montant'];
+        $arrange_default = ['ASC', 'DESC'];
+
+        //status
+        $status = strtolower(trim($_GET['status'] ?? 'active'));
+        $status = ($status === 'deleted') ? 'deleted' : 'active';
+        if ($is_loged_in->getRole() === 'caissier') {
+            $status = 'active';
+        }
+        switch ($status) {
+            case 'active':
+                $status = 'actif';
+                break;
+            case 'deleted':
+                $status = 'supprimé';
+                break;
+        }
+
+        //num_caisse
+        $num_caisse = 'all';
+        $num_caisse = trim($_GET['num_caisse'] ?? 'all');
+        $num_caisse = filter_var($num_caisse, FILTER_VALIDATE_INT);
+        $num_caisse = ($num_caisse === false || $num_caisse < 0) ? 'all' : $num_caisse;
+
+        //id_user
+        $id_user = trim($_GET['id_user'] ?? 'all');
+        $id_user = filter_var($id_user, FILTER_VALIDATE_INT);
+        $id_user = ($id_user === false || $id_user < 10000) ? 'all' : $id_user;
+
+        //oder_by
+        $order_by = strtolower(trim($_GET['order_by']) ?? 'num');
+        $order_by = in_array($order_by, $order_by_default, true) ? $order_by : 'num';
+        switch ($order_by) {
+            case 'num':
+                $order_by = 'f.num_facture';
+                break;
+            case 'date':
+                $order_by = 'f.date_facture';
+                break;
+            case 'montant':
+                $order_by = 'montant_facture';
+                break;
+        }
+        //arrange
+        $arrange = strtoupper(trim($_GET['arrange'] ?? 'ASC'));
+        $arrange = in_array($arrange, $arrange_default, true) ? $arrange : 'ASC';
+
+        $date = new DateTime();
+
+        //from
+        $from = trim($_GET['from'] ?? '');
+        //from not empty
+        if ($from !== '') {
+            $f = DateTime::createFromFormat('Y-m-d', $from);
+            //from - invalid
+            if (!$f) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date', ['field' => $from])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //from - future
+            if ($f > $date) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date_future')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            $from = $f;
+        }
+        //to
+        $to = trim($_GET['to'] ?? '');
+        //to not empty
+        if ($to !== '') {
+            $t = DateTime::createFromFormat('Y-m-d', $to);
+            //to - invalid
+            if (!$t) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date', ['field' => $from])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //to - future
+            if ($t > $date) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date_future')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            $to = $t;
+        }
+        //from && to not empty - from > to
+        if ($from !== '' && $to !== '' && $from > $to) {
+            $response = [
+                'message_type' => 'invalid',
+                'message' => __('messages.invalids.from_to')
+            ];
+
+            echo json_encode($response);
+            return;
+        }
+        //from not epty - format
+        if ($from !== '') {
+            $from = $from->format('Y-m-d');
+        }
+        //to not empty - format
+        if ($to !== '') {
+            $to = $to->format('Y-m-d');
+        }
+
+        //search_facture
+        $search_facture = trim($_GET['search_facture'] ?? '');
+
+        //parametters
+        $params = [
+            'status' => $status,
+            'num_caisse' => $num_caisse,
+            'id_user' => $id_user,
+            'order_by' => $order_by,
+            'arrange' => $arrange,
+            'from' => $from,
+            'to' => $to,
+            'search_facture' => $search_facture
+        ];
+
+        //filter facture
+        $response = EntreeRepositorie::filterFacture($params);
+
+        echo json_encode($response);
+        return;
+    }
+
     //action - list connection facture
 }
