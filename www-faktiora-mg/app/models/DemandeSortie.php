@@ -310,6 +310,7 @@ class DemandeSortie extends Database
                 return $response;
             }
             $lds = $response['data'];
+            $montant_lds = $response['montant_lds'];
 
             //connection autre entree
             $response = AutreEntree::connectionAutreEntree($this->num_ds);
@@ -331,6 +332,7 @@ class DemandeSortie extends Database
                 'message_type' => 'success',
                 'message' => 'success',
                 'lds' => $lds,
+                'montant_lds' => $montant_lds,
                 'autre_entree' => $autre_entree,
                 'sortie' => $sortie
             ];

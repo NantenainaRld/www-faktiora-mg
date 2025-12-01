@@ -170,6 +170,9 @@ class SortieRepositorie extends Database
                 return $response;
             }
 
+            //montant_lds
+            $montant_lds = array_sum(array_column($response['data'], 'prix_total'));
+
             $response = [
                 'message_type' => 'success',
                 'message' => 'success',

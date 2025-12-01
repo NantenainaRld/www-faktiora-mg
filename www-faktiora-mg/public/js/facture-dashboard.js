@@ -54,6 +54,17 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - list lf and produit
+  async function listLfProduit(num_facture) {
+    try {
+      const response = await apiRequest(
+        `/entree/list_lf_produit?num_facture=${num_facture}`
+      );
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -90,8 +101,8 @@ document.addEventListener("DOMContentLoaded", () => {
     //   ""
     // );
     // listConnectionSortie("s202511-12");
-    listAllFacture();
-    // listLdsArticle("s202511-12");
+    // listAllFacture();
+    listLfProduit("f202511-7");
     // updateDemandeSortie("s202511-12", date.value, "10003", "1");
     // deleteAllDemandeSortie(["s202511-12", "s202511-11"]);
     // permanentDeleteAllDemandeSortie(["s202511-12", "s202511-11"]);

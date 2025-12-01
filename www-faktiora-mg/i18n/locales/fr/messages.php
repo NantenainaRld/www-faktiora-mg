@@ -234,6 +234,8 @@ return [
         'caisse_id_lc' => "La ligne caisse numéro <b>:field</b> n'existe pas",
         //entree - num_ae
         'entree_num_ae' => "L'autre entrée numéro <b>:field</b> n'existe pas",
+        //entree - num_facture
+        'entree_num_facture' => "La facture numéro <b>:field</b> n'existe pas ",
         //produit - id_produit
         'produit_id_produit' => "Le produit avec l'ID <b>:field</b> n'existe pas",
         //article - id_article

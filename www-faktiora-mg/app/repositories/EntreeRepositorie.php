@@ -107,4 +107,52 @@ class EntreeRepositorie extends Database
 
         return $response;
     }
+
+    //static - ligne facture
+    public static function ligneFacture($num_facture)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success'
+        ];
+        try {
+
+            $response = parent::selectQuery("SELECT p.id_produit, p.libelle_produit, p.prix_produit, lf.quantite_produit, lf.prix, (lf.quantite_produit * lf.prix) AS prix_total FROM produit p JOIN ligne_facture lf ON lf.id_produit = p.id_produit JOIN facture f ON f.id_facture = lf.id_facture WHERE f.num_facture = :num_facture AND p.etat_produit != 'suprimé' ", ['num_facture' => $num_facture]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //montant lf
+            $montant_lf = array_sum(array_column($response['data'], 'prix_total'));
+
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+                'data' => $response['data'],
+                'montant_lf' => $montant_lf
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.entree_ligneFature',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
 }

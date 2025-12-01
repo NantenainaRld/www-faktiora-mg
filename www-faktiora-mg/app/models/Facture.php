@@ -215,4 +215,76 @@ class Facture extends Database
 
         return $response;
     }
+
+    //static - find by id
+    public static function findById($num_facture)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+            'found' => false
+        ];
+
+        try {
+
+            $response = parent::selectQuery("SELECT * FROM facture WHERE num_facture = :num_facture ", ['num_facture' => $num_facture]);
+
+            //error
+            if ($response['message_type'] == 'error') {
+                return $response;
+            }
+
+            //not found
+            if (count($response['data']) <= 0) {
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'found' => false
+                ];
+
+                return $response;
+            }
+            //found
+            else {
+                $facture_model = new Facture();
+                $facture_model
+                    ->setIdFacture($response['data'][0]['id_facture'])
+                    ->setNumFacture($response['data'][0]['num_facture'])
+                    ->setDateFacture($response['data'][0]['date_facture'])
+                    ->setEtatFacture($response['data'][0]['etat_facture'])
+                    ->setIdUtilsateur($response['data'][0]['id_utilisateur'])
+                    ->setNumCaisse($response['data'][0]['num_caisse'])
+                    ->setIdClient($response['data'][0]['id_client']);
+
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'found' => true,
+                    'model' => $facture_model
+                ];
+
+                return $response;
+            }
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.facture_findById',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
 }
