@@ -252,6 +252,8 @@ return [
         'client_deleteAllClient_1' => "Un client a été supprimé avec succès",
         //client - delete all client plur
         'client_deleteAllClient_plur' => "<b>:field</b> on été supprimés avec succès",
+        //print
+        'print' => "PDF généré avec succès",
     ],
     'not_found' => [
         //user - id

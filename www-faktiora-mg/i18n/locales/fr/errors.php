@@ -34,6 +34,10 @@ return [
         'user_deconnectAll' => DEBUG ? "Erreur dans user/deconnectAll : :field" : "Une erreur est survenue lors de la déconnection des utilisateurs",
         //user - find by email
         'user_findByEmail' => DEBUG ? "Erreur dans user/findByEmail : :field" : "Une erreur est survenue lors de la vérification d'adresse email d'utilisateur",
+        //user - list all user
+        'user_listAllUser' => DEBUG ? "Erreur dans user/listAllUser : :field" : "Une erreur est survenue lors de la recupération de liste des utilisateurs",
+        //user - print all user
+        'user_printAllUser' => DEBUG ? "Erreur dans user/printAllUser : :field" : "Une erreur est survenue lors de la génération de pdf pour la liste des utilisateurs",
         //caisse - create caisse
         'caisse_createCaisse' => DEBUG ? "Erreur dans caisse/createCaisse : :field" : "Erreur lors de la création de caisse",
         //caisse - is num caisse exist
@@ -187,5 +191,6 @@ return [
         'page' => "La page demandée n'est pas trouvée : :field",
         'action' => "L'action demandée n'est pas trouvée : :field",
         'class' => DEBUG ? "Erreur d'autochargement de classe, classe n'est pas trouvé : :field" : "Une erreur est survenue",
+        'config' => "Config file error : undefined key <b>:field</b>"
     ]
 ];

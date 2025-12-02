@@ -6,6 +6,22 @@ return [
         'error' => "Erreur",
         'signup' => "Création du compte",
         'user_dashboard' => "Tableau de bord - utilisateur",
+        'list_date' => "Liste du : <i>:field</i>",
+        'list_all_user' => "LISTE DE TOUS LES UTILISATEURS"
+    ],
+    'labels' => [
+        'name_firstname' => "Nom et prénoms",
+        'sex' => 'Sexe',
+        'email' => "Email",
+        'role' => 'Rôle',
+        'male' => 'masculin',
+        'female' => 'féminin',
+        'admin' => 'administrateur',
+        'cashier' => 'caissier',
+        'total' => 'Total',
+        'status' => 'Status',
+        'deleted' => 'supprimé',
+        'active' => 'actif'
     ],
     'buttons' => ['return' => "Retourner"],
     'welcome' => ['user' => "Bienvenue :nom dans notre site web"],
@@ -19,6 +35,7 @@ return [
         'day' => "jour",
         'minutes' => "minutes",
         'hours' => "heures",
-        'days' => "jours"
+        'days' => "jours",
+        'format_datetime' => "d-m-Y H:i:s"
     ],
 ];

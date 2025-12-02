@@ -982,6 +982,78 @@ class User extends Database
         return $response;
     }
 
+    //static - list all user
+    public static function listAllUser($status)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            $sql = "";
+            //user - deleted
+            if ($status === 'deleted') {
+                $sql = "SELECT id_utilisateur , CONCAT(nom_utilisateur, ' ', prenoms_utilisateur) AS nom_prenoms, sexe_utilisateur, email_utilisateur, role FROM utilisateur WHERE etat_utilisateur = 'supprimé' ORDER BY id_utilisateur ";
+            }
+            //user - not deleted
+            else {
+                $sql = "SELECT id_utilisateur , CONCAT(nom_utilisateur, ' ', prenoms_utilisateur) AS nom_prenoms, sexe_utilisateur, email_utilisateur, role FROM utilisateur WHERE etat_utilisateur != 'supprimé' ORDER BY id_utilisateur ";
+            }
+            $response = parent::selectQuery($sql);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            $nb_caissier = 0;
+            $nb_admin = 0;
+            foreach ($response['data'] as &$user) {
+                //sex
+                if ($user['sexe_utilisateur'] === 'masculin') {
+                    $user['sexe_utilisateur'] = __('forms.labels.male');
+                } else {
+                    $user['sexe_utilisateur'] = __('forms.labels.female');
+                }
+                //role
+                if ($user['role'] === 'admin') {
+                    $user['role'] = __('forms.labels.admin');
+                    $nb_admin++;
+                } else {
+                    $user['role'] = __('forms.labels.cashier');
+                    $nb_caissier++;
+                }
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+                'data' => $response['data'],
+                'nb_user' => count($response['data']),
+                'nb_caissier' => $nb_caissier,
+                'nb_admin' => $nb_admin
+            ];
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.user_listAllUser',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //====================== PRIVATE FUNCTION ====================
 
     //static - is email_utilisateur exist?

@@ -149,6 +149,28 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(error);
     }
   }
+  //function - print all user
+  async function printAllUser(status = "active") {
+    try {
+      const response = await apiRequest(
+        `/user/print_all_user?status=${status}`
+      );
+      //not success
+      if (response.message_type !== "success") {
+        console.log(response);
+      }
+      //success
+      else {
+        const a = document.createElement("a");
+        a.href = `data:application/pdf;base64,${response.pdf}`;
+        a.download = response.file_name;
+        a.click();
+        console.log(response.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   //==================== EVENTS ===================
   const from = document.getElementById("from");
@@ -158,6 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
     // deconnectAll([10000, 10001, 10005, 10003]);
-    deconnectAll([1045000, 10004, 10005, 10003]);
+    // deconnectAll([1045000, 10004, 10005, 10003]);
+    printAllUser();
   });
 });
