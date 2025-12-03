@@ -40,7 +40,8 @@ return [
         'num' => 'Numéro',
         'label' => 'Libellé',
         'encasement' => 'Encaissement',
-        'disbursement' => 'Décaissement'
+        'disbursement' => 'Décaissement',
+        'responsable' => 'Responsable'
     ],
     'buttons' => ['return' => "Retourner"],
     'welcome' => ['user' => "Bienvenue :nom dans notre site web"],

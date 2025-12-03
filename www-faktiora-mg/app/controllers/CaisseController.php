@@ -2039,7 +2039,8 @@ class CaisseController extends Controller
                 'label' => __('forms.labels.label'),
                 'encasement' => __('forms.labels.encasement'),
                 'disbursement' => __('forms.labels.disbursement'),
-                'total' => __('forms.labels.total')
+                'total' => __('forms.labels.total'),
+                'responsable' => __('forms.labels.responsable')
             ];
 
             //header
@@ -2074,6 +2075,7 @@ class CaisseController extends Controller
                             }
                             .table td {
                                 padding-left: 5px;
+                                padding-right: 5px;
                                 border: 1px solid black;
                             }
                         </style>
@@ -2238,7 +2240,14 @@ class CaisseController extends Controller
                                 <th>{$strings['disbursement']} ({$config['currency_units']})</th>
                             </tr>";
             $html .= "<tbody>";
-            foreach ($cash_report['data'] as $line) {
+            foreach ($cash_report['data'] as &$line) {
+                $date = new DateTime($line['DATE']);
+                $formatter = new IntlDateFormatter(
+                    $lang,
+                    IntlDateFormatter::SHORT,
+                    IntlDateFormatter::NONE
+                );
+                $line['DATE'] = $formatter->format($date);
                 if (strpos($line['numero'], '/TOTAL') !== false) {
                     $html .= "<tr style='background-color: gray; color: white;'>";
                 } else {
@@ -2260,6 +2269,7 @@ class CaisseController extends Controller
                     </tr>";
             $html .= "</tbody>";
             $html .= "</table>";
+            $html .= "<div><p style='text-align: left;'><b><u>{$strings['responsable']} :</u></b></p></div>";
 
             //footer
             $html .= "</body>
@@ -2273,7 +2283,7 @@ class CaisseController extends Controller
             $response = [
                 'message_type' => 'success',
                 'pdf' => base64_encode($dompdf->output()),
-                'file_name' => str_replace(' ', '_', strtolower('test' . '.pdf')),
+                'file_name' => str_replace(' ', '_', strtolower($strings['cash_report'] . ' ' . $strings['on'] . ' ' . $on . '.pdf')),
                 'message' => __('messages.success.print')
             ];
 
