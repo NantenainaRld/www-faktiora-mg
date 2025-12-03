@@ -7,7 +7,8 @@ return [
         'signup' => "Création du compte",
         'user_dashboard' => "Tableau de bord - utilisateur",
         'list_date' => "Liste du : <i>:field</i>",
-        'list_all_user' => "LISTE DE TOUS LES UTILISATEURS"
+        'list_all_user' => "LISTE DE TOUS LES UTILISATEURS",
+        'cash_report' => "RAPPORT DE CAISSE"
     ],
     'labels' => [
         'name_firstname' => "Nom et prénoms",
@@ -21,7 +22,25 @@ return [
         'total' => 'Total',
         'status' => 'Status',
         'deleted' => 'supprimé',
-        'active' => 'actif'
+        'active' => 'actif',
+        'on' => 'Du',
+        'cash_fund' => 'Solde actuel de la caisse',
+        'cash_treshold' => "Seuil de la caisse",
+        'all' => 'Tout',
+        'cash_num' => "Caisse numéro",
+        'cash_owner' => "Caisse tenue par",
+        'week' => 'semaine',
+        'to' => 'au',
+        'month' => 'mois',
+        'year' => 'année',
+        'loss' => 'perte',
+        'benefice' => 'bénéfice',
+        'neutral' => 'neutre',
+        'date' => 'Date',
+        'num' => 'Numéro',
+        'label' => 'Libellé',
+        'encasement' => 'Encaissement',
+        'disbursement' => 'Décaissement'
     ],
     'buttons' => ['return' => "Retourner"],
     'welcome' => ['user' => "Bienvenue :nom dans notre site web"],

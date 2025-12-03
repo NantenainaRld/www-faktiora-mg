@@ -206,6 +206,36 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function -cash report
+  async function cashReport(
+    num_caisse = "",
+    date_by = "all",
+    per = "day",
+    from = "",
+    to = "",
+    month = 1,
+    year = 2025
+  ) {
+    try {
+      const response = await apiRequest(
+        `/caisse/cash_report?num_caisse=${num_caisse}&date_by=${date_by}&per=${per}&from=${from}&to=${to}&month=${month}&year=${year}`
+      );
+      //not success
+      if (response.message_type !== "success") {
+        console.log(response);
+      }
+      //success
+      else {
+        const a = document.createElement("a");
+        a.href = `data:application/pdf;base64,${response.pdf}`;
+        a.download = response.file_name;
+        a.click();
+        console.log(response.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   //=================== EVENTS =================
   const from = document.getElementById("from");
@@ -216,6 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //btn-test
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
-    listAllCaisse();
+    // listAllCaisse();
+    cashReport(1, "per", "year", from.value, to.value, "5", 2004);
   });
 });

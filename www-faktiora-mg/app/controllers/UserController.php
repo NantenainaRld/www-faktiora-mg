@@ -1444,6 +1444,9 @@ class UserController extends Controller
                     <body>
                     <head>
                         <style>
+                            body {
+                                font-size: 11pt;
+                            }
                             .header {
                                 text-align: center;
                             }

@@ -1,5 +1,12 @@
 <?php
 
+//dompdf
+require_once LIBS_PATH . '/dompdf/autoload.inc.php';
+
+use Dompdf\Dompdf;
+use Dompdf\Image\Cache;
+use Dompdf\Options;
+
 // class client controller
 class CaisseController extends Controller
 {
@@ -1773,6 +1780,523 @@ class CaisseController extends Controller
 
         //list all caisse
         $response = Caisse::listAllCaisse();
+
+        echo json_encode($response);
+        return;
+    }
+
+    //action - cash report
+    public function cashReport()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged ?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+
+        //defaults
+        $date_by_default = ['per', 'between', 'month_year'];
+        $per_default = ['DAY', 'WEEK', 'MONTH', 'YEAR'];
+
+        //date_by
+        $date_by = strtolower(trim($_GET['date_by'] ?? 'all'));
+        $date_by = !in_array($date_by, $date_by_default, true) ? 'all' : $date_by;
+
+        //per
+        $per = strtoupper(trim($_GET['per'] ?? 'DAY'));
+        $per = !in_array($per, $per_default, true) ? 'DAY' : $per;
+
+        //between
+        //from
+        $from = trim($_GET['from'] ?? '');
+        //to
+        $to = trim($_GET['to'] ?? '');
+        if ($date_by === 'between') {
+            //from - empty
+            if ($from === '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.from')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //to - empty
+            if ($to === '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.to')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            $f = DateTime::createFromFormat('Y-m-d', $from);
+            $date = new DateTime();
+            //from - invalid
+            if (!$f) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date', ['field' => $from])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //from - future
+            if ($f > $date) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date_future')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            $t = DateTime::createFromFormat('Y-m-d', $to);
+            //to - invalid
+            if (!$to) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date', ['field' => $to])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //to - future
+            if ($to > $date) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.date_future')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //from > to
+            if ($f > $t) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.from_to')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //format
+            $from = $f->format('Y-m-d');
+            $to = $t->format('Y-m-d');
+        }
+
+        //month_year
+        //month
+        $month = trim($_GET['month'] ?? 'none');
+        $month = filter_var($month, FILTER_VALIDATE_INT);
+        $month = (!$month || $month < 1 || $month > 12) ? 'none' : $month;
+        //year
+        $year = trim($_GET['year'] ?? date('Y'));
+        $year = filter_var($year, FILTER_VALIDATE_INT);
+        $year = (!$year || $year > date('Y')) ? date('Y') : $year;
+
+        //config.json
+        $config = json_decode(file_get_contents(PUBLIC_PATH . '/config/config.json'), true);
+
+        //lang
+        $lang = '';
+        switch ($_COOKIE['lang']) {
+            case 'en':
+                $lang = 'en_US';
+                break;
+            case 'fr':
+                $lang = 'fr_FR';
+                break;
+            case 'mg':
+                $lang = 'mg_MG';
+                break;
+        }
+
+        try {
+            //num_caisse
+            $num_caisse = "";
+            //role admin
+            if ($is_loged_in->getRole() === 'admin') {
+                $num_caisse = trim($_GET['num_caisse'] ?? '');
+                //num_caisse - empty
+                if ($num_caisse === '') {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.caisse_not_selected')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+            }
+            //role caissier
+            else {
+                //does user have caisse ?
+                $response = LigneCaisse::findCaisse($is_loged_in->getIdUtilisateur());
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.user_caisse')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                $num_caisse = $response['model']->getNumCaisse();
+            }
+            //does caisse exist
+            $response = Caisse::findById($num_caisse);
+            //error
+            if ($response['message_type'] === 'error') {
+                echo json_encode($response);
+                return;
+            }
+            //not found
+            if (!$response['found']) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.not_found.caisse_num_caisse', ['field' => $num_caisse])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //solde_caisse
+            $solde_caisse = $response['model']->getSolde();
+            //seuil_caisse
+            $seuil_caisse = $response['model']->getSeuil();
+
+            $params = [
+                'num_caisse' => $num_caisse,
+                'date_by' => $date_by,
+                'per' => $per,
+                'from' => $from,
+                'to' => $to,
+                'month' => $month,
+                'year' => $year
+            ];
+
+            //get cash report
+            $cash_report = CaisseRepositorie::cashReport($params);
+            //error
+            if ($cash_report['message_type'] === 'error') {
+                echo json_encode($cash_report);
+                return;
+            }
+
+            //get name and firstname cashier
+            $cashier = "";
+            if ($is_loged_in->getRole() === 'caissier') {
+                $response = User::findById($is_loged_in->getIdUtilisateur());
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.user_id', ['field' => $is_loged_in->getIdUtilisateur()])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                $cashier = $response['model']->getNomUtilisateur() . ' ' . $response['model']->getPrenomsUtilisateur();
+            }
+            $id_utilisateur = $is_loged_in->getIdUtilisateur();
+
+            //strings
+            $strings = [
+                'cash_report' => __('forms.titles.cash_report'),
+                'on' => __('forms.labels.on'),
+                'cash_fund' => __('forms.labels.cash_fund'),
+                'cash_treshold' => __('forms.labels.cash_treshold'),
+                'cash_num' => __('forms.labels.cash_num'),
+                'cash_owner' => __('forms.labels.cash_owner'),
+                'status' => __('forms.labels.status'),
+                'date' => __('forms.labels.date'),
+                'num' => __('forms.labels.num'),
+                'label' => __('forms.labels.label'),
+                'encasement' => __('forms.labels.encasement'),
+                'disbursement' => __('forms.labels.disbursement'),
+                'total' => __('forms.labels.total')
+            ];
+
+            //header
+            $html = "<!DOCTYPE html> 
+                    <body>
+                    <head>
+                        <style>
+                            body {
+                                font-size: 11pt;
+                            }
+                            div {
+                                width: 100%;
+                            }
+                            .center {
+                                text-align: center;
+                            }
+                            .left {
+                                text-align: left;
+                            }
+                            .table {
+                                width: 100%;
+                                margin: 40px 0;
+                                border-collapse: collapse;
+                            }
+                            .thead {
+                                text-align: center;
+                                border: 1px solid black;
+                            }
+                            .thead th {
+                                padding: 5px;
+                                border: 1px solid black;
+                            }
+                            .table td {
+                                padding-left: 5px;
+                                border: 1px solid black;
+                            }
+                        </style>
+                    </head>
+                    <body>";
+
+            //title
+            if (!isset($config['enterprise_name'])) {
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.not_found.config', ['field' => 'enterprise_name'])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            if (!isset($config['currency_units'])) {
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.not_found.config', ['field' => 'currency_units'])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //date_by
+            $on = "";
+            switch ($date_by) {
+                case 'all':
+                    $on = __('forms.labels.all');
+                    break;
+                case 'per':
+                    switch ($per) {
+                        case 'DAY':
+                            $day = new DateTime();
+                            $formatter = new IntlDateFormatter(
+                                $lang,
+                                IntlDateFormatter::LONG,
+                                IntlDateFormatter::NONE
+                            );
+                            $on = $formatter->format($day);
+                            break;
+
+                        case 'WEEK':
+                            $week = new DateTime();
+                            $formatter = new IntlDateFormatter(
+                                $lang,
+                                IntlDateFormatter::LONG,
+                                IntlDateFormatter::NONE
+                            );
+                            //start_week
+                            $start_week = (clone $week)->modify('monday this week');
+                            $start_week = $formatter->format($start_week);
+                            //end_week
+                            $end_week = (clone $week)->modify('sunday this week');
+                            $end_week = $formatter->format($end_week);
+
+                            $on = $start_week . ' ' . __('forms.labels.to') . ' ' . $end_week;
+                            break;
+                        case 'MONTH':
+                            $month = new DateTime();
+                            $formatter = new IntlDateFormatter(
+                                $lang,
+                                IntlDateFormatter::LONG,
+                                IntlDateFormatter::NONE,
+                                null,
+                                null,
+                                'MMMM YYYY'
+                            );
+
+                            $on  = __('forms.labels.month') . ' ' . $formatter->format($month);
+                            break;
+                        case 'YEAR':
+                            $year = new DateTime();
+                            $formatter = new IntlDateFormatter(
+                                $lang,
+                                IntlDateFormatter::LONG,
+                                IntlDateFormatter::NONE,
+                                null,
+                                null,
+                                'YYYY'
+                            );
+
+                            $on  = __('forms.labels.year') . ' ' . $formatter->format($year);
+                            break;
+                    }
+                    break;
+                case 'between':
+                    $from = new DateTime($from);
+                    $to = new DateTime($to);;
+                    $formatter = new IntlDateFormatter(
+                        $lang,
+                        IntlDateFormatter::LONG,
+                        IntlDateFormatter::NONE,
+                    );
+
+                    $on  = $formatter->format($from) . ' ' . __('forms.labels.to') . ' ' . $formatter->format($to);
+                    break;
+                case 'month_year':
+                    //month - none
+                    if ($month === 'none') {
+                        $year = new DateTime($year . '-04-01');
+                        $formatter = new IntlDateFormatter(
+                            $lang,
+                            IntlDateFormatter::LONG,
+                            IntlDateFormatter::NONE,
+                            null,
+                            null,
+                            'YYYY'
+                        );
+
+                        $on  = __('forms.labels.year') . ' ' . $formatter->format($year);
+                    }
+                    //month - !none
+                    else {
+                        $month_year = new DateTime($year . '-' . $month . '-01');
+                        $formatter = new IntlDateFormatter(
+                            $lang,
+                            IntlDateFormatter::LONG,
+                            IntlDateFormatter::NONE,
+                            null,
+                            null,
+                            'MMMM YYYY'
+                        );
+
+                        $on  = __('forms.labels.month') . ' ' . $formatter->format($month_year);
+                    }
+                    break;
+            }
+            //status
+            $interval = $cash_report['total_entree'] - $cash_report['total_sortie'];
+            $status = '';
+            if ($interval < 0) {
+                $status = __('forms.labels.loss') . " (-{$interval} {$config['currency_units']})";
+            } elseif ($interval === 0) {
+                $status = __('forms.labels.neutral');
+            } else {
+                $status = __('forms.labels.benefice') . " (+{$interval} {$config['currency_units']})";
+            }
+            $html .= "<div class='header'>
+                        <h4 class='center'>{$config['enterprise_name']}</h4>
+                        <h3 class='center' style='margin-bottom: 20px;' ><u>{$strings['cash_report']}</u></h3>
+                        <p class='left'><u><b>{$strings['on']} :</b></u> {$on}</p>
+                        <p class='left'><u><b>{$strings['cash_fund']} :</b></u> {$solde_caisse} {$config['currency_units']}</p>
+                        <p class='left'><u><b>{$strings['cash_treshold']} :</b></u> {$seuil_caisse} {$config['currency_units']}</p>
+                        <p class='left'><u><b>{$strings['cash_num']} :</b></u> {$num_caisse}</p>
+                        <p class='left'><u><b>{$strings['status']} :</b></u> {$status}</p>";
+            if ($is_loged_in->getRole() === 'admin') {
+                $html .= "</div>";
+            } else {
+                $html .= "<p class='left'><u><b>{$strings['cash_owner']} :</b></u> {$cashier} ($id_utilisateur)</p>
+                </div>";
+            }
+
+            //table
+            $html .= "<table class='table'>
+                            <tr class='thead'>
+                                <th>{$strings['date']}</th>
+                                <th>{$strings['num']}</th>
+                                <th>{$strings['label']}</th>
+                                <th>{$strings['encasement']} ({$config['currency_units']})</th>
+                                <th>{$strings['disbursement']} ({$config['currency_units']})</th>
+                            </tr>";
+            $html .= "<tbody>";
+            foreach ($cash_report['data'] as $line) {
+                if (strpos($line['numero'], '/TOTAL') !== false) {
+                    $html .= "<tr style='background-color: gray; color: white;'>";
+                } else {
+                    $html .= "<tr>";
+                }
+                $html .= "
+                            <td>{$line['DATE']}</td>
+                            <td>{$line['numero']}</td>
+                            <td>{$line['libelle']}</td>
+                            <td>{$line['encaissement']}</td>
+                            <td>{$line['decaissement']}</td>
+                        </tr>";
+            }
+            //total
+            $html .= "<tr>
+                        <td colspan='3'>{$strings['total']}</td>
+                        <td>{$cash_report['total_entree']}</td>
+                        <td>{$cash_report['total_sortie']}</td>
+                    </tr>";
+            $html .= "</tbody>";
+            $html .= "</table>";
+
+            //footer
+            $html .= "</body>
+                    </html>";
+
+            $dompdf = new Dompdf();
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+
+            $response = [
+                'message_type' => 'success',
+                'pdf' => base64_encode($dompdf->output()),
+                'file_name' => str_replace(' ', '_', strtolower('test' . '.pdf')),
+                'message' => __('messages.success.print')
+            ];
+
+            echo json_encode($response);
+            return;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_cashReport',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            echo json_encode($response);
+            return;
+        }
 
         echo json_encode($response);
         return;
