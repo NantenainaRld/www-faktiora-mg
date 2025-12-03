@@ -75,6 +75,8 @@ return [
         'entree_facture_lf_id_produit' => "Le produit avec l'ID <b>:id_produit</b> n'appartient pas au ligne facture avec l'ID <b>:id_lf</b>",
         //entree - facture deleted
         'entree_facture_deleted' => "La facture numéro <b>:field</b> est déjà supprimée",
+        //entree - facture not selected 
+        'entree_facture_not_selected' => "Veuiller séléctionner une facture",
         //produit - ids_produit empty
         'produit_ids_produit_empty' => "Veuiller séléctionner au moins un produit",
         //produit - libelle prix

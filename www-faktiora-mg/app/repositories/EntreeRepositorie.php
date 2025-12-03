@@ -125,13 +125,13 @@ class EntreeRepositorie extends Database
             }
 
             //montant lf
-            $montant_lf = array_sum(array_column($response['data'], 'prix_total'));
+            $montant_facture = array_sum(array_column($response['data'], 'prix_total'));
 
             $response = [
                 'message_type' => 'success',
                 'message' => 'success',
                 'data' => $response['data'],
-                'montant_lf' => $montant_lf
+                'montant_facture' => $montant_facture
             ];
 
             return $response;

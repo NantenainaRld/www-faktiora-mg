@@ -76,6 +76,32 @@ class Facture extends Database
         return $this->etat_facture;
     }
 
+    //============================= GETTERS =======================
+
+    //getter - date_facture
+    public function getDateFacture()
+    {
+        return $this->date_facture;
+    }
+
+    //getter - id_utilisateur
+    public function getIdUtilisateur()
+    {
+        return $this->id_utilisateur;
+    }
+
+    //getter - num_caisse
+    public function getNumCaisse()
+    {
+        return $this->num_caisse;
+    }
+
+    //getter - id_client
+    public function getIdClient()
+    {
+        return $this->id_client;
+    }
+
     //============================== PUBLIC FUNCTION ==================
 
     //create facture
@@ -296,8 +322,8 @@ class Facture extends Database
         return $response;
     }
 
-    //list connection sortie
-    public function listConnectionSortie()
+    //list connection facture
+    public function listConnectionFacture()
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 
@@ -310,7 +336,7 @@ class Facture extends Database
                 return $response;
             }
             $lf = $response['data'];
-            $montant_lf = $response['montant_lf'];
+            $montant_facture = $response['montant_facture'];
 
             //connection autre entree
             $response = AutreEntree::connectionAutreEntree($this->num_facture);
@@ -332,7 +358,7 @@ class Facture extends Database
                 'message_type' => 'success',
                 'message' => 'success',
                 'lf' => $lf,
-                'montant_lf' => $montant_lf,
+                'montant_facture' => $montant_facture,
                 'autre_entree' => $autre_entree,
                 'sortie' => $sortie
             ];

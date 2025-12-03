@@ -76,6 +76,36 @@ class Client extends Database
         return $this->etat_client;
     }
 
+    //getter - nom_client
+    public function getNomClient()
+    {
+        return $this->nom_client;
+    }
+
+    //getter - prenoms_client
+    public function getPrenomsClient()
+    {
+        return $this->prenoms_client;
+    }
+
+    //getter - sexe_client
+    public function getSexeClient()
+    {
+        return $this->sexe_client;
+    }
+
+    //getter - telephone
+    public function getTelephone()
+    {
+        return $this->telephone;
+    }
+
+    //getter - adresse
+    public function getAdresse()
+    {
+        return $this->adresse;
+    }
+
     //========================= PUBLIC FUNCTION ====================
 
     //create client
@@ -209,7 +239,7 @@ class Client extends Database
                     ->setNomClient($response['data'][0]['nom_client'])
                     ->setPrenomsClient($response['data'][0]['prenoms_client'])
                     ->setSexeClient($response['data'][0]['sexe_client'])
-                    ->setSexeClient($response['data'][0]['telephone'])
+                    ->setTelephone($response['data'][0]['telephone'])
                     ->setAdresse($response['data'][0]['adresse'])
                     ->setEtatClient($response['data'][0]['etat_client']);
 

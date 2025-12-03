@@ -1,5 +1,11 @@
 <?php
 
+//dompdf
+require_once LIBS_PATH . '/dompdf/autoload.inc.php';
+
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 //CLASS - entree controller
 class EntreeController extends Controller
 {
@@ -2104,7 +2110,7 @@ class EntreeController extends Controller
             //list connection facture
             $facture_model = new Facture();
             $facture_model->setNumFacture($num_facture);
-            $response = $facture_model->listConnectionSortie();
+            $response = $facture_model->listConnectionFacture();
 
             echo json_encode($response);
             return;
@@ -2468,6 +2474,368 @@ class EntreeController extends Controller
         //redirect to entree index
         else {
             header('Location: ' . SITE_URL . '/entree');
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
+
+    //action - print facture
+    public function printFacture()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged ?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+
+        //config.json
+        $config = json_decode(file_get_contents(PUBLIC_PATH . '/config/config.json'), true);
+
+        //lang
+        $lang = '';
+        switch ($_COOKIE['lang']) {
+            case 'en':
+                $lang = 'en_US';
+                break;
+            case 'fr':
+                $lang = 'fr_FR';
+                break;
+            case 'mg':
+                $lang = 'mg_MG';
+                break;
+        }
+
+        //num_facture
+        $num_facture = strtoupper(trim($_GET['num_facture'] ?? ''));
+        //num_ds - empty
+        if ($num_facture === '') {
+            $response = [
+                'message_type' => 'invalid',
+                'message' => __('messages.invalids.entree_facture_not_selected')
+            ];
+
+            echo json_encode($response);
+            return;
+        }
+
+        try {
+
+            //does num_facture exist ?
+            $facture = Facture::findById($num_facture);
+            //error
+            if ($facture['message_type'] === 'error') {
+                echo json_encode($facture);
+                return;
+            }
+            //not found
+            if (!$facture['found']) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.not_found.entree_num_facture', ['field' => $num_facture])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //num_caisse
+            $num_caisse = $facture['model']->getNumCaisse();
+            //date_facture
+            $date_facture = $facture['model']->getDateFacture();
+            $date_facture = new DateTime($date_facture);
+            $formatter = new IntlDateFormatter(
+                $lang,
+                IntlDateFormatter::LONG,
+                IntlDateFormatter::NONE
+            );
+            $date_facture = $formatter->format($date_facture);
+            //id_client
+            $id_client = $facture['model']->getIdClient();
+
+            //id_client - not null
+            //nom_client
+            $nom_client = "";
+            //prenoms_client
+            $prenoms_client = "";
+            //telephone
+            $telephone = "";
+            //adresse
+            $adresse = "";
+            $sexe_client = "";
+            if ($id_client) {
+                //get client info
+                $client = Client::findById($id_client);
+                //error
+                if ($client['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                $nom_client = $client['model']->getNomClient();
+                if ($client['model']->getPrenomsClient()) {
+                    $prenoms_client = $client['model']->getPrenomsClient();
+                }
+                if ($client['model']->getTelephone()) {
+                    $telephone = $client['model']->getTelephone();
+                }
+                if ($client['model']->getAdresse()) {
+                    $adresse = $client['model']->getAdresse();
+                }
+                if ($client['model']->getSexeClient() === 'masculin') {
+                    $sexe_client = __('forms.labels.mister');
+                } else {
+                    $sexe_client = __('forms.labels.madam');
+                }
+            }
+
+            //role caissier
+            if ($is_loged_in->getRole() === 'caissier') {
+                //does caissier have caisse ?
+                $response = LigneCaisse::findCaisse($is_loged_in->getIdUtilisateur());
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.user_caisse')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+            }
+
+            //get facture connection
+            $facture_model = new Facture();
+            $facture_model->setNumFacture($num_facture);
+            $connection_facture = $facture_model->listConnectionFacture();
+            $id_utilisateur = $facture['model']->getIdUtilisateur();
+
+            //strings
+            $strings = [
+                'bill' => strtoupper(__('forms.labels.bill')),
+                'phone' => __('forms.labels.phone'),
+                'adress' => __('forms.labels.adress'),
+                'correction' => __('forms.labels.correction'),
+                'on' => __('forms.labels.on'),
+                'quantity' => __('forms.labels.quantity'),
+                'unit_price' => __('forms.labels.unit_price'),
+                'amount' => __('forms.labels.amount'),
+                'inflow' => __('forms.labels.inflow'),
+                'outflow' => __('forms.labels.outflow'),
+                'cashier' => ucfirst(__('forms.labels.cashier')),
+                'client' => __('forms.labels.client'),
+                'num' => __('forms.labels.num'),
+                'label' => __('forms.labels.label'),
+                'total' => __('forms.labels.total'),
+                'cash' => __('forms.labels.cash')
+            ];
+
+            //header
+            $html = "<!DOCTYPE html> 
+                    <body>
+                    <head>
+                        <style>
+                            body {
+                                font-size: 11pt;
+                            }
+                            div {
+                                width: 100%;
+                            }
+                            .center {
+                                text-align: center;
+                            }
+                            .left {
+                                text-align: left;
+                            }
+                            .table {
+                                width: 100%;
+                                margin: 40px 0;
+                                border-collapse: collapse;
+                            }
+                            .thead {
+                                text-align: center;
+                                border: 1px solid black;
+                            }
+                            .thead th {
+                                padding: 5px;
+                                border: 1px solid black;
+                            }
+                            .table td {
+                                padding-left: 5px;
+                                padding-right: 5px;
+                                border: 1px solid black;
+                            }
+                        </style>
+                    </head>
+                    <body>";
+
+            //title
+            if (!isset($config['enterprise_name'])) {
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.not_found.config', ['field' => 'enterprise_name'])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            if (!isset($config['currency_units'])) {
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.not_found.config', ['field' => 'currency_units'])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //caissier numero
+            $num_cashier = strtolower($strings['cashier']);
+            $html .= "<div class='header'>
+                        <h4 class='center'>{$config['enterprise_name']}</h4>
+                        <h3 class='center' style='color: green;'>{$strings['bill']} N° {$num_facture}</h3>
+                        <div style='display: flex; margin-top: 20px; text-align: center;'>
+                            <span>{$strings['cash']} {$strings['num']} : {$num_caisse}</span>  -
+                            <span style='margin-left: 10px;'>{$num_cashier} ID : {$id_utilisateur}</span>
+                        </div>
+                       ";
+
+            //table client and date
+            $html .= "<table style='width: 100%; margin-top: 20px;'>
+                        <tr>
+                            <td style='text-align: left;'>
+                                <p>{$sexe_client} , {$nom_client} {$prenoms_client}</p>
+                                <p>{$strings['phone']} : {$telephone} </p>
+                                <p>{$strings['adress']} : {$adresse} </p>
+                                <p>ID : {$id_client} </p>
+                            </td>
+                            <td style='text-align: right; vertical-align: top;padding-top: 16px;'><b>{$strings['on']} : </b>{$date_facture}</td>
+                        </tr>
+                    </table>";
+
+            //table
+            $total = $connection_facture['montant_facture'];
+            $html .= "<table class='table'>
+                            <tr class='thead'>
+                                <th>ID</th>
+                                <th>{$strings['label']}</th>
+                                <th>{$strings['quantity']}</th>
+                                <th>{$strings['unit_price']} ({$config['currency_units']})</th>
+                                <th>{$strings['amount']} ({$config['currency_units']})</th>
+                            </tr>";
+            $html .= "<tbody>";
+            foreach ($connection_facture['lf'] as $line) {
+                $html .= "<tr>
+                            <td>{$line['id_lf']}</td>
+                            <td>{$line['libelle_produit']}</td>
+                            <td>{$line['quantite_produit']}</td>
+                            <td>{$line['prix']}</td>
+                            <td>{$line['prix_total']}</td>
+                        </tr>";
+            }
+            //montant_facture
+            $html .= "<tr>
+                            <td style='border: none;'></td>
+                            <td style='border: none;'></td>
+                            <td colspan='2'>{$strings['total']}</td>
+                            <td>{$connection_facture['montant_facture']}</td>
+                        </tr>";
+
+            //correction ae
+            if (count($connection_facture['autre_entree']) > 0) {
+                $html .= "<tr>
+                            <td style='text-align: center; border: none; padding: 20px; color: blue;' colspan='5'><b>{$strings['correction']}</b> ({$strings['inflow']})</td>
+                        </tr>";
+                foreach ($connection_facture['autre_entree'] as $line) {
+                    $html .= "<tr>
+                            <td>{$line['num_ae']}</td>
+                            <td>{$line['libelle_ae']}</td>
+                            <td>1</td>
+                            <td>{$line['montant_ae']}</td>
+                            <td>{$line['montant_ae']}</td>
+                        </tr>";
+                    $total += $line['montant_ae'];
+                }
+            }
+
+            //correction ds
+            if (count($connection_facture['sortie']) > 0) {
+                $html .= "<tr>
+                            <td style='text-align: center; border: none; padding: 20px; color: tomato;' colspan='5'><b>{$strings['correction']}</b> ({$strings['outflow']})</td>
+                        </tr>";
+                foreach ($connection_facture['sortie'] as $line) {
+                    $html .= "<tr>
+                            <td>{$line['num_ds']}</td>
+                            <td>{$line['libelle_article']}</td>
+                            <td>1</td>
+                            <td>{$line['prix_article']}</td>
+                            <td>{$line['prix_article']}</td>
+                        </tr>";
+                    $total -= $line['prix_article'];
+                }
+            }
+
+            $html .= "</tbody>
+                    </table>";
+
+            //total
+            $html .= "<div><span style='float: left;'><b>{$strings['total']} :</b>  {$total} {$config['currency_units']}</span></div>";
+
+            //sign
+            $html .= "<div style='margin-top: 50px;'>
+                        <table style='width: 100%;'>
+                            <tr>
+                                <td style='text-align: center'><u><b>{$strings['cashier']}</b></u></td>
+                                <td style='text-align: center;'><u><b>{$strings['client']}</b></u></td>
+                            </tr>
+                        </table>
+                    </div>";
+
+            //footer
+            $html .= "</body>
+                    </html>";
+
+            $dompdf = new Dompdf();
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+
+            $response = [
+                'message_type' => 'success',
+                'pdf' => base64_encode($dompdf->output()),
+                'file_name' => str_replace(' ', '_', strtolower('test' . '.pdf')),
+                'message' => __('messages.success.print')
+            ];
+
+            echo json_encode($response);
+            return;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.sortie_printDemandeSortie',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            echo json_encode($response);
             return;
         }
 

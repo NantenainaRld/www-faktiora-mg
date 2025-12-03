@@ -155,6 +155,28 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - print facture
+  async function printFacture(num_facture = "") {
+    try {
+      const response = await apiRequest(
+        `/entree/print_facture?num_facture=${num_facture}`
+      );
+      //not success
+      if (response.message_type !== "success") {
+        console.log(response);
+      }
+      // success
+      else {
+        const a = document.createElement("a");
+        a.href = `data:application/pdf;base64,${response.pdf}`;
+        a.download = response.file_name;
+        a.click();
+        console.log(response.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -196,23 +218,24 @@ document.addEventListener("DOMContentLoaded", () => {
     // updateFacture("f202511-7", date.value, "10003", "1", "10000");
     // deleteAllFacture(["f202511-7", "f202511-5", "f202511-4"]);
     // permanentDeleteAllFacture(["f202511-7", "f202511-5", "f202511-4"]);
-    correctionFacture(
-      "f202511-6",
-      [
-        {
-          id_lf: 6,
-          id_produit: 3,
-          quantite_produit: 1,
-        },
-        {
-          id_lf: 1,
-          id_produit: 1,
-          quantite_produit: 3,
-        },
-      ],
-      date.value,
-      10004,
-      1
-    );
+    // correctionFacture(
+    //   "f202511-6",
+    //   [
+    //     {
+    //       id_lf: 6,
+    //       id_produit: 3,
+    //       quantite_produit: 1,
+    //     },
+    //     {
+    //       id_lf: 1,
+    //       id_produit: 1,
+    //       quantite_produit: 3,
+    //     },
+    //   ],
+    //   date.value,
+    //   10004,
+    //   1
+    // );
+    printFacture("f202511-2");
   });
 });

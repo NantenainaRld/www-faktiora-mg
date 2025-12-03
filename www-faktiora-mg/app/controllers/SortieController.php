@@ -2117,6 +2117,8 @@ class SortieController extends Controller
                 IntlDateFormatter::NONE
             );
             $date_ds = $formatter->format($date_ds);
+            //id_utilisateur
+            $id_utilisateur = $ds['model']->getIdUtilisateur();
 
             //role caissier
             if ($is_loged_in->getRole() === 'caissier') {
@@ -2168,18 +2170,10 @@ class SortieController extends Controller
                 'cashier' => ucfirst(__('forms.labels.cashier')),
                 'applicant' => __('forms.labels.applicant'),
                 'supervisor' => __('forms.labels.supervisor'),
-                //     'cash_fund' => __('forms.labels.cash_fund'),
-                //     'cash_treshold' => __('forms.labels.cash_treshold'),
-                //     'cash_num' => __('forms.labels.cash_num'),
-                //     'cash_owner' => __('forms.labels.cash_owner'),
-                //     'status' => __('forms.labels.status'),
-                //     'date' => __('forms.labels.date'),
                 'num' => __('forms.labels.num'),
                 'label' => __('forms.labels.label'),
-                //     'encasement' => __('forms.labels.encasement'),
-                //     'disbursement' => __('forms.labels.disbursement'),
                 'total' => __('forms.labels.total'),
-                //     'responsable' => __('forms.labels.responsable')
+                'cash' => __('forms.labels.cash')
             ];
 
             //header
@@ -2240,9 +2234,15 @@ class SortieController extends Controller
                 echo json_encode($response);
                 return;
             }
+            //caissier numero
+            $num_cashier = strtolower($strings['cashier']);
             $html .= "<div class='header'>
                         <h4 class='center'>{$config['enterprise_name']}</h4>
-                        <h3 class='center'><u>{$strings['sortie_title']}</u></h3>
+                        <h3 class='center' style='color: tomato;'><u>{$strings['sortie_title']}</u></h3>
+                        <div style='display: flex; margin-top: 20px; text-align: center;'>
+                            <span>{$strings['cash']} {$strings['num']} : {$num_caisse}</span>  -
+                            <span style='margin-left: 10px;'>{$num_cashier} ID : {$id_utilisateur}</span>
+                        </div>
                         <div style='display: flex; margin-top: 50px;'>
                             <span style='float: left;'><b>{$strings['num']} : </b>{$num_ds}</span>
                             <span style='float: right;'><b>{$strings['on']} : </b>{$date_ds}</span>
@@ -2279,7 +2279,7 @@ class SortieController extends Controller
             //correction ae
             if (count($connection_sortie['autre_entree']) > 0) {
                 $html .= "<tr>
-                            <td style='text-align: center; border: none; padding: 20px;' colspan='5'><b>{$strings['correction']}</b> ({$strings['inflow']})</td>
+                            <td style='text-align: center; border: none; padding: 20px; color: blue;' colspan='5'><b>{$strings['correction']}</b> ({$strings['inflow']})</td>
                         </tr>";
                 foreach ($connection_sortie['autre_entree'] as $line) {
                     $html .= "<tr>
@@ -2289,14 +2289,14 @@ class SortieController extends Controller
                             <td>{$line['montant_ae']}</td>
                             <td>{$line['montant_ae']}</td>
                         </tr>";
-                    $total += $line['montant_ae'];
+                    $total -= $line['montant_ae'];
                 }
             }
 
             //correction ds
             if (count($connection_sortie['sortie']) > 0) {
                 $html .= "<tr>
-                            <td style='text-align: center; border: none; padding: 20px;' colspan='5'><b>{$strings['correction']}</b> ({$strings['outflow']})</td>
+                            <td style='text-align: center; border: none; padding: 20px; color: tomato;' colspan='5'><b>{$strings['correction']}</b> ({$strings['outflow']})</td>
                         </tr>";
                 foreach ($connection_sortie['sortie'] as $line) {
                     $html .= "<tr>
@@ -2320,7 +2320,7 @@ class SortieController extends Controller
             $html .= "<div style='margin-top: 50px;'>
                         <table style='width: 100%;'>
                             <tr>
-                                <td style='text-algin: left'><u><b>{$strings['applicant']}</b></u></td>
+                                <td style='text-align: left'><u><b>{$strings['applicant']}</b></u></td>
                                 <td style='text-align: center;'><u><b>{$strings['cashier']}</b></u></td>
                                 <td style='text-align: right;'><u><b>{$strings['supervisor']}</b></u></td>
                             </tr>

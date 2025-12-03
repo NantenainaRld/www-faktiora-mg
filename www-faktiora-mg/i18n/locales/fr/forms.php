@@ -50,7 +50,14 @@ return [
         'outflow' => 'sortie',
         'inflow' => 'entrée',
         'applicant' => 'Demandeur',
-        'supervisor' => 'Superviseur'
+        'supervisor' => 'Superviseur',
+        'cash' => "caisse",
+        'bill' => 'facture',
+        'mister' => 'Monsieur',
+        'madam' => 'Madame',
+        'phone' => 'Télépone',
+        'adress' => 'Adresse',
+        'client' => 'Client'
     ],
     'buttons' => ['return' => "Retourner"],
     'welcome' => ['user' => "Bienvenue :nom dans notre site web"],

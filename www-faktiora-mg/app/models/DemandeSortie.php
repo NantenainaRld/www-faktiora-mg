@@ -79,6 +79,12 @@ class DemandeSortie extends Database
         return $this->date_ds;
     }
 
+    //getter - id_utilisateur
+    public function getIdUtilisateur()
+    {
+        return $this->id_utilisateur;
+    }
+
     //======================= PUBLIC FUNCTION ====================
 
     //create demande sortie
