@@ -148,6 +148,8 @@ return [
         'sortie_getMontantAe' => DEBUG ? "Erreur dans sortie/getMontantAe : :field" : "Une erreur est survenue lors de calcule de montant de sortie",
         //sortie - correction facture
         'sortie_correctionFacture' => DEBUG ? "Erreur dans sortie/correctionFacture : :field" : "Une erreur est survenue lors de la correction de la facture",
+        //sortie - print demande sortie
+        'sortie_printDemandeSortie' => DEBUG ? "Erreur dans sortie/printDemandeSortie : :field" : "Une erreur est survenue lors de la génération de pdf de demande de sortie",
         //produit  - create produit
         'produit_createProduit' => DEBUG ? "Erreur dans produit/createProduit : :field" : "Une erreur est survenue lors d'ajout de nouveau produit",
         //produit - filter produit

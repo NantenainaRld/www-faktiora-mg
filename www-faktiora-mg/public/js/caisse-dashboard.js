@@ -247,6 +247,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnTest = document.getElementById("btn-test");
   btnTest.addEventListener("click", () => {
     // listAllCaisse();
-    cashReport(1, "per", "year", from.value, to.value, "5", 2004);
+    // cashReport(1, "per", "year", from.value, to.value, "5", 2004);
   });
 });

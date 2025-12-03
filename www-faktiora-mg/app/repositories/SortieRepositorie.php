@@ -29,6 +29,12 @@ class SortieRepositorie extends Database
                 return $response;
             }
 
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+                'data' => $response['data']
+            ];
+
             return $response;
         } catch (Throwable $e) {
             error_log($e->getMessage() .
@@ -163,7 +169,7 @@ class SortieRepositorie extends Database
         ];
         try {
 
-            $response = parent::selectQuery("SELECT lds.id_lds, a.id_article, a.libelle_article, lds.prix_article, lds.quantite_article, (lds.prix_article * lds.quantite_article) AS prix_total FROM ligne_ds lds JOIN article a ON a.id_article = lds.id_article JOIN demande_sortie ds ON ds.id_ds = lds.id_ds WHERE a.etat_article != 'supprimé' AND ds.num_ds = :num_ds AND a.libelle_article NOT LIKE 'correction/%' ", ['num_ds' => $num_ds]);
+            $response = parent::selectQuery("SELECT lds.id_lds, a.id_article, a.libelle_article, lds.prix_article, lds.quantite_article, (lds.prix_article * lds.quantite_article) AS prix_total FROM ligne_ds lds JOIN article a ON a.id_article = lds.id_article JOIN demande_sortie ds ON ds.id_ds = lds.id_ds WHERE a.etat_article != 'supprimé' AND ds.num_ds = :num_ds AND a.libelle_article NOT LIKE 'correction/%' ORDER BY lds.id_lds ", ['num_ds' => $num_ds]);
 
             //error
             if ($response['message_type'] === 'error') {
@@ -177,6 +183,7 @@ class SortieRepositorie extends Database
                 'message_type' => 'success',
                 'message' => 'success',
                 'data' => $response['data'],
+                'montant_lds' => $montant_lds
             ];
 
             return $response;

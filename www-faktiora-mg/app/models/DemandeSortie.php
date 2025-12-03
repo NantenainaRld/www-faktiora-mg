@@ -73,6 +73,12 @@ class DemandeSortie extends Database
         return $this->num_caisse;
     }
 
+    //getter - date_ds
+    public function getDateDs()
+    {
+        return $this->date_ds;
+    }
+
     //======================= PUBLIC FUNCTION ====================
 
     //create demande sortie
@@ -310,7 +316,7 @@ class DemandeSortie extends Database
                 return $response;
             }
             $lds = $response['data'];
-            $montant_lds = $response['montant_lds'];
+            $montant_ds = $response['montant_lds'];
 
             //connection autre entree
             $response = AutreEntree::connectionAutreEntree($this->num_ds);
@@ -332,7 +338,7 @@ class DemandeSortie extends Database
                 'message_type' => 'success',
                 'message' => 'success',
                 'lds' => $lds,
-                'montant_lds' => $montant_lds,
+                'montant_ds' => $montant_ds,
                 'autre_entree' => $autre_entree,
                 'sortie' => $sortie
             ];

@@ -8,7 +8,8 @@ return [
         'user_dashboard' => "Tableau de bord - utilisateur",
         'list_date' => "Liste du : <i>:field</i>",
         'list_all_user' => "LISTE DE TOUS LES UTILISATEURS",
-        'cash_report' => "RAPPORT DE CAISSE"
+        'cash_report' => "RAPPORT DE CAISSE",
+        'sortie' => "DEMANDE D'ENGAGEMENT DE DEPENSE"
     ],
     'labels' => [
         'name_firstname' => "Nom et prénoms",
@@ -41,7 +42,15 @@ return [
         'label' => 'Libellé',
         'encasement' => 'Encaissement',
         'disbursement' => 'Décaissement',
-        'responsable' => 'Responsable'
+        'responsable' => 'Responsable',
+        'quantity' => 'Quantité',
+        'unit_price' => 'Prix unitaire',
+        'amount' => 'Montant',
+        'correction' => 'Correction',
+        'outflow' => 'sortie',
+        'inflow' => 'entrée',
+        'applicant' => 'Demandeur',
+        'supervisor' => 'Superviseur'
     ],
     'buttons' => ['return' => "Retourner"],
     'welcome' => ['user' => "Bienvenue :nom dans notre site web"],

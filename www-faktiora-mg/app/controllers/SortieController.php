@@ -1,5 +1,11 @@
 <?php
 
+//dompdf
+require_once LIBS_PATH . '/dompdf/autoload.inc.php';
+
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 //CLASS - sortie controller
 class SortieController extends Controller
 {
@@ -2033,5 +2039,332 @@ class SortieController extends Controller
             header('Location: ' . SITE_URL . '/entree');
             return;
         }
+    }
+
+    //action - print demande_sortie
+    public function printDemandeSortie()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged ?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+
+        //config.json
+        $config = json_decode(file_get_contents(PUBLIC_PATH . '/config/config.json'), true);
+
+        //lang
+        $lang = '';
+        switch ($_COOKIE['lang']) {
+            case 'en':
+                $lang = 'en_US';
+                break;
+            case 'fr':
+                $lang = 'fr_FR';
+                break;
+            case 'mg':
+                $lang = 'mg_MG';
+                break;
+        }
+
+        //num_ds
+        $num_ds = strtoupper(trim($_GET['num_ds'] ?? ''));
+        //num_ds - empty
+        if ($num_ds === '') {
+            $response = [
+                'message_type' => 'invalid',
+                'message' => __('messages.invalids.sortie_not_selected')
+            ];
+
+            echo json_encode($response);
+            return;
+        }
+
+        try {
+
+            //does num_ds exist ?
+            $ds = DemandeSortie::findById($num_ds);
+            //error
+            if ($ds['message_type'] === 'error') {
+                echo json_encode($ds);
+                return;
+            }
+            //not found
+            if (!$ds['found']) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.not_found.sortie_num_ds', ['field' => $num_ds])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //num_caisse
+            $num_caisse = $ds['model']->getNumCaisse();
+            //date_ds
+            $date_ds = $ds['model']->getDateDs();
+            $date_ds = new DateTime($date_ds);
+            $formatter = new IntlDateFormatter(
+                $lang,
+                IntlDateFormatter::LONG,
+                IntlDateFormatter::NONE
+            );
+            $date_ds = $formatter->format($date_ds);
+
+            //role caissier
+            if ($is_loged_in->getRole() === 'caissier') {
+                //does caissier have caisse ?
+                $response = LigneCaisse::findCaisse($is_loged_in->getIdUtilisateur());
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                //not found
+                if (!$response['found']) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.not_found.user_caisse')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+            }
+
+            //get connectionsortie
+            $demande_sortie_model = new DemandeSortie();
+            $demande_sortie_model->setNumDs($num_ds);
+            $connection_sortie = $demande_sortie_model->listConnectionSortie();
+            //not ds
+            if (count($connection_sortie['lds']) <= 0) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.sortie_not_ds', ['field' => $num_ds])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+
+            //strings
+            $strings = [
+                'sortie_title' => __('forms.titles.sortie'),
+                'correction' => __('forms.labels.correction'),
+                'on' => __('forms.labels.on'),
+                'quantity' => __('forms.labels.quantity'),
+                'unit_price' => __('forms.labels.unit_price'),
+                'amount' => __('forms.labels.amount'),
+                'inflow' => __('forms.labels.inflow'),
+                'outflow' => __('forms.labels.outflow'),
+                'cashier' => ucfirst(__('forms.labels.cashier')),
+                'applicant' => __('forms.labels.applicant'),
+                'supervisor' => __('forms.labels.supervisor'),
+                //     'cash_fund' => __('forms.labels.cash_fund'),
+                //     'cash_treshold' => __('forms.labels.cash_treshold'),
+                //     'cash_num' => __('forms.labels.cash_num'),
+                //     'cash_owner' => __('forms.labels.cash_owner'),
+                //     'status' => __('forms.labels.status'),
+                //     'date' => __('forms.labels.date'),
+                'num' => __('forms.labels.num'),
+                'label' => __('forms.labels.label'),
+                //     'encasement' => __('forms.labels.encasement'),
+                //     'disbursement' => __('forms.labels.disbursement'),
+                'total' => __('forms.labels.total'),
+                //     'responsable' => __('forms.labels.responsable')
+            ];
+
+            //header
+            $html = "<!DOCTYPE html> 
+                    <body>
+                    <head>
+                        <style>
+                            body {
+                                font-size: 11pt;
+                            }
+                            div {
+                                width: 100%;
+                            }
+                            .center {
+                                text-align: center;
+                            }
+                            .left {
+                                text-align: left;
+                            }
+                            .table {
+                                width: 100%;
+                                margin: 40px 0;
+                                border-collapse: collapse;
+                            }
+                            .thead {
+                                text-align: center;
+                                border: 1px solid black;
+                            }
+                            .thead th {
+                                padding: 5px;
+                                border: 1px solid black;
+                            }
+                            .table td {
+                                padding-left: 5px;
+                                padding-right: 5px;
+                                border: 1px solid black;
+                            }
+                        </style>
+                    </head>
+                    <body>";
+
+            //title
+            if (!isset($config['enterprise_name'])) {
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.not_found.config', ['field' => 'enterprise_name'])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            if (!isset($config['currency_units'])) {
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.not_found.config', ['field' => 'currency_units'])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            $html .= "<div class='header'>
+                        <h4 class='center'>{$config['enterprise_name']}</h4>
+                        <h3 class='center'><u>{$strings['sortie_title']}</u></h3>
+                        <div style='display: flex; margin-top: 50px;'>
+                            <span style='float: left;'><b>{$strings['num']} : </b>{$num_ds}</span>
+                            <span style='float: right;'><b>{$strings['on']} : </b>{$date_ds}</span>
+                        </div>";
+
+            //table
+            $total = $connection_sortie['montant_ds'];
+            $html .= "<table class='table'>
+                            <tr class='thead'>
+                                <th>ID</th>
+                                <th>{$strings['label']}</th>
+                                <th>{$strings['quantity']}</th>
+                                <th>{$strings['unit_price']} ({$config['currency_units']})</th>
+                                <th>{$strings['amount']} ({$config['currency_units']})</th>
+                            </tr>";
+            $html .= "<tbody>";
+            foreach ($connection_sortie['lds'] as $line) {
+                $html .= "<tr>
+                            <td>{$line['id_lds']}</td>
+                            <td>{$line['libelle_article']}</td>
+                            <td>{$line['quantite_article']}</td>
+                            <td>{$line['prix_article']}</td>
+                            <td>{$line['prix_total']}</td>
+                        </tr>";
+            }
+            //montant_ds
+            $html .= "<tr>
+                            <td style='border: none;'></td>
+                            <td style='border: none;'></td>
+                            <td colspan='2'>{$strings['total']}</td>
+                            <td>{$connection_sortie['montant_ds']}</td>
+                        </tr>";
+
+            //correction ae
+            if (count($connection_sortie['autre_entree']) > 0) {
+                $html .= "<tr>
+                            <td style='text-align: center; border: none; padding: 20px;' colspan='5'><b>{$strings['correction']}</b> ({$strings['inflow']})</td>
+                        </tr>";
+                foreach ($connection_sortie['autre_entree'] as $line) {
+                    $html .= "<tr>
+                            <td>{$line['num_ae']}</td>
+                            <td>{$line['libelle_ae']}</td>
+                            <td>1</td>
+                            <td>{$line['montant_ae']}</td>
+                            <td>{$line['montant_ae']}</td>
+                        </tr>";
+                    $total += $line['montant_ae'];
+                }
+            }
+
+            //correction ds
+            if (count($connection_sortie['sortie']) > 0) {
+                $html .= "<tr>
+                            <td style='text-align: center; border: none; padding: 20px;' colspan='5'><b>{$strings['correction']}</b> ({$strings['outflow']})</td>
+                        </tr>";
+                foreach ($connection_sortie['sortie'] as $line) {
+                    $html .= "<tr>
+                            <td>{$line['num_ds']}</td>
+                            <td>{$line['libelle_article']}</td>
+                            <td>1</td>
+                            <td>{$line['prix_article']}</td>
+                            <td>{$line['prix_article']}</td>
+                        </tr>";
+                    $total += $line['prix_article'];
+                }
+            }
+
+            $html .= "</tbody>
+                    </table>";
+
+            //total
+            $html .= "<div><span style='float: left;'><b>{$strings['total']} :</b>  {$total} {$config['currency_units']}</span></div>";
+
+            //sign
+            $html .= "<div style='margin-top: 50px;'>
+                        <table style='width: 100%;'>
+                            <tr>
+                                <td style='text-algin: left'><u><b>{$strings['applicant']}</b></u></td>
+                                <td style='text-align: center;'><u><b>{$strings['cashier']}</b></u></td>
+                                <td style='text-align: right;'><u><b>{$strings['supervisor']}</b></u></td>
+                            </tr>
+                        </table>
+                    </div>";
+
+            //footer
+            $html .= "</body>
+                    </html>";
+
+            $dompdf = new Dompdf();
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+
+            $response = [
+                'message_type' => 'success',
+                'pdf' => base64_encode($dompdf->output()),
+                'file_name' => str_replace(' ', '_', strtolower($strings['sortie_title'] . ' ' . $strings['on'] . ' ' . $date_ds . '.pdf')),
+                'message' => __('messages.success.print')
+            ];
+
+            echo json_encode($response);
+            return;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.sortie_printDemandeSortie',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            echo json_encode($response);
+            return;
+        }
+
+        echo json_encode($response);
+        return;
     }
 }

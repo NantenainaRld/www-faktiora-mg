@@ -179,6 +179,28 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
+  //function - print demande sortie
+  async function printDemandeSortie(num_ds = "") {
+    try {
+      const response = await apiRequest(
+        `/sortie/print_demande_sortie&num_ds=${num_ds}`
+      );
+      //not success
+      if (response.message_type !== "success") {
+        console.log(response);
+      }
+      //success
+      else {
+        const a = document.createElement("a");
+        a.href = `data:application/pdf;base64,${response.pdf}`;
+        a.download = response.file_name;
+        a.click();
+        console.log(response.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   //================== EVENTS===================
   const date = document.getElementById("date");
@@ -238,5 +260,6 @@ document.addEventListener("DOMContentLoaded", () => {
     //   "10004",
     //   "1"
     // );
+    printDemandeSortie("s202511-20");
   });
 });
