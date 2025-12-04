@@ -1,30 +1,128 @@
 document.addEventListener("DOMContentLoaded", () => {
-  //input login
-  const login = document.getElementById("login");
-  //mdp
-  const mdp = document.getElementById("mdp");
-
-  //function - login user
-  async function loginUser(login, passsword) {
-    try {
-      const response = await apiRequest("/auth/login_user", {
-        method: "POST",
-        body: {
-          login: login,
-          password: passsword,
-        },
-      });
-      console.log(response);
-    } catch (e) {
-      console.error(e);
+  //save input value in local storage
+  document.querySelectorAll("input").forEach((element) => {
+    element.addEventListener("input", (e) => {
+      if (e.target.id !== "password") {
+        localStorage.setItem(e.target.id, e.target.value);
+      }
+    });
+  });
+  //load input value from local storage
+  document.querySelectorAll("input").forEach((element) => {
+    const saved = localStorage.getItem(element.id);
+    if (saved !== null) {
+      element.value = saved;
     }
-  }
+  });
 
-  //===================== EVENTS =====================
+  //============================== elements ============================
+  //input - login
+  const loginInput = document.getElementById("login");
+  //input - password
+  const passswordInput = document.getElementById("password");
+  //form
+  const form = document.getElementsByTagName("form")[0];
 
-  //btn-login
-  const btnLogin = document.getElementById("btn-login");
-  btnLogin.addEventListener("click", () => {
-    loginUser("10007", "admin");
+  //===================== EVENTS =====================================
+
+  //events - login input change
+  loginInput.addEventListener("input", (e) => {
+    //replace ' ' to ''
+    e.target.value = e.target.value.replace(" ", "");
+
+    //type - text (id_utilisateur)
+    if (/^\d+$/.test(e.target.value)) {
+      e.target.type = "text";
+    }
+    //type - email
+    else {
+      e.target.type = "email";
+    }
+  });
+
+  //form - submit
+  form.addEventListener("submit", async (e) => {
+    //suspend submit
+    e.preventDefault();
+
+    //inputs - not valid
+    if (!e.target.checkValidity()) {
+      e.target.reportValidity();
+      return;
+    } else {
+      try {
+        //FETCH api
+        const response = await apiRequest("/auth/login_user", {
+          method: "POST",
+          body: {
+            login: login.value.trim(),
+            password: password.value.trim(),
+          },
+        });
+
+        //error
+        if (response.message_type === "error") {
+          //alert
+          const alertTemplate = document.getElementById("alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-danger");
+          //icon
+          alert.querySelector(".fas").classList.add("fa-exclamation-triangle");
+          //message
+          alert.querySelector(".alert-message").innerHTML = response.message;
+          //progress bar
+          progressBar.style.transition = "width 20s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          document.getElementById("alert-container").prepend(alert);
+
+          //progress lanch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 20000);
+        }
+        //invalid
+        else {
+          //alert
+          const alertTemplate = document.getElementById("alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-warning");
+          //icon
+          alert.querySelector(".fas").classList.add("fa-info-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML = response.message;
+          //progress bar
+          progressBar.style.transition = "width 20s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          document.getElementById("alert-container").prepend(alert);
+
+          //progress lanch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 20000);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
   });
 });

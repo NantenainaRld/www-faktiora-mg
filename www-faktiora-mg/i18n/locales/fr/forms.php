@@ -57,7 +57,15 @@ return [
         'madam' => 'Madame',
         'phone' => 'Télépone',
         'adress' => 'Adresse',
-        'client' => 'Client'
+        'client' => 'Client',
+        'connection' => "Connexion",
+        'enter_your_login' => "Entrer votre identifiant",
+        'login' => 'Email ou numéro de compte',
+        'password' => "Mot de passe",
+        'signin' => "se connecter",
+        'dont_have_account' => 'Pas encore de compte ?',
+        'signup' => "S'inscrire",
+        'forgot_password' => "Mot de passe oublié"
     ],
     'buttons' => ['return' => "Retourner"],
     'welcome' => ['user' => "Bienvenue :nom dans notre site web"],
@@ -74,4 +82,13 @@ return [
         'days' => "jours",
         'format_datetime' => "d-m-Y H:i:s"
     ],
+    'lang' => [
+        'fr' => 'Français',
+        'mg' => 'Malgache',
+        'en' => 'Anglais'
+    ],
+    'placeholders' => [
+        'email' => 'nom@faktiora.mg'
+    ]
+
 ];

@@ -13,15 +13,54 @@ class AuthController extends Controller
         header('Location: ' . SITE_URL . '/auth/page_login');
         return;
     }
+
     //page - login
     public function pageLogin()
     {
-        $this->render('login', array(
-            'title' => "Connexion",
-            'description' => "Page de connection"
-        ));
-        return;
+        try {
+            //is loged in
+            $is_loged_in  = Auth::isLogedIn();
+            //loged
+            if ($is_loged_in->getLoged()) {
+                //redirect to user index
+                header('Location: ' . SITE_URL . '/user');
+                return;
+            }
+            //show login page
+            else {
+                //lang
+                $current_lang = $_COOKIE['lang'] ?? 'fr';
+                $current_lang = !in_array($current_lang, ['fr', 'mg', 'en']) ? 'fr' : $current_lang;
+                $data_lang = [
+                    'fr' => __('forms.lang.fr'),
+                    'mg' => __('forms.lang.mg'),
+                    'en' => __('forms.lang.en')
+                ];
+
+                $this->render(
+                    'login',
+                    [
+                        'title' => __('forms.labels.connection') . ' - faktiora',
+                        'current_lang' => $current_lang,
+                        'data_lang' => $data_lang
+                    ]
+                );
+                return;
+            }
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            //redirect to error page
+            header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.auth_isLogedIn', ['field' => $e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile()]));
+
+            return;
+        }
     }
+
     //page - signup
     public function pageSignup()
     {
@@ -65,7 +104,6 @@ class AuthController extends Controller
                 echo json_encode($response);
                 return;
             }
-
             try {
 
                 //does user id exist ?
@@ -102,7 +140,7 @@ class AuthController extends Controller
                     }
                     $password = $response['model']->getMdp();
                     $id_utilisateur = $response['model']->getIdUtilisateur();
-                    $mdp_oublie = $response['mmodel']->getMdpOublieExpire;
+                    $mdp_oublie = $response['model']->getMdpOublieExpire();
                     $mdp_oublie_expire = $response['model']->getMdpOublieExpire();
                 }
                 //does user email exist ?
@@ -146,7 +184,7 @@ class AuthController extends Controller
                     }
                     $password = $response['model']->getMdp();
                     $id_utilisateur = $response['model']->getIdUtilisateur();
-                    $mdp_oublie = $response['mmodel']->getMdpOublieExpire;
+                    $mdp_oublie = $response['model']->getMdpOublieExpire();
                     $mdp_oublie_expire = $response['model']->getMdpOublieExpire();
                 }
 

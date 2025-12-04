@@ -822,8 +822,8 @@ class User extends Database
                 $user_model->mdp = $response['data'][0]['mdp'];
                 $user_model->mdp_oublie = $response['data'][0]['mdp_oublie'];
                 $user_model->mdp_oublie_expire = $response['data'][0]['mdp_oublie_expire'];
+                $user_model->etat_utilisateur = $response['data'][0]['etat_utilisateur'];
                 $user_model->dernier_session = $response['data'][0]['dernier_session'];
-
 
                 $response = [
                     'message_type' => 'success',
@@ -836,7 +836,11 @@ class User extends Database
             }
             //not found
             else {
-                $response['data'] = '';
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'found' => false
+                ];
 
                 return $response;
             }
@@ -909,7 +913,11 @@ class User extends Database
             }
             //not found
             else {
-                $response['data'] = '';
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'found' => false
+                ];
 
                 return $response;
             }

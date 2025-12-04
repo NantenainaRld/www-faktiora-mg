@@ -83,12 +83,18 @@ class Router
                         'errors.not_found.' . $type,
                         ['field' => $this->action]
                     ));
+
+                    return;
                 }
             } catch (Throwable $e) {
-                error_log($e->getMessage());
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
 
                 //redirect to error page
-                header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.router', ['field' => $e->getMessage()]));
+                header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.router', ['field' => $e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile()]));
 
                 return;
             }
