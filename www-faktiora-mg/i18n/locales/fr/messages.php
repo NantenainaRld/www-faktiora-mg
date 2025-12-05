@@ -157,6 +157,8 @@ return [
         'user_deconnectAll_1' => "Un utilisateur a été déconnectés avec succès",
         //user - deconnect all plur
         'user_deconnectAll_plur' => "<b>:field</b> utilisateurs ont été déconnecté avec succès",
+        //user - signup
+        'user_signup' => "Compte crée avec succès. Redirection vers la page de connexion",
         //caisse - create caisse
         'caisse_createCaisse' => "Caisse numéro <b>:field</b> crée avec succès",
         //caisse - filter ligne caisse 0 

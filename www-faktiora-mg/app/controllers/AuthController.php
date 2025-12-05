@@ -64,10 +64,48 @@ class AuthController extends Controller
     //page - signup
     public function pageSignup()
     {
-        $this->render('signup', array(
-            'title' => __('forms.titles.signup'),
-        ));
-        return;
+        try {
+            //is loged in
+            $is_loged_in  = Auth::isLogedIn();
+            //loged
+            if ($is_loged_in->getLoged()) {
+                //redirect to user index
+                header('Location: ' . SITE_URL . '/user');
+                return;
+            }
+            //show signup page
+            else {
+                //lang
+                $current_lang = $_COOKIE['lang'] ?? 'fr';
+                $current_lang = !in_array($current_lang, ['fr', 'mg', 'en']) ? 'fr' : $current_lang;
+                $data_lang = [
+                    'fr' => __('forms.lang.fr'),
+                    'mg' => __('forms.lang.mg'),
+                    'en' => __('forms.lang.en')
+                ];
+
+                $this->render(
+                    'signup',
+                    [
+                        'title' => __('forms.labels.signup') . ' - faktiora',
+                        'current_lang' => $current_lang,
+                        'data_lang' => $data_lang
+                    ]
+                );
+                return;
+            }
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            //redirect to error page
+            header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.auth_isLogedIn', ['field' => $e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile()]));
+
+            return;
+        }
     }
 
     //================= ACTION ====================
@@ -78,8 +116,50 @@ class AuthController extends Controller
         header('Content-Type: application/json');
         $response = null;
 
+        try {
+            //is loged in
+            $is_loged_in  = Auth::isLogedIn();
+            //loged
+            if ($is_loged_in->getLoged()) {
+                //redirect to user index
+                header('Location: ' . SITE_URL . '/user');
+                return;
+            }
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            //redirect to error page
+            header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.auth_isLogedIn', ['field' => $e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile()]));
+
+            return;
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $json = json_decode(file_get_contents("php://input"), true);
+            //json - login not found
+            if (!isset($json['login'])) {
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.not_found.json', ['field' => 'login'])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //json - password not found
+            if (!isset($json['password'])) {
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.not_found.json', ['field' => 'password'])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
             //trim
             $json['login'] = trim($json['login']);
 
@@ -294,6 +374,266 @@ class AuthController extends Controller
         //redirect to auth index
         else {
             header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+    }
+
+    //action - signup
+    public function signUp()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        try {
+            //is loged in
+            $is_loged_in  = Auth::isLogedIn();
+            //loged
+            if ($is_loged_in->getLoged()) {
+                //redirect to user index
+                header('Location: ' . SITE_URL . '/user');
+                return;
+            }
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            //redirect to error page
+            header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.auth_isLogedIn', ['field' => $e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile()]));
+
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $json = json_decode(file_get_contents('php://input'), true);
+            //json - nom_utilisateur not found
+            if (!isset($json['nom_utilisateur'])) {
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.not_found.json', ['field' => 'nom_utilisateur'])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //json - prenoms_utilisateur not found
+            if (!isset($json['prenoms_utilisateur'])) {
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.not_found.json', ['field' => 'prenoms_utilisateur'])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //json - sexe_utilisateur not found
+            if (!isset($json['sexe_utilisateur'])) {
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.not_found.json', ['field' => 'sexe_utilisateur'])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //json - email_utilisateur not found
+            if (!isset($json['email_utilisateur'])) {
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.not_found.json', ['field' => 'emai_utilisateur'])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //json - mdp not found
+            if (!isset($json['mdp'])) {
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.not_found.json', ['field' => 'mdp'])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //json - mdp_confirm not found
+            if (!isset($json['mdp_confirm'])) {
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.not_found.json', ['field' => 'mdp_confirm'])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //trim
+            foreach ($json as $key => &$value) {
+                if ($key !== 'mdp' && $key !== 'mdp_confirm') {
+                    $value = trim($value);
+                }
+                if ($key === 'sexe_utilisateur') {
+                    $value = strtolower($value);
+                }
+            }
+
+            //nom_utilisateur - empty
+            if (empty($json['nom_utilisateur'])) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.empty.nom');
+
+                echo json_encode($response);
+                return;
+            }
+            //nom_utilisateur - invalid
+            if (strlen($json['nom_utilisateur']) > 100) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.nom');
+
+                echo json_encode($response);
+                return;
+            }
+
+            //prenoms_utilisateur not empty - invalid
+            if (!empty($json['prenoms_utilisateur']) && strlen($json['prenoms_utilisateur']) > 100) {
+                $response['message_type'] = 'invalid';
+                $response['message'] = __('messages.invalids.prenoms');
+
+                echo json_encode($response);
+                return;
+            }
+
+            //sexe - invalid
+            if (!in_array($json['sexe_utilisateur'], ['masculin', 'féminin'], true)) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __(
+                        'messages.invalids.sexe',
+                        ['field' => $json['sexe_utilisateur']]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //email_utilisateur - empty
+            if (empty($json['email_utilisateur'])) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.email')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //email_utilisateur - invalid
+            if (!filter_var($json['email_utilisateur'], FILTER_VALIDATE_EMAIL)) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __(
+                        'messages.invalids.email',
+                        ['field' => $json['email_utilisateur']]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //email_utilisateur - length > 150
+            if (strlen($json['email_utilisateur']) > 150) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.email_length')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //mdp - empty
+            if (empty($json['mdp'])) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.mdp')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //mdp - invalid
+            if (strlen($json['mdp']) < 6) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.mdp')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //mdp_confirm - empty
+            if (empty($json['mdp_confirm'])) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.mdp_confirm')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            //mdp_confirm - invalid
+            if ($json['mdp_confirm'] !== $json['mdp']) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.mdp_confirm')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+
+                $user_model = new User();
+
+                //signup
+                $user_model
+                    ->setNomUtilisateur($json['nom_utilisateur'])
+                    ->setPrenomsUtilisateur($json['prenoms_utilisateur'])
+                    ->setSexeUtilisateur($json['sexe_utilisateur'])
+                    ->setEmailUtilisateur($json['email_utilisateur'])
+                    ->setMdp($json['mdp']);
+                $response = $user_model->signUp();
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.user_createUser',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            echo json_encode($response);
+            return;
+        }
+        //redirect to signup page
+        else {
+            header('Location: ' . SITE_URL . '/auth/page_signup');
             return;
         }
     }

@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
           //message
           alert.querySelector(".alert-message").innerHTML = response.message;
           //progress bar
-          progressBar.style.transition = "width 20s linear";
+          progressBar.style.transition = "width 15s linear";
           progressBar.style.width = "100%";
 
           //add alert
@@ -118,8 +118,13 @@ document.addEventListener("DOMContentLoaded", () => {
           //auto close alert
           setTimeout(() => {
             alert.querySelector(".btn-close").click();
-          }, 20000);
+          }, 15000);
         }
+
+        //remove saved item
+        document.querySelectorAll("input").forEach((element) => {
+          localStorage.removeItem(element.id);
+        });
       } catch (e) {
         console.log(e);
       }

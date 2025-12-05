@@ -315,7 +315,7 @@ class User extends Database
 
             $response = [
                 'message_type' => 'success',
-                'message' => __('messages.success.user_createUser')
+                'message' => __('messages.success.user_signup')
             ];
 
             return $response;
@@ -1040,6 +1040,7 @@ class User extends Database
                 'nb_caissier' => $nb_caissier,
                 'nb_admin' => $nb_admin
             ];
+
             return $response;
         } catch (Throwable $e) {
             error_log($e->getMessage() .
@@ -1070,7 +1071,9 @@ class User extends Database
         $response = [
             'message_type' => 'success',
             'message' => 'success',
+            'found' => false
         ];
+
         $sql = "SELECT email_utilisateur FROM utilisateur WHERE email_utilisateur = :email ";
         $paramsQuery = ['email' => $email_utilisateur];
 
@@ -1095,6 +1098,7 @@ class User extends Database
             }
             //not found
             else {
+                $response['found'] = false;
             }
 
             $response = [

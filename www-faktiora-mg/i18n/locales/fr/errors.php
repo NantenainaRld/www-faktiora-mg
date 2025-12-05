@@ -195,6 +195,7 @@ return [
         'page' => "La page demandée n'est pas trouvée : :field",
         'action' => "L'action demandée n'est pas trouvée : :field",
         'class' => DEBUG ? "Erreur d'autochargement de classe, classe n'est pas trouvé : :field" : "Une erreur est survenue",
-        'config' => "Config file error : undefined key <b>:field</b>"
+        'config' => "Config file error : undefined key <b>:field</b>",
+        'json' => "JSON erreur : clé <b>:field</b> n'existe pas"
     ]
 ];

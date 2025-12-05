@@ -53,12 +53,12 @@
         <div class="row h-100 align-items-center">
             <!-- welcome  -->
             <div class="d-none d-lg-flex flex-column col-md-6 col-lg-8 border h-100 align-items-center justify-content-center px-5 welcome">
-                <h1 class="text-light fw-bold mb-4"><i class="fas fa-handshake me-2"></i>Bienvenue sur Faktiora</h1>
-                <h6 class="text-center text-light bg-success rounded p-4">` Ici, vous pouvez voir et faire toutes les transactions de votre caisse. Ajouter, supprimer, modifier puis lister les transactions, avec une génération en PDF des factures et rapport de caisse . `</h6>
+                <h1 class="text-light fw-bold mb-4"><i class="fas fa-handshake me-2"></i><?= __('forms.titles.welcome') ?></h1>
+                <h6 class="text-center text-light bg-success rounded p-4"><?= __('forms.titles.welcome_subtitle') ?></h6>
                 <!-- login  -->
             </div>
             <div class="col-12 col-lg-4 col-md-6 d-flex align-items-end justify-content-center ">
-                <div class="card">
+                <div class="card" style="max-height: 90vh;">
                     <!-- card header  -->
                     <div class="card-header d-flex bg-success justify-content-between">
                         <!-- connection  -->
@@ -84,8 +84,8 @@
                         </div>
                     </div>
                     <!-- card body  -->
-                    <div class="card-body d-flex flex-column">
-                        <!-- enter your lgin  -->
+                    <div class="card-body d-flex flex-column overflow-y-auto">
+                        <!-- enter your login  -->
                         <div class="row text-center my-2">
                             <h4 class="form-text text-muted"><?= __('forms.labels.enter_your_login') ?></h4>
                         </div>
@@ -147,7 +147,6 @@
                 </div>
             </div>
         </div>
-    </div>
     </div>
     <!-- bootstrap  -->
     <script src="<?= SITE_URL ?>/bootstrap-5.3.3/js/bootstrap.bundle.min.js"></script>

@@ -2,14 +2,14 @@
 
 return [
     'titles' => [
-        'login' => "Faktiora - connexion",
         'error' => "Erreur",
-        'signup' => "Création du compte",
         'user_dashboard' => "Tableau de bord - utilisateur",
         'list_date' => "Liste du : <i>:field</i>",
         'list_all_user' => "LISTE DE TOUS LES UTILISATEURS",
         'cash_report' => "RAPPORT DE CAISSE",
-        'sortie' => "DEMANDE D'ENGAGEMENT DE DEPENSE"
+        'sortie' => "DEMANDE D'ENGAGEMENT DE DEPENSE",
+        'welcome' => "Bienvenue sur Faktiora",
+        'welcome_subtitle' => "` Ici, vous pouvez voir et faire toutes les transactions de votre caisse. Ajouter, supprimer, modifier puis lister les transactions, avec une génération en PDF des factures et rapport de caisse . `"
     ],
     'labels' => [
         'name_firstname' => "Nom et prénoms",
@@ -59,13 +59,19 @@ return [
         'adress' => 'Adresse',
         'client' => 'Client',
         'connection' => "Connexion",
-        'enter_your_login' => "Entrer votre identifiant",
+        'enter_your_login' => "Entrer vos identifications",
         'login' => 'Email ou numéro de compte',
         'password' => "Mot de passe",
+        'password_confirm' => "Confirmer le mot de passe",
         'signin' => "se connecter",
         'dont_have_account' => 'Pas encore de compte ?',
-        'signup' => "S'inscrire",
-        'forgot_password' => "Mot de passe oublié"
+        'signup_0' => "S'inscrire",
+        'forgot_password' => "Mot de passe oublié",
+        'signup' => 'Inscription',
+        'fill_information' => "Compléter vos informations",
+        'name' => "Nom",
+        'firstname' => "Prénom(s)",
+        'have_account' => "Déjà un compte ?"
     ],
     'buttons' => ['return' => "Retourner"],
     'welcome' => ['user' => "Bienvenue :nom dans notre site web"],
