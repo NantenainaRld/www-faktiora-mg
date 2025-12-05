@@ -50,7 +50,68 @@
 
 <body class="bg-light d-flex flex-column min-vh-100 ">
     <div class="container-fluid vh-100">
-        <div class="row h-100 align-items-center">
+        <!-- template placeholder  -->
+        <template id="template-placeholder">
+            <div class="placeholder-glow col-12 d-flex g-0 h-100 align-items-center">
+                <!-- welcome  -->
+                <div class="d-none d-lg-flex flex-column col-md-6 col-lg-8 border h-100 align-items-center justify-content-center px-5 welcome">
+                    <h1 class="placeholder bg-success col-7 mb-4"></h1>
+                    <span class="placeholder col-8 bg-success mb-2"></span>
+                    <span class="placeholder col-10 bg-success"></span>
+                </div>
+                <!-- signin  -->
+                <div class="col-12 col-lg-4 col-md-6 d-flex align-items-end justify-content-center">
+                    <div class="card">
+                        <!-- card header  -->
+                        <div class="card-header d-flex bg-success justify-content-between">
+                            <!-- signup  -->
+                            <h2 class="placeholder bg-light col-6"></h2>
+                            <!-- lang  -->
+                            <div class="dropdown placeholder col-4 rounded-1 bg-light">
+                            </div>
+                        </div>
+                        <!-- card body  -->
+                        <div class="card-body d-flex flex-column overflow-y-auto">
+                            <!-- enter your login  -->
+                            <div class="row justify-content-center my-2">
+                                <h4 class="placeholder bg-secondary col-6"></h4>
+                            </div>
+                            <hr>
+                            <!-- form  -->
+                            <form class="p-3">
+                                <!-- login -->
+                                <div class="mb-3">
+                                    <label class="placeholder col-4 bg-secondary">
+                                    </label>
+                                    <input type="text" class="form-control disabled placeholder bg-secondary">
+                                </div>
+                                <!-- password -->
+                                <div class="mb-3">
+                                    <label class="placeholder col-4 bg-secondary">
+                                    </label>
+                                    <input class="form-control bg-secondary disabled placeholder">
+                                </div>
+                                <!-- forgot password  -->
+                                <div class="mb-3 d-flex justify-content-end">
+                                    <span class="placeholder bg-secondary col-4"></span>
+                                </div>
+                                <!-- btn submit  -->
+                                <div class="mt-4 mb-2 text-center">
+                                    <button class="btn btn-success placeholder disabled col-6" type="button"></button>
+                                </div>
+                                <!-- signup -->
+                                <div class="text-center mt-4">
+                                    <span class="placeholder bg-secondary col-4"></span>
+                                    <span class="placeholder bg-secondary col-3"></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <!-- template real  -->
+        <template id="template-real">
             <!-- welcome  -->
             <div class="d-none d-lg-flex flex-column col-md-6 col-lg-8 border h-100 align-items-center justify-content-center px-5 welcome">
                 <h1 class="text-light fw-bold mb-4"><i class="fas fa-handshake me-2"></i><?= __('forms.titles.welcome') ?></h1>
@@ -116,7 +177,7 @@
                                 </label>
                                 <div class="input-goup d-flex">
                                     <span class="input-group-text text-secondary rounded-end-0 text-success"><i class="fas fa-at"></i></span>
-                                    <input type="text" class="form-control text-secondary rounded-start-0" id="login" placeholder="<?= __('forms.placeholders.email') . ", 10008" ?>" required>
+                                    <input type="text" class="form-control text-secondary rounded-start-0 real-input" id="login" placeholder="<?= __('forms.placeholders.email') . ", 10008" ?>" required>
                                 </div>
                             </div>
                             <!-- password input  -->
@@ -126,7 +187,7 @@
                                 </label>
                                 <div class="input-goup d-flex">
                                     <span class="input-group-text text-secondary rounded-end-0 text-success"><i class="fas fa-lock"></i></span>
-                                    <input type="password" class="form-control text-secondary rounded-0" id="password" required>
+                                    <input type="password" class="form-control text-secondary rounded-0 real-input" id="password" required>
                                 </div>
                             </div>
                             <!-- forgot password  -->
@@ -140,12 +201,14 @@
                             </div>
                             <!-- signup -->
                             <div class="text-center mt-4">
-                                <span class="text-secondary"><?= __('forms.labels.dont_have_account') ?><a href="#" class="text-primary text-decoration-none ms-2"><?= __('forms.labels.signup') ?></a></span>
+                                <span class="text-secondary"><?= __('forms.labels.dont_have_account') ?><a href="<?= SITE_URL ?>/auth/page_signup" class="text-primary text-decoration-none ms-2"><?= __('forms.labels.signup') ?></a></span>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+        </template>
+        <div class="row h-100 align-items-center" id="container">
         </div>
     </div>
     <!-- bootstrap  -->

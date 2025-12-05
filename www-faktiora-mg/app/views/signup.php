@@ -258,7 +258,7 @@
                             </div>
                             <!-- signin -->
                             <div class="text-center mt-4">
-                                <span class="text-secondary"><?= __('forms.labels.have_account') ?><a href="#" class="text-primary text-decoration-none ms-2"><?= ucfirst(__('forms.labels.signin')) ?></a></span>
+                                <span class="text-secondary"><?= __('forms.labels.have_account') ?><a href="<?= SITE_URL ?>/auth/page_login" class="text-primary text-decoration-none ms-2"><?= ucfirst(__('forms.labels.signin')) ?></a></span>
                             </div>
                         </form>
                     </div>
