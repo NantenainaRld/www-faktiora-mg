@@ -73,7 +73,17 @@ return [
         'name' => "Nom",
         'firstname' => "Prénom(s)",
         'have_account' => "Déjà un compte ?",
-        'home' => 'Accueil'
+        'home' => 'Accueil',
+        'dashboard' => 'Tableau de bord',
+        'user' => 'Utilisateur',
+        'download_list' => 'Télécharger la liste',
+        'autre_entree' => 'Autre entrée',
+        'product' => 'Produit',
+        'article' => 'Article',
+        'setting' => 'Paramètre',
+        'account' => 'Compte',
+        'application' => 'Application',
+        'logout' => 'Se déconnecter'
     ],
     'buttons' => ['return' => "Retourner"],
     'welcome' => ['user' => "Bienvenue :nom dans notre site web"],

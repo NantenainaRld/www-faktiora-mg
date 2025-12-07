@@ -34,15 +34,15 @@
                else {
                   //a- user name
                   const aUserName = document.getElementById('a-user_name');
-                  aUserName.className = 'mb-2 text-light text-decoration-none text-center';
+                  aUserName.className = 'mb-1 text-light text-decoration-none text-center fs-6';
                   aUserName.innerHTML = `<h4 class='fw-bold'>${accountInfo.data.nom_utilisateur}</h4> <span class='fs-6 green-first'>${accountInfo.data.prenoms_utilisateur}</span>`;
                   //a- user email
                   const aUserEmail = document.getElementById('a-user_email');
-                  aUserEmail.className = 'mb-2 green-second text-decoration-none text-center form-text bg-green-third rounded-1 px-2';
+                  aUserEmail.className = 'mb-1 green-second text-decoration-none text-center form-text bg-green-third rounded-1 px-2';
                   aUserEmail.innerHTML = `${accountInfo.data.email_utilisateur}`;
                   //a- user role id user
                   const aRoleIdUser = document.getElementById('a-user_role_id_user');
-                  aRoleIdUser.className = 'mb-2 green-second text-decoration-none text-center form-text bg-success rounded-1 px-2 fw-bold bg-opacity-25';
+                  aRoleIdUser.className = 'mb-1 green-second text-decoration-none text-center form-text bg-success rounded-1 px-2 fw-bold bg-opacity-25';
                   aRoleIdUser.innerHTML = `${accountInfo.data.role_t} - ${accountInfo.data.id_utilisateur}`;
                   //role - caissier
                   if (accountInfo.data.role === 'caissier') {
@@ -90,7 +90,7 @@
    <!-- script fontawesome  -->
    <script src="<?= SITE_URL ?>/fontawesome-pro-7.1.0-web/js/fontawesome.js"></script>
    <script src="<?= SITE_URL ?>/fontawesome-pro-7.1.0-web/js/duotone.js"></script>
-   <!-- script js -->
+   <!-- script welcome -->
    </body>
 
    </html>
