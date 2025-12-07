@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
             alert.classList.add("alert-danger");
             //icon
             alert
-              .querySelector(".fas")
+              .querySelector(".fad")
               .classList.add("fa-exclamation-triangle");
             //message
             alert.querySelector(".alert-message").innerHTML = response.message;
@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
             //alert type
             alert.classList.add("alert-warning");
             //icon
-            alert.querySelector(".fas").classList.add("fa-info-circle");
+            alert.querySelector(".fad").classList.add("fa-info-circle");
             //message
             alert.querySelector(".alert-message").innerHTML = response.message;
             //progress bar

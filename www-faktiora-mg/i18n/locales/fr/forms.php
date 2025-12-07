@@ -9,7 +9,8 @@ return [
         'cash_report' => "RAPPORT DE CAISSE",
         'sortie' => "DEMANDE D'ENGAGEMENT DE DEPENSE",
         'welcome' => "Bienvenue sur Faktiora",
-        'welcome_subtitle' => "` Ici, vous pouvez voir et faire toutes les transactions de votre caisse. Ajouter, supprimer, modifier puis lister les transactions, avec une génération en PDF des factures et rapport de caisse . `"
+        'welcome_subtitle' => "` Ici, vous pouvez voir et faire toutes les transactions de votre caisse. Ajouter, supprimer, modifier puis lister les transactions, avec une génération en PDF des factures et rapport de caisse . `",
+        'caisse_dashboard' => 'Tableau de bord caisse'
     ],
     'labels' => [
         'name_firstname' => "Nom et prénoms",
@@ -71,7 +72,8 @@ return [
         'fill_information' => "Compléter vos informations",
         'name' => "Nom",
         'firstname' => "Prénom(s)",
-        'have_account' => "Déjà un compte ?"
+        'have_account' => "Déjà un compte ?",
+        'home' => 'Accueil'
     ],
     'buttons' => ['return' => "Retourner"],
     'welcome' => ['user' => "Bienvenue :nom dans notre site web"],

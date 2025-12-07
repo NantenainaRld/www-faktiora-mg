@@ -4,13 +4,14 @@ document.cookie = `time_zone=${
 }; path=/`;
 
 //api request
-async function apiRequest(url, options = {}) {
-  url = SITE_URL + url;
+async function apiRequest(endpoint, options = {}) {
+  url = SITE_URL + endpoint;
   try {
     const response = await fetch(url, {
       method: options.method ?? "GET",
       headers: { "Content-Type": "application/json" },
       body: options.body ? JSON.stringify(options.body) : null,
+      credentials: "include",
     });
 
     //redirect to error page

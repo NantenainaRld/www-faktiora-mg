@@ -99,7 +99,9 @@ class Auth extends Database
                     ' - File : ' . $e->getFile());
 
                 //redirect to error page
-                header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.auth_isLogedIn', ['field' => $e->getMessage()]));
+                header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.auth_isLogedIn', ['field' => $e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile()]));
 
                 return;
             }

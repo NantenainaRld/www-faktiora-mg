@@ -6,6 +6,7 @@ require_once LIBS_PATH . '/dompdf/autoload.inc.php';
 use Dompdf\Dompdf;
 use Dompdf\Image\Cache;
 use Dompdf\Options;
+use FontLib\Table\Type\head;
 
 // class client controller
 class CaisseController extends Controller
@@ -21,7 +22,28 @@ class CaisseController extends Controller
     //page - caisse dashboard
     public function pageCaisse()
     {
-        $this->render('caisse_dashboard', ['title' => 'Gestion des caisses']);
+        //is loged in
+        $is_loged_in  = Auth::isLogedIn();
+        //loged
+        if ($is_loged_in->getLoged()) {
+            //role not admin 
+            // if ($is_loged_in->getRole() !== 'admin') {
+            //     // redirect to caisse index 
+            //     header('Location: ' . SITE_URL . '/caisse');
+            //     return;
+            // }
+            //show login page
+            $this->render('caisse_dashboard', [
+                'title' => 'Faktiora - ' . __('forms.titles.caisse_dashboard'),
+                'role' => $is_loged_in->getRole()
+            ]);
+        }
+        //not loged
+        else {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
     }
 
     //============================== ACTIONS ===========================

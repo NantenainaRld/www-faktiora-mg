@@ -116,25 +116,12 @@ class AuthController extends Controller
         header('Content-Type: application/json');
         $response = null;
 
-        try {
-            //is loged in
-            $is_loged_in  = Auth::isLogedIn();
-            //loged
-            if ($is_loged_in->getLoged()) {
-                //redirect to user index
-                header('Location: ' . SITE_URL . '/user');
-                return;
-            }
-        } catch (Throwable $e) {
-            error_log($e->getMessage() .
-                ' - Line : ' . $e->getLine() .
-                ' - File : ' . $e->getFile());
-
-            //redirect to error page
-            header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.auth_isLogedIn', ['field' => $e->getMessage() .
-                ' - Line : ' . $e->getLine() .
-                ' - File : ' . $e->getFile()]));
-
+        //is loged in
+        $is_loged_in  = Auth::isLogedIn();
+        //loged
+        if ($is_loged_in->getLoged()) {
+            //redirect to user index
+            header('Location: ' . SITE_URL . '/user');
             return;
         }
 
@@ -384,25 +371,12 @@ class AuthController extends Controller
         header('Content-Type: application/json');
         $response = null;
 
-        try {
-            //is loged in
-            $is_loged_in  = Auth::isLogedIn();
-            //loged
-            if ($is_loged_in->getLoged()) {
-                //redirect to user index
-                header('Location: ' . SITE_URL . '/user');
-                return;
-            }
-        } catch (Throwable $e) {
-            error_log($e->getMessage() .
-                ' - Line : ' . $e->getLine() .
-                ' - File : ' . $e->getFile());
-
-            //redirect to error page
-            header('Location: ' . SITE_URL . '/error?messages=' . __('errors.catch.auth_isLogedIn', ['field' => $e->getMessage() .
-                ' - Line : ' . $e->getLine() .
-                ' - File : ' . $e->getFile()]));
-
+        //is loged in
+        $is_loged_in  = Auth::isLogedIn();
+        //loged
+        if ($is_loged_in->getLoged()) {
+            //redirect to user index
+            header('Location: ' . SITE_URL . '/user');
             return;
         }
 

@@ -503,7 +503,6 @@ class UserController extends Controller
     {
         header('Content-Type: application/json');
         $response = null;
-
         //is loged in ?
         $is_loged_in = Auth::isLogedIn();
         //not loged
@@ -512,13 +511,6 @@ class UserController extends Controller
             header('Location: ' . SITE_URL . '/auth');
             return;
         }
-        //not admin
-        if ($is_loged_in->getRole() !== 'admin') {
-            //redirect to user index
-            header('Location: ' . SITE_URL . '/user');
-            return;
-        }
-
         //user exist?
         $response = User::findById($is_loged_in->getIdUtilisateur());
         //error
@@ -539,7 +531,21 @@ class UserController extends Controller
             echo json_encode($response);
             return;
         }
-
+        // role caissier 
+        $num_caisse = '';
+        if ($is_loged_in->getRole() === 'caissier') {
+            // user has caisse ?
+            $findUserCaisse = LigneCaisse::findCaisse($is_loged_in->getRole());
+            //error
+            if ($findUserCaisse['message_type'] === 'error') {
+                echo json_encode($findUserCaisse);
+                return;
+            }
+            // found 
+            if ($findUserCaisse['found']) {
+                $num_caisse = $findUserCaisse['model']->getNumCaisse();
+            }
+        }
         //account info
         $response = [
             'message_type' => 'success',
@@ -550,7 +556,9 @@ class UserController extends Controller
                 'prenoms_utilisateur' => $response['model']->getPrenomsUtilisateur(),
                 'sexe_utilisateur' => $response['model']->getSexeUtilisateur(),
                 'email_utilisateur' => $response['model']->getEmailUtilisateur(),
-                'role' => $response['model']->getRole()
+                'role_t' => ucfirst(($response['model']->getRole() === 'admin') ? __('forms.labels.admin') : __('forms.labels.cashier')),
+                'role' => $response['model']->getRole(),
+                'num_caisse' => $num_caisse
             ]
         ];
 

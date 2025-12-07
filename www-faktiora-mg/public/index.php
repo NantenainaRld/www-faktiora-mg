@@ -1,6 +1,10 @@
 <?php
 //session start
 session_start();
+header('Access-Control-Allow-Methods: GET, POST, DELETE, PUT, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+header('Access-Control-Allow-Credentials: true');
+header('Vary: Origin');
 
 // ERROR SHOW
 error_reporting(E_ALL);
@@ -19,6 +23,8 @@ define('PUBLIC_PATH', __DIR__);
 
 //charge config file
 require_once CONFIG_PATH . '/config.php';
+header('Access-Control-Allow-Origin: ' . SITE_URL);
+
 //charge translations
 require_once SERVICE_PAH . '/TranslationService.php';
 //charge helper
