@@ -24,6 +24,27 @@ class UserController extends Controller
         $this->render('user_dashboard', ['title' => __('forms.titles.user_dashboard')]);
     }
 
+    //page - home
+    public function pageHome()
+    {
+        //is loged in ?
+        $is_loged_in = Auth::isLogedIn();
+        //loged
+        if ($is_loged_in->getLoged()) {
+            $_SESSION['menu'] = 'home';
+            $this->render('home', [
+                'title' => 'Faktiora - ' . __('forms.labels.home'),
+                'role' => $is_loged_in->getRole()
+            ]);
+        }
+        //not loged
+        else {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+    }
+
     //========================== ACIONS ==========================
 
     //action - create default admin account

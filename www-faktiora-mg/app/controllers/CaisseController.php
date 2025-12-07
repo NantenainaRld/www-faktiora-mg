@@ -26,12 +26,12 @@ class CaisseController extends Controller
         $is_loged_in  = Auth::isLogedIn();
         //loged
         if ($is_loged_in->getLoged()) {
-            //role not admin 
-            // if ($is_loged_in->getRole() !== 'admin') {
-            //     // redirect to caisse index 
-            //     header('Location: ' . SITE_URL . '/caisse');
-            //     return;
-            // }
+            // role not admin 
+            if ($is_loged_in->getRole() !== 'admin') {
+                // redirect to caisse index 
+                header('Location: ' . SITE_URL . '/caisse');
+                return;
+            }
             //show login page
             $this->render('caisse_dashboard', [
                 'title' => 'Faktiora - ' . __('forms.titles.caisse_dashboard'),

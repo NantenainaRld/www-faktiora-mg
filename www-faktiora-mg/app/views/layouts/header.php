@@ -18,11 +18,12 @@
         /* colors  */
         :root {
             --color-second: #E9ECEF;
+            --color-third: #b7bbc0ff;
             --green-first: #ECF4E8;
             --green-second: #CBF3BB;
         }
 
-        /* vody  */
+        /* body  */
 
         body {
             background-color: #F8F9FA;
@@ -32,6 +33,10 @@
         .btn-second {
             background-color: var(--color-second) !important;
             border-color: var(--color-second) !important;
+        }
+
+        .btn-second:active {
+            background-color: var(--color-third) !important;
         }
 
         /* bg  second */
@@ -103,6 +108,30 @@
         .overlay-searchbar.active {
             display: block !important;
             z-index: 999;
+        }
+
+        /* menu active  */
+        .nav-item.active {
+            background-color: rgba(4, 30, 14, 0.4) !important;
+        }
+
+        .nav-item:hover,
+        .navbar:hover {
+            background-color: rgba(4, 30, 14, 0.4) !important;
+        }
+
+        .nav-item:active,
+        .navbar:active {
+            background-color: rgba(3, 26, 12, 0.4) !important;
+        }
+
+        /* submenu hover */
+        .navbar li:hover {
+            background-color: var(--bs-success) !important;
+        }
+
+        .navbar li:active {
+            background-color: rgba(3, 26, 12, 0.4) !important;
         }
     </style>
 </head>
@@ -287,7 +316,7 @@
                         <!-- items  -->
                         <ul class="w-100 px-2 h-80 nav-pills nav-fill flex-column list-unstyled overflow-y-auto">
                             <!-- home  -->
-                            <li class="nav-item bg-success rounded-1 mb-2 text-light">
+                            <li class="nav-item <?= $_SESSION['menu'] === 'home' ? 'active' : '' ?> bg-success rounded-1 mb-2 text-light">
                                 <a href="#" class="nav-link fw-bold p-2 text-start" style="font-size: 0.85rem;">
                                     <i class="fad fa-house me-2"></i><?= __('forms.labels.home') ?>
                                 </a>
@@ -296,7 +325,7 @@
                             <li class="nav-item green-second text-start rounded-1 mb-2 fw-bold" style="font-size: 0.85rem;"><i class="fad fa-table-columns me-2"></i><?= __('forms.labels.dashboard') ?></li>
                             <!-- user  -->
                             <?php if ($role === 'admin'): ?>
-                                <li class="nav-item fw-bold text-light mb-2">
+                                <li class="nav-item fw-bold text-light mb-2 rounded-2">
                                     <nav class="navbar bg-success p-0 rounded">
                                         <a href=""
                                             class="nav-link navbar-toggler text-light p-2 justify-content-between d-flex"
@@ -331,7 +360,7 @@
                                 </li>
                             <?php endif; ?>
                             <!-- caisse  -->
-                            <li class="nav-item fw-bold text-light mb-2">
+                            <li class="nav-item fw-bold text-light mb-2 rounded-2">
                                 <nav class="navbar bg-success p-0 rounded">
                                     <a href=""
                                         class="nav-link navbar-toggler text-light p-2 justify-content-between d-flex"
@@ -371,7 +400,7 @@
                                 </a>
                             </li>
                             <!-- entree  -->
-                            <li class="nav-item fw-bold text-light mb-2">
+                            <li class="nav-item fw-bold text-light mb-2 rounded-2">
                                 <nav class="navbar bg-success p-0 rounded">
                                     <a href=""
                                         class="nav-link navbar-toggler text-light p-2 justify-content-between d-flex"

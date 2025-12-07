@@ -43,6 +43,9 @@ Autoload::register();
 //initialize translation
 TranslationService::init();
 
+//page selection
+$_SESSION['menu'] = (!isset($_SESSION['menu']) || !in_array($_SESSION["menu"], ['home', 'user_dashboard', 'user_print_list', 'caisse_dashboard', 'cash_report', 'client', 'facture', 'autre_entree', 'sortie', 'produit', 'article', 'setting_account', 'setting_app'])) ? 'home' : $_SESSION['menu'];
+
 // Router
 $router = new Router();
 $router->run();

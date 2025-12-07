@@ -52,45 +52,57 @@
                      aUserNumCaisse.innerHTML = accountInfo.data.num_caisse;
                   }
                }
+
+               //side bar && search bar
+
+               // btn sidebar 
+               const btnSideBar = container.querySelector('#btn-sidebar');
+               //overlay
+               const overlay = container.querySelector('.overlay');
+               //sidebar
+               const sidebar = container.querySelector('.sidebar');
+               btnSideBar.addEventListener('click', () => {
+                  sidebar.classList.toggle('active');
+                  overlay.classList.toggle('active');
+               });
+               //overlay toggle sidebar
+               overlay.addEventListener('click', () => {
+                  overlay.classList.toggle('active');
+                  sidebar.classList.toggle('active');
+               });
+               //searchbar
+               // const searchBar = document.querySelector('.searchbar');
+               // //overlay search bar
+               // const overlaySearchBar = document.querySelector('.overlay-searchbar');
+               //toggle sidebar
+               // const toggleSideBar = () => {
+               //    sidebar.classList.toggle('active');
+               //    overlay.classList.toggle('active');
+               // };
+               // /
+               // //toggle searchbar
+               // const toggleSearchBar = () => {
+               //    searchBar.classList.toggle('active');
+               //    overlaySearchBar.classList.toggle('active');
+               // };
+               // //overlay-searchbar toggle
+               // overlaySearchBar.addEventListener('click', () => {
+               //    overlaySearchBar.classList.toggle('active');
+               //    searchBar.classList.toggle('active');
+               // });
             } catch (e) {
                console.log(e);
             }
          }, 1000);
-
-         //overlay
-         const overlay = document.querySelector('.overlay');
-         //sidebar
-         const sidebar = document.querySelector('.sidebar');
-         //searchbar
-         const searchBar = document.querySelector('.searchbar');
-         //overlay search bar
-         const overlaySearchBar = document.querySelector('.overlay-searchbar');
-         //toggle sidebar
-         const toggleSideBar = () => {
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-         };
-         //overlay toggle
-         overlay.addEventListener('click', () => {
-            overlay.classList.toggle('active');
-            sidebar.classList.toggle('active');
-         });
-         //toggle searchbar
-         const toggleSearchBar = () => {
-            searchBar.classList.toggle('active');
-            overlaySearchBar.classList.toggle('active');
-         };
-         //overlay-searchbar toggle
-         overlaySearchBar.addEventListener('click', () => {
-            overlaySearchBar.classList.toggle('active');
-            searchBar.classList.toggle('active');
-         });
       });
    </script>
    <!-- script fontawesome  -->
    <script src="<?= SITE_URL ?>/fontawesome-pro-7.1.0-web/js/fontawesome.js"></script>
    <script src="<?= SITE_URL ?>/fontawesome-pro-7.1.0-web/js/duotone.js"></script>
    <!-- script welcome -->
+   <?php if ($_SESSION['menu'] === 'home'): ?>
+      <script src="<?= SITE_URL ?>/js/home.js"></script>
+   <?php endif; ?>
    </body>
 
    </html>

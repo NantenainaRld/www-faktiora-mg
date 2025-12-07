@@ -10,7 +10,7 @@ return [
         'sortie' => "DEMANDE D'ENGAGEMENT DE DEPENSE",
         'welcome' => "Bienvenue sur Faktiora",
         'welcome_subtitle' => "` Ici, vous pouvez voir et faire toutes les transactions de votre caisse. Ajouter, supprimer, modifier puis lister les transactions, avec une génération en PDF des factures et rapport de caisse . `",
-        'caisse_dashboard' => 'Tableau de bord caisse'
+        'caisse_dashboard' => 'Tableau de bord caisse',
     ],
     'labels' => [
         'name_firstname' => "Nom et prénoms",
