@@ -519,6 +519,197 @@ class UserController extends Controller
         return;
     }
 
+    //action - print all user
+    public function printAllUser()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged ?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+        //role - not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to user index
+            header('Location: ' . SITE_URL . '/user');
+            return;
+        }
+
+        //config.json
+        $config = json_decode(file_get_contents(PUBLIC_PATH . '/config/config.json'), true);
+
+        //status
+        $status = strtolower(trim($_GET['status'] ?? 'active'));
+        $status = ($status === 'deleted') ? $status : 'active';
+
+        try {
+
+            //strings
+            $date = new DateTime();
+            $list_date = __('forms.titles.list_date', ['field' => $date->format(__('forms.times.format_datetime'))]);
+            $list_all_user = __('forms.titles.list_all_user');
+            $name_firstname = __('forms.labels.name_firstname');
+            $sex = __('forms.labels.sex');
+            $email = __('forms.labels.email');
+            $role = __('forms.labels.role');
+            $strings = [
+                'caissier' => __('forms.labels.cashier'),
+                'admin' => __('forms.labels.admin'),
+                'total' => __('forms.labels.total'),
+                'status' => __('forms.labels.status'),
+            ];
+
+            //get all user
+            $response = User::listAllUser($status);
+            //error
+            if ($response['message_type'] === 'error') {
+                echo json_encode($response);
+                return;
+            }
+
+            //status
+            $status = ($status === 'deleted') ? __('forms.labels.deleted') : __('forms.labels.active');
+
+            //header
+            $html = "<!DOCTYPE html> 
+                    <body>
+                    <head>
+                        <style>
+                            body {
+                                font-size: 11pt;
+                            }
+                            .header {
+                                text-align: center;
+                            }
+                            .table {
+                                width: 100%;
+                                margin: 40px 0;
+                                border-collapse: collapse;
+                            }
+                            .thead {
+                                text-align: center;
+                                border: 1px solid black;
+                            }
+                            .thead th {
+                                padding: 5px;
+                                border: 1px solid black;
+                            }
+                            .table td {
+                                padding: 5px;
+                                border: 1px solid black;
+                            }
+                        </style>
+                    </head>
+                    <body>";
+
+            //title
+            if (!isset($config['enterprise_name'])) {
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __('errors.not_found.config', ['field' => 'enterprise_name'])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+            $html .= "<div class='header'>
+                        <h4>{$config['enterprise_name']}</h4>
+                        <p id='list-date'>{$list_date}</p><br>
+                        <h3><u>{$list_all_user}</u></h3>
+                        <p>{$strings['total']} : {$response['nb_user']}, {$strings['caissier']} : {$response['nb_caissier']}, {$strings['admin']} : {$response['nb_admin']}</p>
+                        <p>{$strings['status']} : {$status}</p>
+                    </div>";
+
+            //table
+            $html .= "<table class='table'>
+                            <tr class='thead'>
+                                <th>ID</th>
+                                <th>{$name_firstname}</th>
+                                <th>{$sex}</th>
+                                <th>{$email}</th>
+                                <th>{$role}</th>
+                            </tr>";
+            $html .= "<tbody>";
+            foreach ($response['data'] as $index => $line) {
+                $html .= "<tr>
+                            <td>{$line['id_utilisateur']}</td>
+                            <td>{$line['nom_prenoms']}</td>
+                            <td>{$line['sexe_utilisateur']}</td>
+                            <td>{$line['email_utilisateur']}</td>
+                            <td>{$line['role']}</td>
+                        </tr>";
+            }
+            $html .= "</tbody>";
+            $html .= "</table>";
+
+            //footer
+            $html .= "</body>
+                    </html>";
+
+            $dompdf = new Dompdf();
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+
+            $response = [
+                'message_type' => 'success',
+                'pdf' => base64_encode($dompdf->output()),
+                'file_name' => str_replace(' ', '_', strtolower($list_all_user . '.pdf')),
+                'message' => __('messages.success.print')
+            ];
+
+            echo json_encode($response);
+            return;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.user_printAllUser',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            echo json_encode($response);
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
+
+    //action - list all user
+    public function listAllUser()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //is loged in ?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+
+        //list all user
+        $response = User::listAllUser('');
+
+        echo json_encode($response);
+        return;
+    }
+
     //action - account info
     public function accountInfo()
     {
@@ -1229,175 +1420,6 @@ class UserController extends Controller
                 echo json_encode($response);
                 return;
             }
-        }
-
-        echo json_encode($response);
-        return;
-    }
-
-    //action - print all user
-    public function printAllUser()
-    {
-        header('Content-Type: application/json');
-        $response = null;
-
-        //loged ?
-        $is_loged_in = Auth::isLogedIn();
-        //not loged
-        if (!$is_loged_in->getLoged()) {
-            //redirect to login page
-            header('Location: ' . SITE_URL . '/auth');
-            return;
-        }
-        //role - not admin
-        if ($is_loged_in->getRole() !== 'admin') {
-            //redirect to user index
-            header('Location: ' . SITE_URL . '/user');
-            return;
-        }
-
-        //config.json
-        $config = json_decode(file_get_contents(PUBLIC_PATH . '/config/config.json'), true);
-
-        //status
-        $status = strtolower(trim($_GET['status'] ?? 'active'));
-        $status = ($status === 'deleted') ? $status : 'active';
-
-        try {
-
-            //strings
-            $date = new DateTime();
-            $list_date = __('forms.titles.list_date', ['field' => $date->format(__('forms.times.format_datetime'))]);
-            $list_all_user = __('forms.titles.list_all_user');
-            $name_firstname = __('forms.labels.name_firstname');
-            $sex = __('forms.labels.sex');
-            $email = __('forms.labels.email');
-            $role = __('forms.labels.role');
-            $strings = [
-                'caissier' => __('forms.labels.cashier'),
-                'admin' => __('forms.labels.admin'),
-                'total' => __('forms.labels.total'),
-                'status' => __('forms.labels.status'),
-            ];
-
-            //get all user
-            $response = User::listAllUser($status);
-            //error
-            if ($response['message_type'] === 'error') {
-                echo json_encode($response);
-                return;
-            }
-
-            //status
-            $status = ($status === 'deleted') ? __('forms.labels.deleted') : __('forms.labels.active');
-
-            //header
-            $html = "<!DOCTYPE html> 
-                    <body>
-                    <head>
-                        <style>
-                            body {
-                                font-size: 11pt;
-                            }
-                            .header {
-                                text-align: center;
-                            }
-                            .table {
-                                width: 100%;
-                                margin: 40px 0;
-                                border-collapse: collapse;
-                            }
-                            .thead {
-                                text-align: center;
-                                border: 1px solid black;
-                            }
-                            .thead th {
-                                padding: 5px;
-                                border: 1px solid black;
-                            }
-                            .table td {
-                                padding: 5px;
-                                border: 1px solid black;
-                            }
-                        </style>
-                    </head>
-                    <body>";
-
-            //title
-            if (!isset($config['enterprise_name'])) {
-                $response = [
-                    'message_type' => 'error',
-                    'message' => __('errors.not_found.config', ['field' => 'enterprise_name'])
-                ];
-
-                echo json_encode($response);
-                return;
-            }
-            $html .= "<div class='header'>
-                        <h4>{$config['enterprise_name']}</h4>
-                        <p id='list-date'>{$list_date}</p><br>
-                        <h3><u>{$list_all_user}</u></h3>
-                        <p>{$strings['total']} : {$response['nb_user']}, {$strings['caissier']} : {$response['nb_caissier']}, {$strings['admin']} : {$response['nb_admin']}</p>
-                        <p>{$strings['status']} : {$status}</p>
-                    </div>";
-
-            //table
-            $html .= "<table class='table'>
-                            <tr class='thead'>
-                                <th>ID</th>
-                                <th>{$name_firstname}</th>
-                                <th>{$sex}</th>
-                                <th>{$email}</th>
-                                <th>{$role}</th>
-                            </tr>";
-            $html .= "<tbody>";
-            foreach ($response['data'] as $index => $line) {
-                $html .= "<tr>
-                            <td>{$line['id_utilisateur']}</td>
-                            <td>{$line['nom_prenoms']}</td>
-                            <td>{$line['sexe_utilisateur']}</td>
-                            <td>{$line['email_utilisateur']}</td>
-                            <td>{$line['role']}</td>
-                        </tr>";
-            }
-            $html .= "</tbody>";
-            $html .= "</table>";
-
-            //footer
-            $html .= "</body>
-                    </html>";
-
-            $dompdf = new Dompdf();
-            $dompdf->loadHtml($html);
-            $dompdf->setPaper('A4', 'portrait');
-            $dompdf->render();
-
-            $response = [
-                'message_type' => 'success',
-                'pdf' => base64_encode($dompdf->output()),
-                'file_name' => str_replace(' ', '_', strtolower($list_all_user . '.pdf')),
-                'message' => __('messages.success.print')
-            ];
-
-            echo json_encode($response);
-            return;
-        } catch (Throwable $e) {
-            error_log($e->getMessage() .
-                ' - Line : ' . $e->getLine() .
-                ' - File : ' . $e->getFile());
-
-            $response = [
-                'message_type' => 'error',
-                'message' => __(
-                    'errors.catch.user_printAllUser',
-                    ['field' => $e->getMessage() .
-                        ' - Line : ' . $e->getLine() .
-                        ' - File : ' . $e->getFile()]
-                )
-            ];
-
-            echo json_encode($response);
-            return;
         }
 
         echo json_encode($response);

@@ -11,6 +11,10 @@ return [
         'welcome' => "Bienvenue sur Faktiora",
         'welcome_subtitle' => "` Ici, vous pouvez voir et faire toutes les transactions de votre caisse. Ajouter, supprimer, modifier puis lister les transactions, avec une génération en PDF des factures et rapport de caisse . `",
         'caisse_dashboard' => 'Tableau de bord caisse',
+        'effective_client' => 'Effectif des clients',
+        'effective_user' => 'Effectif des utilisateurs',
+        'effective_client_user' => 'Effectif client et utilisateur par genre',
+        'effective_user_role' => 'Effectif des utilisateurs par rôle'
     ],
     'labels' => [
         'name_firstname' => "Nom et prénoms",
@@ -83,7 +87,10 @@ return [
         'setting' => 'Paramètre',
         'account' => 'Compte',
         'application' => 'Application',
-        'logout' => 'Se déconnecter'
+        'logout' => 'Se déconnecter',
+        'clients_users' => 'Clients et utilisateur',
+        'male_m' => 'Homme',
+        'female_f' => "Femme"
     ],
     'buttons' => ['return' => "Retourner"],
     'welcome' => ['user' => "Bienvenue :nom dans notre site web"],

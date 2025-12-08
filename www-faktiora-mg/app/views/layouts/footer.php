@@ -99,6 +99,10 @@
    <!-- script fontawesome  -->
    <script src="<?= SITE_URL ?>/fontawesome-pro-7.1.0-web/js/fontawesome.js"></script>
    <script src="<?= SITE_URL ?>/fontawesome-pro-7.1.0-web/js/duotone.js"></script>
+   <!-- script chart js  -->
+   <script src="<?= SITE_URL ?>/chart-js/luxon.min.js"></script>
+   <script src="<?= SITE_URL ?>/chart-js/chart.umd.min.js"></script>
+   <script src="<?= SITE_URL ?>/chart-js/chartjs-adapter-luxon.js"></script>
    <!-- script welcome -->
    <?php if ($_SESSION['menu'] === 'home'): ?>
       <script src="<?= SITE_URL ?>/js/home.js"></script>

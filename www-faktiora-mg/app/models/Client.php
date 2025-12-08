@@ -168,17 +168,35 @@ class Client extends Database
 
         try {
 
-            $response = parent::selectQuery("SELECT id_client, nom_client, prenoms_client FROM client WHERE etat_client != 'supprimé' ");
+            $response = parent::selectQuery("SELECT id_client, nom_client, prenoms_client, sexe_client FROM client WHERE etat_client != 'supprimé' ");
 
             //error
             if ($response['message_type'] === 'error') {
                 return $response;
             }
 
+            //nb male
+            $nb_male = 0;
+            // nb female 
+            $nb_female = 0;
+            foreach ($response['data'] as $line) {
+                //count male
+                if ($line['sexe_client'] === 'masculin') {
+                    $nb_male++;
+                }
+                //count female
+                else {
+                    $nb_female++;
+                }
+            }
+
             $response = [
                 'message_type' => 'success',
                 'message' => 'success',
-                'data' => $response['data']
+                'data' => $response['data'],
+                'nb_client' => count($response['data']),
+                'nb_male' => $nb_male,
+                'nb_female' => $nb_female
             ];
 
             return $response;

@@ -1015,12 +1015,16 @@ class User extends Database
 
             $nb_caissier = 0;
             $nb_admin = 0;
+            $nb_male = 0;
+            $nb_female = 0;
             foreach ($response['data'] as &$user) {
                 //sex
                 if ($user['sexe_utilisateur'] === 'masculin') {
+                    $nb_male++;
                     $user['sexe_utilisateur'] = __('forms.labels.male');
                 } else {
                     $user['sexe_utilisateur'] = __('forms.labels.female');
+                    $nb_female++;
                 }
                 //role
                 if ($user['role'] === 'admin') {
@@ -1038,7 +1042,9 @@ class User extends Database
                 'data' => $response['data'],
                 'nb_user' => count($response['data']),
                 'nb_caissier' => $nb_caissier,
-                'nb_admin' => $nb_admin
+                'nb_admin' => $nb_admin,
+                'nb_male' => $nb_male,
+                'nb_female' => $nb_female
             ];
 
             return $response;

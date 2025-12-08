@@ -13,6 +13,8 @@
     <script src="<?= SITE_URL ?>/js/helpers/helper.js"></script>
     <!-- bootstrap  -->
     <link rel="stylesheet" href="<?= SITE_URL ?>/bootstrap-5.3.3/css/bootstrap.min.css">
+    <!-- i18n  -->
+    <?php require_once PUBLIC_PATH . '/i18n/i18n.php'; ?>
     <!-- style header  -->
     <style>
         /* colors  */
@@ -21,6 +23,7 @@
             --color-third: #b7bbc0ff;
             --green-first: #ECF4E8;
             --green-second: #CBF3BB;
+            --green-third: #10150fff;
         }
 
         /* body  */
@@ -52,6 +55,11 @@
         /* green second  */
         .green-second {
             color: var(--green-second) !important;
+        }
+
+        /* green third  */
+        .green-third {
+            color: var(--green-third) !important;
         }
 
         /* green third  */
@@ -136,9 +144,9 @@
     </style>
 </head>
 
-<body class="d-flex flex-column min-vh-100 min-vw-100 overflow-hidden">
-    <div class="container-fluid align-items-center">
-        <div class="row vh-100" id="container">
+<body class="d-flex flex-column min-vh-100 min-vw-100 vh-100 overflow-hidden">
+    <div class="container-fluid align-items-center h-100">
+        <div class="row h-100" id="container">
             <!-- template placeholder -->
             <template id="template-placeholder">
                 <!-- sidebar  -->
@@ -276,9 +284,9 @@
                                         <!-- title  -->
                                         <div class="card-body">
                                             <h5 class="placeholder w-25 bg-second"></h5>
+                                            <!-- table  -->
+                                            <div style="height: 30vh;" class="placeholder bg-second mx-3 mb-4"></div>
                                         </div>
-                                        <!-- table  -->
-                                        <div style="height: 30vh;" class="placeholder bg-second mx-3 mb-4"></div>
                                     </div>
                                 </div>
                             </div>
@@ -299,7 +307,7 @@
             <!-- template real side bar  -->
             <template id="template-sidebar">
                 <!-- sidebar  -->
-                <nav class="bg-sidebar overflow-y-auto vh-100 sidebar col-6 col-lg-2 col-md-4 placeholder-glow ">
+                <nav class="bg-sidebar overflow-y-auto h-100 sidebar col-6 col-lg-2 col-md-4 placeholder-glow ">
                     <!-- account intinfo  -->
                     <div class="d-flex flex-column align-items-center pt-3 g-0 px-2 border-bottom mb-2" id="account-info">
                         <!-- user name  -->
