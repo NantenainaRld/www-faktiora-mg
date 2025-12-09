@@ -215,17 +215,22 @@ class Facture extends Database
         ];
         try {
 
-            $response = parent::selectQuery("SELECT num_facture FROM facture WHERE etat_facture != 'supprimé' AND num_facture IS NOT NULL");
+            $response = parent::selectQuery("SELECT f.num_facture, (lf.prix * lf.quantite_produit) AS montant_facture FROM facture f JOIN ligne_facture lf ON lf.id_facture = f.id_facture WHERE etat_facture != 'supprimé' AND num_facture IS NOT NULL");
 
             //error
             if ($response['message_type'] === 'error') {
                 return $response;
             }
 
+            //total
+            $total = array_sum(array_column($response['data'], 'montant_facture'));
+
             $response = [
                 'message_type' => 'success',
                 'message' => 'success',
-                'data' => $response['data']
+                'data' => $response['data'],
+                'total_facture' => $total,
+                'nb_facture' => count($response['data']),
             ];
 
             return $response;

@@ -329,17 +329,22 @@ class AutreEntree extends Database
 
         try {
 
-            $response = parent::selectQuery("SELECT num_ae , libelle_ae, montant_ae FROM autre_entree WHERE etat_ae != 'supprimé' ");
+            $response = parent::selectQuery("SELECT num_ae , libelle_ae, montant_ae FROM autre_entree WHERE etat_ae != 'supprimé' AND num_ae IS NOT NULL");
 
             //error
             if ($response['message_type'] === 'error') {
                 return $response;
             }
 
+            //total
+            $total = array_sum(array_column($response['data'], 'montant_ae'));
+
             $response = [
                 'message_type' => 'success',
                 'message' => 'success',
-                'data' => $response['data']
+                'data' => $response['data'],
+                'nb_ae' => count($response['data']),
+                'total_ae' => $total,
             ];
 
             return $response;

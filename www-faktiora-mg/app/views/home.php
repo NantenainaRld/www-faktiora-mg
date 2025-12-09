@@ -33,15 +33,15 @@
                     <!-- chart  -->
                     <div class="row align-items-center py-2">
                         <!-- client and user -->
-                        <div class="col-12 py-2 col-md-5">
+                        <div class="col-12 py-2 col-md-6">
                             <div class="card">
                                 <div class="card-body">
                                     <!-- title client and user -->
-                                    <div class="card-title text-secondary"><i class="fad fa-user me-2"></i><?= __('forms.labels.clients_users') ?></div>
+                                    <div class="card-title text-secondary" id="chart-client-title"><i class="fad fa-user me-2"></i><?= __('forms.labels.clients_users') ?></div>
                                     <!-- chart -->
                                     <div class="align-items-center d-flex justify-content-center row py-1">
                                         <!-- chart client  -->
-                                        <div class="col-12 col-lg-6 d-flex flex-column align-items-center py-2" id="chart-client">
+                                        <div class="col-12 col-lg-6 d-flex flex-column align-items-center py-2 px-4" id="chart-client">
                                             <div class="row py-2 align-items-center justify-content-center">
                                                 <h6 class="placeholder rounded-1 w-50 bg-second mb-3"></h6>
                                                 <div class="rounded-circle bg-second placeholder mb-1 h-25" style="aspect-ratio: 1/1;"></div>
@@ -53,7 +53,7 @@
                                             </div>
                                         </div>
                                         <!-- chart user  -->
-                                        <div class="col-12 d-flex col-lg-6 flex-column align-items-center py-2" id="chart-user">
+                                        <div class="col-12 d-flex col-lg-6 flex-column align-items-center py-2 px-4" id="chart-user">
                                             <div class="row py-2 align-items-center justify-content-center">
                                                 <h6 class="placeholder rounded-1 w-50 bg-second mb-3"></h6>
                                                 <div class="rounded-circle bg-second placeholder mb-1 h-25" style="aspect-ratio: 1/1;"></div>
@@ -69,15 +69,15 @@
                             </div>
                         </div>
                         <!-- transactions -->
-                        <div class="col-12 py-2 col-md-7">
+                        <div class="col-12 py-2 col-md-6">
                             <div class="card">
                                 <div class="card-body">
                                     <!-- title  transactions -->
-                                    <div class="card-title text-secondary"><i class="fad fa-money-bill-transfer me-2"></i>Transactions</div>
+                                    <div class="card-title text-secondary"><i class="fad fa-money-bill-transfer me-2"></i><?= __('forms.labels.transactions') ?></div>
                                     <!-- chart -->
-                                    <div class="align-items-center d-flex justify-content-center row py-1">
+                                    <div class="align-items-center d-flex justify-content-center row py-1" id="chart-transactions">
                                         <!-- chart number-->
-                                        <div class="col-6 d-flex flex-column align-items-center py-2">
+                                        <div class="d-flex flex-column align-items-center py-2 col-12 col-lg-6 px-4" id="chart-transactions-number">
                                             <div class="row py-2 align-items-center justify-content-center">
                                                 <h6 class="placeholder rounded-1 w-50 bg-second mb-3"></h6>
                                                 <div class="rounded-circle bg-second placeholder mb-1 h-25" style=" aspect-ratio: 1/1;"></div>
@@ -86,18 +86,16 @@
                                                     <h6 class="placeholder rounded-1 w-25 bg-second"></h6>
                                                     <h6 class="placeholder rounded-1 w-25 bg-second"></h6>
                                                     <h6 class="placeholder rounded-1 w-25 bg-second"></h6>
-                                                    <h6 class="placeholder rounded-1 w-25 bg-second"></h6>
                                                 </div>
                                             </div>
                                         </div>
                                         <!-- chart amount -->
-                                        <div class="col-6 d-flex flex-column align-items-center py-2">
+                                        <div class="d-flex flex-column align-items-center py-2 col-12 px-4  col-lg-6" id="chart-transactions-total">
                                             <div class="row py-2 align-items-center justify-content-center">
                                                 <h6 class="placeholder rounded-1 w-50 bg-second mb-3"></h6>
                                                 <div class="rounded-circle bg-second placeholder mb-1 h-25" style="aspect-ratio: 1/1;"></div>
                                                 <!-- legends -->
                                                 <div class="d-flex justify-content-between gap-2">
-                                                    <h6 class="placeholder rounded-1 w-25 bg-second"></h6>
                                                     <h6 class="placeholder rounded-1 w-25 bg-second"></h6>
                                                     <h6 class="placeholder rounded-1 w-25 bg-second"></h6>
                                                     <h6 class="placeholder rounded-1 w-25 bg-second"></h6>

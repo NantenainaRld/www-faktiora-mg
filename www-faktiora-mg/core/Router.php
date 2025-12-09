@@ -41,6 +41,18 @@ class Router
 
             return;
         }
+        //favicon
+        else if ($this->controller === 'Favicon.ico') {
+            return;
+        }
+        //bootstrap
+        else if ($this->controller === 'Bootstrap-5.3.3') {
+            return;
+        }
+        //chart js
+        else if ($this->controller === 'Chart-js') {
+            return;
+        }
         //no error
         else {
             try {

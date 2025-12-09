@@ -202,17 +202,22 @@ class DemandeSortie extends Database
         ];
         try {
 
-            $response = parent::selectQuery("SELECT num_ds FROM demande_sortie WHERE etat_ds != 'supprimé' AND num_ds IS NOT NULL");
+            $response = parent::selectQuery("SELECT ds.num_ds, (lds.quantite_article * lds.prix_article) AS montant_ds FROM demande_sortie ds JOIN ligne_ds lds ON lds.id_ds = ds.id_ds WHERE etat_ds != 'supprimé' AND num_ds IS NOT NULL");
 
             //error
             if ($response['message_type'] === 'error') {
                 return $response;
             }
 
+            //total
+            $total = array_sum(array_column($response['data'], 'montant_ds'));
+
             $response = [
                 'message_type' => 'success',
                 'message' => 'success',
-                'data' => $response['data']
+                'data' => $response['data'],
+                'total_sortie' => $total,
+                'nb_sortie' => count($response['data']),
             ];
 
             return $response;

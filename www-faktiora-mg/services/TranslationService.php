@@ -25,6 +25,8 @@ class TranslationService
         else {
             //browser lang
             self::$current_lang = $lang ? (in_array($lang, self::$supported_lang) ? $lang : 'fr') : self::detectLang();
+            //create new cookie lang
+            setcookie('lang', self::$current_lang, time() + (86400) * 365, '/');
         }
 
         //load lang files
@@ -75,9 +77,16 @@ class TranslationService
             setcookie('lang', $lang, time() + (86400) * 365);
             //redirect to site url
             header('Location: ' . SITE_URL);
-            return true;
+            return;
         }
-        return false;
+        //not supported
+        else {
+            //set cookie lang
+            setcookie('lang', 'fr', time() + (86400) * 365, '/');
+            //redirect to site url
+            header('Location: ' . SITE_URL);
+            return;
+        }
     }
 
 
