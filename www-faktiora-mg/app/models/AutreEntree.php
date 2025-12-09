@@ -329,7 +329,7 @@ class AutreEntree extends Database
 
         try {
 
-            $response = parent::selectQuery("SELECT num_ae , libelle_ae, montant_ae FROM autre_entree WHERE etat_ae != 'supprimé' AND num_ae IS NOT NULL");
+            $response = parent::selectQuery("SELECT num_ae , libelle_ae, montant_ae AS montant, DATE(date_ae) AS date FROM autre_entree WHERE etat_ae != 'supprimé' AND num_ae IS NOT NULL");
 
             //error
             if ($response['message_type'] === 'error') {
@@ -337,7 +337,7 @@ class AutreEntree extends Database
             }
 
             //total
-            $total = array_sum(array_column($response['data'], 'montant_ae'));
+            $total = array_sum(array_column($response['data'], 'montant'));
 
             $response = [
                 'message_type' => 'success',

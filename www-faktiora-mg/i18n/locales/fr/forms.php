@@ -14,7 +14,10 @@ return [
         'effective_client' => 'Effectif des clients',
         'effective_user' => 'Effectif des utilisateurs',
         'effective_client_user' => 'Effectif client et utilisateur par genre',
-        'effective_user_role' => 'Effectif des utilisateurs par rôle'
+        'effective_user_role' => 'Effectif des utilisateurs par rôle',
+        'curves_transactions' => "Histogrammes des transactions",
+        'per_nb_trans' => 'Par nombre des transactions',
+        'per_total_trans' => 'Par total des transactions'
     ],
     'labels' => [
         'name_firstname' => "Nom et prénoms",
@@ -44,6 +47,7 @@ return [
         'neutral' => 'neutre',
         'date' => 'Date',
         'num' => 'Numéro',
+        'number' => 'Nombre',
         'label' => 'Libellé',
         'encasement' => 'Encaissement',
         'disbursement' => 'Décaissement',
@@ -95,8 +99,6 @@ return [
         'nb_transactions' => 'Nombre des transactions',
         'total_transactions' => 'Total des transactions'
     ],
-    'buttons' => ['return' => "Retourner"],
-    'welcome' => ['user' => "Bienvenue :nom dans notre site web"],
     'status' => [
         'online' => 'en ligne',
         'disconnected' => 'déconnecté'

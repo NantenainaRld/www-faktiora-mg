@@ -113,13 +113,13 @@
                             <div class="card h-100">
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <!-- title transactions curves  -->
-                                    <div class="card-title text-secondary flex-grow-0">
-                                        <i class="fad fa-chart-mixed-up-circle-dollar me-2"></i>Courbes des transactions
+                                    <div class="card-title text-secondary flex-grow-0" id="chart-transactions-curves-title">
+                                        <i class="fad fa-chart-mixed-up-circle-dollar me-2"></i><?= __('forms.titles.curves_transactions') ?>
                                     </div>
                                     <!-- curves  -->
-                                    <div class="row d-flex justify-content-between py-2 flex-grow-1">
+                                    <div class="row d-flex justify-content-between py-2 flex-grow-1" id="chart-transactions-curves">
                                         <!-- curve number  -->
-                                        <div class="col-12 col-md-6 align-items-center justify-content-center d-flex flex-column mb-3">
+                                        <div class="col-12 col-md-6 align-items-center justify-content-center d-flex flex-column mb-3 overflow-x-auto" id="chart-transactions-curves-nb">
                                             <h6 class="w-25 bg-second rounded-1 placeholder mb-2"></h6>
                                             <div class="placeholder rounded-1 w-75 bg-second mb-3" style="height: 20vh !important;"></div>
                                             <div class="d-flex justify-content-center w-100 align-items-center gap-4">
@@ -129,7 +129,7 @@
                                             </div>
                                         </div>
                                         <!-- curve amount  -->
-                                        <div class="col-12 col-md-6 align-items-center justify-content-center d-flex flex-column">
+                                        <div class="col-12 col-md-6 align-items-center justify-content-center d-flex flex-column" id="chart-transactions-curves-total">
                                             <h6 class="w-25 bg-second rounded-1 placeholder mb-2"></h6>
                                             <div class="placeholder rounded-1 w-75 bg-second mb-3" style="height: 20vh !important;"></div>
                                             <div class="d-flex justify-content-center w-100 align-items-center gap-4">

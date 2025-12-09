@@ -15,6 +15,15 @@
         outflow: "<?= ucfirst(__('forms.labels.outflow')) ?>",
         nb_transactions: "<?= ucfirst(__('forms.labels.nb_transactions')) ?>",
         total_transactions: "<?= ucfirst(__('forms.labels.total_transactions')) ?>",
+        loss: "<?= __('forms.labels.loss') ?>",
+        neutral: "<?= __('forms.labels.neutral') ?>",
+        benefice: "<?= __('forms.labels.benefice') ?>",
+        curves_transactions: "<?= __('forms.titles.curves_transactions') ?>",
+        per_nb_trans: "<?= __('forms.titles.per_nb_trans') ?>",
+        per_total_trans: "<?= __('forms.titles.per_total_trans') ?>",
+        number: "<?= __('forms.labels.number') ?>",
+        date: "<?= __('forms.labels.date') ?>",
+        total: "<?= __('forms.labels.total') ?>"
     }
     //cookie lang value
     const cookieLangValue = document.cookie

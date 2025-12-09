@@ -118,6 +118,10 @@ document.addEventListener("DOMContentLoaded", () => {
       //div chart transactions
       const divChartTransactions =
         document.getElementById("chart-transactions");
+      //div chart transactions curves
+      const divChartTransactionsCurves = document.getElementById(
+        "chart-transactions-curves"
+      );
       //get list autre entree
       const autreEntreeEffective = await apiRequest(
         "/entree/list_all_autre_entree"
@@ -130,15 +134,18 @@ document.addEventListener("DOMContentLoaded", () => {
       );
       //error autre entree effective
       if (autreEntreeEffective.message_type !== "success") {
-        divChartTransactions.innerHTML = `<div class='alert alert-danger form-text'><i class='fad fa-exclamation-circle me-2'></i>${autreEntreeEfective.message}'</div>`;
+        divChartTransactions.innerHTML = `<div class='alert alert-danger form-text'><i class='fad fa-exclamation-circle me-2'></i>${autreEntreeEffective.message}'</div>`;
+        divChartTransactionsCurves.innerHTML = `<div class='alert alert-danger form-text'><i class='fad fa-exclamation-circle me-2'></i>${autreEntreeEffective.message}'</div>`;
       }
       //error facture effective
       else if (factureEffective.message_type !== "success") {
-        divChartTransactions.innerHTML = `<div class='alert alert-danger form-text'><i class='fad fa-exclamation-circle me-2'></i>${autreEntreeEfective.message}'</div>`;
+        divChartTransactions.innerHTML = `<div class='alert alert-danger form-text'><i class='fad fa-exclamation-circle me-2'></i>${autreEntreeEffective.message}'</div>`;
+        divChartTransactionsCurves.innerHTML = `<div class='alert alert-danger form-text'><i class='fad fa-exclamation-circle me-2'></i>${autreEntreeEffective.message}'</div>`;
       }
       //error sortie effective
       else if (sortieEffective.message_type !== "success") {
-        divChartTransactions.innerHTML = `<div class='alert alert-danger form-text'><i class='fad fa-exclamation-circle me-2'></i>${autreEntreeEfective.message}'</div>`;
+        divChartTransactions.innerHTML = `<div class='alert alert-danger form-text'><i class='fad fa-exclamation-circle me-2'></i>${autreEntreeEffective.message}'</div>`;
+        divChartTransactionsCurves.innerHTML = `<div class='alert alert-danger form-text'><i class='fad fa-exclamation-circle me-2'></i>${autreEntreeEffective.message}'</div>`;
       }
       //successs
       else {
@@ -279,9 +286,289 @@ document.addEventListener("DOMContentLoaded", () => {
           },
         });
         divChartTransactonsTotal.append(canvasTransactionsTotal);
+
+        //=============== chart transactions curves
+        //title
+        const chartTransactionsCurvesTitle = document.getElementById(
+          "chart-transactions-curves-title"
+        );
+        let rest =
+            Number(autreEntreeEffective.total_ae) +
+            Number(factureEffective.total_facture) -
+            Number(sortieEffective.total_sortie),
+          status;
+        //loss
+        if (rest < 0) {
+          if (cookieLangValue === "en") {
+            const formatter = new Intl.NumberFormat("en-US", {
+              style: "decimal",
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 0,
+            });
+            rest = formatter.format(rest);
+          } else {
+            const formatter = new Intl.NumberFormat("en-FR", {
+              style: "decimal",
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 0,
+            });
+            rest = formatter.format(rest);
+          }
+          status = `(<span class='text-danger'>${lang.loss} -${rest} ${currencyUnits}</span>)`;
+        }
+        //neutral
+        else if (rest === 0) {
+          status = `(<span class='text-secondary'>${lang.neutral}</span>)`;
+        }
+        //benefice
+        else {
+          if (cookieLangValue === "en") {
+            const formatter = new Intl.NumberFormat("en-US", {
+              style: "decimal",
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 0,
+            });
+            rest = formatter.format(rest);
+          } else {
+            const formatter = new Intl.NumberFormat("en-FR", {
+              style: "decimal",
+              maximumFractionDigits: 2,
+              minimumFractionDigits: 0,
+            });
+            rest = formatter.format(rest);
+          }
+          status = `(<span class='text-success'>${lang.benefice} +${rest} ${currencyUnits}</span>)`;
+        }
+        chartTransactionsCurvesTitle.innerHTML = `<i class="fad fa-chart-mixed-up-circle-dollar me-2"></i>${lang.curves_transactions} ${status}`;
+
+        Chart.register(ChartZoom);
+        Chart.defaults.locale = cookieLangValue;
+
+        //all dates
+        const allDates = [
+          ...new Set([
+            ...autreEntreeEffective.data.map((d) => d.date),
+            ...factureEffective.data.map((d) => d.date),
+            ...sortieEffective.data.map((d) => d.date),
+          ]),
+        ].sort();
+
+        //count par date
+        const countNbTotalAutreEntree = countNbTotal(autreEntreeEffective);
+        const countNbTotalFacture = countNbTotal(factureEffective);
+        const countNbTotalSortie = countNbTotal(sortieEffective);
+
+        //=====show chart transactions curves nb
+        const chartTransactionsCurvesNumber = document.getElementById(
+          "chart-transactions-curves-nb"
+        );
+        const canvasTransactionsCurvesNumber = document.createElement("canvas");
+        new Chart(canvasTransactionsCurvesNumber, {
+          type: "bar",
+          data: {
+            labels: allDates,
+            datasets: [
+              {
+                label: lang.autre_entree,
+                data: prepareCount(countNbTotalAutreEntree, allDates),
+                borderColor: "#00ffeeff",
+                borderWidth: 1,
+                backgroundColor: "#cbf3f0a9",
+                barThickness: 20,
+                borderRadius: 5,
+              },
+              {
+                label: lang.bill,
+                data: prepareCount(countNbTotalFacture, allDates),
+                borderColor: "#01a7b9ff",
+                borderWidth: 1,
+                backgroundColor: "#2ec4b5a1",
+                barThickness: 20,
+                borderRadius: 5,
+              },
+              {
+                label: lang.outflow,
+                data: prepareCount(countNbTotalSortie, allDates),
+                borderColor: "#e10618b9",
+                borderWidth: 1,
+                backgroundColor: "#e63947b0",
+                barThickness: 20,
+                borderRadius: 5,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              title: {
+                display: true,
+                text: lang.per_nb_trans,
+              },
+              legend: { display: true, position: "bottom", align: "center" },
+            },
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: lang.date,
+                },
+                type: "time",
+                time: { unit: "day" },
+              },
+              y: {
+                title: { display: true, text: lang.number },
+                beginAtZero: true,
+                ticks: { stepSize: 1 },
+              },
+            },
+            zoom: {
+              zoom: {
+                wheel: {
+                  enabled: true,
+                  minScale: 0.5,
+                  maxScale: 10,
+                  wheelEvent: "wheel",
+                },
+                pinch: { enabled: true },
+                pan: {
+                  enabled: true,
+                  mode: "xy",
+                  modifierKey: "alt",
+                },
+                drag: {
+                  mode: "xy",
+                  enabled: true,
+                  backgroundColor: "red",
+                  animation: 100,
+                },
+              },
+            },
+          },
+          plugins: [ChartZoom],
+        });
+        chartTransactionsCurvesNumber.innerHTML = "";
+        chartTransactionsCurvesNumber.append(canvasTransactionsCurvesNumber);
+
+        //=====show chart transactions curves total
+        const chartTransactionsCurvesTotal = document.getElementById(
+          "chart-transactions-curves-total"
+        );
+        const canvasTransactionsCurvesTotal = document.createElement("canvas");
+        new Chart(canvasTransactionsCurvesTotal, {
+          type: "bar",
+          data: {
+            labels: allDates,
+            datasets: [
+              {
+                label: lang.autre_entree,
+                data: prepareTotal(countNbTotalAutreEntree, allDates),
+                borderColor: "#00ffeeff",
+                borderWidth: 1,
+                backgroundColor: "#cbf3f0a9",
+                barThickness: 20,
+                borderRadius: 5,
+              },
+              {
+                label: lang.bill,
+                data: prepareTotal(countNbTotalFacture, allDates),
+                borderColor: "#01a7b9ff",
+                borderWidth: 1,
+                backgroundColor: "#2ec4b5a1",
+                barThickness: 20,
+                borderRadius: 5,
+              },
+              {
+                label: lang.outflow,
+                data: prepareTotal(countNbTotalSortie, allDates),
+                borderColor: "#e10618b9",
+                borderWidth: 1,
+                backgroundColor: "#e63947b0",
+                barThickness: 20,
+                borderRadius: 5,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              title: {
+                display: true,
+                text: lang.per_total_trans,
+              },
+              legend: { display: true, position: "bottom", align: "center" },
+            },
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: lang.date,
+                },
+                type: "time",
+                time: { unit: "day" },
+              },
+              y: {
+                title: { display: true, text: lang.total },
+                beginAtZero: true,
+                ticks: { stepSize: 1 },
+              },
+            },
+            zoom: {
+              zoom: {
+                wheel: {
+                  enabled: true,
+                  minScale: 0.5,
+                  maxScale: 10,
+                  wheelEvent: "wheel",
+                },
+                pinch: { enabled: true },
+                pan: {
+                  enabled: true,
+                  mode: "xy",
+                  modifierKey: "alt",
+                },
+                drag: {
+                  mode: "xy",
+                  enabled: true,
+                  backgroundColor: "red",
+                  animation: 100,
+                },
+              },
+            },
+          },
+          plugins: [ChartZoom],
+        });
+        chartTransactionsCurvesTotal.innerHTML = "";
+        chartTransactionsCurvesTotal.append(canvasTransactionsCurvesTotal);
+        console.log(countNbTotalSortie);
       }
     } catch (e) {
       console.log(e);
     }
   }, 1050);
+
+  //=========================== FUNCTIONS
+  //function - count nb && total per date
+  const countNbTotal = (effective) => {
+    const result = {};
+
+    effective.data.forEach((item) => {
+      if (!result[item.date]) {
+        //object date {} not exist
+        result[item.date] = {
+          count: 0,
+          total: 0,
+        };
+      }
+      //increment
+      result[item.date].count++;
+      result[item.date].total += Number(item.montant);
+    });
+    return result;
+  };
+  //function - prepare count
+  const prepareCount = (countNbTotal, allDates) =>
+    allDates.map((date) => countNbTotal[date]?.count || 0);
+  //function - prepare total
+  const prepareTotal = (countNbTotal, allDates) =>
+    allDates.map((date) => countNbTotal[date]?.total || 0);
 });

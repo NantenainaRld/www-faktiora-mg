@@ -202,7 +202,7 @@ class DemandeSortie extends Database
         ];
         try {
 
-            $response = parent::selectQuery("SELECT ds.num_ds, (lds.quantite_article * lds.prix_article) AS montant_ds FROM demande_sortie ds JOIN ligne_ds lds ON lds.id_ds = ds.id_ds WHERE etat_ds != 'supprimé' AND num_ds IS NOT NULL");
+            $response = parent::selectQuery("SELECT ds.num_ds, (lds.quantite_article * lds.prix_article) AS montant, DATE(date_ds) AS date FROM demande_sortie ds JOIN ligne_ds lds ON lds.id_ds = ds.id_ds WHERE etat_ds != 'supprimé' AND num_ds IS NOT NULL");
 
             //error
             if ($response['message_type'] === 'error') {
@@ -210,7 +210,7 @@ class DemandeSortie extends Database
             }
 
             //total
-            $total = array_sum(array_column($response['data'], 'montant_ds'));
+            $total = array_sum(array_column($response['data'], 'montant'));
 
             $response = [
                 'message_type' => 'success',

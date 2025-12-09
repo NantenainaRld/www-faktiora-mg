@@ -215,7 +215,7 @@ class Facture extends Database
         ];
         try {
 
-            $response = parent::selectQuery("SELECT f.num_facture, (lf.prix * lf.quantite_produit) AS montant_facture FROM facture f JOIN ligne_facture lf ON lf.id_facture = f.id_facture WHERE etat_facture != 'supprimé' AND num_facture IS NOT NULL");
+            $response = parent::selectQuery("SELECT f.num_facture, (lf.prix * lf.quantite_produit) AS montant, DATE(date_facture) AS date FROM facture f JOIN ligne_facture lf ON lf.id_facture = f.id_facture WHERE etat_facture != 'supprimé' AND num_facture IS NOT NULL");
 
             //error
             if ($response['message_type'] === 'error') {
@@ -223,7 +223,7 @@ class Facture extends Database
             }
 
             //total
-            $total = array_sum(array_column($response['data'], 'montant_facture'));
+            $total = array_sum(array_column($response['data'], 'montant'));
 
             $response = [
                 'message_type' => 'success',
