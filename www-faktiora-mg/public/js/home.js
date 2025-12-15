@@ -6,6 +6,27 @@ document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("container");
     // load template real
     container.append(templateRealContent.content.cloneNode(true));
+    //config
+    let config = "",
+      currencyUnits = "",
+      cookieLangValue = "";
+    const f = async () => {
+      try {
+        //cookie lang value
+        cookieLangValue = document.cookie
+          .split("; ")
+          .find((row) => row.startsWith(`lang=`))
+          ?.split("=")[1];
+
+        //get currency units
+        config = await fetch(`${SITE_URL}/config/config.json`);
+        if (!config.ok) throw new Error(`HTTP ${config.status}`);
+        currencyUnits = (await config.json()).currency_units;
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    await f();
 
     try {
       //================ chart client ========================
@@ -15,9 +36,47 @@ document.addEventListener("DOMContentLoaded", () => {
       const clientEffective = await apiRequest("/client/list_all_client");
       //get user effective
       const userEffective = await apiRequest("/user/list_all_user");
-      //chart client title
-      const chartClientTitle = document.getElementById("chart-client-title");
-      chartClientTitle.innerHTML = `<i class="fad fa-user me-2" id="chart-client-title"></i>${lang.clients_users} (${clientEffective.nb_client}, ${userEffective.nb_user})`;
+
+      //formatter
+      let formatterNumber, formatterTotal;
+      //en
+      if (cookieLangValue === "en") {
+        formatterNumber = new Intl.NumberFormat("en-US", {
+          style: "decimal",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        });
+        formatterTotal = new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: currencyUnits,
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        });
+      }
+      //fr && mg
+      else {
+        formatterNumber = new Intl.NumberFormat("fr-FR", {
+          style: "decimal",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2,
+        });
+        if (cookieLangValue === "mg") {
+          formatterTotal = new Intl.NumberFormat("fr-FR", {
+            style: "currency",
+            currency: currencyUnits,
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          });
+        } else {
+          formatterTotal = new Intl.NumberFormat("fr-FR", {
+            style: "currency",
+            currency: currencyUnits,
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          });
+        }
+      }
+
       //not success
       if (clientEffective.message_type !== "success") {
         divChartClient.innerHTML = `<div class='alert alert-danger form-text'><i class='fad fa-exclamation-circle me-2'></i>${clientEffective.message}'</div>`;
@@ -30,6 +89,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         //success
         else {
+          //chart client title
+          const chartClientTitle =
+            document.getElementById("chart-client-title");
+          chartClientTitle.innerHTML = `<i class="fad fa-user me-2" id="chart-client-title"></i>${
+            lang.clients_users
+          } (${formatterNumber.format(
+            Number(clientEffective.nb_client)
+          )}, ${formatterNumber.format(Number(userEffective.nb_user))})`;
+
           //show chart
           divChartClient.innerHTL = "";
           //chart client
@@ -151,12 +219,6 @@ document.addEventListener("DOMContentLoaded", () => {
       else {
         //============== chart transactions number
 
-        //get currency units
-        const config = await fetch(`${SITE_URL}/config/config.json`);
-        if (!config.ok) throw new Error(`HTTP ${config.status}`);
-        const currencyUnits = (await config.json()).currency_units;
-
-        //format nb && total
         //initialize variables
         let nbTransactions =
             Number(autreEntreeEffective.nb_ae) +
@@ -165,46 +227,8 @@ document.addEventListener("DOMContentLoaded", () => {
           totalTransactions =
             Number(autreEntreeEffective.total_ae) +
             Number(factureEffective.total_facture) +
-            Number(sortieEffective.total_sortie),
-          formatterNumber,
-          formatterTotal;
-        //en
-        if (cookieLangValue === "en") {
-          formatterNumber = new Intl.NumberFormat("en-US", {
-            style: "decimal",
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          });
-          formatterTotal = new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: currencyUnits,
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          });
-        }
-        //fr && mg
-        else {
-          formatterNumber = new Intl.NumberFormat("fr-FR", {
-            style: "decimal",
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          });
-          if (cookieLangValue === "mg") {
-            formatterTotal = new Intl.NumberFormat("fr-FR", {
-              style: "currency",
-              currency: currencyUnits,
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 2,
-            });
-          } else {
-            formatterTotal = new Intl.NumberFormat("fr-FR", {
-              style: "currency",
-              currency: currencyUnits,
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 2,
-            });
-          }
-        }
+            Number(sortieEffective.total_sortie);
+
         nbTransactions = formatterNumber.format(nbTransactions);
         totalTransactions = formatterTotal.format(totalTransactions);
         //div chart transactions number
@@ -287,11 +311,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         divChartTransactonsTotal.append(canvasTransactionsTotal);
 
-        //=============== chart transactions curves
+        //=============== chart transactions histo
         //title
         const chartTransactionsCurvesTitle = document.getElementById(
           "chart-transactions-curves-title"
         );
+        //rest
         let rest =
             Number(autreEntreeEffective.total_ae) +
             Number(factureEffective.total_facture) -
@@ -364,7 +389,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         const canvasTransactionsCurvesNumber = document.createElement("canvas");
         new Chart(canvasTransactionsCurvesNumber, {
-          type: "bar",
+          type: "line",
           data: {
             labels: allDates,
             datasets: [
@@ -422,26 +447,26 @@ document.addEventListener("DOMContentLoaded", () => {
               },
             },
             zoom: {
-              zoom: {
-                wheel: {
-                  enabled: true,
-                  minScale: 0.5,
-                  maxScale: 10,
-                  wheelEvent: "wheel",
-                },
-                pinch: { enabled: true },
-                pan: {
-                  enabled: true,
-                  mode: "xy",
-                  modifierKey: "alt",
-                },
-                drag: {
-                  mode: "xy",
-                  enabled: true,
-                  backgroundColor: "red",
-                  animation: 100,
-                },
-              },
+              // zoom: {
+              //   wheel: {
+              //     enabled: true,
+              //     minScale: 0.5,
+              //     maxScale: 10,
+              //     wheelEvent: "wheel",
+              //   },
+              //   pinch: { enabled: true },
+              //   pan: {
+              //     enabled: true,
+              //     mode: "xy",
+              //     modifierKey: "alt",
+              //   },
+              //   drag: {
+              //     mode: "xy",
+              //     enabled: true,
+              //     backgroundColor: "red",
+              //     animation: 100,
+              //   },
+              // },
             },
           },
           plugins: [ChartZoom],
@@ -455,7 +480,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         const canvasTransactionsCurvesTotal = document.createElement("canvas");
         new Chart(canvasTransactionsCurvesTotal, {
-          type: "bar",
+          type: "line",
           data: {
             labels: allDates,
             datasets: [
@@ -465,7 +490,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 borderColor: "#00ffeeff",
                 borderWidth: 1,
                 backgroundColor: "#cbf3f0a9",
-                barThickness: 20,
+                // barThickness: 20,
                 borderRadius: 5,
               },
               {
@@ -474,7 +499,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 borderColor: "#01a7b9ff",
                 borderWidth: 1,
                 backgroundColor: "#2ec4b5a1",
-                barThickness: 20,
+                // barThickness: 20,
                 borderRadius: 5,
               },
               {
@@ -483,7 +508,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 borderColor: "#e10618b9",
                 borderWidth: 1,
                 backgroundColor: "#e63947b0",
-                barThickness: 20,
+                // barThickness: 20,
                 borderRadius: 5,
               },
             ],
@@ -493,7 +518,7 @@ document.addEventListener("DOMContentLoaded", () => {
             plugins: {
               title: {
                 display: true,
-                text: lang.per_total_trans,
+                text: `${lang.per_total_trans}`,
               },
               legend: { display: true, position: "bottom", align: "center" },
             },
@@ -507,32 +532,35 @@ document.addEventListener("DOMContentLoaded", () => {
                 time: { unit: "day" },
               },
               y: {
-                title: { display: true, text: lang.total },
+                title: {
+                  display: true,
+                  text: `${lang.total} (${currencyUnits})`,
+                },
                 beginAtZero: true,
                 ticks: { stepSize: 1 },
               },
             },
             zoom: {
-              zoom: {
-                wheel: {
-                  enabled: true,
-                  minScale: 0.5,
-                  maxScale: 10,
-                  wheelEvent: "wheel",
-                },
-                pinch: { enabled: true },
-                pan: {
-                  enabled: true,
-                  mode: "xy",
-                  modifierKey: "alt",
-                },
-                drag: {
-                  mode: "xy",
-                  enabled: true,
-                  backgroundColor: "red",
-                  animation: 100,
-                },
-              },
+              // zoom: {
+              //   wheel: {
+              //     enabled: true,
+              //     minScale: 0.5,
+              //     maxScale: 10,
+              //     wheelEvent: "wheel",
+              //   },
+              //   pinch: { enabled: true },
+              //   pan: {
+              //     enabled: true,
+              //     mode: "xy",
+              //     modifierKey: "alt",
+              //   },
+              //   drag: {
+              //     mode: "xy",
+              //     enabled: true,
+              //     backgroundColor: "red",
+              //     animation: 100,
+              //   },
+              // },
             },
           },
           plugins: [ChartZoom],

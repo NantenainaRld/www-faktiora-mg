@@ -14,92 +14,15 @@ class UserRepositorie extends Database
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
         $paramsQuery = [];
-        $sql = "SELECT
-            u.id_utilisateur,
-            u.nom_utilisateur,
-            u.prenoms_utilisateur,
-            u.sexe_utilisateur,
-            u.email_utilisateur,
-            u.role,
-            c.num_caisse,
-            CASE WHEN u.dernier_session >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) THEN 'online' ELSE 'disconnected' END AS
-        status,
-            CASE WHEN u.dernier_session >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) THEN 0 ELSE TIMESTAMPDIFF(
-                MINUTE,
-                u.dernier_session,
-                NOW())
-            END AS minutes_ago,
-            CASE WHEN TIMESTAMPDIFF(
-                MINUTE,
-                u.dernier_session,
-                NOW()) < 60 THEN CONCAT(
-                    TIMESTAMPDIFF(MINUTE, u.dernier_session,
-                    NOW()),
-                    ' m'
-                ) 
-                 WHEN TIMESTAMPDIFF(HOUR, u.dernier_session, NOW()) < 24 THEN CONCAT(
-                    TIMESTAMPDIFF(HOUR, u.dernier_session, NOW()),
-                    ' h') ELSE CONCAT(
-                        TIMESTAMPDIFF(DAY, u.dernier_session, NOW()),
-                        ' d')
-                    END AS last_time,
-                    COUNT(f.num_facture) AS nb_factures,
-                    COUNT(ae.id_ae) AS nb_ae,
-                    (
-                        COUNT(f.num_facture) + COUNT(ae.id_ae)
-                    ) AS nb_entrees,
-                    COUNT(ds.id_ds) AS nb_sorties,
-                    (
-                        COUNT(f.num_facture) + COUNT(ae.id_ae) + COUNT(ds.id_ds)
-                    ) AS nb_transactions,
-                    COALESCE(
-                        SUM(
-                            lf.quantite_produit * p.prix_produit
-                        ),
-                        0
-                    ) AS total_factures,
-                    COALESCE(SUM(ae.montant_ae),
-                    0) AS total_ae,
-                    COALESCE(
-                        SUM(
-                            lf.quantite_produit * p.prix_produit
-                        ) + SUM(ae.montant_ae),
-                        0
-                    ) AS total_entrees,
-                    COALESCE(
-                        SUM(
-                            lds.quantite_article * lds.prix_article
-                        ),
-                        0
-                    ) AS total_sorties,
-                    COALESCE(
-                        SUM(
-                            lf.quantite_produit * p.prix_produit
-                        ) + SUM(ae.montant_ae) + SUM(
-                            lds.quantite_article * lds.prix_article
-                        ),
-                        0
-                    ) AS total_transactions
-                FROM
-                    utilisateur u LEFT JOIN ligne_caisse lc ON lc.id_utilisateur = u.id_utilisateur AND lc.date_fin IS NULL LEFT JOIN caisse c ON c.num_caisse = lc.num_caisse ";
 
         //date_by - 
+        $ae_cond = '';
+        $facture_cond = '';
+        $sortie_cond = '';
         switch ($params['date_by']) {
 
             //date_by - all
             case 'all':
-                $sql .= "LEFT JOIN facture f ON
-            f.id_utilisateur = u.id_utilisateur 
-        LEFT JOIN ligne_facture lf ON
-            lf.id_facture = f.id_facture
-        LEFT JOIN produit p ON
-            p.id_produit = lf.id_produit 
-            LEFT JOIN autre_entree ae ON
-            ae.id_utilisateur = u.id_utilisateur 
-            LEFT JOIN demande_sortie ds ON
-            ds.id_utilisateur = u.id_utilisateur 
-            LEFT JOIN ligne_ds lds ON
-            lds.id_ds = ds.id_ds ";
                 break;
             //date_by - per
             case 'per':
@@ -107,33 +30,21 @@ class UserRepositorie extends Database
 
                     //per - DAY
                     case 'DAY':
-                        $sql .= "LEFT JOIN facture f ON
-            f.id_utilisateur = u.id_utilisateur AND DATE(f.date_facture) = CURDATE() 
-        LEFT JOIN ligne_facture lf ON
-            lf.id_facture = f.id_facture
-        LEFT JOIN produit p ON
-            p.id_produit = lf.id_produit 
-            LEFT JOIN autre_entree ae ON
-            ae.id_utilisateur = u.id_utilisateur AND DATE(ae.date_ae) = CURDATE() 
-            LEFT JOIN demande_sortie ds ON
-            ds.id_utilisateur = u.id_utilisateur AND DATE(ds.date_ds) = CURDATE() 
-            LEFT JOIN ligne_ds lds ON
-            lds.id_ds = ds.id_ds ";
+                        //ae
+                        $ae_cond = 'AND DATE(ae.date_ae) = CURDATE() ';
+                        //facture
+                        $facture_cond = 'AND DATE(f.date_facture) = CURDATE() ';
+                        //sortie
+                        $sortie_cond = 'AND DATE(ds.date_ds) = CURDATE() ';
                         break;
                     //per - !DAY
                     default:
-                        $sql .= "LEFT JOIN facture f ON
-                                    f.id_utilisateur = u.id_utilisateur AND {$params['per']}(f.date_facture) = {$params['per']}(CURDATE()) 
-                        LEFT JOIN ligne_facture lf ON
-                            lf.id_facture = f.id_facture
-                        LEFT JOIN produit p ON
-                            p.id_produit = lf.id_produit 
-                            LEFT JOIN autre_entree ae ON
-                            ae.id_utilisateur = u.id_utilisateur AND {$params['per']}(ae.date_ae)  = {$params['per']}(CURDATE()) 
-                            LEFT JOIN demande_sortie ds ON
-                            ds.id_utilisateur = u.id_utilisateur AND {$params['per']}(ds.date_ds) = {$params['per']}(CURDATE()) 
-                            LEFT JOIN ligne_ds lds ON
-                            lds.id_ds = ds.id_ds ";
+                        //ae
+                        $ae_cond = "AND {$params['per']}(ae.date_ae) = {$params['per']}(CURDATE()) ";
+                        //facture
+                        $facture_cond = "AND {$params['per']}(f.date_facture) = {$params['per']}(CURDATE()) ";
+                        //sortie
+                        $sortie_cond = "AND {$params['per']}(ds.date_ds) = {$params['per']}(CURDATE()) ";
                         break;
                 }
                 break;
@@ -142,52 +53,34 @@ class UserRepositorie extends Database
                 //from - empty
                 if ($params['from'] === '') {
                     //to - !empty
-                    $sql .= "LEFT JOIN facture f ON
-                            f.id_utilisateur = u.id_utilisateur AND DATE(f.date_facture) <= :to
-                LEFT JOIN ligne_facture lf ON
-                    lf.id_facture = f.id_facture
-                LEFT JOIN produit p ON
-                    p.id_produit = lf.id_produit 
-                    LEFT JOIN autre_entree ae ON
-                    ae.id_utilisateur = u.id_utilisateur AND DATE(ae.date_ae) <= :to 
-                    LEFT JOIN demande_sortie ds ON
-                    ds.id_utilisateur = u.id_utilisateur AND DATE(ds.date_ds) <= :to 
-                    LEFT JOIN ligne_ds lds ON
-                    lds.id_ds = ds.id_ds ";
+                    //ae
+                    $ae_cond = "AND DATE(ae.date_ae) <= :to ";
+                    //facture
+                    $facture_cond = "AND DATE(f.date_facture) <= :to ";
+                    //sortie
+                    $sortie_cond = "AND DATE(ds.date_ds) <= :to ";
                     $paramsQuery['to'] = $params['to'];
                 }
                 //from - !empty
                 else {
                     //to - empty
                     if ($params['to'] === '') {
-                        $sql .= "LEFT JOIN facture f ON
-                                f.id_utilisateur = u.id_utilisateur AND DATE(f.date_facture) >= :from
-                    LEFT JOIN ligne_facture lf ON
-                        lf.id_facture = f.id_facture
-                    LEFT JOIN produit p ON
-                        p.id_produit = lf.id_produit 
-                        LEFT JOIN autre_entree ae ON
-                        ae.id_utilisateur = u.id_utilisateur AND DATE(ae.date_ae) >= :from 
-                        LEFT JOIN demande_sortie ds ON
-                        ds.id_utilisateur = u.id_utilisateur AND DATE(ds.date_ds) >= :from
-                        LEFT JOIN ligne_ds lds ON
-                        lds.id_ds = ds.id_ds ";
+                        //ae
+                        $ae_cond = "AND DATE(ae.date_ae) >= :from ";
+                        //facture
+                        $facture_cond = "AND DATE(f.date_facture) >= :from ";
+                        //sortie
+                        $sortie_cond = "AND DATE(ds.date_ds) >= :from ";
                         $paramsQuery['from'] = $params['from'];
                     }
                     //to - !empty
                     else {
-                        $sql .= "LEFT JOIN facture f ON
-                                f.id_utilisateur = u.id_utilisateur AND DATE(f.date_facture) BETWEEN :from AND :to 
-                    LEFT JOIN ligne_facture lf ON
-                        lf.id_facture = f.id_facture
-                    LEFT JOIN produit p ON
-                        p.id_produit = lf.id_produit 
-                        LEFT JOIN autre_entree ae ON
-                        ae.id_utilisateur = u.id_utilisateur AND DATE(ae.date_ae) BETWEEN :from AND :to 
-                        LEFT JOIN demande_sortie ds ON
-                        ds.id_utilisateur = u.id_utilisateur AND DATE(ds.date_ds) BETWEEN :from AND :to 
-                        LEFT JOIN ligne_ds lds ON
-                        lds.id_ds = ds.id_ds ";
+                        //ae
+                        $ae_cond = "AND DATE(ae.date_ae) BETWEEN :from AND :to  ";
+                        //facture
+                        $facture_cond = "AND DATE(f.date_facture) BETWEEN :from AND :to  ";
+                        //sortie
+                        $sortie_cond = "AND DATE(ds.date_ds) BETWEEN :from AND :to  ";
                         $paramsQuery['from'] = $params['from'];
                         $paramsQuery['to'] = $params['to'];
                     }
@@ -195,42 +88,114 @@ class UserRepositorie extends Database
                 break;
             //date_by - month_year
             case 'month_year':
-                //month - none
-                if ($params['month'] === 'none') {
+                //month - all
+                if ($params['month'] === 'all') {
                     //year - 
-                    $sql .= "LEFT JOIN facture f ON
-                                f.id_utilisateur = u.id_utilisateur AND YEAR(f.date_facture) = :year
-                    LEFT JOIN ligne_facture lf ON
-                        lf.id_facture = f.id_facture
-                    LEFT JOIN produit p ON
-                        p.id_produit = lf.id_produit 
-                        LEFT JOIN autre_entree ae ON
-                        ae.id_utilisateur = u.id_utilisateur AND YEAR(ae.date_ae) = :year 
-                        LEFT JOIN demande_sortie ds ON
-                        ds.id_utilisateur = u.id_utilisateur AND YEAR(ds.date_ds) = :year 
-                        LEFT JOIN ligne_ds lds ON
-                        lds.id_ds = ds.id_ds ";
+                    //ae
+                    $ae_cond = "AND YEAR(ae.date_ae) = :year ";
+                    //facture
+                    $facture_cond = "AND YEAR(f.date_facture) = :year ";
+                    //ds
+                    $sortie_cond = "AND YEAR(ds.date_ds) = :year ";
                     $paramsQuery['year'] = $params['year'];
                 }
-                //month - !none
+                //month - !all
                 else {
                     //year -
-                    $sql .= "LEFT JOIN facture f ON
-                            f.id_utilisateur = u.id_utilisateur AND MONTH(f.date_facture) = :month AND YEAR(f.date_facture) = :year
-                LEFT JOIN ligne_facture lf ON
-                    lf.id_facture = f.id_facture
-                LEFT JOIN produit p ON
-                    p.id_produit = lf.id_produit 
-                    LEFT JOIN autre_entree ae ON
-                    ae.id_utilisateur = u.id_utilisateur AND MONTH(ae.date_ae) = :month AND YEAR(ae.date_ae) = :year 
-                    LEFT JOIN demande_sortie ds ON
-                    ds.id_utilisateur = u.id_utilisateur AND MONTH(ds.date_ds) = :month AND YEAR(ds.date_ds) = :year
-                    LEFT JOIN ligne_ds lds ON
-                    lds.id_ds = ds.id_ds ";
+                    //ae
+                    $ae_cond = "AND YEAR(ae.date_ae) = :year AND MONTH(ae.date_ae) = :month ";
+                    //facture
+                    $facture_cond = "AND YEAR(f.date_facture) = :year AND MONTH(f.date_facture) = :month ";
+                    //ds
+                    $sortie_cond = "AND YEAR(ds.date_ds) = :year AND MONTH(ds.date_ds) = :month ";
                     $paramsQuery['month'] = $params['month'];
                     $paramsQuery['year'] = $params['year'];
                 }
                 break;
+        }
+
+        //sql
+        $sql = "SELECT
+            u.id_utilisateur,
+            CONCAT(u.nom_utilisateur, ' ', u.prenoms_utilisateur) AS fullname,
+            u.email_utilisateur,
+            u.role,
+            c.num_caisse,
+            u.etat_utilisateur,
+            u.sexe_utilisateur,
+            CASE WHEN u.dernier_session >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) THEN 0 ELSE TIMESTAMPDIFF(
+                MINUTE,
+                u.dernier_session,
+                NOW())
+            END AS minutes_ago,
+                (SELECT COUNT(ae.id_ae) 
+                    FROM autre_entree ae 
+                    WHERE ae.id_utilisateur = u.id_utilisateur AND ae.etat_ae != 'supprimé' {$ae_cond}) 
+                    AS nb_ae,
+                (SELECT COUNT(f.id_facture) 
+                    FROM facture f 
+                    WHERE f.id_utilisateur = u.id_utilisateur AND f.etat_facture != 'supprimé' {$facture_cond}) 
+                    AS nb_facture,
+                ((SELECT COUNT(ae.id_ae) 
+                    FROM autre_entree ae 
+                    WHERE ae.id_utilisateur = u.id_utilisateur AND ae.etat_ae != 'supprimé' {$ae_cond}) + 
+                    (SELECT COUNT(f.id_facture) 
+                    FROM facture f 
+                    WHERE f.id_utilisateur = u.id_utilisateur AND f.etat_facture != 'supprimé' {$facture_cond}))
+                    AS nb_entree, 
+                (SELECT COUNT(ds.id_ds) 
+                    FROM demande_sortie ds 
+                    WHERE ds.id_utilisateur = u.id_utilisateur AND ds.etat_ds != 'supprimé' {$sortie_cond}) 
+                    AS nb_sortie,
+                ((SELECT COUNT(ae.id_ae) 
+                    FROM autre_entree ae 
+                    WHERE ae.id_utilisateur = u.id_utilisateur AND ae.etat_ae != 'supprimé' {$ae_cond}) + 
+                    (SELECT COUNT(f.id_facture) 
+                    FROM facture f 
+                    WHERE f.id_utilisateur = u.id_utilisateur AND f.etat_facture != 'supprimé' {$facture_cond}) + 
+                    (SELECT COUNT(ds.id_ds) 
+                    FROM demande_sortie ds 
+                    WHERE ds.id_utilisateur = u.id_utilisateur AND ds.etat_ds != 'supprimé' {$sortie_cond}) ) 
+                    AS nb_transaction,
+                (SELECT COALESCE(SUM(ae.montant_ae),0)
+                    FROM autre_entree ae 
+                    WHERE ae.id_utilisateur = u.id_utilisateur AND ae.etat_ae != 'supprimé' {$ae_cond}) 
+                    AS total_ae,
+                (SELECT COALESCE(SUM(lf.prix * lf.quantite_produit), 0) 
+                    FROM facture f JOIN ligne_facture lf ON lf.id_facture = f.id_facture 
+                    WHERE f.id_utilisateur = u.id_utilisateur AND f.etat_facture != 'supprimé' {$facture_cond}) 
+                    AS total_facture,
+                ((SELECT COALESCE(SUM(ae.montant_ae),0)
+                    FROM autre_entree ae 
+                    WHERE ae.id_utilisateur = u.id_utilisateur AND ae.etat_ae != 'supprimé' {$ae_cond}) + 
+                    (SELECT COALESCE(SUM(lf.prix * lf.quantite_produit), 0) 
+                    FROM facture f JOIN ligne_facture lf ON lf.id_facture = f.id_facture 
+                    WHERE f.id_utilisateur = u.id_utilisateur AND f.etat_facture != 'supprimé' {$facture_cond}) ) 
+                    AS total_entree, 
+                (SELECT COALESCE(SUM(lds.prix_article * lds.quantite_article),0) 
+                    FROM demande_sortie ds JOIN ligne_ds lds ON lds.id_ds = ds.id_ds 
+                    WHERE ds.id_utilisateur = u.id_utilisateur AND ds.etat_ds != 'supprimé' {$sortie_cond}) 
+                    AS total_sortie,
+                ((SELECT COALESCE(SUM(ae.montant_ae),0)
+                    FROM autre_entree ae 
+                    WHERE ae.id_utilisateur = u.id_utilisateur AND ae.etat_ae != 'supprimé' {$ae_cond}) + 
+                    (SELECT COALESCE(SUM(lf.prix * lf.quantite_produit), 0) 
+                    FROM facture f JOIN ligne_facture lf ON lf.id_facture = f.id_facture 
+                    WHERE f.id_utilisateur = u.id_utilisateur AND f.etat_facture != 'supprimé' {$facture_cond}) + 
+                    (SELECT COALESCE(SUM(lds.prix_article * lds.quantite_article),0) 
+                    FROM demande_sortie ds JOIN ligne_ds lds ON lds.id_ds = ds.id_ds 
+                    WHERE ds.id_utilisateur = u.id_utilisateur AND ds.etat_ds != 'supprimé' {$sortie_cond})) 
+                    AS total_transaction 
+                FROM utilisateur u ";
+
+        //num_caisse - all
+        if ($params['num_caisse'] === 'all') {
+            $sql .= "LEFT JOIN ligne_caisse lc ON lc.id_utilisateur = u.id_utilisateur AND lc.date_fin IS NULL LEFT JOIN caisse c ON c.num_caisse = lc.num_caisse AND c.etat_caisse != 'supprimé' ";
+        }
+        //num_caisse - !all 
+        else {
+            $sql .= "JOIN ligne_caisse lc ON lc.id_utilisateur = u.id_utilisateur JOIN caisse c ON c.num_caisse = :num_caisse AND c.etat_caisse != 'supprimé' ";
+            $paramsQuery['num_caisse'] = $params['num_caisse'];
         }
 
         //where 1=1
@@ -265,23 +230,14 @@ class UserRepositorie extends Database
             $paramsQuery['sexe'] = $params['sexe'];
         }
 
-        //num_caisse - !all
-        if ($params['num_caisse'] !== 'all') {
-            $sql .= "AND c.num_caisse = :num_caisse ";
-            $paramsQuery['num_caisse'] = $params['num_caisse'];
-        }
-
         //search_user
         if ($params['search_user'] !== '') {
             $sql .= "AND (u.id_utilisateur LIKE :search OR u.nom_utilisateur LIKE :search OR u.prenoms_utilisateur LIKE :search OR u.email_utilisateur LIKE :search ) ";
             $paramsQuery['search'] = "%" . $params['search_user'] . "%";
         }
 
-        //group by
-        $sql .= "GROUP BY u.id_utilisateur ";
-
-        //order_by
-        $sql .= "ORDER BY {$params['order_by']} {$params['arrange']} ";
+        //group by && arrange by
+        $sql .= " ORDER BY {$params['arrange_by']} {$params['order']} ";
 
         try {
 
@@ -297,8 +253,14 @@ class UserRepositorie extends Database
             $nb_admin = 0;
             $nb_caissier = 0;
 
-            $i = 0;
-            foreach ($response['data'] as $data) {
+            //nb_connected
+            $nb_connected = 0;
+            //nb_disconnected
+            $nb_disconnected = 0;
+            //count nb_deleted
+            $nb_deleted = 0;
+
+            foreach ($response['data'] as &$data) {
                 //count admin
                 if ($data['role'] === 'admin') {
                     $nb_admin++;
@@ -307,15 +269,27 @@ class UserRepositorie extends Database
                 else {
                     $nb_caissier++;
                 }
-                //status - deleted
-                if ($params['status'] === 'deleted') {
-                    $response['data'][$i]['status'] = 'deleted';
+
+                //count connected
+                if ($data['minutes_ago'] <= 0 && $data['etat_utilisateur'] !== 'supprimé') {
+                    $nb_connected++;
+                    $data['etat_utilisateur'] = 'connected';
                 }
-                //connected
-                if ($response['data'][$i]['minutes_ago'] <= 0) {
-                    $response['data'][$i]['last_time'] = '-';
+                //count disconnected
+                elseif ($data['minutes_ago'] > 0 && $data['etat_utilisateur'] !== 'supprimé') {
+                    $nb_disconnected++;
+                    $data['etat_utilisateur'] = 'disconnected';
                 }
-                $i++;
+                //count deleted
+                elseif ($data['etat_utilisateur'] === 'supprimé') {
+                    $nb_deleted++;
+                    $data['etat_utilisateur'] = 'deleted';
+                }
+
+                //num_caisse
+                if (empty($data['num_caisse']) && $data['num_caisse'] !== 0) {
+                    $data['num_caisse'] = '-';
+                }
             }
 
             $response = [
@@ -324,7 +298,10 @@ class UserRepositorie extends Database
                 'data' => $response['data'],
                 'nb_user' => $nb_user,
                 'nb_admin' => $nb_admin,
-                'nb_caissier' => $nb_caissier
+                'nb_caissier' => $nb_caissier,
+                'nb_connected' => $nb_connected,
+                'nb_disconnected' => $nb_disconnected,
+                'nb_deleted' => $nb_deleted
             ];
 
             return $response;

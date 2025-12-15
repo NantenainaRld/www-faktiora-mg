@@ -3,7 +3,7 @@
 <!-- template  -->
 <template id="template-home">
     <!-- main-content  -->
-    <div class="col-12 col-lg-10 col-md-8 placeholder-glow h-100 d-flex flex-column">
+    <div class="col-12 col-lg-10 col-md-8 placeholder-glow h-100 d-flex flex-column justify-content-between">
         <!-- header  -->
         <header class="row justify-content-center flex-grow-0">
             <div class=" col-12">
@@ -17,7 +17,7 @@
             </div>
         </header>
         <!-- main -->
-        <main class="row mt-4 overflow-y-auto overflow-y-auto mb-2 flex-grow-1">
+        <main class="row mt-4 overflow-y-auto mb-2 flex-grow-1">
             <div class="col-12 h-100 d-flex flex-column justify-content-between ">
                 <!-- welcome  -->
                 <?php if ($role === 'caissier'): ?>

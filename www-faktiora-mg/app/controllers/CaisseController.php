@@ -1793,12 +1793,12 @@ class CaisseController extends Controller
             return;
         }
 
-        //role - not admin
-        if ($is_loged_in->getRole() !== 'admin') {
-            //redirect to caisse index
-            header("Location: " . SITE_URL . '/caisse');
-            return;
-        }
+        // //role - not admin
+        // if ($is_loged_in->getRole() !== 'admin') {
+        //     //redirect to caisse index
+        //     header("Location: " . SITE_URL . '/caisse');
+        //     return;
+        // }
 
         //list all caisse
         $response = Caisse::listAllCaisse();

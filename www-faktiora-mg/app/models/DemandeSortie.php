@@ -194,15 +194,101 @@ class DemandeSortie extends Database
     }
 
     //static- list all demande sortie
-    public static function listAllDemandeSortie()
+    public static function listAllDemandeSortie($params)
     {
         $response = [
             'message_type' => 'success',
             'message' => 'success'
         ];
+
+        $paramsQuery = [];
+
+        //date_by - 
+        $ds_cond = '';
+        switch ($params['date_by']) {
+
+            //date_by - all
+            case 'all':
+                break;
+            //date_by - per
+            case 'per':
+                switch ($params['per']) {
+
+                    //per - DAY
+                    case 'DAY':
+                        //ds
+                        $ds_cond = 'AND DATE(ds.date_ds) = CURDATE() ';
+                        break;
+                    //per - !DAY
+                    default:
+                        //ds
+                        $ds_cond = "AND {$params['per']}(ds.date_ds) = {$params['per']}(CURDATE()) ";
+                        break;
+                }
+                break;
+            //date_by - between
+            case 'between':
+                //from - empty
+                if ($params['from'] === '') {
+                    //to - !empty
+                    //ds
+                    $ds_cond = "AND DATE(ds.date_ds) <= :to ";
+                    $paramsQuery['to'] = $params['to'];
+                }
+                //from - !empty
+                else {
+                    //to - empty
+                    if ($params['to'] === '') {
+                        //ds
+                        $ds_cond = "AND DATE(ds.date_ds) >= :from ";
+                        $paramsQuery['from'] = $params['from'];
+                    }
+                    //to - !empty
+                    else {
+                        //ds
+                        $ds_cond = "AND DATE(ds.date_ds) BETWEEN :from AND :to  ";
+                        $paramsQuery['from'] = $params['from'];
+                        $paramsQuery['to'] = $params['to'];
+                    }
+                }
+                break;
+            //date_by - month_year
+            case 'month_year':
+                //month - all
+                if ($params['month'] === 'all') {
+                    //year - 
+                    //ds
+                    $ds_cond = "AND YEAR(ds.date_ds) = :year ";
+                    $paramsQuery['year'] = $params['year'];
+                }
+                //month - !all
+                else {
+                    //year -
+                    //ds
+                    $ds_cond = "AND YEAR(ds.date_ds) = :year AND MONTH(ds.date_ds) = :month ";
+                    $paramsQuery['month'] = $params['month'];
+                    $paramsQuery['year'] = $params['year'];
+                }
+                break;
+        }
+
+        //num_caisse
+        $caisse_cond = '';
+        if ($params['num_caisse'] !== 'all') {
+            $caisse_cond = " AND ds.num_caisse = :num_caisse ";
+            $paramsQuery['num_caisse'] = $params['num_caisse'];
+        }
+
+        //id_utilisateur
+        $user_cond = '';
+        if ($params['id_utilisateur'] !== 'all') {
+            $user_cond = " AND ds.id_utilisateur = :user_id ";
+            $paramsQuery['user_id'] = $params['id_utilisateur'];
+        }
+
         try {
 
-            $response = parent::selectQuery("SELECT ds.num_ds, (lds.quantite_article * lds.prix_article) AS montant, DATE(date_ds) AS date FROM demande_sortie ds JOIN ligne_ds lds ON lds.id_ds = ds.id_ds WHERE etat_ds != 'supprimé' AND num_ds IS NOT NULL");
+            $response = parent::selectQuery("SELECT ds.num_ds, (lds.quantite_article * lds.prix_article) AS montant, DATE(date_ds) AS date FROM demande_sortie ds JOIN ligne_ds lds ON lds.id_ds = ds.id_ds WHERE etat_ds != 'supprimé' AND num_ds IS NOT NULL {$ds_cond} {$caisse_cond} {$user_cond} ORDER BY date ASC", $paramsQuery);
 
             //error
             if ($response['message_type'] === 'error') {

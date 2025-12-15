@@ -18,10 +18,35 @@ class UserController extends Controller
         $this->render('header', ['title' => 'Header']);
         return;
     }
+
     //page - user dashboard
     public function pageUser()
     {
-        $this->render('user_dashboard', ['title' => __('forms.titles.user_dashboard')]);
+
+        //is loged in ?
+        $is_loged_in = Auth::isLogedIn();
+        //loged
+        if ($is_loged_in->getLoged()) {
+            //not admin
+            if ($is_loged_in->getRole() !== 'admin') {
+                //redirect to home
+                header('Location: ' . SITE_URL . '/user/page_home');
+                return;
+            }
+
+            $_SESSION['menu'] = 'user';
+            $this->render('user_dashboard', [
+                'title' => 'Faktiora - ' . __('forms.titles.user_dashboard'),
+                'role' => $is_loged_in->getRole()
+            ]);
+            return;
+        }
+        //not loged
+        else {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
     }
 
     //page - home
@@ -36,6 +61,7 @@ class UserController extends Controller
                 'title' => 'Faktiora - ' . __('forms.labels.home'),
                 'role' => $is_loged_in->getRole()
             ]);
+            return;
         }
         //not loged
         else {
@@ -304,21 +330,21 @@ class UserController extends Controller
         $status_default = ['connected', 'disconnected', 'deleted'];
         $role_default = ['admin', 'caissier'];
         $sexe_default = ['masculin', 'féminin'];
-        $order_by_default = [
-            'nb_factures',
+        $arrange_by_default = [
+            'nb_facture',
             'nb_ae',
-            'nb_entrees',
-            'nb_sorties',
-            'nb_transactions',
-            'total_factures',
+            'nb_entree',
+            'nb_sortie',
+            'nb_transaction',
+            'total_facture',
             'total_ae',
-            'total_entrees',
-            'total_sorties',
-            'total_transactions',
+            'total_entree',
+            'total_sortie',
+            'total_transaction',
             'name',
             'id'
         ];
-        $arrange_default = ['DESC', 'ASC'];
+        $order_default = ['DESC', 'ASC'];
         $date_by_default = [
             'per',
             'between',
@@ -335,7 +361,6 @@ class UserController extends Controller
         $status = strtolower(trim($_GET['status'] ?? 'all'));
         $status = in_array($status, $status_default, true) ? $status : 'all';
 
-
         //role
         $role = strtolower(trim($_GET['role'] ?? 'all'));
         $role = in_array($role, $role_default, true) ? $role : 'all';
@@ -344,22 +369,19 @@ class UserController extends Controller
         $sexe = strtolower(trim($_GET['sexe'] ?? 'all'));
         $sexe = in_array($sexe, $sexe_default, true) ? $sexe : 'all';
 
-        //order_by
-        $order_by = strtolower(trim($_GET['order_by'] ?? 'name'));
-        $order_by = in_array($order_by, $order_by_default, true) ? $order_by : 'name';
-        $order_by = ($order_by === 'name') ? 'u.nom_utilisateur' : $order_by;
-        $order_by = ($order_by === 'id') ? 'u.id_utilisateur' : $order_by;
-        // //arrange
-        $arrange = strtoupper(trim($_GET['arrange'] ?? 'ASC'));
-        $arrange = in_array($arrange, $arrange_default, true) ? $arrange : 'ASC';
+        //arrange_by
+        $arrange_by = strtolower(trim($_GET['arrange_by'] ?? 'name'));
+        $arrange_by = in_array($arrange_by, $arrange_by_default, true) ? $arrange_by : 'name';
+        $arrange_by = ($arrange_by === 'name') ? 'fullname' : $arrange_by;
+        $arrange_by = ($arrange_by === 'id') ? 'u.id_utilisateur' : $arrange_by;
+        //order
+        $order = strtoupper(trim($_GET['order'] ?? 'ASC'));
+        $order = in_array($order, $order_default, true) ? $order : 'ASC';
 
         //num_caisse
         $num_caisse = trim($_GET['num_caisse'] ?? 'all');
-        $num_caisse = ($num_caisse !== 'all') ? filter_var($num_caisse, FILTER_VALIDATE_INT) : $num_caisse;
-        //num_caisse - invalid
-        if ($num_caisse === false || $num_caisse < 0) {
-            $num_caisse = 'all';
-        }
+        $num_caisse = filter_var($num_caisse, FILTER_VALIDATE_INT);
+        $num_caisse = (!$num_caisse || $num_caisse < 0) ? 'all' : $num_caisse;
 
         //date_by
         $date_by = strtolower(trim($_GET['date_by'] ?? 'all'));
@@ -371,6 +393,7 @@ class UserController extends Controller
         $from = trim($_GET['from'] ?? '');
         //to
         $to = trim($_GET['to'] ?? '');
+        $date = new DateTime();
         if ($date_by === 'between') {
             //from && to - empty
             if ($from === '' && $to === '') {
@@ -457,13 +480,13 @@ class UserController extends Controller
             }
         }
         //month
-        $month = trim($_GET['month'] ?? 'none');
+        $month = trim($_GET['month'] ?? 'all');
         $month = filter_var($month, FILTER_VALIDATE_INT);
-        $month = ($month === false || ($month < 1 || $month > 12)) ? 'none' : $month;
+        $month = ($month === false || ($month < 1 || $month > 12)) ? 'all' : $month;
         //year
         $year = trim($_GET['year'] ?? date('Y'));
         $year = filter_var($year, FILTER_VALIDATE_INT);
-        $year =  ($year === false || ($year < 1700 || $year > 2500)) ? ((new DateTime())->format('Y')) : $year;
+        $year =  ($year === false || ($year < 1700 || $year > date('Y'))) ? ((new DateTime())->format('Y')) : $year;
 
         //sarch_user
         $search_user = trim($_GET['search_user'] ?? '');
@@ -472,8 +495,8 @@ class UserController extends Controller
             'status' => $status,
             'role' => $role,
             'sexe' => $sexe,
-            'order_by' => $order_by,
-            'arrange' => $arrange,
+            'arrange_by' => $arrange_by,
+            'order' => $order,
             'num_caisse' => $num_caisse,
             'date_by' => $date_by,
             'per' => $per,

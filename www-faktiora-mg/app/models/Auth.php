@@ -69,6 +69,7 @@ class Auth extends Database
             $self->id_utilisateur = trim($_SESSION['auth']['id_utilisateur']);
 
             try {
+                // $response = $self->selectQuery("SELECT id_utilisateur, role FROM utilisateur WHERE id_utilisateur = :id AND etat_utilisateur = 'connecté' AND dernier_session >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) ", ['id' => $self->id_utilisateur]);
                 $response = $self->selectQuery("SELECT id_utilisateur, role FROM utilisateur WHERE id_utilisateur = :id AND etat_utilisateur = 'connecté' ", ['id' => $self->id_utilisateur]);
 
                 //error

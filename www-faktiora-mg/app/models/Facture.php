@@ -207,15 +207,101 @@ class Facture extends Database
     }
 
     //static- list all facture
-    public static function listAllFacture()
+    public static function listAllFacture($params)
     {
         $response = [
             'message_type' => 'success',
             'message' => 'success'
         ];
+
+        $paramsQuery = [];
+
+        //date_by - 
+        $facture_cond = '';
+        switch ($params['date_by']) {
+
+            //date_by - all
+            case 'all':
+                break;
+            //date_by - per
+            case 'per':
+                switch ($params['per']) {
+
+                    //per - DAY
+                    case 'DAY':
+                        //facture
+                        $facture_cond = 'AND DATE(f.date_facture) = CURDATE() ';
+                        break;
+                    //per - !DAY
+                    default:
+                        //facture
+                        $facture_cond = "AND {$params['per']}(f.date_facture) = {$params['per']}(CURDATE()) ";
+                        break;
+                }
+                break;
+            //date_by - between
+            case 'between':
+                //from - empty
+                if ($params['from'] === '') {
+                    //to - !empty
+                    //facture
+                    $facture_cond = "AND DATE(f.date_facture) <= :to ";
+                    $paramsQuery['to'] = $params['to'];
+                }
+                //from - !empty
+                else {
+                    //to - empty
+                    if ($params['to'] === '') {
+                        //facture
+                        $facture_cond = "AND DATE(f.date_facture) >= :from ";
+                        $paramsQuery['from'] = $params['from'];
+                    }
+                    //to - !empty
+                    else {
+                        //facture
+                        $facture_cond = "AND DATE(f.date_facture) BETWEEN :from AND :to  ";
+                        $paramsQuery['from'] = $params['from'];
+                        $paramsQuery['to'] = $params['to'];
+                    }
+                }
+                break;
+            //date_by - month_year
+            case 'month_year':
+                //month - all
+                if ($params['month'] === 'all') {
+                    //year - 
+                    //facture
+                    $facture_cond = "AND YEAR(f.date_facture) = :year ";
+                    $paramsQuery['year'] = $params['year'];
+                }
+                //month - !all
+                else {
+                    //year -
+                    //facture
+                    $facture_cond = "AND YEAR(f.date_facture) = :year AND MONTH(f.date_facture) = :month ";
+                    $paramsQuery['month'] = $params['month'];
+                    $paramsQuery['year'] = $params['year'];
+                }
+                break;
+        }
+
+        //num_caisse
+        $caisse_cond = '';
+        if ($params['num_caisse'] !== 'all') {
+            $caisse_cond = " AND f.num_caisse = :num_caisse ";
+            $paramsQuery['num_caisse'] = $params['num_caisse'];
+        }
+
+        //id_utilisateur
+        $user_cond = '';
+        if ($params['id_utilisateur'] !== 'all') {
+            $user_cond = " AND f.id_utilisateur = :user_id ";
+            $paramsQuery['user_id'] = $params['id_utilisateur'];
+        }
+
         try {
 
-            $response = parent::selectQuery("SELECT f.num_facture, (lf.prix * lf.quantite_produit) AS montant, DATE(date_facture) AS date FROM facture f JOIN ligne_facture lf ON lf.id_facture = f.id_facture WHERE etat_facture != 'supprimé' AND num_facture IS NOT NULL");
+            $response = parent::selectQuery("SELECT f.num_facture, (lf.prix * lf.quantite_produit) AS montant, DATE(date_facture) AS date FROM facture f JOIN ligne_facture lf ON lf.id_facture = f.id_facture WHERE etat_facture != 'supprimé' AND num_facture IS NOT NULL {$facture_cond} {$caisse_cond} {$user_cond} ORDER BY date ASC", $paramsQuery);
 
             //error
             if ($response['message_type'] === 'error') {

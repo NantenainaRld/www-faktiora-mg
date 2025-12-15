@@ -425,8 +425,145 @@ class EntreeController extends Controller
             return;
         }
 
+        //defaults
+        $date_by_default = [
+            'per',
+            'between',
+            'month_year'
+        ];
+        $per_default = [
+            'DAY',
+            'WEEK',
+            'MONTH',
+            'YEAR'
+        ];
+
+        //num_caisse
+        $num_caisse = trim($_GET['num_caisse'] ?? 'all');
+        $num_caisse = filter_var($num_caisse, FILTER_VALIDATE_INT);
+        $num_caisse = (!$num_caisse || $num_caisse < 0) ? 'all' : $num_caisse;
+
+        //id_utilisateur
+        $id_utilisateur = trim($_GET['id_utilisateur'] ?? 'all');
+
+        //date_by
+        $date_by = strtolower(trim($_GET['date_by'] ?? 'all'));
+        $date_by = in_array($date_by, $date_by_default, true) ? $date_by : 'all';
+        //per
+        $per = strtoupper(trim($_GET['per'] ?? 'DAY'));
+        $per = in_array($per, $per_default, true) ? $per : 'DAY';
+        //from
+        $from = trim($_GET['from'] ?? '');
+        //to
+        $to = trim($_GET['to'] ?? '');
+        $date = new DateTime();
+        if ($date_by === 'between') {
+            //from && to - empty
+            if ($from === '' && $to === '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.from_to')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            $date = new DateTime();
+
+            //from - not empty
+            if ($from !== '') {
+                $from = DateTime::createFromFormat('Y-m-d', $from);
+                //from - invalid
+                if (!$from) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date', ['field' => $from])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //from - future
+                if ($from > $date) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date_future')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+            }
+
+            //to - not empty
+            if ($to !== '') {
+                $to = DateTime::createFromFormat('Y-m-d', $to);
+                //from - invalid
+                if (!$to) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date', ['field' => $from])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //to - future
+                if ($to > $date) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date_future')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+            }
+
+            //from && to not empty - from > to
+            if ($from !== '' && $to !== '' && $from > $to) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.from_to')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //from not empty- reformat
+            if ($from !== '') {
+                $from = $from->format('Y-m-d');
+            }
+
+            //to not empty - reformat
+            if ($to !== '') {
+                $to = $to->format('Y-m-d');
+            }
+        }
+        //month
+        $month = trim($_GET['month'] ?? 'none');
+        $month = filter_var($month, FILTER_VALIDATE_INT);
+        $month = ($month === false || ($month < 1 || $month > 12)) ? 'none' : $month;
+        //year
+        $year = trim($_GET['year'] ?? date('Y'));
+        $year = filter_var($year, FILTER_VALIDATE_INT);
+        $year =  ($year === false || ($year < 1700 || $year > date('Y'))) ? ((new DateTime())->format('Y')) : $year;
+
+        $params = [
+            'num_caisse' => $num_caisse,
+            'id_utilisateur' => $id_utilisateur,
+            'date_by' => $date_by,
+            'per' => $per,
+            'from' => $from,
+            'to' => $to,
+            'month' => $month,
+            'year' => $year,
+        ];
+
         //list all caisse
-        $response = AutreEntree::listAllAutreEntree();
+        $response = AutreEntree::listAllAutreEntree($params);
 
         echo json_encode($response);
         return;
@@ -1997,8 +2134,145 @@ class EntreeController extends Controller
             return;
         }
 
+        //defaults
+        $date_by_default = [
+            'per',
+            'between',
+            'month_year'
+        ];
+        $per_default = [
+            'DAY',
+            'WEEK',
+            'MONTH',
+            'YEAR'
+        ];
+
+        //num_caisse
+        $num_caisse = trim($_GET['num_caisse'] ?? 'all');
+        $num_caisse = filter_var($num_caisse, FILTER_VALIDATE_INT);
+        $num_caisse = (!$num_caisse || $num_caisse < 0) ? 'all' : $num_caisse;
+
+        //id_utilisateur
+        $id_utilisateur = trim($_GET['id_utilisateur'] ?? 'all');
+
+        //date_by
+        $date_by = strtolower(trim($_GET['date_by'] ?? 'all'));
+        $date_by = in_array($date_by, $date_by_default, true) ? $date_by : 'all';
+        //per
+        $per = strtoupper(trim($_GET['per'] ?? 'DAY'));
+        $per = in_array($per, $per_default, true) ? $per : 'DAY';
+        //from
+        $from = trim($_GET['from'] ?? '');
+        //to
+        $to = trim($_GET['to'] ?? '');
+        $date = new DateTime();
+        if ($date_by === 'between') {
+            //from && to - empty
+            if ($from === '' && $to === '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.empty.from_to')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            $date = new DateTime();
+
+            //from - not empty
+            if ($from !== '') {
+                $from = DateTime::createFromFormat('Y-m-d', $from);
+                //from - invalid
+                if (!$from) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date', ['field' => $from])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //from - future
+                if ($from > $date) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date_future')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+            }
+
+            //to - not empty
+            if ($to !== '') {
+                $to = DateTime::createFromFormat('Y-m-d', $to);
+                //from - invalid
+                if (!$to) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date', ['field' => $from])
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+                //to - future
+                if ($to > $date) {
+                    $response = [
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.date_future')
+                    ];
+
+                    echo json_encode($response);
+                    return;
+                }
+            }
+
+            //from && to not empty - from > to
+            if ($from !== '' && $to !== '' && $from > $to) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.from_to')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //from not empty- reformat
+            if ($from !== '') {
+                $from = $from->format('Y-m-d');
+            }
+
+            //to not empty - reformat
+            if ($to !== '') {
+                $to = $to->format('Y-m-d');
+            }
+        }
+        //month
+        $month = trim($_GET['month'] ?? 'none');
+        $month = filter_var($month, FILTER_VALIDATE_INT);
+        $month = ($month === false || ($month < 1 || $month > 12)) ? 'none' : $month;
+        //year
+        $year = trim($_GET['year'] ?? date('Y'));
+        $year = filter_var($year, FILTER_VALIDATE_INT);
+        $year =  ($year === false || ($year < 1700 || $year > date('Y'))) ? ((new DateTime())->format('Y')) : $year;
+
+        $params = [
+            'num_caisse' => $num_caisse,
+            'id_utilisateur' => $id_utilisateur,
+            'date_by' => $date_by,
+            'per' => $per,
+            'from' => $from,
+            'to' => $to,
+            'month' => $month,
+            'year' => $year,
+        ];
+
         //list all facture
-        $response = Facture::listAllFacture();
+        $response = Facture::listAllFacture($params);
 
         echo json_encode($response);
         return;

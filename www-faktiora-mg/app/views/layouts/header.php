@@ -35,11 +35,16 @@
         /* btn second  */
         .btn-second {
             background-color: var(--color-second) !important;
-            border-color: var(--color-second) !important;
+            border-color: white !important;
         }
 
         .btn-second:active {
             background-color: var(--color-third) !important;
+        }
+
+        .btn-second:hover {
+            background-color: #a0aba1ff !important;
+            color: white;
         }
 
         /* bg  second */
@@ -104,12 +109,15 @@
         .searchbar {
             transition: all 0.3s;
             margin-right: -100%;
-            z-index: 1000;
+            position: fixed;
+            top: 0;
+            right: 0;
         }
 
         /* searc bar  */
         .searchbar.active {
             margin-right: 0%;
+            z-index: 1000;
         }
 
         /* overlay  searchbar*/
@@ -119,17 +127,18 @@
         }
 
         /* menu active  */
-        .nav-item.active {
+        .nav-item.active,
+        .navbar.active {
             background-color: rgba(4, 30, 14, 0.4) !important;
         }
 
-        .nav-item:hover,
-        .navbar:hover {
+        .nav-item.action:hover,
+        .navbar.action:hover {
             background-color: rgba(4, 30, 14, 0.4) !important;
         }
 
-        .nav-item:active,
-        .navbar:active {
+        .nav-item.action:active,
+        .navbar.action:active {
             background-color: rgba(3, 26, 12, 0.4) !important;
         }
 
@@ -141,12 +150,21 @@
         .navbar li:active {
             background-color: rgba(3, 26, 12, 0.4) !important;
         }
+
+        ::placeholder {
+            opacity: 0.5 !important;
+            font-style: italic;
+        }
     </style>
+    <!-- style user dashboard  -->
+    <?php if ($_SESSION['menu'] === 'user'): ?>
+        <link rel="stylesheet" href="<?= SITE_URL ?>/css/user-dashboard.css">
+    <?php endif; ?>
 </head>
 
-<body class="d-flex flex-column min-vh-100 min-vw-100 vh-100 overflow-hidden">
-    <div class="container-fluid align-items-center h-100">
-        <div class="row h-100" id="container">
+<body class="d-flex flex-column vw-100 vh-100 overflow-hidden">
+    <div class="container-fluid g-0 align-items-center justify-content-center align-items-center d-flex h-100 w-100">
+        <div class="row h-100 w-100" id="container">
             <!-- template placeholder -->
             <template id="template-placeholder">
                 <!-- sidebar  -->
@@ -324,8 +342,8 @@
                         <!-- items  -->
                         <ul class="w-100 px-2 h-80 nav-pills nav-fill flex-column list-unstyled overflow-y-auto">
                             <!-- home  -->
-                            <li class="nav-item <?= $_SESSION['menu'] === 'home' ? 'active' : '' ?> bg-success rounded-1 mb-2 text-light">
-                                <a href="#" class="nav-link fw-bold p-2 text-start" style="font-size: 0.85rem;">
+                            <li class="nav-item action <?= $_SESSION['menu'] === 'home' ? 'active' : '' ?> bg-success rounded-1 mb-2 text-light">
+                                <a href="<?= SITE_URL ?>/user/page_home" class="nav-link fw-bold p-2 text-start" style="font-size: 0.85rem;">
                                     <i class="fad fa-house me-2"></i><?= __('forms.labels.home') ?>
                                 </a>
                             </li>
@@ -333,9 +351,9 @@
                             <li class="nav-item green-second text-start rounded-1 mb-2 fw-bold" style="font-size: 0.85rem;"><i class="fad fa-table-columns me-2"></i><?= __('forms.labels.dashboard') ?></li>
                             <!-- user  -->
                             <?php if ($role === 'admin'): ?>
-                                <li class="nav-item fw-bold text-light mb-2 rounded-2">
-                                    <nav class="navbar bg-success p-0 rounded">
-                                        <a href=""
+                                <li class="nav-item action fw-bold text-light mb-2 rounded-2">
+                                    <nav class="navbar action bg-success p-0 rounded <?= $_SESSION['menu'] === 'user' ? 'active' : '' ?>">
+                                        <a href="#"
                                             class="nav-link navbar-toggler text-light p-2 justify-content-between d-flex"
                                             data-bs-toggle="collapse" data-bs-target="#user-menu-navbar" style="font-size: 0.85rem;">
                                             <i class="fad fa-user me-2 text-start">
@@ -349,8 +367,8 @@
                                         <div class="collapse navbar-collapse" id="user-menu-navbar">
                                             <ul class="navbar-nav py-2 px-1" style="font-size: 0.75rem;">
                                                 <!-- user dashboard  -->
-                                                <li class="nav-item green-second bg-green-third rounded-1 mb-1 text-start px-3">
-                                                    <a href="" class="nav-link text-light green-second">
+                                                <li class="nav-item green-second <?= $_SESSION['menu'] === 'user' ? 'bg-success' : 'bg-green-third' ?> rounded-1 mb-1 text-start px-3">
+                                                    <a href="<?= SITE_URL ?>/user/page_user" class="nav-link text-light green-second">
                                                         <i class="fad fa-chart-area me-2">
                                                         </i><?= __('forms.labels.dashboard') ?>
                                                     </a>
@@ -369,7 +387,7 @@
                             <?php endif; ?>
                             <!-- caisse  -->
                             <li class="nav-item fw-bold text-light mb-2 rounded-2">
-                                <nav class="navbar bg-success p-0 rounded">
+                                <nav class="navbar action bg-success p-0 rounded">
                                     <a href=""
                                         class="nav-link navbar-toggler text-light p-2 justify-content-between d-flex"
                                         data-bs-toggle="collapse" data-bs-target="#caisse-menu-navbar" style="font-size: 0.85rem;">
@@ -402,14 +420,14 @@
                                 </nav>
                             </li>
                             <!-- client -->
-                            <li class="nav-item bg-success rounded-1 mb-2 text-light">
+                            <li class="nav-item action bg-success rounded-1 mb-2 text-light">
                                 <a href="#" class="nav-link fw-bold p-2 text-start" style="font-size: 0.85rem;">
                                     <i class="fad fa-user-check me-2"></i><?= __('forms.labels.client') ?>
                                 </a>
                             </li>
                             <!-- entree  -->
                             <li class="nav-item fw-bold text-light mb-2 rounded-2">
-                                <nav class="navbar bg-success p-0 rounded">
+                                <nav class="navbar action bg-success p-0 rounded">
                                     <a href=""
                                         class="nav-link navbar-toggler text-light p-2 justify-content-between d-flex"
                                         data-bs-toggle="collapse" data-bs-target="#entree-menu-navbar" style="font-size: 0.85rem;">
@@ -442,19 +460,19 @@
                                 </nav>
                             </li>
                             <!-- sortie -->
-                            <li class="nav-item bg-success rounded-1 mb-2 text-light">
+                            <li class="nav-item action bg-success rounded-1 mb-2 text-light">
                                 <a href="#" class="nav-link fw-bold p-2 text-start" style="font-size: 0.85rem;">
                                     <i class="fad fa-chart-line-down me-2"></i><?= ucfirst(__('forms.labels.outflow')) ?>
                                 </a>
                             </li>
                             <!-- produit -->
-                            <li class="nav-item bg-success rounded-1 mb-2 text-light">
+                            <li class="nav-item action bg-success rounded-1 mb-2 text-light">
                                 <a href="#" class="nav-link fw-bold p-2 text-start" style="font-size: 0.85rem;">
                                     <i class="fad fa-bin-bottles me-2"></i><?= __('forms.labels.product') ?>
                                 </a>
                             </li>
                             <!-- article -->
-                            <li class="nav-item bg-success rounded-1 mb-2 text-light">
+                            <li class="nav-item action bg-success rounded-1 mb-2 text-light">
                                 <a href="#" class="nav-link fw-bold p-2 text-start" style="font-size: 0.85rem;">
                                     <i class="fad fa-minus me-2"></i><?= __('forms.labels.article') ?>
                                 </a>
@@ -465,13 +483,13 @@
                                 </i><?= __('forms.labels.setting') ?>
                             </li>
                             <!-- account setting -->
-                            <li class="nav-item bg-success rounded-1 mb-2 text-light">
+                            <li class="nav-item action bg-success rounded-1 mb-2 text-light">
                                 <a href="#" class="nav-link fw-bold p-2 text-start" style="font-size: 0.85rem;">
                                     <i class="fad fa-user-gear me-2"></i><?= __('forms.labels.account') ?>
                                 </a>
                             </li>
                             <!-- application setting -->
-                            <li class="nav-item bg-success rounded-1 mb-2 text-light">
+                            <li class="nav-item action bg-success rounded-1 mb-2 text-light">
                                 <a href="#" class="nav-link fw-bold p-2 text-start" style="font-size: 0.85rem;">
                                     <i class="fad fa-gears me-2"></i><?= __('forms.labels.application') ?>
                                 </a>

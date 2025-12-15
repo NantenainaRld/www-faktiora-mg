@@ -320,16 +320,100 @@ class AutreEntree extends Database
     }
 
     //list all autre entree
-    public static function listAllAutreEntree()
+    public static function listAllAutreEntree($params)
     {
         $response = [
             'message_type' => 'success',
             'message' => 'success'
         ];
+        $paramsQuery = [];
+
+        //date_by - 
+        $ae_cond = '';
+        switch ($params['date_by']) {
+
+            //date_by - all
+            case 'all':
+                break;
+            //date_by - per
+            case 'per':
+                switch ($params['per']) {
+
+                    //per - DAY
+                    case 'DAY':
+                        //ae
+                        $ae_cond = 'AND DATE(date_ae) = CURDATE() ';
+                        break;
+                    //per - !DAY
+                    default:
+                        //ae
+                        $ae_cond = "AND {$params['per']}(date_ae) = {$params['per']}(CURDATE()) ";
+                        break;
+                }
+                break;
+            //date_by - between
+            case 'between':
+                //from - empty
+                if ($params['from'] === '') {
+                    //to - !empty
+                    //ae
+                    $ae_cond = "AND DATE(date_ae) <= :to ";
+                    $paramsQuery['to'] = $params['to'];
+                }
+                //from - !empty
+                else {
+                    //to - empty
+                    if ($params['to'] === '') {
+                        //ae
+                        $ae_cond = "AND DATE(date_ae) >= :from";
+                        $paramsQuery['from'] = $params['from'];
+                    }
+                    //to - !empty
+                    else {
+                        //ae
+                        $ae_cond = "AND DATE(date_ae) BETWEEN :from AND :to  ";
+                        $paramsQuery['from'] = $params['from'];
+                        $paramsQuery['to'] = $params['to'];
+                    }
+                }
+                break;
+            //date_by - month_year
+            case 'month_year':
+                //month - all
+                if ($params['month'] === 'all') {
+                    //year - 
+                    //ae
+                    $ae_cond = "AND YEAR(date_ae) = :year ";
+                    $paramsQuery['year'] = $params['year'];
+                }
+                //month - !all
+                else {
+                    //year -
+                    //ae
+                    $ae_cond = "AND YEAR(date_ae) = :year AND MONTH(date_ae) = :month ";
+                    $paramsQuery['month'] = $params['month'];
+                    $paramsQuery['year'] = $params['year'];
+                }
+                break;
+        }
+
+        //num_caisse
+        $caisse_cond = '';
+        if ($params['num_caisse'] !== 'all') {
+            $caisse_cond = " AND num_caisse = :num_caisse ";
+            $paramsQuery['num_caisse'] = $params['num_caisse'];
+        }
+
+        //id_utilisateur
+        $user_cond = '';
+        if ($params['id_utilisateur'] !== 'all') {
+            $user_cond = " AND id_utilisateur = :user_id ";
+            $paramsQuery['user_id'] = $params['id_utilisateur'];
+        }
 
         try {
 
-            $response = parent::selectQuery("SELECT num_ae , libelle_ae, montant_ae AS montant, DATE(date_ae) AS date FROM autre_entree WHERE etat_ae != 'supprimé' AND num_ae IS NOT NULL");
+            $response = parent::selectQuery("SELECT num_ae , libelle_ae, montant_ae AS montant, DATE(date_ae) AS date FROM autre_entree WHERE etat_ae != 'supprimé' AND num_ae IS NOT NULL {$ae_cond} {$caisse_cond} {$user_cond} ORDER BY date ASC", $paramsQuery);
 
             //error
             if ($response['message_type'] === 'error') {

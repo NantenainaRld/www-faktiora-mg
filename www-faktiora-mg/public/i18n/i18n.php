@@ -23,11 +23,12 @@
         per_total_trans: "<?= __('forms.titles.per_total_trans') ?>",
         number: "<?= __('forms.labels.number') ?>",
         date: "<?= __('forms.labels.date') ?>",
-        total: "<?= __('forms.labels.total') ?>"
+        total: "<?= __('forms.labels.total') ?>",
+        role: "<?= ucfirst(__('forms.labels.role')) ?>",
+        connected: "<?= ucfirst(__('forms.labels.connected')) ?>",
+        disconnected: "<?= ucfirst(__('forms.labels.disconnected')) ?>",
+        deleted: "<?= ucfirst(__('forms.labels.deleted')) ?>",
+        status: "<?= ucfirst(__('forms.labels.status')) ?>",
+        all: "<?= ucfirst(__('forms.labels.all')) ?>"
     }
-    //cookie lang value
-    const cookieLangValue = document.cookie
-        .split('; ')
-        .find(row => row.startsWith(`lang=`))
-        ?.split('=')[1];
 </script>

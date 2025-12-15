@@ -53,43 +53,24 @@
                   }
                }
 
-               //side bar && search bar
-
                // btn sidebar 
                const btnSideBar = container.querySelector('#btn-sidebar');
                //overlay
                const overlay = container.querySelector('.overlay');
                //sidebar
                const sidebar = container.querySelector('.sidebar');
-               btnSideBar.addEventListener('click', () => {
-                  sidebar.classList.toggle('active');
-                  overlay.classList.toggle('active');
-               });
-               //overlay toggle sidebar
-               overlay.addEventListener('click', () => {
-                  overlay.classList.toggle('active');
-                  sidebar.classList.toggle('active');
-               });
-               //searchbar
-               // const searchBar = document.querySelector('.searchbar');
-               // //overlay search bar
-               // const overlaySearchBar = document.querySelector('.overlay-searchbar');
-               //toggle sidebar
-               // const toggleSideBar = () => {
-               //    sidebar.classList.toggle('active');
-               //    overlay.classList.toggle('active');
-               // };
-               // /
-               // //toggle searchbar
-               // const toggleSearchBar = () => {
-               //    searchBar.classList.toggle('active');
-               //    overlaySearchBar.classList.toggle('active');
-               // };
-               // //overlay-searchbar toggle
-               // overlaySearchBar.addEventListener('click', () => {
-               //    overlaySearchBar.classList.toggle('active');
-               //    searchBar.classList.toggle('active');
-               // });
+               if (btnSideBar) {
+                  //toggle sidebar
+                  btnSideBar.addEventListener('click', () => {
+                     sidebar.classList.toggle('active');
+                     overlay.classList.toggle('active');
+                  });
+                  //overlay toggle sidebar
+                  overlay.addEventListener('click', () => {
+                     overlay.classList.toggle('active');
+                     sidebar.classList.toggle('active');
+                  });
+               }
             } catch (e) {
                console.log(e);
             }
@@ -104,9 +85,13 @@
    <script src="<?= SITE_URL ?>/chart-js/chart.umd.min.js"></script>
    <script src="<?= SITE_URL ?>/chart-js/chartjs-adapter-luxon.js"></script>
    <script src="<?= SITE_URL ?>/chart-js/chartjs-plugin-zoom.min.js"></script>
-   <!-- script welcome -->
+   <!-- script home -->
    <?php if ($_SESSION['menu'] === 'home'): ?>
       <script src="<?= SITE_URL ?>/js/home.js"></script>
+   <?php endif; ?>
+   <!-- script user -->
+   <?php if ($_SESSION['menu'] === 'user'): ?>
+      <script src="<?= SITE_URL ?>/js/users/user-dashboard.js"></script>
    <?php endif; ?>
    </body>
 
