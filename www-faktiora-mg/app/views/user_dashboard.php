@@ -173,13 +173,17 @@
                                             <button class="btn btn-outline-primary fw-bold w-auto btn-sm me-2 my-2" data-bs-toggle='modal' data-bs-target='#modal-add-user'>
                                                 <i class="fad fa-user-circle-plus me-2"></i><?= __('forms.labels.add') ?>
                                             </button>
+                                            <!-- btn deconnect user  -->
+                                            <button class="btn btn-outline-dark fw-bold w-auto btn-sm me-2 my-2" id="btn-deconnect-user">
+                                                <i class="fad fa-arrow-left-from-bracket me-2"></i><?= __('forms.labels.disconnect') ?>
+                                            </button>
                                             <!-- btn delete user  -->
                                             <button class="btn btn-outline-danger fw-bold w-auto btn-sm me-2 my-2" id="btn-delete-user">
-                                                <i class="fad fa-trash me-2"></i><?= __('forms.labels.delete') ?>
+                                                <i class="fad fa-user-circle-minus me-2"></i><?= __('forms.labels.delete') ?>
                                             </button>
                                             <!-- btn delete permanent user  -->
                                             <button class="btn btn-danger fw-bold w-auto btn-sm me-2 my-2" id="btn-delete-permanent-user">
-                                                <i class="fad fa-trash me-2"></i><?= __('forms.labels.delete_permanent') ?>
+                                                <i class="fad fa-user-circle-minus me-2"></i><?= __('forms.labels.delete_permanent') ?>
                                             </button>
                                         </div>
                                         <table class="w-100 table-striped">
@@ -666,6 +670,58 @@
                 <div class="modal-footer d-flex flex-nowrap justify-content-end">
                     <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-delete-user"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
                     <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-delete-user"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_delete') ?></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal deconnect user  -->
+    <div class="modal fade" id="modal-deconnect-user" tabindex="-1" aria-labelledby="modalDeconnectUser" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <!-- modal header  -->
+                <div class="modal-header bg-dark text-light">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-arrow-left-from-bracket me-2"></i><?= __('forms.titles.deconnect_user') ?></h6>
+                </div>
+                <!-- modal body  -->
+                <div class="modal-body">
+                    <div class="message">Voulez-vous vraiment déconnecter ces ... utilisateurs ?</div>
+                </div>
+                <!-- modal footer  -->
+                <div class="modal-footer d-flex flex-nowrap justify-content-end">
+                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-deconnect-user"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
+                    <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-deconnect-user"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_deconnect') ?></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal print all user  -->
+    <div class="modal fade" id="modal-print-all-user" tabindex="-1" aria-labelledby="modalPrintAllUser" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <!-- modal header  -->
+                <div class="modal-header bg-dark text-light">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-file-pdf me-2"></i><?= __('forms.titles.print_all_user') ?></h6>
+                </div>
+                <!-- modal body  -->
+                <div class="modal-body">
+                    <div class="message mb-4"><?= __('forms.labels.ask_print_all_user') ?></div>
+                    <div class="d-flex justify-content-center gap-4">
+                        <!-- status active  -->
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input form-check-input-sm" name="download-status-user" id="download-status-user-active" value="acive" checked>
+                            <label for="form-check-label" for="download-status-user-active"><?= __('forms.labels.active') ?></label>
+                        </div>
+                        <!-- status deleted  -->
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input form-check-input-sm" name="download-status-user" id="download-status-user-deleted" value="deleted">
+                            <label for="form-check-label" for="download-status-user-deleted"><?= __('forms.labels.deleted') ?></label>
+                        </div>
+                    </div>
+                </div>
+                <!-- modal footer  -->
+                <div class="modal-footer d-flex flex-nowrap justify-content-end">
+                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-print-all-user"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                    <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-print-all-user"><i class="fad fa-download me-2"></i><?= __('forms.labels.download') ?></button>
                 </div>
             </div>
         </div>

@@ -1358,7 +1358,7 @@ class UserController extends Controller
     }
 
     //action - deconnect all user
-    public function deconnectAll()
+    public function deconnectAllUser()
     {
         header('Content-Type: application/json');
         $response = null;
@@ -1398,7 +1398,7 @@ class UserController extends Controller
             try {
 
                 //deconnect all user
-                $response = User::deconnectAll(
+                $response = User::deconnectAllUser(
                     $ids_user,
                     $is_loged_in->getIdUtilisateur()
                 );

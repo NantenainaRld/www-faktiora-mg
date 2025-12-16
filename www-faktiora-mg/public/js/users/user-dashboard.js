@@ -1230,6 +1230,308 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
       }
     });
+
+    //======================= DECONNECT USER ==========================
+    //modal deconnect user
+    const modalDeconnectUser = document.getElementById("modal-deconnect-user");
+    //btn deconnect user
+    const btnDeconnectUser = tbody
+      .closest("table")
+      .parentElement.querySelector("#btn-deconnect-user");
+
+    //=====EVENT btn deconnect user
+    btnDeconnectUser.addEventListener("click", () => {
+      //selected user
+      const selectedUser = tbody.querySelectorAll(
+        "input[type='checkbox']:checked"
+      );
+
+      //no selection
+      if (selectedUser.length <= 0) {
+        //alert
+        const alertTemplate = document.getElementById("alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-warning");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          lang.user_ids_user_empty;
+        //progress bar
+        progressBar.style.transition = "width 10s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        tbody.closest("div").prepend(alert);
+
+        //progress lanch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 10000);
+
+        return;
+      }
+      //selection
+      else {
+        //modal message 1
+        if (selectedUser.length === 1) {
+          modalDeconnectUser.querySelector(".message").innerHTML =
+            lang.question_deconnect_user_1.replace(
+              ":field",
+              selectedUser[0].closest("tr").dataset.userId
+            );
+        }
+        //modal message plur
+        else {
+          modalDeconnectUser.querySelector(".message").innerHTML =
+            lang.question_deconnect_user_plur.replace(
+              ":field",
+              selectedUser.length
+            );
+        }
+
+        //show modal deconnect user
+        new bootstrap.Modal(modalDeconnectUser).show();
+
+        //====== EVENT btn confirm deconnect user
+        modalDeconnectUser
+          .querySelector("#btn-confirm-deconnect-user")
+          .addEventListener("click", async () => {
+            try {
+              //ids_user
+              let ids_user = [...selectedUser];
+              ids_user = ids_user.map(
+                (selected) => selected.closest("tr").dataset.userId
+              );
+
+              //FETCH api delete permanent all user
+              const response = await apiRequest("/user/deconnect_all_user", {
+                method: "PUT",
+                body: { ids_user: ids_user },
+              });
+
+              //error
+              if (response.message_type === "error") {
+                //alert
+                const alertTemplate = document.getElementById("alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-triangle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                tbody.closest("div").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+
+                return;
+              }
+              //invalid
+              else if (response.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.getElementById("alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                tbody.closest("div").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+
+                return;
+              }
+              //succcess
+              else {
+                //alert
+                const alertTemplate = document.getElementById("alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-success");
+                //icon
+                alert.querySelector(".fad").classList.add("fa-check-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                tbody.closest("div").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+
+                //close modal
+                modalDeconnectUser
+                  .querySelector("#btn-close-modal-deconnect-user")
+                  .click();
+
+                //refesh filter user
+                filterUser(
+                  tbody,
+                  container.querySelector("#chart-role"),
+                  container.querySelector("#chart-status"),
+                  selectStatus.value.trim(),
+                  selectRole.value.trim(),
+                  selectSex.value.trim(),
+                  selectArrangeBy.value.trim(),
+                  selectOrder.value.trim(),
+                  selectNumCaisse.value.trim(),
+                  selectDateBy.value.trim(),
+                  selectPer.value.trim(),
+                  dateFrom.value.trim(),
+                  dateTo.value.trim(),
+                  selectMonth.value.trim(),
+                  selectYear.value.trim(),
+                  inputSearch.value.trim()
+                );
+
+                return;
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      }
+    });
+
+    //====================== PRINT ALL USER ===========================
+    //modal print all user
+    const modalPrintAllUser = document.getElementById("modal-print-all-user");
+    //a - print all user
+    const aPrintAllUser = document.getElementById("a-print-all-user");
+
+    //===== EVENT a print all user
+    aPrintAllUser.addEventListener("click", () => {
+      //show modal print all user
+      new bootstrap.Modal(modalPrintAllUser).show();
+
+      //===== EVENT btn confirm print all user
+      modalPrintAllUser
+        .querySelector("#btn-confirm-print-all-user")
+        .addEventListener("click", async () => {
+          //radio status
+          const radioStatusUser = modalPrintAllUser.querySelector(
+            "input[type='radio']:checked"
+          );
+          
+          try {
+            //FETCH api print all user
+            const response = await apiRequest(
+              `/user/print_all_user?status=${radioStatusUser.value.trim()}`
+            );
+
+            //error
+            if (response.message_type === "error") {
+              //alert
+              const alertTemplate = document.getElementById("alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-danger");
+              //icon
+              alert
+                .querySelector(".fad")
+                .classList.add("fa-exclamation-triangle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                response.message;
+              //progress bar
+              progressBar.style.transition = "width 20s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              modalPrintAllUser.querySelector(".modal-body").prepend(alert);
+
+              //progress lanch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 20000);
+
+              return;
+            }
+
+            //download user report list
+            const a = document.createElement("a");
+            a.href = `data:application/pdf;base64,${response.pdf}`;
+            a.download = response.file_name;
+            a.click();
+
+            //close modal print all user
+            modalPrintAllUser
+              .querySelector("#btn-close-modal-print-all-user")
+              .click();
+
+            return;
+          } catch (e) {
+            console.error(e);
+          }
+        });
+    });
   }, 1050);
 
   //================ FUNCTIONS ================
@@ -2279,107 +2581,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error(e);
     }
   }
-  //function - create user by admin
-  // async function createUser(nom, prenoms, sexe, email, role, mdp, mdp_confirm) {
-  //   try {
-  //     const response = await apiRequest("/user/create_user", {
-  //       method: "POST",
-  //       body: {
-  //         nom_utilisateur: nom,
-  //         prenoms_utilisateur: prenoms,
-  //         sexe_utilisateur: sexe,
-  //         email_utilisateur: email,
-  //         role: role,
-  //         mdp: mdp,
-  //         mdp_confirm: mdp_confirm,
-  //       },
-  //     });
-  //     console.log(response);
-  //   } catch (Error) {
-  //     console.log("Error : " + Error);
-  //   }
-  // }
-  // //function - update user
-  // async function updateByAdmin(id, nom, prenoms, sexe, email, role, mdp) {
-  //   try {
-  //     const response = await apiRequest("/user/update_by_admin", {
-  //       method: "PUT",
-  //       body: {
-  //         id_utilisateur: id,
-  //         nom_utilisateur: nom,
-  //         prenoms_utilisateur: prenoms,
-  //         sexe_utilisateur: sexe,
-  //         email_utilisateur: email,
-  //         role: role,
-  //         mdp: mdp,
-  //       },
-  //     });
-  //     console.log(response);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
-  // //function - update user
-  // async function updateByUser(id, nom, prenoms, sexe, email, mdp) {
-  //   try {
-  //     const response = await apiRequest("/user/update_by_user", {
-  //       method: "PUT",
-  //       body: {
-  //         id_utilisateur: id,
-  //         nom_utilisateur: nom,
-  //         prenoms_utilisateur: prenoms,
-  //         sexe_utilisateur: sexe,
-  //         email_utilisateur: email,
-  //         mdp: mdp,
-  //       },
-  //     });
-  //     console.log(response);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
-  // //function - delete all
-  // async function deleteAll(ids = []) {
-  //   try {
-  //     const response = await apiRequest("/user/delete_all", {
-  //       method: "PUT",
-  //       body: {
-  //         ids_user: ids,
-  //       },
-  //     });
-  //     console.log(response);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
-  // //function - permanent delete all
-  // async function permanentDeleteAll(ids = []) {
-  //   try {
-  //     const response = await apiRequest("/user/permanent_delete_all", {
-  //       method: "DELETE",
-  //       body: {
-  //         ids_user: ids,
-  //       },
-  //     });
-  //     console.log(response);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
-  // //function - deconnect all
-  // async function deconnectAll(ids_user = []) {
-  //   try {
-  //     const response = await apiRequest("/user/deconnect_all", {
-  //       method: "PUT",
-  //       body: {
-  //         ids_user: ids_user,
-  //       },
-  //     });
-  //     console.log(response);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
   // //function - print all user
   // async function printAllUser(status = "active") {
   //   try {

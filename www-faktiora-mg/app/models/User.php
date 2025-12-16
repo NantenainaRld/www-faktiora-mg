@@ -731,7 +731,7 @@ class User extends Database
     }
 
     //deconnect all user
-    public static function deconnectAll($ids_user, $id_utilisateur)
+    public static function deconnectAllUser($ids_user, $id_utilisateur)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 

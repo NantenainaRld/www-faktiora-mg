@@ -21,7 +21,9 @@ return [
         'user_list' => 'Liste des utilisateurs',
         'user_add' => "Ajout d'un utilisateur",
         'user_update' => 'Modification du compte',
-        'delete_user' => 'Suppréssion des utilisateurs'
+        'delete_user' => 'Suppréssion des utilisateurs',
+        'deconnect_user' => 'Déconnection des utilisateurs',
+        'print_all_user' => 'Rapport de liste des utilisateurs'
     ],
     'labels' => [
         'all' => 'tout',
@@ -142,6 +144,12 @@ return [
         'question_delete_user_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> utilisateurs ?",
         'question_delete_permanent_user_1' => "Voulez-vous vraiment supprimer définitivement l' utilisateur avec l 'ID <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>.",
         'question_delete_permanent_user_plur' => "Voulez-vous vraiment supprimer définitivement ces <b>:field</b> utilisateurs ?. <span class='text-danger'>Cette action est irréversible</span>.",
+        'disconnect' => 'Déconnecter',
+        'yes_deconnect' => 'Oui, déconnecter',
+        'question_deconnect_user_1' => "Voulez-vous vraiment déconnecter l'utilisateur avec l'ID <b>:field<b/> ?",
+        'question_deconnect_user_plur' => "Voulez-vous vraiment déconnecter ces <b>:field</b> utilisateurs ?",
+        'ask_print_all_user' => 'Vous pouvez choisir selon les status des utilisateurs suivants : ',
+        'download' => 'Télécharger'
     ],
     'status' => [
         'online' => 'en ligne',

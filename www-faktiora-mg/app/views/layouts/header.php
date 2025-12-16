@@ -380,7 +380,7 @@
                                                 </li>
                                                 <!--print list user  -->
                                                 <li class="nav-item green-second bg-green-third rounded-1 text-start px-3">
-                                                    <a href="" class="nav-link text-light green-second">
+                                                    <a href="#" class="nav-link text-light green-second" id="a-print-all-user">
                                                         <i class="fad fa-file-pdf me-2">
                                                         </i><?= __('forms.labels.download_list') ?>
                                                     </a>

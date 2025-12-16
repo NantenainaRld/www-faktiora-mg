@@ -35,5 +35,7 @@
         question_delete_user_plur: "<?= __('forms.labels.question_delete_user_plur') ?>",
         question_delete_permanent_user_1: "<?= __('forms.labels.question_delete_permanent_user_1') ?>",
         question_delete_permanent_user_plur: "<?= __('forms.labels.question_delete_permanent_user_plur') ?>",
+        question_deconnect_user_1: "<?= __('forms.labels.question_deconnect_user_1') ?>",
+        question_deconnect_user_plur: "<?= __('forms.labels.question_deconnect_user_plur') ?>",
     }
 </script>
