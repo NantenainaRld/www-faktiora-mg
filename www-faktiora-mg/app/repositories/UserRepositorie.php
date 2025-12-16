@@ -119,6 +119,8 @@ class UserRepositorie extends Database
             u.id_utilisateur,
             CONCAT(u.nom_utilisateur, ' ', u.prenoms_utilisateur) AS fullname,
             u.email_utilisateur,
+            u.nom_utilisateur,
+            u.prenoms_utilisateur,
             u.role,
             c.num_caisse,
             u.etat_utilisateur,

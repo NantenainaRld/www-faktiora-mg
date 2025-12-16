@@ -782,7 +782,7 @@ class UserController extends Controller
     }
 
     //action - update user by admin
-    public function updateByAdmin()
+    public function updateUserByAdmin()
     {
         header('Content-Type: application/json');
         $response = null;
@@ -838,7 +838,7 @@ class UserController extends Controller
                 return;
             }
 
-            //prenoms_utilisateur - invalid
+            //prenoms_utilisateur noe empty - invalid
             if ($json['prenoms_utilisateur'] !== '' && strlen($json['prenoms_utilisateur']) > 100) {
                 $response = [
                     'message_type' => 'invalid',
@@ -902,7 +902,7 @@ class UserController extends Controller
                 return;
             }
 
-            //mdp - invalid
+            //mdp not empty - invalid
             if ($json['mdp'] !== '' && strlen($json['mdp']) < 6) {
                 $response = [
                     'message_type' => 'invalid',
@@ -941,7 +941,7 @@ class UserController extends Controller
                     ->setEmailUtilisateur($json['email_utilisateur'])
                     ->setRole($json['role'])
                     ->setMdp($json['mdp']);
-                $response = $response['model']->updateByAdmin();
+                $response = $response['model']->updateUserByAdmin();
 
                 echo json_encode($response);
                 return;

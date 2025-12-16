@@ -19,7 +19,8 @@ return [
         'per_nb_trans' => 'Par nombre des transactions',
         'per_total_trans' => 'Par total des transactions',
         'user_list' => 'Liste des utilisateurs',
-        'user_add' => "Ajout d'un utilisateur"
+        'user_add' => "Ajout d'un utilisateur",
+        'user_update' => 'Modification du compte'
     ],
     'labels' => [
         'all' => 'tout',
@@ -129,7 +130,9 @@ return [
         'actions' => 'actions',
         'action' => 'action',
         'cancel' => 'Annuler',
-        'add' => 'Ajouter'
+        'add' => 'Ajouter',
+        'keep_empty' => 'Laisser vide si vous ne voulez pas modifier',
+        'save' => 'Enregistrer'
     ],
     'status' => [
         'online' => 'en ligne',

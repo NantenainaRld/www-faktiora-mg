@@ -383,7 +383,7 @@ class User extends Database
     }
 
     //update user by admin
-    public function updateByAdmin()
+    public function updateUserByAdmin()
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 
