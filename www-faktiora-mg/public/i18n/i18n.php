@@ -29,6 +29,11 @@
         disconnected: "<?= ucfirst(__('forms.labels.disconnected')) ?>",
         deleted: "<?= ucfirst(__('forms.labels.deleted')) ?>",
         status: "<?= ucfirst(__('forms.labels.status')) ?>",
-        all: "<?= ucfirst(__('forms.labels.all')) ?>"
+        all: "<?= ucfirst(__('forms.labels.all')) ?>",
+        user_ids_user_empty: "<?= __('messages.invalids.user_ids_user_empty') ?>",
+        question_delete_user_1: "<?= __('forms.labels.question_delete_user_1') ?>",
+        question_delete_user_plur: "<?= __('forms.labels.question_delete_user_plur') ?>",
+        question_delete_permanent_user_1: "<?= __('forms.labels.question_delete_permanent_user_1') ?>",
+        question_delete_permanent_user_plur: "<?= __('forms.labels.question_delete_permanent_user_plur') ?>",
     }
 </script>

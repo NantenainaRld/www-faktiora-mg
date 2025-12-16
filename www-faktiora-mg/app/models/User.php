@@ -611,8 +611,8 @@ class User extends Database
         return $response;
     }
 
-    //delete all
-    public static function deleteAll($ids_user, $id_utilisateur)
+    //delete all user
+    public static function deleteAllUser($ids_user, $id_utilisateur)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 
@@ -671,8 +671,8 @@ class User extends Database
         return $response;
     }
 
-    //permanent delete all
-    public static function permanentDeleteAll($ids_user, $id_utilisateur)
+    //delete permanent all user
+    public static function deletePermanentAllUser($ids_user, $id_utilisateur)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 

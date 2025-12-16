@@ -20,7 +20,8 @@ return [
         'per_total_trans' => 'Par total des transactions',
         'user_list' => 'Liste des utilisateurs',
         'user_add' => "Ajout d'un utilisateur",
-        'user_update' => 'Modification du compte'
+        'user_update' => 'Modification du compte',
+        'delete_user' => 'Suppréssion des utilisateurs'
     ],
     'labels' => [
         'all' => 'tout',
@@ -132,7 +133,15 @@ return [
         'cancel' => 'Annuler',
         'add' => 'Ajouter',
         'keep_empty' => 'Laisser vide si vous ne voulez pas modifier',
-        'save' => 'Enregistrer'
+        'save' => 'Enregistrer',
+        'delete' => 'Supprimer',
+        'yes_delete' => 'Oui, supprimer',
+        'no_cancel' => 'Non, annuler',
+        'delete_permanent' => 'Supprimer définitivement',
+        'question_delete_user_1' => "Voulez-vous vraiment supprimer l' utilisateur avec l 'ID <b>:field</b> ?",
+        'question_delete_user_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> utilisateurs ?",
+        'question_delete_permanent_user_1' => "Voulez-vous vraiment supprimer définitivement l' utilisateur avec l 'ID <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>.",
+        'question_delete_permanent_user_plur' => "Voulez-vous vraiment supprimer définitivement ces <b>:field</b> utilisateurs ?. <span class='text-danger'>Cette action est irréversible</span>.",
     ],
     'status' => [
         'online' => 'en ligne',

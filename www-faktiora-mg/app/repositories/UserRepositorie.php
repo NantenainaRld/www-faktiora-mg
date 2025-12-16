@@ -209,11 +209,11 @@ class UserRepositorie extends Database
         }
         //status - connected
         elseif ($params['status'] === 'connected') {
-            $sql .= "AND u.etat_utilisateur != 'supprimé' AND u.dernier_session >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) ";
+            $sql .= "AND u.etat_utilisateur != 'supprimé' AND u.dernier_session >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) AND u.etat_utilisateur = 'connecté' ";
         }
         //status - diconnected
         elseif ($params['status'] === 'disconnected') {
-            $sql .= "AND u.etat_utilisateur != 'supprimé' AND u.dernier_session < DATE_SUB(NOW(), INTERVAL 5 MINUTE) ";
+            $sql .= "AND u.etat_utilisateur != 'supprimé' AND u.dernier_session < DATE_SUB(NOW(), INTERVAL 5 MINUTE)  OR u.etat_utilisateur = 'déconnecté' ";
         }
         //status - deleted
         else {
@@ -273,12 +273,12 @@ class UserRepositorie extends Database
                 }
 
                 //count connected
-                if ($data['minutes_ago'] <= 0 && $data['etat_utilisateur'] !== 'supprimé') {
+                if ($data['minutes_ago'] <= 0 && $data['etat_utilisateur'] && $data['etat_utilisateur'] === 'connecté') {
                     $nb_connected++;
                     $data['etat_utilisateur'] = 'connected';
                 }
                 //count disconnected
-                elseif ($data['minutes_ago'] > 0 && $data['etat_utilisateur'] !== 'supprimé') {
+                elseif ($data['minutes_ago'] > 0 && $data['etat_utilisateur'] === 'déconnecté') {
                     $nb_disconnected++;
                     $data['etat_utilisateur'] = 'disconnected';
                 }

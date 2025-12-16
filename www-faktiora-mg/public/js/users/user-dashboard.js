@@ -613,7 +613,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     //=====EVENT input add user name
     inputAddUserName.addEventListener("input", (e) => {
-      e.target.value = e.target.value.replace("  ", " ");
+      e.target.value = e.target.value.replace("  ", " ").toUpperCase();
     });
     //=====EVENT input add user first name
     inputAddUserFirstName.addEventListener("input", (e) => {
@@ -783,6 +783,451 @@ document.addEventListener("DOMContentLoaded", async () => {
         } catch (e) {
           console.error(e);
         }
+      }
+    });
+
+    //=======================  DELETE USER ==========================
+    //modal delete user
+    const modalDeleteUser = document.getElementById("modal-delete-user");
+    //btn delete user
+    const btnDeleteUser = tbody
+      .closest("table")
+      .parentElement.querySelector("#btn-delete-user");
+
+    //=====EVENT btn delete user
+    btnDeleteUser.addEventListener("click", () => {
+      //selected user
+      const selectedUser = tbody.querySelectorAll(
+        "input[type='checkbox']:checked"
+      );
+
+      //no selection
+      if (selectedUser.length <= 0) {
+        //alert
+        const alertTemplate = document.getElementById("alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-warning");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          lang.user_ids_user_empty;
+        //progress bar
+        progressBar.style.transition = "width 10s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        tbody.closest("div").prepend(alert);
+
+        //progress lanch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 10000);
+
+        return;
+      }
+      //selection
+      else {
+        //modal message 1
+        if (selectedUser.length === 1) {
+          modalDeleteUser.querySelector(".message").innerHTML =
+            lang.question_delete_user_1.replace(
+              ":field",
+              selectedUser[0].closest("tr").dataset.userId
+            );
+        }
+        //modal message plur
+        else {
+          modalDeleteUser.querySelector(".message").innerHTML =
+            lang.question_delete_user_plur.replace(
+              ":field",
+              selectedUser.length
+            );
+        }
+
+        //show modal delete user
+        new bootstrap.Modal(modalDeleteUser).show();
+
+        //====== EVENT btn confirm delete user
+        modalDeleteUser
+          .querySelector("#btn-confirm-delete-user")
+          .addEventListener("click", async () => {
+            try {
+              //ids_user
+              let ids_user = [...selectedUser];
+              ids_user = ids_user.map(
+                (selected) => selected.closest("tr").dataset.userId
+              );
+
+              //FETCH api delete all user
+              const response = await apiRequest("/user/delete_all_user", {
+                method: "PUT",
+                body: { ids_user: ids_user },
+              });
+
+              //error
+              if (response.message_type === "error") {
+                //alert
+                const alertTemplate = document.getElementById("alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-triangle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                tbody.closest("div").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+
+                return;
+              }
+              //invalid
+              else if (response.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.getElementById("alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                tbody.closest("div").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+
+                return;
+              }
+              //succcess
+              else {
+                //alert
+                const alertTemplate = document.getElementById("alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-success");
+                //icon
+                alert.querySelector(".fad").classList.add("fa-check-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                tbody.closest("div").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+
+                //close modal
+                modalDeleteUser
+                  .querySelector("#btn-close-modal-delete-user")
+                  .click();
+
+                //refesh filter user
+                filterUser(
+                  tbody,
+                  container.querySelector("#chart-role"),
+                  container.querySelector("#chart-status"),
+                  selectStatus.value.trim(),
+                  selectRole.value.trim(),
+                  selectSex.value.trim(),
+                  selectArrangeBy.value.trim(),
+                  selectOrder.value.trim(),
+                  selectNumCaisse.value.trim(),
+                  selectDateBy.value.trim(),
+                  selectPer.value.trim(),
+                  dateFrom.value.trim(),
+                  dateTo.value.trim(),
+                  selectMonth.value.trim(),
+                  selectYear.value.trim(),
+                  inputSearch.value.trim()
+                );
+
+                return;
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      }
+    });
+
+    //=======================  DELETE PERMANENT USER ==========================
+    //btn delete permanent user
+    const btnDeletePermanentUser = tbody
+      .closest("table")
+      .parentElement.querySelector("#btn-delete-permanent-user");
+
+    //=====EVENT btn delete permanent user
+    btnDeletePermanentUser.addEventListener("click", () => {
+      //selected user
+      const selectedUser = tbody.querySelectorAll(
+        "input[type='checkbox']:checked"
+      );
+
+      //no selection
+      if (selectedUser.length <= 0) {
+        //alert
+        const alertTemplate = document.getElementById("alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-warning");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          lang.user_ids_user_empty;
+        //progress bar
+        progressBar.style.transition = "width 10s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        tbody.closest("div").prepend(alert);
+
+        //progress lanch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 10000);
+
+        return;
+      }
+      //selection
+      else {
+        //modal message 1
+        if (selectedUser.length === 1) {
+          modalDeleteUser.querySelector(".message").innerHTML =
+            lang.question_delete_permanent_user_1.replace(
+              ":field",
+              selectedUser[0].closest("tr").dataset.userId
+            );
+        }
+        //modal message plur
+        else {
+          modalDeleteUser.querySelector(".message").innerHTML =
+            lang.question_delete_permanent_user_plur.replace(
+              ":field",
+              selectedUser.length
+            );
+        }
+
+        //show modal delete user
+        new bootstrap.Modal(modalDeleteUser).show();
+
+        //====== EVENT btn confirm delete user
+        modalDeleteUser
+          .querySelector("#btn-confirm-delete-user")
+          .addEventListener("click", async () => {
+            try {
+              //ids_user
+              let ids_user = [...selectedUser];
+              ids_user = ids_user.map(
+                (selected) => selected.closest("tr").dataset.userId
+              );
+
+              //FETCH api delete permanent all user
+              const response = await apiRequest(
+                "/user/delete_permanent_all_user",
+                {
+                  method: "DELETE",
+                  body: { ids_user: ids_user },
+                }
+              );
+
+              //error
+              if (response.message_type === "error") {
+                //alert
+                const alertTemplate = document.getElementById("alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-triangle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                tbody.closest("div").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+
+                return;
+              }
+              //invalid
+              else if (response.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.getElementById("alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                tbody.closest("div").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+
+                return;
+              }
+              //succcess
+              else {
+                //alert
+                const alertTemplate = document.getElementById("alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-success");
+                //icon
+                alert.querySelector(".fad").classList.add("fa-check-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                tbody.closest("div").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+
+                //close modal
+                modalDeleteUser
+                  .querySelector("#btn-close-modal-delete-user")
+                  .click();
+
+                //refesh filter user
+                filterUser(
+                  tbody,
+                  container.querySelector("#chart-role"),
+                  container.querySelector("#chart-status"),
+                  selectStatus.value.trim(),
+                  selectRole.value.trim(),
+                  selectSex.value.trim(),
+                  selectArrangeBy.value.trim(),
+                  selectOrder.value.trim(),
+                  selectNumCaisse.value.trim(),
+                  selectDateBy.value.trim(),
+                  selectPer.value.trim(),
+                  dateFrom.value.trim(),
+                  dateTo.value.trim(),
+                  selectMonth.value.trim(),
+                  selectYear.value.trim(),
+                  inputSearch.value.trim()
+                );
+
+                return;
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          });
       }
     });
   }, 1050);
@@ -1211,7 +1656,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             "#input-update-user-name"
           );
           inputUpdateUserName.addEventListener("input", (e) => {
-            e.target.value = e.target.value.replace("  ", " ");
+            e.target.value = e.target.value.replace("  ", " ").toUpperCase();
           });
           inputUpdateUserName.value = tr.dataset.userName;
           //input - update user first name

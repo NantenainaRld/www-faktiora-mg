@@ -1201,7 +1201,7 @@ class UserController extends Controller
     }
 
     //action - delete all user
-    public function deleteAll()
+    public function deleteAllUser()
     {
         header('Content-Type: application/json');
         $response = null;
@@ -1240,8 +1240,8 @@ class UserController extends Controller
 
             try {
 
-                //delete all
-                $response = (User::deleteAll(
+                //delete all user
+                $response = (User::deleteAllUser(
                     $ids_user,
                     $is_loged_in->getIdUtilisateur()
                 ));
@@ -1280,8 +1280,8 @@ class UserController extends Controller
         return;
     }
 
-    //action - permanent delete all user
-    public function permanentDeleteAll()
+    //action - delete permanent all user
+    public function deletePermanentAllUser()
     {
         header('Content-Type: application/json');
         $response = null;
@@ -1320,8 +1320,8 @@ class UserController extends Controller
 
             try {
 
-                //permanent delete all
-                $response = (User::permanentDeleteAll(
+                //delete permanent all user
+                $response = (User::deletePermanentAllUser(
                     $ids_user,
                     $is_loged_in->getIdUtilisateur()
                 ));
