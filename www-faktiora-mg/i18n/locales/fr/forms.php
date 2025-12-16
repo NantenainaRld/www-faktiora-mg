@@ -18,7 +18,8 @@ return [
         'curves_transactions' => "Courbes des transactions",
         'per_nb_trans' => 'Par nombre des transactions',
         'per_total_trans' => 'Par total des transactions',
-        'user_list' => 'Liste des utilisateurs'
+        'user_list' => 'Liste des utilisateurs',
+        'user_add' => "Ajout d'un utilisateur"
     ],
     'labels' => [
         'all' => 'tout',
@@ -126,7 +127,9 @@ return [
         'this_year' => 'cette année',
         'reset' => 'Rénitialiser',
         'actions' => 'actions',
-        'action' => 'action'
+        'action' => 'action',
+        'cancel' => 'Annuler',
+        'add' => 'Ajouter'
     ],
     'status' => [
         'online' => 'en ligne',

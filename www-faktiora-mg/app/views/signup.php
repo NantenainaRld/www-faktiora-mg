@@ -210,14 +210,17 @@
                                 </div>
                             </div>
                             <!-- user sex -->
-                            <div class="mb-3 py-3 d-flex gap-2 align-items-center">
+                            <div class="mb-3">
                                 <label for="user-sex" class="form-label text-secondary mt-2">
                                     <?= __('forms.labels.sex') ?>
                                 </label>
-                                <select id="user-sex" class="form-select-md form-select text-secondary real-select">
-                                    <option value="masculin"><?= __('forms.labels.male') ?></option>
-                                    <option value="féminin"><?= __('forms.labels.female') ?></option>
-                                </select>
+                                <div class="input-group">
+                                    <span class="input-group-text text-success"><i class="fad fa-venus"></i></span>
+                                    <select id="user-sex" class="form-select-md form-select text-secondary real-select">
+                                        <option value="masculin"><?= __('forms.labels.male') ?></option>
+                                        <option value="féminin"><?= __('forms.labels.female') ?></option>
+                                    </select>
+                                </div>
                             </div>
                             <!-- user email -->
                             <div class="mb-3">
@@ -234,9 +237,10 @@
                                 <label for="password" class="form-label text-secondary">
                                     <?= __('forms.labels.password') ?><span class="text-danger ms-2">*</span>
                                 </label>
-                                <div class="input-goup d-flex">
-                                    <span class="input-group-text text-secondary rounded-end-0 text-success"><i class="fad fa-lock"></i></span>
+                                <div class="input-group d-flex">
+                                    <span class="input-group-text text-success"><i class="fad fa-lock"></i></span>
                                     <input type="password" class="form-control text-secondary rounded-0 real-input" id="password" minlength="6" required>
+                                    <button type="button" class="input-group-text"><i class="fad fa-eye-slash"></i></button>
                                 </div>
                             </div>
                             <!-- password confirm input  -->
@@ -247,6 +251,7 @@
                                 <div class="input-goup d-flex">
                                     <span class="input-group-text text-secondary rounded-end-0 text-success"><i class="fad fa-lock"></i></span>
                                     <input type="password" class="form-control text-secondary rounded-0 real-input" id="password-confirm" minlength="6" required>
+                                    <button type="button" class="input-group-text"><i class="fad fa-eye-slash"></i></button>
                                 </div>
                             </div>
                             <!-- btn submit  -->

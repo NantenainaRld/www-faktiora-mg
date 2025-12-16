@@ -50,8 +50,34 @@ document.addEventListener("DOMContentLoaded", () => {
     const sex = select;
     //input - password
     const passswordInput = document.getElementById("password");
+    passswordInput
+      .closest("div")
+      .querySelector("button")
+      .addEventListener("click", (e) => {
+        e.target.innerHTML = "";
+        if (passswordInput.type === "password") {
+          passswordInput.type = "text";
+          e.target.innerHTML = `<i class="fad fa-eye"></i>`;
+        } else {
+          passswordInput.type = "password";
+          e.target.innerHTML = `<i class="fad fa-eye-slash"></i>`;
+        }
+      });
     //input - password confirm
     const passswordConfirmInput = document.getElementById("password-confirm");
+    passswordConfirmInput
+      .closest("div")
+      .querySelector("button")
+      .addEventListener("click", (e) => {
+        e.target.innerHTML = "";
+        if (passswordConfirmInput.type === "password") {
+          passswordConfirmInput.type = "text";
+          e.target.innerHTML = `<i class="fad fa-eye"></i>`;
+        } else {
+          passswordConfirmInput.type = "password";
+          e.target.innerHTML = `<i class="fad fa-eye-slash"></i>`;
+        }
+      });
     //form
     const form = document.getElementsByTagName("form")[0];
 

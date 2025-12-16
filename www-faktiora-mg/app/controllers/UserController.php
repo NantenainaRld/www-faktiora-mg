@@ -118,7 +118,7 @@ class UserController extends Controller
 
             //trim
             foreach ($json as $key => &$value) {
-                if ($key !== 'mdp' && $key !== 'mdp_confirm') {
+                if ($key !== 'mdp') {
                     $value = trim($value);
                 }
                 if ($key === 'sexe_utilisateur' || $key === 'role') {
@@ -232,26 +232,6 @@ class UserController extends Controller
                 $response = [
                     'message_type' => 'invalid',
                     'message' => __('messages.invalids.mdp')
-                ];
-
-                echo json_encode($response);
-                return;
-            }
-            //mdp_confirm - empty
-            if (empty($json['mdp_confirm'])) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.empty.mdp_confirm')
-                ];
-
-                echo json_encode($response);
-                return;
-            }
-            //mdp_confirm - invalid
-            if ($json['mdp_confirm'] !== $json['mdp']) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.invalids.mdp_confirm')
                 ];
 
                 echo json_encode($response);

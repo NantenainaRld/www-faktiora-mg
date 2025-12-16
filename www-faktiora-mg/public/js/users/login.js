@@ -33,6 +33,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginInput = document.getElementById("login");
     //input - password
     const passswordInput = document.getElementById("password");
+    passswordInput
+      .closest("div")
+      .querySelector("button")
+      .addEventListener("click", (e) => {
+        e.target.innerHTML = "";
+        if (passswordInput.type === "password") {
+          passswordInput.type = "text";
+          e.target.innerHTML = `<i class="fad fa-eye"></i>`;
+        } else {
+          passswordInput.type = "password";
+          e.target.innerHTML = `<i class="fad fa-eye-slash"></i>`;
+        }
+      });
     //form
     const form = document.getElementsByTagName("form")[0];
 

@@ -11,7 +11,7 @@
                 <div class="row justify-content-center g-3">
                     <!-- btn menu mobile-->
                     <div class="col-12 d-flex justify-content-start py-2 d-md-none">
-                        <button class="btn btn-sm btn-second" type="button"><i class="fad fa-bars" id="btn-sidebar"></i></button>
+                        <button class="btn btn-sm btn-second" type="button" id="btn-sidebar"><i class="fad fa-bars"></i></button>
                     </div>
                 </div>
             </div>

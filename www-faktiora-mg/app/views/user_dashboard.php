@@ -11,7 +11,7 @@
                 <div class="row justify-content-center g-3">
                     <!-- btn menu mobile-->
                     <div class="col-2 d-flex justify-content-start py-2 d-md-none">
-                        <button class="btn btn-sm btn-second" type="button"><i class="fad fa-bars" id="btn-sidebar"></i></button>
+                        <button class="btn btn-sm btn-second" type="button" id="btn-sidebar"><i class="fad fa-bars"></i></button>
                     </div>
                     <!-- search filter  -->
                     <div class="col-8 d-flex justify-content-center py-2 col-md-11">
@@ -39,7 +39,7 @@
                         <div class="row">
                             <!-- effective  -->
                             <div class="col-12 py-2">
-                                <div class="card">
+                                <div class="card h-100">
                                     <div class="card-body">
                                         <!-- title effective-->
                                         <div class="card-title text-secondary"><i class="fad fa-user me-2"></i><?= __('forms.titles.effective_user') ?><span id="chart-effective-title"></span></div>
@@ -107,7 +107,7 @@
                         </div>
                     </div>
                     <!-- histo number and total-->
-                    <div class="col-12 py-2 col-lg-6 h-100">
+                    <div class="col-12 py-2 col-lg-6">
                         <div class="card h-100">
                             <div class="card-body">
                                 <!-- title histo -->
@@ -167,6 +167,11 @@
                                                 <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
                                             </div>
                                         </template>
+                                        <!-- btn  -->
+                                        <div class="row g-0 justify-content-start mb-2">
+                                            <!-- btn add user  -->
+                                            <button class="btn btn-primary w-auto btn-sm" data-bs-toggle='modal' data-bs-target='#modal-add-user'>Ajouter</button>
+                                        </div>
                                         <table class="w-100 table-striped">
                                             <thead class="bg-success text-light align-items-center form-text">
                                                 <tr>
@@ -424,6 +429,110 @@
     </div>
     <!-- overlay searchbar  -->
     <div class="overlay-searchbar d-none min-vh-100 bg-dark bg-opacity-50 top-0 col-12 position-fixed "></div>
+    <!-- modal add user  -->
+    <div class="modal fade" id="modal-add-user" tabindex="-1" aria-labelledby="modalAddUser" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <!-- modal header  -->
+                <div class="modal-header bg-green-0 text-light">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-user-plus me-2"></i><?= __('forms.titles.user_add') ?></h6>
+                </div>
+                <form>
+                    <!-- modal body  -->
+                    <div class="modal-body">
+                        <!-- form add user  -->
+                        <!-- template alert  -->
+                        <template class="alert-template">
+                            <div class="alert alert-dismissible fade show alert-slide" role="alert">
+                                <!-- alert progress bar  -->
+                                <div class="progress mb-2" style="height: 2px;">
+                                    <div class="progress-bar bg-secondary"></div>
+                                </div>
+                                <!-- alert icon  -->
+                                <i class="fad me-2"></i>
+                                <!-- alert message  -->
+                                <span class="alert-message"></span>
+                                <!-- alert btn close  -->
+                                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </template>
+                        <!-- add user name  -->
+                        <div class="mb-2">
+                            <label for="input-add-user-name" class="form-label"><?= ucfirst(__('forms.labels.name')) ?> <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success">
+                                    <i class="fad fa-address-card"></i>
+                                </span>
+                                <input type="text" class="form-control form-control-sm text-secondary" placeholder="RALANDISON" id="input-add-user-name" maxlength="100" required>
+                            </div>
+                        </div>
+                        <!--  add user first name -->
+                        <div class="mb-2">
+                            <label for="input-add-user-first-name" class="form-label"><?= ucfirst(__('forms.labels.firstname')) ?></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success">
+                                    <i class="fad fa-address-card"></i>
+                                </span>
+                                <input type="text" class="form-control form-control-sm text-secondary" placeholder="Nantenaina" id="input-add-user-first-name" maxlength="100" required>
+                            </div>
+                        </div>
+                        <!--  add user sex -->
+                        <div class="mb-2">
+                            <label for="select-add-user-sex" class="form-label me-2 mt-1"><?= ucfirst(__('forms.labels.sex')) ?></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success">
+                                    <i class="fad fa-venus"></i>
+                                </span>
+                                <select name="" id="select-add-user-sex" class="form-select form-select-sm">
+                                    <option value="masculin"><?= strtolower(__('forms.labels.male')) ?></option>
+                                    <option value="féminin"><?= strtolower(__('forms.labels.female')) ?></option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--  add user email -->
+                        <div class="mb-2">
+                            <label for="input-add-user-email" class="form-label me-2"><?= ucfirst(__('forms.labels.email')) ?> <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success">
+                                    <i class="fad fa-at"></i>
+                                </span>
+                                <input type="email" class="form-control form-control-sm text-secondary" id="input-add-user-email" placeholder="nantenaina@faktiora.mg" maxlength="150" required>
+                            </div>
+                        </div>
+                        <!--  add user role -->
+                        <div class="mb-2">
+                            <label for="select-add-user-role" class="form-label me-2 mt-1"><?= ucfirst(__('forms.labels.role')) ?></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success">
+                                    <i class="fad fa-circle-user-circle-user"></i>
+                                </span>
+                                <select name="" id="select-add-user-role" class="form-select form-select-sm ">
+                                    <option value="admin"><?= strtolower(__('forms.labels.admin')) ?></option>
+                                    <option value="caissier"><?= strtolower(__('forms.labels.cashier')) ?></option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--  add user mdp -->
+                        <div class="mb-2">
+                            <label for="input-add-user-mdp" class="form-label me-2 mt-1"><?= ucfirst(__('forms.labels.password')) ?> <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success">
+                                    <i class="fad fa-lock"></i>
+                                </span>
+                                <input type="password" class="form-control form-control-sm text-secondary" id="input-add-user-mdp" minlength="6" required>
+                                <button class="input-group-text" type="button"><i class="fad fa-eye-slash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- modal footer  -->
+                    <div class="modal-footer d-flex flex-nowrap justify-content-end">
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-add-user"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-primary btn-sm fw-bold" type="submit"><i class="fad fa-user-plus me-2"></i><?= __('forms.labels.add') ?></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </template>
 <!-- footer  -->
 <?php require_once APP_PATH . '/views/layouts/footer.php'; ?>

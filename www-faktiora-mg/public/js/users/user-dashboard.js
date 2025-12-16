@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", async () => {
   //template real content
   const templateRealContent = document.getElementById("template-user");
-  //container
-  const container = document.getElementById("container");
+  // //container
+  // const container = document.getElementById("container");
   //config
   let config = "",
     currencyUnits = "",
@@ -67,6 +67,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   setTimeout(async () => {
     //load template real
     container.append(templateRealContent.content.cloneNode(true));
+    // btn sidebar
+    const btnSideBar = container.querySelector("#btn-sidebar");
+    //overlay
+    const overlay = container.querySelector(".overlay");
+    //sidebar
+    const sidebar = container.querySelector(".sidebar");
+    if (btnSideBar) {
+      //toggle sidebar
+      btnSideBar.addEventListener("click", () => {
+        sidebar.classList.toggle("active");
+        overlay.classList.toggle("active");
+      });
+      //overlay toggle sidebar
+      overlay.addEventListener("click", () => {
+        overlay.classList.toggle("active");
+        sidebar.classList.toggle("active");
+      });
+    }
     //tbody
     const tbody = container.querySelector("tbody");
 
@@ -541,6 +559,232 @@ document.addEventListener("DOMContentLoaded", async () => {
       );
       localStorage.setItem(e.target.id, e.target.value);
     });
+
+    //========================== ADD USER ================================
+    //======elements add user
+    //modal
+    const modalAddUser = document.getElementById("modal-add-user");
+    //input - add user name
+    const inputAddUserName = modalAddUser.querySelector("#input-add-user-name");
+    //input - add user first name
+    const inputAddUserFirstName = modalAddUser.querySelector(
+      "#input-add-user-first-name"
+    );
+    //input - add user email
+    const inputAddUserEmail = modalAddUser.querySelector(
+      "#input-add-user-email"
+    );
+    //btn show/hide password
+    modalAddUser
+      .querySelector("#input-add-user-mdp")
+      .closest("div")
+      .querySelector("button")
+      .addEventListener("click", (e) => {
+        e.target.innerHTML = "";
+        if (
+          modalAddUser.querySelector("#input-add-user-mdp").type === "password"
+        ) {
+          modalAddUser.querySelector("#input-add-user-mdp").type = "text";
+          e.target.innerHTML = `<i class="fad fa-eye"></i>`;
+        } else {
+          modalAddUser.querySelector("#input-add-user-mdp").type = "password";
+          e.target.innerHTML = `<i class="fad fa-eye-slash"></i>`;
+        }
+      });
+    //form add user
+    const formAddUser = modalAddUser.querySelector("form");
+    //save input modal to local storage
+    modalAddUser.querySelectorAll("input, select").forEach((element) => {
+      if (element.type !== "password") {
+        element.addEventListener("input", (e) => {
+          localStorage.setItem(e.target.id, e.target.value);
+        });
+      }
+    });
+    //load input modal from local storage
+    modalAddUser.querySelectorAll("input, select").forEach((element) => {
+      if (element.type !== "password") {
+        const savedInputValue = localStorage.getItem(element.id);
+        if (savedInputValue) {
+          element.value = savedInputValue;
+        }
+      }
+    });
+
+    //=====EVENT input add user name
+    inputAddUserName.addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace("  ", " ");
+    });
+    //=====EVENT input add user first name
+    inputAddUserFirstName.addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace("  ", " ");
+    });
+    //=====EVENT input add user email
+    inputAddUserEmail.addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace(" ", "");
+    });
+    //=====EVENT form add user submit
+    formAddUser.addEventListener("submit", async (e) => {
+      //suspend submit
+      e.preventDefault();
+
+      //inputs - not valid
+      if (!e.target.checkValidity()) {
+        e.target.reportValidity();
+        return;
+      } else {
+        try {
+          //FETCH api add user by admin
+          const response = await apiRequest("/user/create_user", {
+            method: "POST",
+            body: {
+              nom_utilisateur: inputAddUserName.value.trim(),
+              prenoms_utilisateur: inputAddUserFirstName.value.trim(),
+              sexe_utilisateur: modalAddUser
+                .querySelector("#select-add-user-sex")
+                .value.trim(),
+              email_utilisateur: inputAddUserEmail.value.trim(),
+              role: modalAddUser
+                .querySelector("#select-add-user-role")
+                .value.trim(),
+              mdp: modalAddUser.querySelector("#input-add-user-mdp").value,
+            },
+          });
+
+          //invalid
+          if (response.message_type === "invalid") {
+            //alert
+            const alertTemplate = modalAddUser.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-warning");
+            //icon
+            alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+            //message
+            alert.querySelector(".alert-message").innerHTML = response.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            formAddUser.querySelector(".modal-body").prepend(alert);
+
+            //progress lanch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+          }
+          //error
+          else if (response.message_type === "error") {
+            //alert
+            const alertTemplate = modalAddUser.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-danger");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML = response.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            formAddUser.querySelector(".modal-body").prepend(alert);
+
+            //progress lanch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+          }
+          //success
+          else {
+            {
+              //alert
+              const alertTemplate =
+                modalAddUser.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-success");
+              //icon
+              alert.querySelector(".fad").classList.add("fa-check-circle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                response.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              tbody.closest("div").prepend(alert);
+
+              //progress lanch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
+
+              //hide modal
+              modalAddUser.querySelector("#btn-close-modal-add-user").click();
+
+              //remove all input value from local storage
+              modalAddUser
+                .querySelectorAll("input, select")
+                .forEach((element) => {
+                  const saved = localStorage.getItem(element.id);
+                  if (saved) {
+                    localStorage.removeItem(element.id);
+                  }
+                });
+
+              //refesh filter user
+              filterUser(
+                tbody,
+                container.querySelector("#chart-role"),
+                container.querySelector("#chart-status"),
+                selectStatus.value.trim(),
+                selectRole.value.trim(),
+                selectSex.value.trim(),
+                selectArrangeBy.value.trim(),
+                selectOrder.value.trim(),
+                selectNumCaisse.value.trim(),
+                selectDateBy.value.trim(),
+                selectPer.value.trim(),
+                dateFrom.value.trim(),
+                dateTo.value.trim(),
+                selectMonth.value.trim(),
+                selectYear.value.trim(),
+                inputSearch.value.trim()
+              );
+            }
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    });
   }, 1050);
 
   //================ FUNCTIONS ================
@@ -569,8 +813,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const response = await apiRequest(
         `/user/filter_user?status=${status}&role=${role}&sexe=${sexe}&arrange_by=${arrange_by}&order=${order}&num_caisse=${num_caisse}&date_by=${date_by}&per=${per}&from=${from}&to=${to}&month=${month}&year=${year}&search_user=${search_user}`
       );
-
-      console.log(response.data);
 
       //error
       if (response.message_type === "error") {
@@ -1385,25 +1627,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   //     console.log(response);
   //   } catch (Error) {
   //     console.log("Error : " + Error);
-  //   }
-  // }
-
-  // //function - list caissier
-  // async function listCaissier() {
-  //   try {
-  //     const response = await apiRequest("/user/list_caissier", {});
-  //     console.log(response);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
-  // //function - account info
-  // async function accountInfo() {
-  //   try {
-  //     const response = await apiRequest("/user/account_info", {});
-  //     console.log(response);
-  //   } catch (e) {
-  //     console.error(e);
   //   }
   // }
   // //function - update user

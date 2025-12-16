@@ -2,10 +2,26 @@ document.addEventListener("DOMContentLoaded", () => {
   setTimeout(async () => {
     //template real content
     const templateRealContent = document.getElementById("template-home");
-    // container
-    const container = document.getElementById("container");
     // load template real
     container.append(templateRealContent.content.cloneNode(true));
+    // btn sidebar
+    const btnSideBar = container.querySelector("#btn-sidebar");
+    //overlay
+    const overlay = container.querySelector(".overlay");
+    //sidebar
+    const sidebar = container.querySelector(".sidebar");
+    if (btnSideBar) {
+      //toggle sidebar
+      btnSideBar.addEventListener("click", () => {
+        sidebar.classList.toggle("active");
+        overlay.classList.toggle("active");
+      });
+      //overlay toggle sidebar
+      overlay.addEventListener("click", () => {
+        overlay.classList.toggle("active");
+        sidebar.classList.toggle("active");
+      });
+    }
     //config
     let config = "",
       currencyUnits = "",
@@ -567,7 +583,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         chartTransactionsCurvesTotal.innerHTML = "";
         chartTransactionsCurvesTotal.append(canvasTransactionsCurvesTotal);
-        console.log(countNbTotalSortie);
       }
     } catch (e) {
       console.log(e);

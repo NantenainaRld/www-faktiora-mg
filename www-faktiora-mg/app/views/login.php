@@ -172,9 +172,9 @@
                                 <label for="login" class="form-label text-secondary">
                                     <?= __('forms.labels.login') ?>
                                 </label>
-                                <div class="input-goup d-flex">
-                                    <span class="input-group-text text-secondary rounded-end-0 text-success"><i class="fad fa-at"></i></span>
-                                    <input type="text" class="form-control text-secondary rounded-start-0 real-input" id="login" placeholder="<?= __('forms.placeholders.email') . ", 10008" ?>" required>
+                                <div class="input-group d-flex">
+                                    <span class="input-group-text text-secondary text-success"><i class="fad fa-at"></i></span>
+                                    <input type="text" class="form-control text-secondary real-input" id="login" placeholder="<?= __('forms.placeholders.email') . ", 10008" ?>" required>
                                 </div>
                             </div>
                             <!-- password input  -->
@@ -182,9 +182,10 @@
                                 <label for="password" class="form-label text-secondary">
                                     <?= __('forms.labels.password') ?>
                                 </label>
-                                <div class="input-goup d-flex">
+                                <div class="input-group d-flex">
                                     <span class="input-group-text text-secondary rounded-end-0 text-success"><i class="fad fa-lock"></i></span>
-                                    <input type="password" class="form-control text-secondary rounded-0 real-input" id="password" required>
+                                    <input type="password" class="form-control text-secondary real-input" id="password" required>
+                                    <button class="input-group-text" type="button"><i class="fad fa-eye-slash"></i></button>
                                 </div>
                             </div>
                             <!-- forgot password  -->

@@ -67,6 +67,11 @@
             color: var(--green-third) !important;
         }
 
+        /* bg green 0  */
+        .bg-green-0 {
+            background-color: #18392B !important;
+        }
+
         /* green third  */
         .bg-green-third {
             background-color: rgba(4, 30, 14, 0.4) !important;
