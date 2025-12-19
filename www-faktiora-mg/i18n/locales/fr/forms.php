@@ -28,7 +28,8 @@ return [
         'cash_list' => 'Liste des caisses',
         'cash_line' => 'Lignes de caisse',
         'distribution_status' => 'Répartition selon status',
-        'cash_add' => "Ajout d'une nouvelle caisse"
+        'cash_add' => "Ajout d'une nouvelle caisse",
+        'cash_update' => "Modification de caisse"
     ],
     'labels' => [
         'all' => 'tout',

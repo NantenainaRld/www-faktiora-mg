@@ -160,7 +160,7 @@ return [
         //user - signup
         'user_signup' => "Compte crée avec succès. Redirection vers la page de connexion",
         //caisse - create caisse
-        'caisse_createCaisse' => "Caisse numéro <b>:field</b> crée avec succès",
+        'caisse_createCaisse' => "Caisse numéro <b>:field</b> ajoutée avec succès",
         //caisse - filter ligne caisse 0 
         'caisse_filterLigneCaisse_0' => "Aucune ligne caisse trouvée",
         //caisse - filter ligne caisse 1 
@@ -294,7 +294,7 @@ return [
         //user - email
         'user_email' => "L'adresse email <b>:field</b> existe déjà",
         //caisse - num_caisse
-        'caisse_num_caisse' => "Le numéro de caisse <b>:field</b> existe déjà",
+        'caisse_num_caisse' => "La caisse numéro <b>:field</b> existe déjà",
         //caisse - id_lc
         'caisse_id_lc' => "Le numéro de ligne caisse <b>:field</b> existe déjà",
         //entree - num_ae

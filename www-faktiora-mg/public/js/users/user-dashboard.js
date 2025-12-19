@@ -1972,221 +1972,27 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
           }
         });
-        //========= EVENT btn update user
-        tr.querySelector("button").addEventListener("click", () => {
-          //modal update user
-          const modalUpdateUser = document.getElementById("modal-update-user");
-          //account number
-          modalUpdateUser.querySelector("#account-number").innerHTML =
-            tr.dataset.userId;
-          //input - update user name
-          const inputUpdateUserName = modalUpdateUser.querySelector(
-            "#input-update-user-name"
-          );
-          inputUpdateUserName.addEventListener("input", (e) => {
-            e.target.value = e.target.value.replace("  ", " ").toUpperCase();
-          });
-          inputUpdateUserName.value = tr.dataset.userName;
-          //input - update user first name
-          const inputUpdateUserFirstName = modalUpdateUser.querySelector(
-            "#input-update-user-first-name"
-          );
-          inputUpdateUserFirstName.addEventListener("input", (e) => {
-            e.target.value = e.target.value.replace("  ", " ");
-          });
-          inputUpdateUserFirstName.value = tr.dataset.userFirstName;
-          //select - update user sex
-          modalUpdateUser.querySelector("#select-update-user-sex").value =
-            tr.dataset.userSex;
-          //input -update user email
-          const inputUpdateUserEmail = modalUpdateUser.querySelector(
-            "#input-update-user-email"
-          );
-          inputUpdateUserEmail.addEventListener("input", (e) => {
-            e.target.value = e.target.value.replace(" ", "");
-          });
-          inputUpdateUserEmail.value = tr.dataset.userEmail;
-          //select - update user role
-          modalUpdateUser.querySelector("#select-update-user-role").value =
-            tr.dataset.userRole;
 
-          //show modal
-          new bootstrap.Modal(modalUpdateUser).show();
-
-          //=====EVENT form update user submit
-          modalUpdateUser
-            .querySelector("form")
-            .addEventListener("submit", async (e) => {
-              //suspend submit
-              e.preventDefault();
-
-              //inputs - not valid
-              if (!e.target.checkValidity()) {
-                e.target.reportValidity();
-                return;
-              } else {
-                try {
-                  //FETCH api update user by admin
-                  const response = await apiRequest(
-                    "/user/update_user_by_admin",
-                    {
-                      method: "PUT",
-                      body: {
-                        id_utilisateur: modalUpdateUser
-                          .querySelector("#account-number")
-                          .textContent.trim(),
-                        nom_utilisateur: inputUpdateUserName.value.trim(),
-                        prenoms_utilisateur:
-                          inputUpdateUserFirstName.value.trim(),
-                        sexe_utilisateur: modalUpdateUser
-                          .querySelector("#select-update-user-sex")
-                          .value.trim(),
-                        email_utilisateur: inputUpdateUserEmail.value.trim(),
-                        role: modalUpdateUser
-                          .querySelector("#select-update-user-role")
-                          .value.trim(),
-                        mdp: modalUpdateUser.querySelector(
-                          "#input-update-user-mdp"
-                        ).value,
-                      },
-                    }
-                  );
-
-                  //invalid
-                  if (response.message_type === "invalid") {
-                    //alert
-                    const alertTemplate =
-                      modalUpdateUser.querySelector(".alert-template");
-                    const clone = alertTemplate.content.cloneNode(true);
-                    const alert = clone.querySelector(".alert");
-                    const progressBar = alert.querySelector(".progress-bar");
-                    //alert type
-                    alert.classList.add("alert-warning");
-                    //icon
-                    alert
-                      .querySelector(".fad")
-                      .classList.add("fa-exclamation-circle");
-                    //message
-                    alert.querySelector(".alert-message").innerHTML =
-                      response.message;
-                    //progress bar
-                    progressBar.style.transition = "width 10s linear";
-                    progressBar.style.width = "100%";
-
-                    //add alert
-                    modalUpdateUser.querySelector(".modal-body").prepend(alert);
-
-                    //progress lanch animation
-                    setTimeout(() => {
-                      progressBar.style.width = "0%";
-                    }, 10);
-
-                    //auto close alert
-                    setTimeout(() => {
-                      alert.querySelector(".btn-close").click();
-                    }, 10000);
-                  }
-                  //error
-                  else if (response.message_type === "error") {
-                    //alert
-                    const alertTemplate =
-                      modalUpdateUser.querySelector(".alert-template");
-                    const clone = alertTemplate.content.cloneNode(true);
-                    const alert = clone.querySelector(".alert");
-                    const progressBar = alert.querySelector(".progress-bar");
-                    //alert type
-                    alert.classList.add("alert-danger");
-                    //icon
-                    alert
-                      .querySelector(".fad")
-                      .classList.add("fa-exclamation-triangle");
-                    //message
-                    alert.querySelector(".alert-message").innerHTML =
-                      response.message;
-                    //progress bar
-                    progressBar.style.transition = "width 10s linear";
-                    progressBar.style.width = "100%";
-
-                    //add alert
-                    modalUpdateUser.querySelector(".modal-body").prepend(alert);
-
-                    //progress lanch animation
-                    setTimeout(() => {
-                      progressBar.style.width = "0%";
-                    }, 10);
-
-                    //auto close alert
-                    setTimeout(() => {
-                      alert.querySelector(".btn-close").click();
-                    }, 10000);
-                  }
-                  //success
-                  else {
-                    {
-                      //alert
-                      const alertTemplate =
-                        modalUpdateUser.querySelector(".alert-template");
-                      const clone = alertTemplate.content.cloneNode(true);
-                      const alert = clone.querySelector(".alert");
-                      const progressBar = alert.querySelector(".progress-bar");
-                      //alert type
-                      alert.classList.add("alert-success");
-                      //icon
-                      alert
-                        .querySelector(".fad")
-                        .classList.add("fa-check-circle");
-                      //message
-                      alert.querySelector(".alert-message").innerHTML =
-                        response.message;
-                      //progress bar
-                      progressBar.style.transition = "width 10s linear";
-                      progressBar.style.width = "100%";
-
-                      //add alert
-                      tbody.closest("div").prepend(alert);
-
-                      //progress lanch animation
-                      setTimeout(() => {
-                        progressBar.style.width = "0%";
-                      }, 10);
-
-                      //auto close alert
-                      setTimeout(() => {
-                        alert.querySelector(".btn-close").click();
-                      }, 10000);
-
-                      //hide modal
-                      modalUpdateUser
-                        .querySelector("#btn-close-modal-update-user")
-                        .click();
-
-                      //refesh filter user
-                      filterUser(
-                        tbody,
-                        container.querySelector("#chart-role"),
-                        container.querySelector("#chart-status"),
-                        selectStatus.value.trim(),
-                        selectRole.value.trim(),
-                        selectSex.value.trim(),
-                        selectArrangeBy.value.trim(),
-                        selectOrder.value.trim(),
-                        selectNumCaisse.value.trim(),
-                        selectDateBy.value.trim(),
-                        selectPer.value.trim(),
-                        dateFrom.value.trim(),
-                        dateTo.value.trim(),
-                        selectMonth.value.trim(),
-                        selectYear.value.trim(),
-                        inputSearch.value.trim()
-                      );
-                    }
-                  }
-                } catch (e) {
-                  console.error(e);
-                }
-              }
-            });
-        });
+        //===== EVENT update user
+        updateUser(
+          tr,
+          tbody,
+          divChartRole,
+          divChartStatus,
+          status,
+          role,
+          sexe,
+          arrange_by,
+          order,
+          num_caisse,
+          date_by,
+          per,
+          from,
+          to,
+          month,
+          year,
+          search_user
+        );
       });
 
       //=======EVENT SELECT all
@@ -2606,5 +2412,234 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (e) {
       console.error(e);
     }
+  }
+  //function update user
+  function updateUser(
+    tr,
+    tbody,
+    divChartRole,
+    divChartStatus,
+    status,
+    role,
+    sexe,
+    arrange_by,
+    order,
+    num_caisse,
+    date_by,
+    per,
+    from,
+    to,
+    month,
+    year,
+    search_user
+  ) {
+    //========= EVENT btn update user
+    tr.querySelector("button").addEventListener("click", () => {
+      //modal update user
+      const modalUpdateUser = document.getElementById("modal-update-user");
+      //account number
+      modalUpdateUser.querySelector("#account-number").innerHTML =
+        tr.dataset.userId;
+      //input - update user name
+      const inputUpdateUserName = modalUpdateUser.querySelector(
+        "#input-update-user-name"
+      );
+      inputUpdateUserName.addEventListener("input", (e) => {
+        e.target.value = e.target.value.replace("  ", " ").toUpperCase();
+      });
+      inputUpdateUserName.value = tr.dataset.userName;
+      //input - update user first name
+      const inputUpdateUserFirstName = modalUpdateUser.querySelector(
+        "#input-update-user-first-name"
+      );
+      inputUpdateUserFirstName.addEventListener("input", (e) => {
+        e.target.value = e.target.value.replace("  ", " ");
+      });
+      inputUpdateUserFirstName.value = tr.dataset.userFirstName;
+      //select - update user sex
+      modalUpdateUser.querySelector("#select-update-user-sex").value =
+        tr.dataset.userSex;
+      //input -update user email
+      const inputUpdateUserEmail = modalUpdateUser.querySelector(
+        "#input-update-user-email"
+      );
+      inputUpdateUserEmail.addEventListener("input", (e) => {
+        e.target.value = e.target.value.replace(" ", "");
+      });
+      inputUpdateUserEmail.value = tr.dataset.userEmail;
+      //select - update user role
+      modalUpdateUser.querySelector("#select-update-user-role").value =
+        tr.dataset.userRole;
+
+      //show modal
+      new bootstrap.Modal(modalUpdateUser).show();
+
+      //=====EVENT form update user submit
+      modalUpdateUser
+        .querySelector("form")
+        .addEventListener("submit", async (e) => {
+          //suspend submit
+          e.preventDefault();
+
+          //inputs - not valid
+          if (!e.target.checkValidity()) {
+            e.target.reportValidity();
+            return;
+          } else {
+            try {
+              //FETCH api update user by admin
+              const response = await apiRequest("/user/update_user_by_admin", {
+                method: "PUT",
+                body: {
+                  id_utilisateur: modalUpdateUser
+                    .querySelector("#account-number")
+                    .textContent.trim(),
+                  nom_utilisateur: inputUpdateUserName.value.trim(),
+                  prenoms_utilisateur: inputUpdateUserFirstName.value.trim(),
+                  sexe_utilisateur: modalUpdateUser
+                    .querySelector("#select-update-user-sex")
+                    .value.trim(),
+                  email_utilisateur: inputUpdateUserEmail.value.trim(),
+                  role: modalUpdateUser
+                    .querySelector("#select-update-user-role")
+                    .value.trim(),
+                  mdp: modalUpdateUser.querySelector("#input-update-user-mdp")
+                    .value,
+                },
+              });
+
+              //invalid
+              if (response.message_type === "invalid") {
+                //alert
+                const alertTemplate =
+                  modalUpdateUser.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalUpdateUser.querySelector(".modal-body").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+              }
+              //error
+              else if (response.message_type === "error") {
+                //alert
+                const alertTemplate =
+                  modalUpdateUser.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-triangle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalUpdateUser.querySelector(".modal-body").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+              }
+              //success
+              else {
+                {
+                  //alert
+                  const alertTemplate =
+                    modalUpdateUser.querySelector(".alert-template");
+                  const clone = alertTemplate.content.cloneNode(true);
+                  const alert = clone.querySelector(".alert");
+                  const progressBar = alert.querySelector(".progress-bar");
+                  //alert type
+                  alert.classList.add("alert-success");
+                  //icon
+                  alert.querySelector(".fad").classList.add("fa-check-circle");
+                  //message
+                  alert.querySelector(".alert-message").innerHTML =
+                    response.message;
+                  //progress bar
+                  progressBar.style.transition = "width 10s linear";
+                  progressBar.style.width = "100%";
+
+                  //add alert
+                  tbody.closest("div").prepend(alert);
+
+                  //progress lanch animation
+                  setTimeout(() => {
+                    progressBar.style.width = "0%";
+                  }, 10);
+
+                  //auto close alert
+                  setTimeout(() => {
+                    alert.querySelector(".btn-close").click();
+                  }, 10000);
+
+                  //hide modal
+                  modalUpdateUser
+                    .querySelector("#btn-close-modal-update-user")
+                    .click();
+
+                  //refesh filter user
+                  filterUser(
+                    tbody,
+                    divChartRole,
+                    divChartStatus,
+                    status,
+                    role,
+                    sexe,
+                    arrange_by,
+                    order,
+                    num_caisse,
+                    date_by,
+                    per,
+                    from,
+                    to,
+                    month,
+                    year,
+                    search_user
+                  );
+                }
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          }
+        });
+    });
   }
 });

@@ -498,107 +498,55 @@
             </div>
         </div>
     </div>
-    <!-- modal update user  -->
-    <div class="modal fade" id="modal-update-user" tabindex="-1" aria-labelledby="modalUpdateUser" aria-hidden="true">
+    <!-- modal update caisse  -->
+    <div class="modal fade" id="modal-update-caisse" tabindex="-1" aria-labelledby="modalUpdateCaisse" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- modal header  -->
                 <div class="modal-header bg-green-0 text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-user-edit me-2"></i><?= __('forms.titles.user_update') ?></h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-pen-to-square me-2"></i><?= __('forms.titles.cash_update') ?></h6>
                 </div>
-                <!-- form update user  -->
+                <!-- form update caisse  -->
                 <form>
                     <!-- modal body  -->
                     <div class="modal-body">
-                        <!-- account number -->
-                        <div class="text-center text-secondary" id="account-number">10000</div>
-                        <!-- template alert  -->
-                        <template class="alert-template">
-                            <div class="alert alert-dismissible fade show alert-slide w-100" role="alert">
-                                <!-- alert progress bar  -->
-                                <div class="progress mb-2" style="height: 2px;">
-                                    <div class="progress-bar bg-secondary"></div>
-                                </div>
-                                <!-- alert icon  -->
-                                <i class="fad me-2"></i>
-                                <!-- alert message  -->
-                                <span class="alert-message"></span>
-                                <!-- alert btn close  -->
-                                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        </template>
-                        <!-- update user name  -->
+                        <!-- num_caisse  -->
+                        <div class="text-center text-secondary" id="num-caisse">0</div>
+                        <!-- update num_caisse_update  -->
                         <div class="mb-2">
-                            <label for="update-update-user-name" class="form-label"><?= ucfirst(__('forms.labels.name')) ?> <span class="text-danger">*</span></label>
+                            <label for="input-update-num-caisse-update" class="form-label"><?= __('forms.labels.cash_num') ?> <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text text-success">
-                                    <i class="fad fa-address-card"></i>
+                                    <i class="fad fa-hashtag"></i>
                                 </span>
-                                <input type="text" class="form-control form-control-sm text-secondary" placeholder="RALANDISON" id="input-update-user-name" maxlength="100" required>
+                                <input type="text" class="form-control form-control-sm text-secondary" id="input-update-num-caisse-update" min="0" required>
                             </div>
                         </div>
-                        <!--  update user first name -->
+                        <!--  update solde -->
                         <div class="mb-2">
-                            <label for="input-update-user-first-name" class="form-label"><?= ucfirst(__('forms.labels.firstname')) ?></label>
+                            <label for="input-update-solde" class="form-label"><?= __('forms.labels.balance') ?> <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text text-success">
-                                    <i class="fad fa-address-card"></i>
+                                    <i class="fad fa-coins"></i>
                                 </span>
-                                <input type="text" class="form-control form-control-sm text-secondary" placeholder="Nantenaina" id="input-update-user-first-name" maxlength="100">
+                                <input type="text" class="form-control form-control-sm text-secondary" id="input-update-solde" required>
                             </div>
                         </div>
-                        <!-- update user sex -->
+                        <!-- update seuil -->
                         <div class="mb-2">
-                            <label for="select-update-user-sex" class="form-label me-2 mt-1"><?= ucfirst(__('forms.labels.sex')) ?></label>
+                            <label for="select-update-seuil" class="form-label me-2 mt-1"><?= __('forms.labels.treshold') ?> <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text text-success">
-                                    <i class="fad fa-venus"></i>
+                                    <i class="fad fa-badge-dollar"></i>
                                 </span>
-                                <select name="" id="select-update-user-sex" class="form-select form-select-sm">
-                                    <option value="masculin"><?= strtolower(__('forms.labels.male')) ?></option>
-                                    <option value="féminin"><?= strtolower(__('forms.labels.female')) ?></option>
-                                </select>
+                                <input type="text" class="form-control form-control-sm text-secondary" id="input-update-seuil" required>
                             </div>
-                        </div>
-                        <!--  update user email -->
-                        <div class="mb-2">
-                            <label for="input-update-user-email" class="form-label me-2"><?= ucfirst(__('forms.labels.email')) ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success">
-                                    <i class="fad fa-at"></i>
-                                </span>
-                                <input type="email" class="form-control form-control-sm text-secondary" id="input-update-user-email" placeholder="nantenaina@faktiora.mg" maxlength="150" required>
-                            </div>
-                        </div>
-                        <!-- update user role -->
-                        <div class="mb-2">
-                            <label for="select-update-user-role" class="form-label me-2 mt-1"><?= ucfirst(__('forms.labels.role')) ?></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success">
-                                    <i class="fad fa-circle-user-circle-user"></i>
-                                </span>
-                                <select name="" id="select-update-user-role" class="form-select form-select-sm ">
-                                    <option value="admin"><?= strtolower(__('forms.labels.admin')) ?></option>
-                                    <option value="caissier"><?= strtolower(__('forms.labels.cashier')) ?></option>
-                                </select>
-                            </div>
-                        </div>
-                        <!--  update user mdp -->
-                        <div class="mb-2">
-                            <label for="input-update-user-mdp" class="form-label me-2 mt-1"><?= ucfirst(__('forms.labels.password')) ?> </label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success">
-                                    <i class="fad fa-lock"></i>
-                                </span>
-                                <input type="password" class="form-control form-control-sm text-secondary" id="input-update-user-mdp" minlength="6">
-                                <button class="input-group-text" type="button"><i class="fad fa-eye-slash"></i></button>
-                            </div>
-                            <span class="form-text text-secondary"><?= __('forms.labels.keep_empty') ?></span>
+                            <span class="form-text text-secondary"><?= strtolower(__('forms.labels.less_equal_balance')) ?></span>
                         </div>
                     </div>
                     <!-- modal footer  -->
                     <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-update-user"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-update-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
                         <button class="btn btn-primary btn-sm fw-bold" type="submit"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
                     </div>
                 </form>
