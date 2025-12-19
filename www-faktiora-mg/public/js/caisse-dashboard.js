@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  setTimeout(async () => {
+  setTimeout(async () => 
     //load template real
     container.append(templateRealContent.content.cloneNode(true));
 
@@ -784,7 +784,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
         }
 
-        //show modal delete user
+        //show modal delete caisse
         new bootstrap.Modal(modalDeleteCaisse).show();
 
         //===== EVENT btn confirm delete caisse
@@ -900,6 +900,628 @@ document.addEventListener("DOMContentLoaded", async () => {
                 //close modal
                 modalDeleteCaisse
                   .querySelector("#btn-close-modal-delete-caisse")
+                  .click();
+
+                //refesh filter user
+                filterCaisse(
+                  tbodyCaisse,
+                  container.querySelector("#chart-cash-number"),
+                  selectStatus.value.trim(),
+                  selectArrangeBy.value.trim(),
+                  selectOrder.value.trim(),
+                  selectDateBy.value.trim(),
+                  selectPer.value.trim(),
+                  dateFrom.value.trim(),
+                  dateTo.value.trim(),
+                  selectMonth.value.trim(),
+                  selectYear.value.trim(),
+                  inputSearch.value.trim()
+                );
+                return;
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      }
+    });
+
+    //=======================  DELETE PERMANENT CAISSE =========================
+    //btn delete permanent caisse
+    const btnDeletePermanentCaisse = tbodyCaisse
+      .closest("table")
+      .parentElement.querySelector("#btn-delete-permanent-caisse");
+
+    //===== EVENT btn delete permanent caisse
+    btnDeletePermanentCaisse.addEventListener("click", () => {
+      //selected caisse
+      const selectedCaisse = tbodyCaisse.querySelectorAll(
+        "input[type='checkbox']:checked"
+      );
+
+      //no selection
+      if (selectedCaisse.length <= 0) {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-warning");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          lang.caisse_nums_caisse_empty;
+        //progress bar
+        progressBar.style.transition = "width 10s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        tbodyCaisse.closest("div").prepend(alert);
+
+        //progress lanch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 10000);
+        return;
+      }
+      //selection
+      else {
+        //modal message 1
+        if (selectedCaisse.length === 1) {
+          modalDeleteCaisse.querySelector(".message").innerHTML =
+            lang.question_delete_permanent_caisse_1.replace(
+              ":field",
+              selectedCaisse[0].closest("tr").dataset.numCaisse
+            );
+        }
+        //modal message plur
+        else {
+          modalDeleteCaisse.querySelector(".message").innerHTML =
+            lang.question_delete_permanent_caisse_plur.replace(
+              ":field",
+              selectedCaisse.length
+            );
+        }
+
+        //show modal delete caisse
+        new bootstrap.Modal(modalDeleteCaisse).show();
+
+        //===== EVENT btn confirm delete caisse
+        modalDeleteCaisse
+          .querySelector("#btn-confirm-delete-caisse")
+          .addEventListener("click", async () => {
+            try {
+              //nums_caisse
+              let nums_caisse = [...selectedCaisse];
+              nums_caisse = nums_caisse.map(
+                (selected) => selected.closest("tr").dataset.numCaisse
+              );
+              //FETCH api delete permanent all caisse
+              const response = await apiRequest(
+                "/caisse/delete_permanent_all_caisse",
+                {
+                  method: "DELETE",
+                  body: { nums_caisse: nums_caisse },
+                }
+              );
+              //error
+              if (response.message_type === "error") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-triangle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalDeleteCaisse.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+                return;
+              }
+              //invalid
+              else if (response.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalDeleteCaisse.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                return;
+              }
+              //succcess
+              else {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-success");
+                //icon
+                alert.querySelector(".fad").classList.add("fa-check-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                tbodyCaisse.closest("div").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                //close modal
+                modalDeleteCaisse
+                  .querySelector("#btn-close-modal-delete-caisse")
+                  .click();
+
+                //refesh filter user
+                filterCaisse(
+                  tbodyCaisse,
+                  container.querySelector("#chart-cash-number"),
+                  selectStatus.value.trim(),
+                  selectArrangeBy.value.trim(),
+                  selectOrder.value.trim(),
+                  selectDateBy.value.trim(),
+                  selectPer.value.trim(),
+                  dateFrom.value.trim(),
+                  dateTo.value.trim(),
+                  selectMonth.value.trim(),
+                  selectYear.value.trim(),
+                  inputSearch.value.trim()
+                );
+                return;
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      }
+    });
+
+    //=======================  RESTORE CAISSE =========================
+    //modal restore caisse
+    const modalRestoreCaisse = document.getElementById("modal-restore-caisse");
+    //btn restore caisse
+    const btnRestoreCaisse = tbodyCaisse
+      .closest("table")
+      .parentElement.querySelector("#btn-restore-caisse");
+
+    //===== EVENT btn restore caisse
+    btnRestoreCaisse.addEventListener("click", () => {
+      //selected caisse
+      const selectedCaisse = tbodyCaisse.querySelectorAll(
+        "input[type='checkbox']:checked"
+      );
+
+      //no selection
+      if (selectedCaisse.length <= 0) {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-warning");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          lang.caisse_nums_caisse_empty;
+        //progress bar
+        progressBar.style.transition = "width 10s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        tbodyCaisse.closest("div").prepend(alert);
+
+        //progress lanch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 10000);
+        return;
+      }
+      //selection
+      else {
+        //modal message 1
+        if (selectedCaisse.length === 1) {
+          modalRestoreCaisse.querySelector(".message").innerHTML =
+            lang.question_restore_caisse_1.replace(
+              ":field",
+              selectedCaisse[0].closest("tr").dataset.numCaisse
+            );
+        }
+        //modal message plur
+        else {
+          modalRestoreCaisse.querySelector(".message").innerHTML =
+            lang.question_restore_caisse_plur.replace(
+              ":field",
+              selectedCaisse.length
+            );
+        }
+
+        //show modal restore caisse
+        new bootstrap.Modal(modalRestoreCaisse).show();
+
+        //===== EVENT btn confirm restore caisse
+        modalRestoreCaisse
+          .querySelector("#btn-confirm-restore-caisse")
+          .addEventListener("click", async () => {
+            try {
+              //nums_caisse
+              let nums_caisse = [...selectedCaisse];
+              nums_caisse = nums_caisse.map(
+                (selected) => selected.closest("tr").dataset.numCaisse
+              );
+              //FETCH api restore all caisse
+              const response = await apiRequest("/caisse/restore_all_caisse", {
+                method: "PUT",
+                body: { nums_caisse: nums_caisse },
+              });
+              //error
+              if (response.message_type === "error") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-triangle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalRestoreCaisse.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+                return;
+              }
+              //invalid
+              else if (response.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalRestoreCaisse.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                return;
+              }
+              //succcess
+              else {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-success");
+                //icon
+                alert.querySelector(".fad").classList.add("fa-check-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                tbodyCaisse.closest("div").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                //close modal
+                modalRestoreCaisse
+                  .querySelector("#btn-close-modal-restore-caisse")
+                  .click();
+
+                //refesh filter user
+                filterCaisse(
+                  tbodyCaisse,
+                  container.querySelector("#chart-cash-number"),
+                  selectStatus.value.trim(),
+                  selectArrangeBy.value.trim(),
+                  selectOrder.value.trim(),
+                  selectDateBy.value.trim(),
+                  selectPer.value.trim(),
+                  dateFrom.value.trim(),
+                  dateTo.value.trim(),
+                  selectMonth.value.trim(),
+                  selectYear.value.trim(),
+                  inputSearch.value.trim()
+                );
+                return;
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      }
+    });
+
+    //=======================  FREE CAISSE =========================
+    //modal free caisse
+    const modalFreeCaisse = document.getElementById("modal-free-caisse");
+    //btn free caisse
+    const btnFreeCaisse = tbodyCaisse
+      .closest("table")
+      .parentElement.querySelector("#btn-free-caisse");
+
+    //===== EVENT btn free caisse
+    btnFreeCaisse.addEventListener("click", () => {
+      //selected caisse
+      const selectedCaisse = tbodyCaisse.querySelectorAll(
+        "input[type='checkbox']:checked"
+      );
+
+      //no selection
+      if (selectedCaisse.length <= 0) {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-warning");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          lang.caisse_nums_caisse_empty;
+        //progress bar
+        progressBar.style.transition = "width 10s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        tbodyCaisse.closest("div").prepend(alert);
+
+        //progress lanch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 10000);
+        return;
+      }
+      //selection
+      else {
+        //modal message 1
+        if (selectedCaisse.length === 1) {
+          modalRestoreCaisse.querySelector(".message").innerHTML =
+            lang.question_restore_caisse_1.replace(
+              ":field",
+              selectedCaisse[0].closest("tr").dataset.numCaisse
+            );
+        }
+        //modal message plur
+        else {
+          modalRestoreCaisse.querySelector(".message").innerHTML =
+            lang.question_restore_caisse_plur.replace(
+              ":field",
+              selectedCaisse.length
+            );
+        }
+
+        //show modal restore caisse
+        new bootstrap.Modal(modalRestoreCaisse).show();
+
+        //===== EVENT btn confirm restore caisse
+        modalRestoreCaisse
+          .querySelector("#btn-confirm-restore-caisse")
+          .addEventListener("click", async () => {
+            try {
+              //nums_caisse
+              let nums_caisse = [...selectedCaisse];
+              nums_caisse = nums_caisse.map(
+                (selected) => selected.closest("tr").dataset.numCaisse
+              );
+              //FETCH api restore all caisse
+              const response = await apiRequest("/caisse/restore_all_caisse", {
+                method: "PUT",
+                body: { nums_caisse: nums_caisse },
+              });
+              //error
+              if (response.message_type === "error") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-triangle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalRestoreCaisse.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+                return;
+              }
+              //invalid
+              else if (response.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalRestoreCaisse.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                return;
+              }
+              //succcess
+              else {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-success");
+                //icon
+                alert.querySelector(".fad").classList.add("fa-check-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                tbodyCaisse.closest("div").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                //close modal
+                modalRestoreCaisse
+                  .querySelector("#btn-close-modal-restore-caisse")
                   .click();
 
                 //refesh filter user
@@ -1190,7 +1812,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // //         }
     // //       });
     // //   });
-  }, 1050);
+  , 1050);
 
   //================ FUNCTIONS ================
 

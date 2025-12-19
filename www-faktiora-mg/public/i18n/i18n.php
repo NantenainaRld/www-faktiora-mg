@@ -44,5 +44,9 @@
         caisse_nums_caisse_empty: "<?= __('messages.invalids.caisse_nums_caisse_empty') ?>",
         question_delete_caisse_1: "<?= __('forms.labels.question_delete_caisse_1') ?>",
         question_delete_caisse_plur: "<?= __('forms.labels.question_delete_caisse_plur') ?>",
+        question_delete_permanent_caisse_1: "<?= __('forms.labels.question_delete_permanent_caisse_1') ?>",
+        question_delete_permanent_caisse_plur: "<?= __('forms.labels.question_delete_permanent_caisse_plur') ?>",
+        question_restore_caisse_1: "<?= __('forms.labels.question_restore_caisse_1') ?>",
+        question_restore_caisse_plur: "<?= __('forms.labels.question_restore_caisse_plur') ?>",
     }
 </script>

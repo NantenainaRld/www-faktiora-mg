@@ -176,8 +176,12 @@
                                                     <button class="btn btn-outline-primary fw-bold w-auto btn-sm me-2 my-2" data-bs-toggle='modal' data-bs-target='#modal-add-caisse'>
                                                         <i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?>
                                                     </button>
+                                                    <!-- btn free caisse -->
+                                                    <button class="btn btn-outline-info fw-bold w-auto btn-sm me-2 my-2">
+                                                        <i class="fad fa-circle-minus me-2"></i><?= __('forms.labels.free_c') ?>
+                                                    </button>
                                                     <!-- btn restore caisse  -->
-                                                    <button class="btn btn-outline-dark fw-bold w-auto btn-sm me-2 my-2" id="btn-deconnect-user">
+                                                    <button class="btn btn-outline-warning fw-bold w-auto btn-sm me-2 my-2" id="btn-restore-caisse">
                                                         <i class="fad fa-arrow-rotate-left me-2"></i>
                                                         <?= __('forms.labels.restore') ?>
                                                     </button>
@@ -186,7 +190,7 @@
                                                         <i class="fad fa-trash me-2"></i><?= __('forms.labels.delete') ?>
                                                     </button>
                                                     <!-- btn delete permanent caisse  -->
-                                                    <button class="btn btn-danger fw-bold w-auto btn-sm me-2 my-2" id="btn-delete-permanent-user">
+                                                    <button class="btn btn-danger fw-bold w-auto btn-sm me-2 my-2" id="btn-delete-permanent-caisse">
                                                         <i class="fad fa-trash me-2"></i><?= __('forms.labels.delete_permanent') ?>
                                                     </button>
                                                 </div>
@@ -573,22 +577,22 @@
             </div>
         </div>
     </div>
-    <!-- modal deconnect user  -->
-    <div class="modal fade" id="modal-deconnect-user" tabindex="-1" aria-labelledby="modalDeconnectUser" aria-hidden="true">
+    <!-- modal restore caisse  -->
+    <div class="modal fade" id="modal-restore-caisse" tabindex="-1" aria-labelledby="modalRestoreCaisse" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- modal header  -->
-                <div class="modal-header bg-dark text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-arrow-left-from-bracket me-2"></i><?= __('forms.titles.deconnect_user') ?></h6>
+                <div class="modal-header bg-warning text-light">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-arrow-rotate-left me-2"></i><?= __('forms.titles.restore_caisse') ?></h6>
                 </div>
                 <!-- modal body  -->
                 <div class="modal-body">
-                    <div class="message">Voulez-vous vraiment déconnecter ces ... utilisateurs ?</div>
+                    <div class="message">Voulez-vous vraiment récupérer ces ... caisses ?</div>
                 </div>
                 <!-- modal footer  -->
                 <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-deconnect-user"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
-                    <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-deconnect-user"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_deconnect') ?></button>
+                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-restore-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
+                    <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-restore-caisse"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_restore') ?></button>
                 </div>
             </div>
         </div>

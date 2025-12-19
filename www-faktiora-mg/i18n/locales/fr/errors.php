@@ -86,6 +86,8 @@ return [
         'caisse_updateSolde' => DEBUG ? "Erreur dans caisse/updateSolde : :field" : "Une erreur est survenue lors de mis à jour du solde de caisse",
         //caisse - cahs report
         'caisse_cashReport' => DEBUG ? "Erreur dans caisse/cashReport : :field" : "Une erreur est survenue lors de la génération de pdf de rapport de caisse",
+        //caisse - restore all
+        'caisse_restoreAll' => DEBUG ? "Erreur dans caisse/restoreAll : :field" : "Une erreur est survenue lors de la récupération des caisses",
         //entree - create autre entree
         'entree_createAutreEntree' => DEBUG ? "Erreur dans entree/createAutreEntree : :field" : "Une erreur est survenue lors d'ajout de nouveau autre entrée",
         //entree - is num_ae exist 

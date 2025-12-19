@@ -322,8 +322,8 @@ class Caisse extends Database
         return $response;
     }
 
-    //permanent delete all caisse
-    public static function permanentDeleteAll($nums_caisse)
+    //delete permanent all caisse
+    public static function deletePermanentAllCaisse($nums_caisse)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 
@@ -388,8 +388,8 @@ class Caisse extends Database
         return $response;
     }
 
-    //static - free caisse
-    public static function freeCaisse($nums_caisse)
+    //static - free all caisse
+    public static function freeAllCaisse($nums_caisse)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 
@@ -604,6 +604,65 @@ class Caisse extends Database
                 'message_type' => 'error',
                 'message' => __(
                     'errors.catch.caisse_updateSolde',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
+    //static - restore all caisse
+    public static function restoreAllCaisse($nums_caisse)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        $placeholders = implode(', ', array_fill(0, count($nums_caisse), '?'));
+        $sql = "UPDATE caisse SET etat_caisse = 'libre' WHERE num_caisse IN ({$placeholders}) AND etat_caisse = 'supprimé' ";
+
+        try {
+
+            //restore all caisse
+            $response = parent::executeQuery($sql, $nums_caisse);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //success
+            //0
+            if ($response['row_count'] === 0) {
+                $response['message'] = __('messages.success.caisse_restoreAllCaisse_0');
+            }
+            //1
+            elseif ($response['row_count'] === 1) {
+                $response['message'] = __('messages.success.caisse_restoreAllCaisse_1');
+            }
+            //plur
+            else {
+                $response['message'] = __('messages.success.caisse_restoreAllCaisse_plur', ['field' => $response['row_count']]);
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => $response['message']
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.caisse_restoreAll',
                     ['field' => $e->getMessage() .
                         ' - Line : ' . $e->getLine() .
                         ' - File : ' . $e->getFile()]

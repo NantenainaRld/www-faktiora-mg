@@ -195,6 +195,12 @@ return [
         'caisse_freeCaisse_plur' => "<b>:field</b> caisses ont été libérées avec succès",
         //caisse - update ligne caisse
         'caisse_updateLigneCaisse' => "Ligne caisse numéro <b>:field</b> est modifiée avec succès",
+        //caisse - restore all caisse 0
+        'caisse_restoreAllCaisse_0' => "Aucune caisse n'est récupéree",
+        //caisse - restore all caisse 1,
+        'caisse_restoreAllCaisse_1' => "Une caisse a été récupérée avec succès",
+        //caisse - restore all caisse plur
+        'caisse_restoreAllCaisse_plur' => "<b>:field</b> ont été récupérées avec succès",
         //entree - add autre entree
         'entree_createAutreEntree' => "Autre entrée ajoutée avec succès",
         //entree - update autre entree

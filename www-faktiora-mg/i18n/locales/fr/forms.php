@@ -29,7 +29,8 @@ return [
         'cash_line' => 'Lignes de caisse',
         'distribution_status' => 'Répartition selon status',
         'cash_add' => "Ajout d'une nouvelle caisse",
-        'cash_update' => "Modification de caisse"
+        'cash_update' => "Modification de caisse",
+        'restore_caisse' => 'Récupération des caisses'
     ],
     'labels' => [
         'all' => 'tout',
@@ -169,7 +170,13 @@ return [
         'occuped' => 'Occupé',
         'less_equal_balance' => 'Inférieur ou égal au solde',
         'question_delete_caisse_1' => "Voulez-vous vraiment supprimer la caisse numéro <b>:field</b> ?",
-        'question_delete_caisse_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> caisses ?"
+        'question_delete_caisse_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> caisses ?",
+        'question_delete_permanent_caisse_1' => "Voulez-vous vraiment supprimer définitivement la caisse numéro <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>.",
+        'question_delete_permanent_caisse_plur' => "Voulez-vous vraiment supprimer définitivement ces <b>:field</b> caisses ?. <span class='text-danger'>Cette action est irréversible</span>.",
+        'yes_restore' => 'Oui, récupérer',
+        'question_restore_caisse_1' => 'Voulez-vous vraiment récupérer la caisse numéro <b>:field</b> ?',
+        'question_restore_caisse_plur' => 'Voulez-vous vraiment récupérer ces <b>:field<b> caisses ?',
+        'free_c' => 'Libérer'
     ],
     'times' => [
         'minute' => "minute",

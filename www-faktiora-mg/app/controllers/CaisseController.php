@@ -835,8 +835,8 @@ class CaisseController extends Controller
         return;
     }
 
-    //action - permanent delete all caisse
-    public function permanentDeleteAll()
+    //action - delete permanent all caisse
+    public function deletePermanentAllCaisse()
     {
         header('Content-Type: application/json');
         $response = null;
@@ -875,8 +875,8 @@ class CaisseController extends Controller
 
             try {
 
-                //permanent delete all caisse
-                $response = Caisse::permanentdeleteAll($nums_caisse);
+                //delete permanent all caisse
+                $response = Caisse::deletePermanentAllCaisse($nums_caisse);
 
                 echo json_encode($response);
                 return;
@@ -1482,8 +1482,8 @@ class CaisseController extends Controller
         return;
     }
 
-    //action - free caisse
-    public function freeCaisse()
+    //action - free all caisse
+    public function freeAllCaisse()
     {
         header('Content-Type: application/json');
         $response = null;
@@ -1521,8 +1521,8 @@ class CaisseController extends Controller
 
             try {
 
-                //free caisse
-                $response = Caisse::freeCaisse($nums_caisse);
+                //free all caisse
+                $response = Caisse::freeAllCaisse($nums_caisse);
 
                 echo json_encode($response);
                 return;
@@ -2378,6 +2378,83 @@ class CaisseController extends Controller
             ];
 
             echo json_encode($response);
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
+
+    //action - restore all caisse
+    public function restoreAllCaisse()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //role - not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to caisse index
+            header("Location: " . SITE_URL . '/caisse');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            $json = json_decode(file_get_contents('php://input'), true);
+
+            $nums_caisse = array_map(fn($x) => trim($x), $json['nums_caisse']);
+
+            //nums_caisse - empty
+            if (count($nums_caisse) <= 0) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.caisse_nums_caisse_empty')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+
+                //restore all caisse
+                $response = Caisse::restoreAllCaisse($nums_caisse);
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.caisse_restoreAll',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            echo json_encode($response);
+            return;
+        }
+        //redirect to caisse index
+        else {
+            header('Location: ' . SITE_URL . '/caisse');
             return;
         }
 
