@@ -15,8 +15,29 @@ class UserController extends Controller
     //page - index
     public function index()
     {
-        $this->render('header', ['title' => 'Header']);
-        return;
+        //is loged in ?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+        //loged
+        else {
+            //role caissier
+            if ($is_loged_in->getRole() === 'caissier') {
+                //redirect to page home
+                header('Location: ' . SITE_URL . '/user/page_home');
+                return;
+            }
+            //role admin
+            else {
+                //redirect to page user
+                header('Location: ' . SITE_URL . '/user/page_user');
+                return;
+            }
+        }
     }
 
     //page - user dashboard
@@ -639,10 +660,17 @@ class UserController extends Controller
                             </tr>";
             $html .= "<tbody>";
             foreach ($response['data'] as $index => $line) {
+                //sex
+                $sex = '';
+                if ($line['sexe_utilisateur'] === 'masculin') {
+                    $sex = strtolower(__('forms.labels.male_m'));
+                } else {
+                    $sex = strtolower(__('forms.labels.female_f'));
+                }
                 $html .= "<tr>
                             <td>{$line['id_utilisateur']}</td>
                             <td>{$line['nom_prenoms']}</td>
-                            <td>{$line['sexe_utilisateur']}</td>
+                            <td>{$sex}</td>
                             <td>{$line['email_utilisateur']}</td>
                             <td>{$line['role']}</td>
                         </tr>";

@@ -270,8 +270,8 @@ class AuthController extends Controller
                         echo json_encode($response);
                         return;
                     }
-                    //redirect to user index
-                    header('Location: ' . SITE_URL . '/user');
+                    //redirect to user home
+                    header('Location: ' . SITE_URL . '/user/page_home');
                     return;
                 }
                 //login incorrect
@@ -307,8 +307,8 @@ class AuthController extends Controller
                                     echo json_encode($response);
                                     return;
                                 }
-                                //redirect to user index
-                                header('Location: ' . SITE_URL . '/user');
+                                //redirect to user home
+                                header('Location: ' . SITE_URL . '/user/page_home');
                                 return;
                             }
                             //mdp_oublie - incorrect

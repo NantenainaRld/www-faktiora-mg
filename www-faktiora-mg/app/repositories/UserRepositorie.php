@@ -203,9 +203,9 @@ class UserRepositorie extends Database
         //where 1=1
         $sql .= "WHERE 1=1 ";
 
-        //status - all no deleted
+        //status - all 
         if ($params['status'] === 'all') {
-            $sql .= "AND u.etat_utilisateur != 'supprimé' ";
+            // $sql .= "AND u.etat_utilisateur != 'supprimé' ";
         }
         //status - connected
         elseif ($params['status'] === 'connected') {
@@ -238,7 +238,7 @@ class UserRepositorie extends Database
             $paramsQuery['search'] = "%" . $params['search_user'] . "%";
         }
 
-        //group by && arrange by
+        //arrange by
         $sql .= " ORDER BY {$params['arrange_by']} {$params['order']} ";
 
         try {

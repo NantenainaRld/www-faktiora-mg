@@ -154,7 +154,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     //==================ELEMENTS searchbar
     //input - search
     const inputSearch = document.getElementById("input-search");
-    inputSearch.addEventListener("input", () => {});
     const savedInputSearch = localStorage.getItem(inputSearch.id);
     inputSearch.value = !savedInputSearch ? "" : savedInputSearch;
     //input - search searchbar
@@ -1472,7 +1471,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           const radioStatusUser = modalPrintAllUser.querySelector(
             "input[type='radio']:checked"
           );
-          
+
           try {
             //FETCH api print all user
             const response = await apiRequest(
@@ -1822,6 +1821,33 @@ document.addEventListener("DOMContentLoaded", async () => {
       allTr.forEach((tr) => {
         //========= EVENT tr selection chart
         tr.addEventListener("click", async () => {
+          //rest
+          let rest =
+              Number(tr.dataset.totalAe) +
+              Number(tr.dataset.totalFacture) -
+              Number(tr.dataset.totalSortie),
+            status;
+          //loss
+          if (rest < 0) {
+            status = `(<span class='text-danger'>${
+              lang.loss
+            } ${formatterTotal.format(rest)}</span>)`;
+          }
+          //neutral
+          else if (rest === 0) {
+            status = `(<span class='text-secondary'>${lang.neutral}</span>)`;
+          }
+          //benefice
+          else {
+            status = `(<span class='text-success'>${
+              lang.benefice
+            } +${formatterTotal.format(rest)}</span>)`;
+          }
+          //chart histo title
+          const chartHistoTransactionsTitle = document.getElementById(
+            "chart-histo-transactions-title"
+          );
+          chartHistoTransactionsTitle.innerHTML = `<i class="fad fa-chart-mixed-up-circle-dollar me-2"></i>${lang.curves_transactions} ${status}`;
           //remove selection
           if (selectedRow && selectedRow === tr) {
             tr.classList.remove("active");
@@ -2581,36 +2607,4 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error(e);
     }
   }
-  // //function - print all user
-  // async function printAllUser(status = "active") {
-  //   try {
-  //     const response = await apiRequest(
-  //       `/user/print_all_user?status=${status}`
-  //     );
-  //     //not success
-  //     if (response.message_type !== "success") {
-  //       console.log(response);
-  //     }
-  //     //success
-  //     else {
-  //       const a = document.createElement("a");
-  //       a.href = `data:application/pdf;base64,${response.pdf}`;
-  //       a.download = response.file_name;
-  //       a.click();
-  //       console.log(response.message);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
-  // //==================== EVENTS ===================
-  // const from = document.getElementById("from");
-  // const to = document.getElementById("to");
-  // //btn test
-  // const btnTest = document.getElementById("btn-test");
-  // btnTest.addEventListener("click", () => {
-  //   // deconnectAll([10000, 10001, 10005, 10003]);
-  //   // deconnectAll([1045000, 10004, 10005, 10003]);
-  //   printAllUser();
-  // });
 });

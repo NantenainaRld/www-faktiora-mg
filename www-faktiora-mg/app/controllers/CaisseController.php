@@ -19,24 +19,75 @@ class CaisseController extends Controller
     {
         echo "page index";
     }
+
     //page - caisse dashboard
     public function pageCaisse()
     {
-        //is loged in
-        $is_loged_in  = Auth::isLogedIn();
+        //is loged in ?
+        $is_loged_in = Auth::isLogedIn();
         //loged
         if ($is_loged_in->getLoged()) {
-            // role not admin 
+            //not admin
             if ($is_loged_in->getRole() !== 'admin') {
-                // redirect to caisse index 
+                //redirect to caisse index
                 header('Location: ' . SITE_URL . '/caisse');
                 return;
             }
-            //show login page
-            $this->render('caisse_dashboard', [
-                'title' => 'Faktiora - ' . __('forms.titles.caisse_dashboard'),
-                'role' => $is_loged_in->getRole()
-            ]);
+
+            //get currency_units
+            $currency_units = '';
+            try {
+                $config = json_decode(file_get_contents(PUBLIC_PATH . '/config/config.json'), true);
+
+                //currency_units not found
+                if (!isset($config['currency_units'])) {
+                    //redirect to error page 
+                    header('Location:' . SITE_URL . '/errors?messages=' . __('errors.not_found.json', ['field' => 'currency_units']));
+
+                    return;
+                }
+
+                $currency_units = $config['currency_units'];
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.caisse_createCaisse',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
+
+                //redirect to error page
+                header('Location: ' . SITE_URL . '/errors?messages=' . $response['message']);
+
+                return;
+            }
+
+            $_SESSION['menu'] = 'cash';
+            //admin
+            if ($is_loged_in->getRole() === 'admin') {
+                $this->render('caisse_dashboard_admin', [
+                    'title' => 'Faktiora - ' . __('forms.titles.caisse_dashboard'),
+                    'role' => $is_loged_in->getRole(),
+                    'currency_units' => $currency_units
+                ]);
+                return;
+            }
+            //caissier
+            else {
+                $this->render('caisse_dashboard_caissier', [
+                    'title' => 'Faktiora - ' . __('forms.titles.caisse_dashboard'),
+                    'role' => $is_loged_in->getRole(),
+                    'currency_units' => $currency_units
+                ]);
+                return;
+            }
         }
         //not loged
         else {
@@ -65,7 +116,7 @@ class CaisseController extends Controller
 
         //role - not admin
         if ($is_loged_in->getRole() !== 'admin') {
-            //redirect tocaisse index
+            //redirect to caisse index
             header("Location: " . SITE_URL . '/caisse');
             return;
         }
@@ -78,7 +129,7 @@ class CaisseController extends Controller
 
             //num_caisse - invalid
             $num_caisse = filter_var($json['num_caisse'], FILTER_VALIDATE_INT);
-            if ($num_caisse === false || $num_caisse < 0) {
+            if (!$num_caisse || $num_caisse < 0) {
                 $response = [
                     'message_type' => 'invalid',
                     'message' => __('messages.invalids.caisse_num_caisse')
@@ -209,21 +260,21 @@ class CaisseController extends Controller
         }
 
         //defaults
-        $status_default = ['libre', 'occupé', 'deleted'];
-        $order_by_default = [
-            'nb_factures',
+        $status_default = ['free', 'occuped', 'deleted'];
+        $arrange_by_default = [
+            'nb_facture',
             'nb_ae',
-            'nb_entrees',
-            'nb_sorties',
-            'nb_transactions',
-            'total_factures',
+            'nb_entree',
+            'nb_sortie',
+            'nb_transaction',
+            'total_facture',
             'total_ae',
-            'total_entrees',
-            'total_sorties',
-            'total_transactions',
+            'total_entree',
+            'total_sortie',
+            'total_transaction',
             'num'
         ];
-        $arrange_default = ['DESC', 'ASC'];
+        $order_default = ['DESC', 'ASC'];
         $date_by_default = [
             'per',
             'between',
@@ -240,13 +291,13 @@ class CaisseController extends Controller
         $status = strtolower(trim($_GET['status'] ?? 'all'));
         $status = in_array($status, $status_default, true) ? $status : 'all';
 
-        //order_by
-        $order_by = strtolower(trim($_GET['order_by'] ?? 'num'));
-        $order_by = in_array($order_by, $order_by_default, true) ? $order_by : 'num';
-        $order_by = ($order_by === 'num') ? 'c.num_caisse' : $order_by;
-        // //arrange
-        $arrange = strtoupper(trim($_GET['arrange'] ?? 'ASC'));
-        $arrange = in_array($arrange, $arrange_default, true) ? $arrange : 'ASC';
+        //arrange_by
+        $arrange_by = strtolower(trim($_GET['arrange_by'] ?? 'num'));
+        $arrange_by = in_array($arrange_by, $arrange_by_default, true) ? $arrange_by : 'num';
+        $arrange_by = ($arrange_by === 'num') ? 'c.num_caisse' : $arrange_by;
+        //order
+        $order = strtoupper(trim($_GET['order'] ?? 'ASC'));
+        $order = in_array($order, $order_default, true) ? $order : 'ASC';
 
         //date_by
         $date_by = strtolower(trim($_GET['date_by'] ?? 'all'));
@@ -357,8 +408,8 @@ class CaisseController extends Controller
 
         $params = [
             'status' => $status,
-            'order_by' => $order_by,
-            'arrange' => $arrange,
+            'arrange_by' => $arrange_by,
+            'order' => $order,
             'date_by' => $date_by,
             'per' => $per,
             'from' => $from,

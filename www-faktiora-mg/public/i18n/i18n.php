@@ -37,5 +37,9 @@
         question_delete_permanent_user_plur: "<?= __('forms.labels.question_delete_permanent_user_plur') ?>",
         question_deconnect_user_1: "<?= __('forms.labels.question_deconnect_user_1') ?>",
         question_deconnect_user_plur: "<?= __('forms.labels.question_deconnect_user_plur') ?>",
+        caisse_number: "<?= __('forms.labels.caisse_number') ?>",
+        free: "<?= __('forms.labels.free') ?>",
+        occuped: "<?= __('forms.labels.occuped') ?>",
+        distribution_status: "<?= __('forms.titles.distribution_status') ?>",
     }
 </script>

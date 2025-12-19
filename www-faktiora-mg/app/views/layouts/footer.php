@@ -75,6 +75,10 @@
    <?php if ($_SESSION['menu'] === 'user'): ?>
       <script src="<?= SITE_URL ?>/js/users/user-dashboard.js"></script>
    <?php endif; ?>
+   <!-- script caisse -->
+   <?php if ($_SESSION['menu'] === 'cash'): ?>
+      <script src="<?= SITE_URL ?>/js/caisse-dashboard.js"></script>
+   <?php endif; ?>
    </body>
 
    </html>

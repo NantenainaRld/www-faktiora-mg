@@ -136,26 +136,9 @@ class LigneCaisse extends Database
                 return $response;
             }
 
-            //success
-            //0
-            if (count($response['data']) === 0) {
-                $response['message'] = __('messages.success.caisse_filterLigneCaisse_0');
-            }
-            //1
-            elseif (count($response['data']) === 1) {
-                $response['message'] = __('messages.success.caisse_filterLigneCaisse_1');
-            }
-            //plur
-            else {
-                $response['message'] = __(
-                    'messages.success.caisse_filterLigneCaisse_plur',
-                    ['field' => count($response['data'])]
-                );
-            }
-
             $response = [
                 'message_type' => 'success',
-                'message' => $response['message'],
+                'message' => 'success',
                 'data' => $response['data']
             ];
 

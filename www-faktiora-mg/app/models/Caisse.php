@@ -74,7 +74,7 @@ class Caisse extends Database
 
     //=========================== PUBLIC FUNCTION =============================
 
-    // add caisse
+    //add caisse
     public function createCaisse()
     {
         $response = [

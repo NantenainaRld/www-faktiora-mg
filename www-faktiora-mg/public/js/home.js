@@ -355,7 +355,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             rest = formatter.format(rest);
           }
-          status = `(<span class='text-danger'>${lang.loss} -${rest} ${currencyUnits}</span>)`;
+          status = `(<span class='text-danger'>${lang.loss} ${rest} ${currencyUnits}</span>)`;
         }
         //neutral
         else if (rest === 0) {

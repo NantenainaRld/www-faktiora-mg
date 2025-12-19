@@ -4,6 +4,7 @@ return [
     'titles' => [
         'error' => "Erreur",
         'user_dashboard' => "Tableau de bord utilisateur",
+        'caisse_dashboard' => "Tableau de bord caisse",
         'list_date' => "Liste du : <i>:field</i>",
         'list_all_user' => "LISTE DE TOUS LES UTILISATEURS",
         'cash_report' => "RAPPORT DE CAISSE",
@@ -23,7 +24,11 @@ return [
         'user_update' => 'Modification du compte',
         'delete_user' => 'Suppréssion des utilisateurs',
         'deconnect_user' => 'Déconnection des utilisateurs',
-        'print_all_user' => 'Rapport de liste des utilisateurs'
+        'print_all_user' => 'Rapport de liste des utilisateurs',
+        'cash_list' => 'Liste des caisses',
+        'cash_line' => 'Lignes de caisse',
+        'distribution_status' => 'Répartition selon status',
+        'cash_add' => "Ajout d'une nouvelle caisse"
     ],
     'labels' => [
         'all' => 'tout',
@@ -48,6 +53,7 @@ return [
         'cash_treshold' => "Seuil de la caisse",
         'all' => 'Tout',
         'cash_num' => "Caisse numéro",
+        'cash_number' => 'Numéro de caisse',
         'cash_owner' => "Caisse tenue par",
         'week' => 'semaine',
         'month' => 'mois',
@@ -149,11 +155,19 @@ return [
         'question_deconnect_user_1' => "Voulez-vous vraiment déconnecter l'utilisateur avec l'ID <b>:field<b/> ?",
         'question_deconnect_user_plur' => "Voulez-vous vraiment déconnecter ces <b>:field</b> utilisateurs ?",
         'ask_print_all_user' => 'Vous pouvez choisir selon les status des utilisateurs suivants : ',
-        'download' => 'Télécharger'
-    ],
-    'status' => [
-        'online' => 'en ligne',
-        'disconnected' => 'déconnecté'
+        'download' => 'Télécharger',
+        'occupation' => 'Occupation',
+        'occup_caisse' => 'Occuper la caisse',
+        'select' => 'Séléctionner',
+        'caisse_number' => 'Nombre de caisse',
+        'restore' => 'Récupérer',
+        'balance' => 'Solde',
+        'treshold' => 'Seuil',
+        'user' => 'Utilisateur',
+        'free' => 'Libre',
+        'occuped' => 'Occupé',
+        'less_equal_balance' => 'Inférieur ou égal au solde'
+
     ],
     'times' => [
         'minute' => "minute",

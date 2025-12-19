@@ -165,10 +165,14 @@
     <?php if ($_SESSION['menu'] === 'user'): ?>
         <link rel="stylesheet" href="<?= SITE_URL ?>/css/user-dashboard.css">
     <?php endif; ?>
+    <!-- style caisse dashboard  -->
+    <?php if ($_SESSION['menu'] === 'cash'): ?>
+        <link rel="stylesheet" href="<?= SITE_URL ?>/css/caisse-dashboard.css">
+    <?php endif; ?>
 </head>
 
 <body class="d-flex flex-column vw-100 vh-100 overflow-hidden">
-    <div class="container-fluid g-0 align-items-center justify-content-center align-items-center d-flex h-100 w-100">
+    <div class="container-fluid g-0 justify-content-center align-items-center d-flex h-100 w-100">
         <div class="row h-100 w-100" id="container">
             <!-- template placeholder -->
             <template id="template-placeholder">
@@ -392,8 +396,8 @@
                             <?php endif; ?>
                             <!-- caisse  -->
                             <li class="nav-item fw-bold text-light mb-2 rounded-2">
-                                <nav class="navbar action bg-success p-0 rounded">
-                                    <a href=""
+                                <nav class="navbar action bg-success p-0 rounded <?= $_SESSION['menu'] === 'cash' ? 'active' : '' ?>">
+                                    <a href="#"
                                         class="nav-link navbar-toggler text-light p-2 justify-content-between d-flex"
                                         data-bs-toggle="collapse" data-bs-target="#caisse-menu-navbar" style="font-size: 0.85rem;">
                                         <i class="fad fa-cash-register me-2 text-start">
@@ -407,8 +411,8 @@
                                     <div class="collapse navbar-collapse" id="caisse-menu-navbar">
                                         <ul class="navbar-nav py-2 px-1" style="font-size: 0.75rem;">
                                             <!-- caisse dashboard  -->
-                                            <li class="nav-item green-second bg-green-third rounded-1 mb-1 text-start px-3">
-                                                <a href="" class="nav-link text-light green-second">
+                                            <li class="nav-item green-second rounded-1 mb-1 text-start px-3 <?= $_SESSION['menu'] === 'cash' ? 'bg-success' : 'bg-green-third' ?>">
+                                                <a href="<?= SITE_URL ?>/caisse/page_caisse" class="nav-link text-light green-second">
                                                     <i class="fad fa-chart-area me-2">
                                                     </i><?= __('forms.labels.dashboard') ?>
                                                 </a>
