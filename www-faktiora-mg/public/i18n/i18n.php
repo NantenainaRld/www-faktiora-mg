@@ -41,5 +41,8 @@
         free: "<?= __('forms.labels.free') ?>",
         occuped: "<?= __('forms.labels.occuped') ?>",
         distribution_status: "<?= __('forms.titles.distribution_status') ?>",
+        caisse_nums_caisse_empty: "<?= __('messages.invalids.caisse_nums_caisse_empty') ?>",
+        question_delete_caisse_1: "<?= __('forms.labels.question_delete_caisse_1') ?>",
+        question_delete_caisse_plur: "<?= __('forms.labels.question_delete_caisse_plur') ?>",
     }
 </script>

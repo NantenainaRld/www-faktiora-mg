@@ -759,7 +759,7 @@ class CaisseController extends Controller
     }
 
     //action - delete all caisse
-    public function deleteAll()
+    public function deleteAllCaisse()
     {
         header('Content-Type: application/json');
         $response = null;
@@ -799,7 +799,7 @@ class CaisseController extends Controller
             try {
 
                 //delete all caisse
-                $response = Caisse::deleteAll($nums_caisse);
+                $response = Caisse::deleteAllCaisse($nums_caisse);
 
                 echo json_encode($response);
                 return;

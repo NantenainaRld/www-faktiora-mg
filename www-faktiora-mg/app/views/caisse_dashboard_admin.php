@@ -182,7 +182,7 @@
                                                         <?= __('forms.labels.restore') ?>
                                                     </button>
                                                     <!-- btn delete caisse -->
-                                                    <button class="btn btn-outline-danger fw-bold w-auto btn-sm me-2 my-2" id="btn-delete-user">
+                                                    <button class="btn btn-outline-danger fw-bold w-auto btn-sm me-2 my-2" id="btn-delete-caisse">
                                                         <i class="fad fa-trash me-2"></i><?= __('forms.labels.delete') ?>
                                                     </button>
                                                     <!-- btn delete permanent caisse  -->
@@ -194,7 +194,7 @@
                                                 <table class="w-100 table-striped">
                                                     <thead class="bg-success text-light align-items-center form-text">
                                                         <tr>
-                                                            <th><input type="checkbox" class="form-check-input" id="check-all"></th>
+                                                            <th><input type="checkbox" class="form-check-input" id="check-all-caisse"></th>
                                                             <th><i class="fad fa-hashtag me-2"></i><?= __('forms.labels.num') ?></th>
                                                             <th><i class="fad fa-coins me-2"></i><?= __('forms.labels.balance') . " ({$currency_units})" ?></th>
                                                             <th><i class="fad fa-badge-dollar me-2"></i><?= __('forms.labels.treshold') . " ({$currency_units})" ?></th>
@@ -553,22 +553,22 @@
             </div>
         </div>
     </div>
-    <!-- modal delete user  -->
-    <div class="modal fade" id="modal-delete-user" tabindex="-1" aria-labelledby="modalDeleteUser" aria-hidden="true">
+    <!-- modal delete caisse -->
+    <div class="modal fade" id="modal-delete-caisse" tabindex="-1" aria-labelledby="modalDeleteCaisse" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- modal header  -->
                 <div class="modal-header bg-danger text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-user-circle-minus me-2"></i><?= __('forms.titles.delete_user') ?></h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-trash me-2"></i>Suppréssion des caisses</h6>
                 </div>
                 <!-- modal body  -->
                 <div class="modal-body">
-                    <div class="message">Voulez-vous vraiment supprimer ces ... utilisateurs ?</div>
+                    <div class="message">Voulez-vous vraiment supprimer ces ... caisses ?</div>
                 </div>
                 <!-- modal footer  -->
                 <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-delete-user"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
-                    <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-delete-user"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_delete') ?></button>
+                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-delete-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
+                    <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-delete-caisse"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_delete') ?></button>
                 </div>
             </div>
         </div>

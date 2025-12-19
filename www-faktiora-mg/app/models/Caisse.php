@@ -257,7 +257,7 @@ class Caisse extends Database
     }
 
     //delete all caisse
-    public static function deleteAll($nums_caisse)
+    public static function deleteAllCaisse($nums_caisse)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 
