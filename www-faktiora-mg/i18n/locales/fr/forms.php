@@ -200,7 +200,8 @@ return [
         'en' => 'Anglais'
     ],
     'placeholders' => [
-        'email' => 'nom@faktiora.mg'
+        'email' => 'nom@faktiora.mg',
+        'search_lc' => "ID ligne caisse, ID utilisateur"
     ]
 
 ];

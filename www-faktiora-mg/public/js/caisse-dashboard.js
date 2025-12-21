@@ -98,6 +98,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     //tbody caisse
     const tbodyCaisse = container.querySelector("#tbody-caisse");
+    const tbodyLC = container.querySelector("#tbody-lc");
 
     //===================== SEARCHBAR =====================
     //btn searcbar
@@ -429,6 +430,41 @@ document.addEventListener("DOMContentLoaded", async () => {
         inputSearch.value.trim()
       );
       localStorage.setItem(e.target.id, e.target.value);
+    });
+
+    //========================= SEARCH LIGNE CAISSE ====================
+    //input - search lc id
+    const inputSearchLCId = container.querySelector("#input-search-lc-id");
+    const savedInputSearchLCId = localStorage.getItem(inputSearchLCId.id);
+    inputSearchLCId.value = !savedInputSearchLCId ? "" : savedInputSearchLCId;
+    //input - search lc from
+    const inputSearchLCFrom = container.querySelector("#input-search-lc-from");
+    const savedInputSeachLCFrom = localStorage.getItem(inputSearchLCFrom.id);
+    inputSearchLCFrom.value = !savedInputSeachLCFrom
+      ? ""
+      : savedInputSeachLCFrom;
+    //input - searc lc to
+    const inputSearchLCTo = container.querySelector("#input-search-lc-to");
+    const savedInputSearchLCTo = localStorage.getItem(inputSearchLCTo.id);
+    inputSearchLCTo.value = !savedInputSearchLCTo ? "" : savedInputSearchLCTo;
+
+    //===== EVENT input search lc id
+    inputSearchLCId.addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, "");
+      localStorage.setItem(e.target.id, e.target.value);
+      filterLigneCaisse(tbodyLC);
+    });
+    //===== EVENT input search lc from
+    inputSearchLCFrom.addEventListener("input", (e) => {
+      inputSearchLCTo.min = e.target.value;
+      localStorage.setItem(e.target.id, e.target.value);
+      filterLigneCaisse(tbodyLC);
+    });
+    //===== EVENT input search lc to
+    inputSearchLCTo.addEventListener("input", (e) => {
+      inputSearchLCFrom.max = e.target.value;
+      localStorage.setItem(e.target.id, e.target.value);
+      filterLigneCaisse(tbodyLC);
     });
 
     //========================== ADD CAISSE =======================
@@ -1549,7 +1585,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     //====================== ADD LIGNE CAISSE ========================
-    addLigneCaisse(container.querySelector("#tbody-lc"));
+    addLigneCaisse();
     // //   //====================== PRINT ALL USER ===========================
     // //   //modal print all user
     // //   const modalPrintAllUser = document.getElementById("modal-print-all-user");
@@ -2005,7 +2041,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               //table lc cash num
               tableLcCashNum.innerHTML = tr.dataset.numCaisse;
               //===== table ligne_caisse
-              filterLigneCaisse(tbodyLC, tr.dataset.numCaisse, "", "", "");
+              filterLigneCaisse(tbodyLC);
             }
           }
         });
@@ -2348,17 +2384,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   const prepareTotal = (countNbTotal, allDates) =>
     allDates.map((date) => countNbTotal[date]?.total || 0);
   //function - filter ligne_caisse
-  async function filterLigneCaisse(
-    tbody,
-    num_caisse,
-    id_uiltilisateur,
-    from,
-    to
-  ) {
+  async function filterLigneCaisse(tbody) {
     try {
       //FETCH api filter ligne_caisse
       const filterLigneCaisse = await apiRequest(
-        `/caisse/filter_ligne_caisse?num_caisse=${num_caisse}&id_utilisateur=${id_uiltilisateur}&from=${from}&to=${to}`
+        `/caisse/filter_ligne_caisse?num_caisse=${
+          container.querySelector("#table-lc-cash-num").textContent
+        }&id=${container
+          .querySelector("#input-search-lc-id")
+          .value.trim()}&from=${container
+          .querySelector("#input-search-lc-from")
+          .value.trim()}&to=${container
+          .querySelector("#input-search-lc-to")
+          .value.trim()}`
       );
 
       //error
@@ -3048,7 +3086,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 inputSearch.value.trim()
               );
               //refresh filter ligne_caisse
-              filterLigneCaisse(tbodyLC, numCaisse, "", "", "");
+              filterLigneCaisse(tbodyLC);
             }
           } catch (e) {
             console.error(e);

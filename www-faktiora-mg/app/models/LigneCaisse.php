@@ -95,10 +95,10 @@ class LigneCaisse extends Database
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 
-        $sql = "SELECT * FROM ligne_caisse WHERE num_caisse = :num_caisse AND id_utilisateur LIKE :id_utilisateur ";
+        $sql = "SELECT * FROM ligne_caisse WHERE num_caisse = :num_caisse AND (id_lc LIKE :id OR id_utilisateur LIKE :id) ";
         $paramsQuery = [
             'num_caisse' => $params['num_caisse'],
-            'id_utilisateur' => "%" . $params['id_utilisateur'] . "%"
+            'id' => "%" . $params['id'] . "%"
         ];
 
         //from - empty

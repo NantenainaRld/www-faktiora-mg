@@ -478,8 +478,8 @@ class CaisseController extends Controller
             return;
         }
 
-        //id_utilisateur
-        $id_utilisateur = trim($_GET['id_utilisateur'] ?? '');
+        //id
+        $id = trim($_GET['id'] ?? '');
 
         //from
         $from = trim($_GET['from'] ?? '');
@@ -561,7 +561,7 @@ class CaisseController extends Controller
         //parametters
         $params = [
             'num_caisse' => $num_caisse,
-            'id_utilisateur' => $id_utilisateur,
+            'id' => $id,
             'from' => $from,
             'to' => $to
         ];

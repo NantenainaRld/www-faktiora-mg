@@ -229,6 +229,35 @@
                                             <i class="fad fa-list-dropdown me-2"></i><?= __('forms.titles.cash_line') . ' (' . strtolower(__('forms.labels.cash_num')) ?>: <span id="table-lc-cash-num"></span>)
                                         </div>
                                         <div class="row justify-content-center  overflow-auto align-items-top flex-grow-1">
+                                            <!-- search ligne_caisse  -->
+                                            <dvi class="col-12 bg-second rounded-1 py-2 align-items-center d-flex flex-column">
+                                                <!-- input - search ligne_caisse  -->
+                                                <div class="row w-100 mb-2">
+                                                    <div class="me-2 input-group">
+                                                        <input type="text" class="form-control form-control-sm text-secondary" placeholder="<?= __('forms.placeholders.search_lc') ?>" id="input-search-lc-id">
+                                                        <span class="input-group-text"><i class="fad fa-magnifying-glass"></i></span>
+                                                    </div>
+                                                </div>
+                                                <div class="row w-100 flex-nowrap overflow-x-auto">
+                                                    <!-- input - search date_debut  -->
+                                                    <div class="me-2 col-6 
+                                                    d-flex gap-1">
+                                                        <label for="input-search-lc-from" class="form-label text-secondary mt-1"><?= __('forms.labels.on') ?></label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text"><i class="fad fa-calendar"></i></span>
+                                                            <input type="datetime-local" class="form-control form-control-sm text-secondary" id="input-search-lc-from" max="<?= date('Y-m-d\TH:i') ?>">
+                                                        </div>
+                                                    </div>
+                                                    <!-- input - search date_fin  -->
+                                                    <div class="me-2 col-6 d-flex gap-1">
+                                                        <label for="input-search-lc-to" class="form-label text-secondary mt-1"><?= ucfirst(__('forms.labels.to')) ?></label>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text"><i class="fad fa-calendar"></i></span>
+                                                            <input type="datetime-local" class="form-control form-control-sm text-secondary" id="input-search-lc-to" max="<?= date('Y-m-d\TH:i') ?>">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </dvi>
                                             <div class="col-12">
                                                 <!-- btn  -->
                                                 <div class="row g-0 justify-content-start mb-2">
@@ -490,7 +519,7 @@
                                 </span>
                                 <input type="text" class="form-control form-control-sm text-secondary" id="input-add-seuil" required>
                             </div>
-                            <span class="form-text text-secondary"><?= strtolower(__('forms.labels.less_equal_balance')) ?></span>
+                            <span class="form-text text-secondary">(<?= strtolower(__('forms.labels.less_equal_balance')) ?>)</span>
                         </div>
                     </div>
                     <!-- modal footer  -->
@@ -545,7 +574,7 @@
                                 </span>
                                 <input type="text" class="form-control form-control-sm text-secondary" id="input-update-seuil" required>
                             </div>
-                            <span class="form-text text-secondary"><?= strtolower(__('forms.labels.less_equal_balance')) ?></span>
+                            <span class="form-text text-secondary">(<?= strtolower(__('forms.labels.less_equal_balance')) ?>)</span>
                         </div>
                     </div>
                     <!-- modal footer  -->
