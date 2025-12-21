@@ -708,7 +708,7 @@
                     <div class="d-flex justify-content-center gap-4">
                         <!-- status active  -->
                         <div class="form-check">
-                            <input type="radio" class="form-check-input form-check-input-sm" name="download-status-user" id="download-status-user-active" value="acive" checked>
+                            <input type="radio" class="form-check-input form-check-input-sm" name="download-status-user" id="download-status-user-active" value="active" checked>
                             <label for="form-check-label" for="download-status-user-active"><?= __('forms.labels.active') ?></label>
                         </div>
                         <!-- status deleted  -->

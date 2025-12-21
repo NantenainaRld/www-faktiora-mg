@@ -53,6 +53,10 @@ class Router
         else if ($this->controller === 'Chart-js') {
             return;
         }
+        //select2
+        else if ($this->controller === 'Select2') {
+            return;
+        }
         //no error
         else {
             try {

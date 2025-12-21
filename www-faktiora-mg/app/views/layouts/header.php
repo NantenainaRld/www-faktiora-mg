@@ -169,6 +169,9 @@
     <?php if ($_SESSION['menu'] === 'cash'): ?>
         <link rel="stylesheet" href="<?= SITE_URL ?>/css/caisse-dashboard.css">
     <?php endif; ?>
+    <!-- style select2  -->
+    <link rel="stylesheet" href="<?= SITE_URL ?>/select2/css/select2.min.css">
+    <link rel="stylesheet" href="<?= SITE_URL ?>/select2/css/select2-bootstrap-5-theme.min.css">
 </head>
 
 <body class="d-flex flex-column vw-100 vh-100 overflow-hidden">

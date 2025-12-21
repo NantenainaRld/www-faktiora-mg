@@ -30,7 +30,9 @@ return [
         'distribution_status' => 'Répartition selon status',
         'cash_add' => "Ajout d'une nouvelle caisse",
         'cash_update' => "Modification de caisse",
-        'restore_caisse' => 'Récupération des caisses'
+        'restore_caisse' => 'Récupération des caisses',
+        'free_caisse' => "Libération des caisses",
+        'add_ligne_caisse' => "Ajout d'une ligne de caisse"
     ],
     'labels' => [
         'all' => 'tout',
@@ -176,7 +178,12 @@ return [
         'yes_restore' => 'Oui, récupérer',
         'question_restore_caisse_1' => 'Voulez-vous vraiment récupérer la caisse numéro <b>:field</b> ?',
         'question_restore_caisse_plur' => 'Voulez-vous vraiment récupérer ces <b>:field<b> caisses ?',
-        'free_c' => 'Libérer'
+        'free_c' => 'Libérer',
+        'question_free_caisse_1' => "Voulez-vous vraiment libérer la caisse numéro <b>:field</b> ?",
+        'question_free_caisse_plur' => "Voulez-vous vraiment libérer ces <b>:field</b> caisses ?",
+        'yes_free' => 'Oui, libérer',
+        'date_start' => 'Date de début',
+        'date_end' => 'Date de fin'
     ],
     'times' => [
         'minute' => "minute",

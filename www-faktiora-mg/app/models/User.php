@@ -347,7 +347,7 @@ class User extends Database
 
         try {
 
-            $response = parent::selectQuery("SELECT id_utilisateur , CONCAT(nom_utilisateur, ' ', prenoms_utilisateur) AS nom_prenoms FROM utilisateur WHERE role = 'caissier' AND etat_utilisateur != 'supprimé' ");
+            $response = parent::selectQuery("SELECT id_utilisateur , CONCAT(nom_utilisateur, ' ', prenoms_utilisateur) AS fullname FROM utilisateur WHERE role = 'caissier' AND etat_utilisateur != 'supprimé' ORDER BY id_utilisateur ASC ");
 
             //error
             if ($response['message_type'] === 'error') {
@@ -483,6 +483,48 @@ class User extends Database
 
         return $response;
     }
+
+    //update etat_utilisateur to connected
+    public function updateToConnected()
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+        ];
+
+        try {
+
+            $response = parent::executeQuery("UPDATE utilisateur SET etat_utilisateur = 'connecté' WHERE id_utilisateur = :id ", ['id' => $this->id_utilisateur]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.auth_loginUser',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+    }
+
 
     //update account
     public function updateAccount()
@@ -944,52 +986,6 @@ class User extends Database
         return $response;
     }
 
-    //update etat_utilisateur to connected
-    public function updateToConnected()
-    {
-        $response = [
-            'message_type' => 'success',
-            'message' => 'success',
-        ];
-
-        try {
-
-            $response = parent::executeQuery("UPDATE utilisateur SET etat_utilisateur = 'connecté' WHERE id_utilisateur = :id ", ['id' => $this->id_utilisateur]);
-
-            //error
-            if ($response['message_type'] === 'error') {
-                return $response;
-            }
-
-            $response = [
-                'message_type' => 'success',
-                'message' => 'success',
-            ];
-
-            return $response;
-        } catch (Throwable $e) {
-            error_log(
-                $e->getMessage() .
-                    ' - Line : ' . $e->getLine() .
-                    ' - File : ' . $e->getFile()
-            );
-
-            $response = [
-                'message_type' => 'error',
-                'message' => __(
-                    'errors.catch.auth_loginUser',
-                    ['field' => $e->getMessage() .
-                        ' - Line : ' . $e->getLine() .
-                        ' - File : ' . $e->getFile()]
-                )
-            ];
-
-            return $response;
-        }
-
-        return $response;
-    }
-
     //static - list all user
     public static function listAllUser($status)
     {
@@ -997,16 +993,17 @@ class User extends Database
 
         try {
 
-            $sql = "";
-            //user - deleted
+            $user_cond = "1=1 ";
+            //status - deleted
             if ($status === 'deleted') {
-                $sql = "SELECT id_utilisateur , CONCAT(nom_utilisateur, ' ', prenoms_utilisateur) AS nom_prenoms, sexe_utilisateur, email_utilisateur, role FROM utilisateur WHERE etat_utilisateur = 'supprimé' ORDER BY id_utilisateur ";
+                $user_cond = "etat_utilisateur = 'supprimé' ";
             }
-            //user - not deleted
-            else {
-                $sql = "SELECT id_utilisateur , CONCAT(nom_utilisateur, ' ', prenoms_utilisateur) AS nom_prenoms, sexe_utilisateur, email_utilisateur, role FROM utilisateur WHERE etat_utilisateur != 'supprimé' ORDER BY id_utilisateur ";
+            //status - active
+            else if ($status === 'active') {
+                $user_cond = "etat_utilisateur != 'supprimé' ";
             }
-            $response = parent::selectQuery($sql);
+
+            $response = parent::selectQuery("SELECT id_utilisateur , CONCAT(nom_utilisateur, ' ', prenoms_utilisateur) AS nom_prenoms, sexe_utilisateur, email_utilisateur, role FROM utilisateur WHERE {$user_cond} ORDER BY id_utilisateur ASC");
 
             //error
             if ($response['message_type'] === 'error') {

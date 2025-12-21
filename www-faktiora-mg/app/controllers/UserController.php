@@ -569,7 +569,7 @@ class UserController extends Controller
 
         //status
         $status = strtolower(trim($_GET['status'] ?? 'active'));
-        $status = ($status === 'deleted') ? $status : 'active';
+        $status = ($status === 'deleted' || $status === 'all') ? $status : 'active';
 
         try {
 
@@ -735,7 +735,7 @@ class UserController extends Controller
         }
 
         //list all user
-        $response = User::listAllUser('');
+        $response = User::listAllUser('all');
 
         echo json_encode($response);
         return;

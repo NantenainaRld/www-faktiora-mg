@@ -67,6 +67,9 @@
    <script src="<?= SITE_URL ?>/chart-js/chart.umd.min.js"></script>
    <script src="<?= SITE_URL ?>/chart-js/chartjs-adapter-luxon.js"></script>
    <script src="<?= SITE_URL ?>/chart-js/chartjs-plugin-zoom.min.js"></script>
+   <!-- script select2  -->
+   <script src="<?= SITE_URL ?>/select2/js/jquery.min.js"></script>
+   <script src="<?= SITE_URL ?>/select2/js/select2.min.js"></script>
    <!-- script home -->
    <?php if ($_SESSION['menu'] === 'home'): ?>
       <script src="<?= SITE_URL ?>/js/home.js"></script>

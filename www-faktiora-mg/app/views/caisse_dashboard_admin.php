@@ -177,7 +177,7 @@
                                                         <i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?>
                                                     </button>
                                                     <!-- btn free caisse -->
-                                                    <button class="btn btn-outline-info fw-bold w-auto btn-sm me-2 my-2">
+                                                    <button class="btn btn-outline-info fw-bold w-auto btn-sm me-2 my-2" id="btn-free-caisse">
                                                         <i class="fad fa-circle-minus me-2"></i><?= __('forms.labels.free_c') ?>
                                                     </button>
                                                     <!-- btn restore caisse  -->
@@ -226,14 +226,14 @@
                                     <div class="card-body d-flex flex-column justify-content-between">
                                         <!-- title table -->
                                         <div class="card-title text-secondary flex-grow-0" id="chart-transactions-curves-title">
-                                            <i class="fad fa-list-dropdown me-2"></i><?= __('forms.titles.cash_line') ?>
+                                            <i class="fad fa-list-dropdown me-2"></i><?= __('forms.titles.cash_line') . ' (' . strtolower(__('forms.labels.cash_num')) ?>: <span id="table-lc-cash-num"></span>)
                                         </div>
                                         <div class="row justify-content-center  overflow-auto align-items-top flex-grow-1">
                                             <div class="col-12">
                                                 <!-- btn  -->
                                                 <div class="row g-0 justify-content-start mb-2">
                                                     <!-- btn add ligne_caisse  -->
-                                                    <button class="btn btn-outline-primary fw-bold w-auto btn-sm me-2 my-2" data-bs-toggle='modal' data-bs-target='#modal-add-user'>
+                                                    <button class="btn btn-outline-primary fw-bold w-auto btn-sm me-2 my-2" id="btn-add-ligne-caisse">
                                                         <i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?>
                                                     </button>
                                                     <!-- btn delete ligne_caisse  -->
@@ -515,7 +515,7 @@
                     <!-- modal body  -->
                     <div class="modal-body">
                         <!-- num_caisse  -->
-                        <div class="text-center text-secondary" id="num-caisse">0</div>
+                        <div class="text-center text-secondary mb-1" id="num-caisse">0</div>
                         <!-- update num_caisse_update  -->
                         <div class="mb-2">
                             <label for="input-update-num-caisse-update" class="form-label"><?= __('forms.labels.cash_num') ?> <span class="text-danger">*</span></label>
@@ -594,6 +594,78 @@
                     <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-restore-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
                     <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-restore-caisse"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_restore') ?></button>
                 </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal free caisse  -->
+    <div class="modal fade" id="modal-free-caisse" tabindex="-1" aria-labelledby="modalFreeCaisse" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <!-- modal header  -->
+                <div class="modal-header bg-info text-light">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-minus me-2"></i><?= __('forms.titles.free_caisse') ?></h6>
+                </div>
+                <!-- modal body  -->
+                <div class="modal-body">
+                    <div class="message">Voulez-vous vraiment libérer ces ... caisses ?</div>
+                </div>
+                <!-- modal footer  -->
+                <div class="modal-footer d-flex flex-nowrap justify-content-end">
+                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-free-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
+                    <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-free-caisse"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_free') ?></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal add ligne_caisse  -->
+    <div class="modal fade" id="modal-add-ligne-caisse" tabindex="-1" aria-labelledby="modalAddLigneCaisse" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <!-- modal header  -->
+                <div class="modal-header bg-green-0 text-light">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-plus me-2"></i><?= __('forms.titles.add_ligne_caisse') ?></h6>
+                </div>
+                <form>
+                    <!-- modal body  -->
+                    <div class="modal-body">
+                        <!-- cash num  -->
+                        <div class="text-center text-secondary mb-1"><?= strtolower(__('forms.labels.cash_num')) ?> : <b><span id="add-ligne-caisse-cash-num"></span></b></div>
+                        <!-- date_debut  -->
+                        <div class="mb-3">
+                            <label for="input-add-date-debut" class="form-label"><?= __('forms.labels.date_start') ?> <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
+                                <input type="datetime-local" class="form-control form-control-sm text-secondary" id="input-add-date-debut" max="<?= date('Y-m-d\TH:i') ?>" required>
+                            </div>
+                        </div>
+                        <!-- date_fin  -->
+                        <div class="mb-3">
+                            <label for="input-add-date-fin" class="form-label"><?= __('forms.labels.date_end') ?> <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
+                                <input type="datetime-local" class="form-control form-control-sm text-secondary" id="input-add-date-fin" max="<?= date('Y-m-d\TH:i') ?>">
+                            </div>
+                            <span class="form-text">(si vide : la caisse sera occupée si elle est libre)</span>
+                        </div>
+                        <!-- select - id_utilisateur  -->
+                        <div class="mb-3">
+                            <label for="select-add-id-utilisateur" class="form-label"><?= ucfirst(__('forms.labels.cashier')) ?> <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-user"></i></span>
+                                <select name="" id="select-add-id-utilisateur" class="form-select form-select-sm select2" required>
+                                    <option></option>
+                                    <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
+                                </select>
+                                <button type="button" class="input-group-text" id="btn-refresh-list-user"><i class="fad fa-arrow-rotate-left"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- modal footer  -->
+                    <div class="modal-footer d-flex flex-nowrap justify-content-end">
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-add-ligne-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-add-ligne-caisse"><i class="fad fa-check me-2"></i><?= __('forms.labels.add') ?></button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

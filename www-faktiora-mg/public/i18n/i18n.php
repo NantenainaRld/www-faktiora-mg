@@ -48,5 +48,8 @@
         question_delete_permanent_caisse_plur: "<?= __('forms.labels.question_delete_permanent_caisse_plur') ?>",
         question_restore_caisse_1: "<?= __('forms.labels.question_restore_caisse_1') ?>",
         question_restore_caisse_plur: "<?= __('forms.labels.question_restore_caisse_plur') ?>",
+        question_free_caisse_1: "<?= __('forms.labels.question_restore_caisse_1') ?>",
+        question_free_caisse_plur: "<?= __('forms.labels.question_restore_caisse_plur') ?>",
+        select: "<?= __('forms.labels.select') ?>",
     }
 </script>

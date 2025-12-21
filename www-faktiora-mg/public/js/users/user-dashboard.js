@@ -2578,62 +2578,60 @@ document.addEventListener("DOMContentLoaded", async () => {
               }
               //success
               else {
-                {
-                  //alert
-                  const alertTemplate =
-                    modalUpdateUser.querySelector(".alert-template");
-                  const clone = alertTemplate.content.cloneNode(true);
-                  const alert = clone.querySelector(".alert");
-                  const progressBar = alert.querySelector(".progress-bar");
-                  //alert type
-                  alert.classList.add("alert-success");
-                  //icon
-                  alert.querySelector(".fad").classList.add("fa-check-circle");
-                  //message
-                  alert.querySelector(".alert-message").innerHTML =
-                    response.message;
-                  //progress bar
-                  progressBar.style.transition = "width 10s linear";
-                  progressBar.style.width = "100%";
+                //alert
+                const alertTemplate =
+                  modalUpdateUser.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-success");
+                //icon
+                alert.querySelector(".fad").classList.add("fa-check-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
 
-                  //add alert
-                  tbody.closest("div").prepend(alert);
+                //add alert
+                tbody.closest("div").prepend(alert);
 
-                  //progress lanch animation
-                  setTimeout(() => {
-                    progressBar.style.width = "0%";
-                  }, 10);
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
 
-                  //auto close alert
-                  setTimeout(() => {
-                    alert.querySelector(".btn-close").click();
-                  }, 10000);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
 
-                  //hide modal
-                  modalUpdateUser
-                    .querySelector("#btn-close-modal-update-user")
-                    .click();
+                //hide modal
+                modalUpdateUser
+                  .querySelector("#btn-close-modal-update-user")
+                  .click();
 
-                  //refesh filter user
-                  filterUser(
-                    tbody,
-                    divChartRole,
-                    divChartStatus,
-                    status,
-                    role,
-                    sexe,
-                    arrange_by,
-                    order,
-                    num_caisse,
-                    date_by,
-                    per,
-                    from,
-                    to,
-                    month,
-                    year,
-                    search_user
-                  );
-                }
+                //refesh filter user
+                filterUser(
+                  tbody,
+                  divChartRole,
+                  divChartStatus,
+                  status,
+                  role,
+                  sexe,
+                  arrange_by,
+                  order,
+                  num_caisse,
+                  date_by,
+                  per,
+                  from,
+                  to,
+                  month,
+                  year,
+                  search_user
+                );
               }
             } catch (e) {
               console.error(e);

@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  setTimeout(async () => 
+  setTimeout(async () => {
     //load template real
     container.append(templateRealContent.content.cloneNode(true));
 
@@ -1342,7 +1342,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     //=======================  FREE CAISSE =========================
-    //modal free caisse
+    // modal free caisse
     const modalFreeCaisse = document.getElementById("modal-free-caisse");
     //btn free caisse
     const btnFreeCaisse = tbodyCaisse
@@ -1391,27 +1391,27 @@ document.addEventListener("DOMContentLoaded", async () => {
       else {
         //modal message 1
         if (selectedCaisse.length === 1) {
-          modalRestoreCaisse.querySelector(".message").innerHTML =
-            lang.question_restore_caisse_1.replace(
+          modalFreeCaisse.querySelector(".message").innerHTML =
+            lang.question_free_caisse_1.replace(
               ":field",
               selectedCaisse[0].closest("tr").dataset.numCaisse
             );
         }
         //modal message plur
         else {
-          modalRestoreCaisse.querySelector(".message").innerHTML =
-            lang.question_restore_caisse_plur.replace(
+          modalFreeCaisse.querySelector(".message").innerHTML =
+            lang.question_free_caisse_plur.replace(
               ":field",
               selectedCaisse.length
             );
         }
 
-        //show modal restore caisse
-        new bootstrap.Modal(modalRestoreCaisse).show();
+        //show modal free caisse
+        new bootstrap.Modal(modalFreeCaisse).show();
 
-        //===== EVENT btn confirm restore caisse
-        modalRestoreCaisse
-          .querySelector("#btn-confirm-restore-caisse")
+        //===== EVENT btn confirm free caisse
+        modalFreeCaisse
+          .querySelector("#btn-confirm-free-caisse")
           .addEventListener("click", async () => {
             try {
               //nums_caisse
@@ -1420,7 +1420,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 (selected) => selected.closest("tr").dataset.numCaisse
               );
               //FETCH api restore all caisse
-              const response = await apiRequest("/caisse/restore_all_caisse", {
+              const response = await apiRequest("/caisse/free_all_caisse", {
                 method: "PUT",
                 body: { nums_caisse: nums_caisse },
               });
@@ -1445,7 +1445,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 progressBar.style.width = "100%";
 
                 //add alert
-                modalRestoreCaisse.querySelector(".modal-body").prepend(alert);
+                modalFreeCaisse.querySelector(".modal-body").prepend(alert);
 
                 //progress launch animation
                 setTimeout(() => {
@@ -1478,7 +1478,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 progressBar.style.width = "100%";
 
                 //add alert
-                modalRestoreCaisse.querySelector(".modal-body").prepend(alert);
+                modalFreeCaisse.querySelector(".modal-body").prepend(alert);
 
                 //progress launch animation
                 setTimeout(() => {
@@ -1520,8 +1520,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                   alert.querySelector(".btn-close").click();
                 }, 10000);
                 //close modal
-                modalRestoreCaisse
-                  .querySelector("#btn-close-modal-restore-caisse")
+                modalFreeCaisse
+                  .querySelector("#btn-close-modal-free-caisse")
                   .click();
 
                 //refesh filter user
@@ -1547,203 +1547,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
       }
     });
-    // //   //======================= DECONNECT USER ==========================
-    // //   //modal deconnect user
-    // //   const modalDeconnectUser = document.getElementById("modal-deconnect-user");
-    // //   //btn deconnect user
-    // //   const btnDeconnectUser = tbody
-    // //     .closest("table")
-    // //     .parentElement.querySelector("#btn-deconnect-user");
-    // //   //=====EVENT btn deconnect user
-    // //   btnDeconnectUser.addEventListener("click", () => {
-    // //     //selected user
-    // //     const selectedUser = tbody.querySelectorAll(
-    // //       "input[type='checkbox']:checked"
-    // //     );
-    // //     //no selection
-    // //     if (selectedUser.length <= 0) {
-    // //       //alert
-    // //       const alertTemplate = document.getElementById("alert-template");
-    // //       const clone = alertTemplate.content.cloneNode(true);
-    // //       const alert = clone.querySelector(".alert");
-    // //       const progressBar = alert.querySelector(".progress-bar");
-    // //       //alert type
-    // //       alert.classList.add("alert-warning");
-    // //       //icon
-    // //       alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    // //       //message
-    // //       alert.querySelector(".alert-message").innerHTML =
-    // //         lang.user_ids_user_empty;
-    // //       //progress bar
-    // //       progressBar.style.transition = "width 10s linear";
-    // //       progressBar.style.width = "100%";
-    // //       //add alert
-    // //       tbody.closest("div").prepend(alert);
-    // //       //progress lanch animation
-    // //       setTimeout(() => {
-    // //         progressBar.style.width = "0%";
-    // //       }, 10);
-    // //       //auto close alert
-    // //       setTimeout(() => {
-    // //         alert.querySelector(".btn-close").click();
-    // //       }, 10000);
-    // //       return;
-    // //     }
-    // //     //selection
-    // //     else {
-    // //       //modal message 1
-    // //       if (selectedUser.length === 1) {
-    // //         modalDeconnectUser.querySelector(".message").innerHTML =
-    // //           lang.question_deconnect_user_1.replace(
-    // //             ":field",
-    // //             selectedUser[0].closest("tr").dataset.userId
-    // //           );
-    // //       }
-    // //       //modal message plur
-    // //       else {
-    // //         modalDeconnectUser.querySelector(".message").innerHTML =
-    // //           lang.question_deconnect_user_plur.replace(
-    // //             ":field",
-    // //             selectedUser.length
-    // //           );
-    // //       }
-    // //       //show modal deconnect user
-    // //       new bootstrap.Modal(modalDeconnectUser).show();
-    // //       //====== EVENT btn confirm deconnect user
-    // //       modalDeconnectUser
-    // //         .querySelector("#btn-confirm-deconnect-user")
-    // //         .addEventListener("click", async () => {
-    // //           try {
-    // //             //ids_user
-    // //             let ids_user = [...selectedUser];
-    // //             ids_user = ids_user.map(
-    // //               (selected) => selected.closest("tr").dataset.userId
-    // //             );
-    // //             //FETCH api delete permanent all user
-    // //             const response = await apiRequest("/user/deconnect_all_user", {
-    // //               method: "PUT",
-    // //               body: { ids_user: ids_user },
-    // //             });
-    // //             //error
-    // //             if (response.message_type === "error") {
-    // //               //alert
-    // //               const alertTemplate = document.getElementById("alert-template");
-    // //               const clone = alertTemplate.content.cloneNode(true);
-    // //               const alert = clone.querySelector(".alert");
-    // //               const progressBar = alert.querySelector(".progress-bar");
-    // //               //alert type
-    // //               alert.classList.add("alert-danger");
-    // //               //icon
-    // //               alert
-    // //                 .querySelector(".fad")
-    // //                 .classList.add("fa-exclamation-triangle");
-    // //               //message
-    // //               alert.querySelector(".alert-message").innerHTML =
-    // //                 response.message;
-    // //               //progress bar
-    // //               progressBar.style.transition = "width 20s linear";
-    // //               progressBar.style.width = "100%";
-    // //               //add alert
-    // //               tbody.closest("div").prepend(alert);
-    // //               //progress lanch animation
-    // //               setTimeout(() => {
-    // //                 progressBar.style.width = "0%";
-    // //               }, 10);
-    // //               //auto close alert
-    // //               setTimeout(() => {
-    // //                 alert.querySelector(".btn-close").click();
-    // //               }, 20000);
-    // //               return;
-    // //             }
-    // //             //invalid
-    // //             else if (response.message_type === "invalid") {
-    // //               //alert
-    // //               const alertTemplate = document.getElementById("alert-template");
-    // //               const clone = alertTemplate.content.cloneNode(true);
-    // //               const alert = clone.querySelector(".alert");
-    // //               const progressBar = alert.querySelector(".progress-bar");
-    // //               //alert type
-    // //               alert.classList.add("alert-warning");
-    // //               //icon
-    // //               alert
-    // //                 .querySelector(".fad")
-    // //                 .classList.add("fa-exclamation-circle");
-    // //               //message
-    // //               alert.querySelector(".alert-message").innerHTML =
-    // //                 response.message;
-    // //               //progress bar
-    // //               progressBar.style.transition = "width 10s linear";
-    // //               progressBar.style.width = "100%";
-    // //               //add alert
-    // //               tbody.closest("div").prepend(alert);
-    // //               //progress lanch animation
-    // //               setTimeout(() => {
-    // //                 progressBar.style.width = "0%";
-    // //               }, 10);
-    // //               //auto close alert
-    // //               setTimeout(() => {
-    // //                 alert.querySelector(".btn-close").click();
-    // //               }, 10000);
-    // //               return;
-    // //             }
-    // //             //succcess
-    // //             else {
-    // //               //alert
-    // //               const alertTemplate = document.getElementById("alert-template");
-    // //               const clone = alertTemplate.content.cloneNode(true);
-    // //               const alert = clone.querySelector(".alert");
-    // //               const progressBar = alert.querySelector(".progress-bar");
-    // //               //alert type
-    // //               alert.classList.add("alert-success");
-    // //               //icon
-    // //               alert.querySelector(".fad").classList.add("fa-check-circle");
-    // //               //message
-    // //               alert.querySelector(".alert-message").innerHTML =
-    // //                 response.message;
-    // //               //progress bar
-    // //               progressBar.style.transition = "width 10s linear";
-    // //               progressBar.style.width = "100%";
-    // //               //add alert
-    // //               tbody.closest("div").prepend(alert);
-    // //               //progress lanch animation
-    // //               setTimeout(() => {
-    // //                 progressBar.style.width = "0%";
-    // //               }, 10);
-    // //               //auto close alert
-    // //               setTimeout(() => {
-    // //                 alert.querySelector(".btn-close").click();
-    // //               }, 10000);
-    // //               //close modal
-    // //               modalDeconnectUser
-    // //                 .querySelector("#btn-close-modal-deconnect-user")
-    // //                 .click();
-    // //               //refesh filter user
-    // //               filterUser(
-    // //                 tbody,
-    // //                 container.querySelector("#chart-role"),
-    // //                 container.querySelector("#chart-status"),
-    // //                 selectStatus.value.trim(),
-    // //                 selectRole.value.trim(),
-    // //                 selectSex.value.trim(),
-    // //                 selectArrangeBy.value.trim(),
-    // //                 selectOrder.value.trim(),
-    // //                 selectNumCaisse.value.trim(),
-    // //                 selectDateBy.value.trim(),
-    // //                 selectPer.value.trim(),
-    // //                 dateFrom.value.trim(),
-    // //                 dateTo.value.trim(),
-    // //                 selectMonth.value.trim(),
-    // //                 selectYear.value.trim(),
-    // //                 inputSearch.value.trim()
-    // //               );
-    // //               return;
-    // //             }
-    // //           } catch (e) {
-    // //             console.error(e);
-    // //           }
-    // //         });
-    // //     }
-    // //   });
+
+    //====================== ADD LIGNE CAISSE ========================
+    addLigneCaisse(container.querySelector("#tbody-lc"));
     // //   //====================== PRINT ALL USER ===========================
     // //   //modal print all user
     // //   const modalPrintAllUser = document.getElementById("modal-print-all-user");
@@ -1812,7 +1618,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // //         }
     // //       });
     // //   });
-  , 1050);
+  }, 1050);
 
   //================ FUNCTIONS ================
 
@@ -2037,6 +1843,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         tr.addEventListener("click", async () => {
           //tbody ligne_caisse
           const tbodyLC = container.querySelector("#tbody-lc");
+          //table lc cash num
+          const tableLcCashNum = container.querySelector("#table-lc-cash-num");
           //rest
           let rest =
               Number(tr.dataset.totalAe) +
@@ -2112,6 +1920,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                                                                 <span class="bg-second placeholder w-100 rounded-1" style="height: 2vh !important;"></span>
                                                             </td>
                                                         </tr>`;
+            //remove table lc cash num
+            tableLcCashNum.innerHTML = "";
           }
           //add selection
           else {
@@ -2166,8 +1976,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
             //success effective transactions
             else {
-              //all dat
-              // es
+              //all dates
               const allDates = [
                 ...new Set([
                   ...autreEntreeEffective.data.map((d) => d.date),
@@ -2193,6 +2002,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 sortieEffective
               );
 
+              //table lc cash num
+              tableLcCashNum.innerHTML = tr.dataset.numCaisse;
               //===== table ligne_caisse
               filterLigneCaisse(tbodyLC, tr.dataset.numCaisse, "", "", "");
             }
@@ -2993,14 +2804,320 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     });
   }
+  //function - add ligne_caisse
+  function addLigneCaisse(tbodyLC) {
+    //btn add ligne_caisse
+    const btnAddLigneCaisse = container.querySelector("#btn-add-ligne-caisse");
+    //modal add ligne_caisse
+    const modalAddLigneCaisse = document.getElementById(
+      "modal-add-ligne-caisse"
+    );
+
+    //===== EVENT btn add ligne_caisse
+    btnAddLigneCaisse.addEventListener("click", () => {
+      //num_caisse
+      const numCaisse = container
+        .querySelector("#table-lc-cash-num")
+        .textContent.trim();
+      //num_caisse - empty
+      if (numCaisse === "") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-warning");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          "Veuiller séléctionner une caisse";
+        //progress bar
+        progressBar.style.transition = "width 10s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        tbodyLC.closest("div").prepend(alert);
+
+        //progress launch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 10000);
+
+        return;
+      }
+      //modal - num_caisse
+      modalAddLigneCaisse.querySelector(
+        "#add-ligne-caisse-cash-num"
+      ).innerHTML = numCaisse;
+
+      //input - add date_debut
+      const inputAddDateDebut = modalAddLigneCaisse.querySelector(
+        "#input-add-date-debut"
+      );
+      //input - add date_fin
+      const inputAddDateFin = modalAddLigneCaisse.querySelector(
+        "#input-add-date-fin"
+      );
+      //select - add id_utilisateur
+      const selectAddIdUtilisateur = modalAddLigneCaisse.querySelector(
+        "#select-add-id-utilisateur"
+      );
+
+      //initialize select2
+      const $modalAddligneCaisse = $(modalAddLigneCaisse);
+      $(".select2").select2({
+        theme: "bootstrap-5",
+        placeholder: lang.select.toLowerCase(),
+        dropdownParent: $modalAddligneCaisse,
+      });
+
+      //list user
+      listUser(selectAddIdUtilisateur);
+
+      //===== EVENT - input add date_date_debut
+      inputAddDateDebut.addEventListener("input", (e) => {
+        //set min date_fin
+        inputAddDateFin.min = e.target.value;
+      });
+      //===== EVENT - input add date_fin
+      inputAddDateFin.addEventListener("input", (e) => {
+        //set max date_debut
+        inputAddDateDebut.max = e.target.value;
+      });
+
+      //show modal add ligne_caisse
+      new bootstrap.Modal(modalAddLigneCaisse).show();
+
+      //===== EVENT - btn refresh list user
+      modalAddLigneCaisse
+        .querySelector("#btn-refresh-list-user")
+        .addEventListener("click", () => {
+          listUser(selectAddIdUtilisateur);
+        });
+
+      //===== EVENT - form add ligne_caisse submit
+      modalAddLigneCaisse
+        .querySelector("form")
+        .addEventListener("submit", async (e) => {
+          //suspend submit
+          e.preventDefault();
+
+          //check validity
+          if (!e.target.checkValidity()) {
+            e.target.reportValidity();
+            return;
+          }
+
+          try {
+            //FETCH api add ligne_caisse
+            const apiAddLigneCaisse = await apiRequest(
+              "/caisse/add_ligne_caisse",
+              {
+                method: "POST",
+                body: {
+                  num_caisse: numCaisse,
+                  date_debut: inputAddDateDebut.value.trim(),
+                  date_fin: inputAddDateFin.value.trim(),
+                  id_utilisateur: selectAddIdUtilisateur.value.trim(),
+                },
+              }
+            );
+            //error
+            if (apiAddLigneCaisse.message_type === "error") {
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-danger");
+              //icon
+              alert
+                .querySelector(".fad")
+                .classList.add("fa-exclamation-triangle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                apiAddLigneCaisse.message;
+              //progress bar
+              progressBar.style.transition = "width 20s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              modalAddLigneCaisse.querySelector(".modal-body").prepend(alert);
+
+              //progress launch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 20000);
+
+              return;
+            }
+            //invalid
+            else if (apiAddLigneCaisse.message_type === "invalid") {
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-warning");
+              //icon
+              alert
+                .querySelector(".fad")
+                .classList.add("fa-exclamation-circle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                apiAddLigneCaisse.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              modalAddLigneCaisse.querySelector(".modal-body").prepend(alert);
+
+              //progress launch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
+
+              return;
+            }
+            //sucess
+            else {
+              //alert
+              const alertTemplate = container.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-success");
+              //icon
+              alert.querySelector(".fad").classList.add("fa-check-circle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                apiAddLigneCaisse.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              tbodyLC.closest("div").prepend(alert);
+
+              //progress lanch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
+
+              //hide modal
+              modalAddLigneCaisse
+                .querySelector("#btn-close-modal-add-ligne-caisse")
+                .click();
+
+              //refresh filter caisse
+              filterCaisse(
+                tbodyCaisse,
+                container.querySelector("#chart-cash-number"),
+                selectStatus.value.trim(),
+                selectArrangeBy.value.trim(),
+                selectOrder.value.trim(),
+                selectDateBy.value.trim(),
+                selectPer.value.trim(),
+                dateFrom.value.trim(),
+                dateTo.value.trim(),
+                selectMonth.value.trim(),
+                selectYear.value.trim(),
+                inputSearch.value.trim()
+              );
+              //refresh filter ligne_caisse
+              filterLigneCaisse(tbodyLC, numCaisse, "", "", "");
+            }
+          } catch (e) {
+            console.error(e);
+          }
+        });
+    });
+  }
+  //function - list user
+  async function listUser(select) {
+    try {
+      //FETCH api list all caissier
+      const response = await apiRequest("/user/list_all_user");
+
+      //error
+      if (response.message_type === "error") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-danger");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
+        //message
+        alert.querySelector(".alert-message").innerHTML = response.message;
+        //progress bar
+        progressBar.style.transition = "width 20s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        select.closest("div").prepend(alert);
+
+        //progress launch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 20000);
+
+        return;
+      }
+
+      //set options
+      select.innerHTML = "<option></option>";
+      response.data.forEach((line) => {
+        const option = document.createElement("option");
+        option.value = line.id_utilisateur;
+        option.innerText = `${line.id_utilisateur} - ${line.nom_prenoms}`;
+
+        //append option to select
+        select.append(option);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
   // //function - list num_caisse
-  // async function listNumCaisse(selectNumCaisse, tbody) {
+  // async function listNumCaisse(select) {
   //   try {
-  //     const response = await apiRequest("/caisse/list_all_caisse");
+  //     //FETCH api list all caissier
+  //     const response = await apiRequest("/caissier");
+
   //     //error
   //     if (response.message_type === "error") {
   //       //alert
-  //       const alertTemplate = document.getElementById("alert-template");
+  //       const alertTemplate = document.querySelector(".alert-template");
   //       const clone = alertTemplate.content.cloneNode(true);
   //       const alert = clone.querySelector(".alert");
   //       const progressBar = alert.querySelector(".progress-bar");
@@ -3013,9 +3130,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   //       //progress bar
   //       progressBar.style.transition = "width 20s linear";
   //       progressBar.style.width = "100%";
+
   //       //add alert
-  //       tbody.closest("div").prepend(alert);
-  //       //progress lanch animation
+  //       select.closest("div").prepend(alert);
+
+  //       //progress launch animation
   //       setTimeout(() => {
   //         progressBar.style.width = "0%";
   //       }, 10);
@@ -3023,49 +3142,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   //       setTimeout(() => {
   //         alert.querySelector(".btn-close").click();
   //       }, 20000);
+
   //       return;
   //     }
-  //     //invalid
-  //     else if (response.message_type === "invalid") {
-  //       //alert
-  //       const alertTemplate = document.getElementById("alert-template");
-  //       const clone = alertTemplate.content.cloneNode(true);
-  //       const alert = clone.querySelector(".alert");
-  //       const progressBar = alert.querySelector(".progress-bar");
-  //       //alert type
-  //       alert.classList.add("alert-warning");
-  //       //icon
-  //       alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-  //       //message
-  //       alert.querySelector(".alert-message").innerHTML = response.message;
-  //       //progress bar
-  //       progressBar.style.transition = "width 10s linear";
-  //       progressBar.style.width = "100%";
-  //       //add alert
-  //       tbody.closest("div").prepend(alert);
-  //       //progress lanch animation
-  //       setTimeout(() => {
-  //         progressBar.style.width = "0%";
-  //       }, 10);
-  //       //auto close alert
-  //       setTimeout(() => {
-  //         alert.querySelector(".btn-close").click();
-  //       }, 10000);
-  //       return;
-  //     }
-  //     selectNumCaisse.innerHTML = "";
-  //     //option all
-  //     const optionAll = document.createElement("option");
-  //     optionAll.selected = true;
-  //     optionAll.value = "all";
-  //     optionAll.innerText = lang.all;
-  //     //append option all
-  //     selectNumCaisse.append(optionAll);
+
+  //     //set options
+  //     select.innerHTML = "<option></option>";
   //     response.data.forEach((line) => {
   //       const option = document.createElement("option");
-  //       option.value = line.num_caisse;
-  //       option.innerText = line.num_caisse;
-  //       selectNumCaisse.append(option);
+  //       option.value = line.id_utilisateur;
+  //       option.innerText = `${line.id_utilisateur} - ${line.fullname}`;
+
+  //       //append option to select
+  //       select.append(option);
   //     });
   //   } catch (e) {
   //     console.error(e);
