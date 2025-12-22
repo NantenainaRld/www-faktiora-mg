@@ -529,6 +529,7 @@ class UserController extends Controller
             header('Location: ' . SITE_URL . '/auth');
             return;
         }
+
         //not admin
         if ($is_loged_in->getRole() !== 'admin') {
             //redirect to user index

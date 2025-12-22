@@ -155,7 +155,7 @@ class Caisse extends Database
 
         try {
 
-            $response = parent::selectQuery("SELECT num_caisse FROM caisse WHERE etat_caisse = 'libre' ");
+            $response = parent::selectQuery("SELECT num_caisse FROM caisse WHERE etat_caisse = 'libre' ORDER BY num_caisse ASC");
 
             //error
             if ($response['message_type'] === 'error') {

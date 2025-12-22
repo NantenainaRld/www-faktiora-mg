@@ -588,13 +588,6 @@ class CaisseController extends Controller
             return;
         }
 
-        //role - not caissier
-        if ($is_loged_in->getRole() !== 'caissier') {
-            //redirect to caisse index
-            header("Location: " . SITE_URL . '/caisse');
-            return;
-        }
-
         //list free caisse
         $response = Caisse::listFreeCaisse();
 
@@ -1944,9 +1937,9 @@ class CaisseController extends Controller
 
         //month_year
         //month
-        $month = trim($_GET['month'] ?? 'none');
+        $month = trim($_GET['month'] ?? 'all');
         $month = filter_var($month, FILTER_VALIDATE_INT);
-        $month = (!$month || $month < 1 || $month > 12) ? 'none' : $month;
+        $month = (!$month || $month < 1 || $month > 12) ? 'all' : $month;
         //year
         $year = trim($_GET['year'] ?? date('Y'));
         $year = filter_var($year, FILTER_VALIDATE_INT);
@@ -1968,6 +1961,14 @@ class CaisseController extends Controller
                 $lang = 'mg_MG';
                 break;
         }
+
+        //formatters
+        //number
+        $formatterNumber = new NumberFormatter($lang, NumberFormatter::DECIMAL);
+        $formatterNumber->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 2);
+        //total
+        $formatterTotal = new NumberFormatter($lang, NumberFormatter::CURRENCY);
+        $formatterTotal->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 2);
 
         try {
             //num_caisse
@@ -2024,6 +2025,17 @@ class CaisseController extends Controller
                 echo json_encode($response);
                 return;
             }
+            //caisse - deleted
+            if ($response['model']->getEtatCaisse() === 'supprimé') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.caisse_deleted', ['field' => $num_caisse])
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
             //solde_caisse
             $solde_caisse = $response['model']->getSolde();
             //seuil_caisse
@@ -2137,6 +2149,8 @@ class CaisseController extends Controller
                 echo json_encode($response);
                 return;
             }
+
+            //currency units doesnt exist
             if (!isset($config['currency_units'])) {
                 $response = [
                     'message_type' => 'error',
@@ -2146,7 +2160,8 @@ class CaisseController extends Controller
                 echo json_encode($response);
                 return;
             }
-            //date_by
+
+            //date_by format
             $on = "";
             switch ($date_by) {
                 case 'all':
@@ -2250,22 +2265,30 @@ class CaisseController extends Controller
                     }
                     break;
             }
+
             //status
             $interval = $cash_report['total_entree'] - $cash_report['total_sortie'];
+            //format interval
+            $interval_f = str_replace(["\u{00A0}", "\u{202F}"], ' ', $formatterTotal->formatCurrency($interval, $config['currency_units']));
             $status = '';
             if ($interval < 0) {
-                $status = __('forms.labels.loss') . " (-{$interval} {$config['currency_units']})";
+                $status = __('forms.labels.loss') . " ({$interval_f})";
             } elseif ($interval === 0) {
                 $status = __('forms.labels.neutral');
             } else {
-                $status = __('forms.labels.benefice') . " (+{$interval} {$config['currency_units']})";
+                $status = __('forms.labels.benefice') . " (+ {$interval_f})";
             }
+
+            //format solde
+            $solde_f = str_replace(["\u{00A0}", "\u{202F}"], ' ', $formatterTotal->formatCurrency($solde_caisse, $config['currency_units']));
+            //format seuil
+            $seuil_f = str_replace(["\u{00A0}", "\u{202F}"], ' ', $formatterTotal->formatCurrency($seuil_caisse, $config['currency_units']));
             $html .= "<div class='header'>
                         <h4 class='center'>{$config['enterprise_name']}</h4>
                         <h3 class='center' style='margin-bottom: 20px;' ><u>{$strings['cash_report']}</u></h3>
                         <p class='left'><u><b>{$strings['on']} :</b></u> {$on}</p>
-                        <p class='left'><u><b>{$strings['cash_fund']} :</b></u> {$solde_caisse} {$config['currency_units']}</p>
-                        <p class='left'><u><b>{$strings['cash_treshold']} :</b></u> {$seuil_caisse} {$config['currency_units']}</p>
+                        <p class='left'><u><b>{$strings['cash_fund']} :</b></u> {$solde_f}</p>
+                        <p class='left'><u><b>{$strings['cash_treshold']} :</b></u> {$seuil_f}</p>
                         <p class='left'><u><b>{$strings['cash_num']} :</b></u> {$num_caisse}</p>
                         <p class='left'><u><b>{$strings['status']} :</b></u> {$status}</p>";
             if ($is_loged_in->getRole() === 'admin') {
@@ -2285,6 +2308,7 @@ class CaisseController extends Controller
                                 <th>{$strings['disbursement']} ({$config['currency_units']})</th>
                             </tr>";
             $html .= "<tbody>";
+            //tr
             foreach ($cash_report['data'] as &$line) {
                 $date = new DateTime($line['DATE']);
                 $formatter = new IntlDateFormatter(
@@ -2298,19 +2322,29 @@ class CaisseController extends Controller
                 } else {
                     $html .= "<tr>";
                 }
+
+                //encaissement format
+                $encaissement_f = str_replace(["\u{00A0}", "\u{202F}"], ' ', $formatterNumber->format((float)$line['encaissement']));
+                //decaissement format
+                $decaissement_f = str_replace(["\u{00A0}", "\u{202F}"], ' ', $formatterNumber->format((float)$line['decaissement']));
+
                 $html .= "
                             <td>{$line['DATE']}</td>
                             <td>{$line['numero']}</td>
                             <td>{$line['libelle']}</td>
-                            <td>{$line['encaissement']}</td>
-                            <td>{$line['decaissement']}</td>
+                            <td>{$encaissement_f}</td>
+                            <td>{$decaissement_f}</td>
                         </tr>";
             }
             //total
+            //entree format
+            $entree_f = str_replace(["\u{00A0}", "\u{202F}"], ' ', $formatterNumber->format((float)$cash_report['total_entree']));
+            //sortie format
+            $sortie_f = str_replace(["\u{00A0}", "\u{202F}"], ' ', $formatterNumber->format((float)$cash_report['total_sortie']));
             $html .= "<tr>
                         <td colspan='3'>{$strings['total']}</td>
-                        <td>{$cash_report['total_entree']}</td>
-                        <td>{$cash_report['total_sortie']}</td>
+                        <td>{$entree_f}</td>
+                        <td>{$sortie_f}</td>
                     </tr>";
             $html .= "</tbody>";
             $html .= "</table>";

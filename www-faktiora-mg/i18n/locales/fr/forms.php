@@ -35,7 +35,8 @@ return [
         'free_caisse' => "Libération des caisses",
         'add_ligne_caisse' => "Ajout d'une ligne de caisse",
         'update_ligne_caisse' => "Modification de ligne de caisse",
-        'delete_ligne_caisse' => "Suppréssion des lignes de caisse"
+        'delete_ligne_caisse' => "Suppréssion des lignes de caisse",
+        'cash_occupation' => "Occupation de caisse"
     ],
     'labels' => [
         'all' => 'tout',
@@ -189,7 +190,8 @@ return [
         'date_end' => 'Date de fin',
         'message_date_end' => "si vide : la caisse sera occupée si elle est libre",
         'question_delete_ligne_caisse_1' => "Voulez-vous vraiment supprimer la ligne de caisse avec l'ID <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>.",
-        'question_delete_ligne_caisse_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> lignes de caisse ?. <span class='text-danger'>Cette action est irréversible</span>."
+        'question_delete_ligne_caisse_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> lignes de caisse ?. <span class='text-danger'>Cette action est irréversible</span>.",
+        'occup' => "Occuper"
     ],
     'times' => [
         'minute' => "minute",

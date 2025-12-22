@@ -422,7 +422,7 @@
                                             </li>
                                             <!-- cash report  -->
                                             <li class="nav-item green-second bg-green-third rounded-1 text-start px-3">
-                                                <a href="" class="nav-link text-light green-second">
+                                                <a href="#" class="nav-link text-light green-second" id="a-cash-report">
                                                     <i class="fad fa-file-pdf me-2">
                                                     </i><?= ucfirst(strtolower(__('forms.titles.cash_report'))) ?>
                                                 </a>

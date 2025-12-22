@@ -1575,6 +1575,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                   selectYear.value.trim(),
                   inputSearch.value.trim()
                 );
+                //refres list free caisse
+                listFreeCaisse(container.querySelector("#select-occup-caisse"));
+
                 return;
               }
             } catch (e) {
@@ -1789,6 +1792,233 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
       }
     });
+
+    //============================= OCCUP CAISSE =============================
+    //select - occup caisse
+    const selectOccupCaisse = container.querySelector("#select-occup-caisse");
+    //btn occup caisse
+    const btnOccupCaisse = container.querySelector("#btn-occup-caisse");
+    //modal occup caisse
+    const modalOccupCaisse = container.querySelector("#modal-occup-caisse");
+    //list free caisse
+    listFreeCaisse(selectOccupCaisse);
+
+    //====== EVENT btn occup caisse
+    btnOccupCaisse.addEventListener("click", () => {
+      //num_caisse
+      const num_caisse = selectOccupCaisse.value.trim();
+      modalOccupCaisse.querySelector("#occup-caisse-cash-num").innerHTML =
+        num_caisse;
+      //select - caissier
+      const selectCaissier = modalOccupCaisse.querySelector(
+        "#select-occup-caisse-id-utilisateur"
+      );
+
+      //caisse not selected
+      if (num_caisse === "") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-warning");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          lang.caisse_not_selected;
+        //progress bar
+        progressBar.style.transition = "width 10s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        selectOccupCaisse.closest("div").prepend(alert);
+
+        //progress launch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 10000);
+
+        return;
+      }
+
+      //initialize select2 list caissier
+      const $modalOccupCaisse = $(modalOccupCaisse);
+      $(selectCaissier).select2({
+        theme: "bootstrap-5",
+        placeholder: lang.select.toLowerCase(),
+        dropdownParent: $modalOccupCaisse,
+      });
+
+      //list caissier
+      listCaissier(selectCaissier);
+
+      //show modal occup caisse
+      new bootstrap.Modal(modalOccupCaisse).show();
+
+      //===== EVENT btn refresh list caissier
+      modalOccupCaisse
+        .querySelector("#btn-refresh-list-caissier")
+        .addEventListener("click", () => {
+          //refresh list caissier
+          listCaissier(selectCaissier);
+        });
+
+      //===== EVENT form occup caisse submit
+      modalOccupCaisse
+        .querySelector("form")
+        .addEventListener("submit", async (e) => {
+          //suspend submit
+          e.preventDefault();
+
+          //check validty
+          if (!e.target.checkValidity()) {
+            e.target.reportValidity();
+            return;
+          }
+
+          //FETCH api occup caisse
+          const occupCaisse = await apiRequest("/caisse/occup_caisse", {
+            method: "POST",
+            body: {
+              num_caisse: num_caisse.trim(),
+              id_utilisateur: selectCaissier.value.trim(),
+            },
+          });
+
+          //error
+          if (occupCaisse.message_type === "error") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-danger");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              occupCaisse.message;
+            //progress bar
+            progressBar.style.transition = "width 20s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalOccupCaisse.querySelector(".modal-body").prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 20000);
+
+            return;
+          }
+          //invalid
+          else if (occupCaisse.message_type === "invalid") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-warning");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              occupCaisse.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalOccupCaisse.querySelector(".modal-body").prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+
+            return;
+          }
+
+          //close modal
+          modalOccupCaisse
+            .querySelector("#btn-close-modal-occup-caisse")
+            .click();
+
+          //refresh list free caisse
+          listFreeCaisse(selectOccupCaisse);
+          //refresh list caissier
+          listCaissier(selectCaissier);
+          //refresh filter caisse
+          filterCaisse(
+            tbodyCaisse,
+            container.querySelector("#chart-cash-number"),
+            selectStatus.value.trim(),
+            selectArrangeBy.value.trim(),
+            selectOrder.value.trim(),
+            selectDateBy.value.trim(),
+            selectPer.value.trim(),
+            dateFrom.value.trim(),
+            dateTo.value.trim(),
+            selectMonth.value.trim(),
+            selectYear.value.trim(),
+            inputSearch.value.trim()
+          );
+
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-success");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-check-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML = occupCaisse.message;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          selectOccupCaisse.closest("div").prepend(alert);
+
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+
+          return;
+        });
+    });
+
+    //============================= CASH REPORT ====================
+    cashReport();
+
     // //   //====================== PRINT ALL USER ===========================
     // //   //modal print all user
     // //   const modalPrintAllUser = document.getElementById("modal-print-all-user");
@@ -2712,6 +2942,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           tdDateFin.textContent = fromatterDate.format(new Date(dateFin));
         } else {
           tdDateFin.textContent = "-";
+          tdDateFin.classList.add("text-center");
         }
 
         //td - utilisateur
@@ -3339,7 +3570,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   //function - list user
   async function listUser(select) {
     try {
-      //FETCH api list all caissier
+      //FETCH api list all user
       const response = await apiRequest("/user/list_all_user");
 
       //error
@@ -3388,56 +3619,385 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error(e);
     }
   }
-  // //function - list num_caisse
-  // async function listNumCaisse(select) {
-  //   try {
-  //     //FETCH api list all caissier
-  //     const response = await apiRequest("/caissier");
+  //function - list free caisse
+  async function listFreeCaisse(select) {
+    //initialize select2
+    $(select).select2({
+      theme: "bootstrap-5",
+      placeholder: lang.select.toLowerCase(),
+      dropdownParent: $(select.closest(".card")),
+    });
+    try {
+      //FETCH api list free caisse
+      const response = await apiRequest("/caisse/list_free_caisse");
 
-  //     //error
-  //     if (response.message_type === "error") {
-  //       //alert
-  //       const alertTemplate = document.querySelector(".alert-template");
-  //       const clone = alertTemplate.content.cloneNode(true);
-  //       const alert = clone.querySelector(".alert");
-  //       const progressBar = alert.querySelector(".progress-bar");
-  //       //alert type
-  //       alert.classList.add("alert-danger");
-  //       //icon
-  //       alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
-  //       //message
-  //       alert.querySelector(".alert-message").innerHTML = response.message;
-  //       //progress bar
-  //       progressBar.style.transition = "width 20s linear";
-  //       progressBar.style.width = "100%";
+      //error
+      if (response.message_type === "error") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-danger");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
+        //message
+        alert.querySelector(".alert-message").innerHTML = response.message;
+        //progress bar
+        progressBar.style.transition = "width 20s linear";
+        progressBar.style.width = "100%";
 
-  //       //add alert
-  //       select.closest("div").prepend(alert);
+        //add alert
+        select.closest("div").prepend(alert);
 
-  //       //progress launch animation
-  //       setTimeout(() => {
-  //         progressBar.style.width = "0%";
-  //       }, 10);
-  //       //auto close alert
-  //       setTimeout(() => {
-  //         alert.querySelector(".btn-close").click();
-  //       }, 20000);
+        //progress launch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 20000);
 
-  //       return;
-  //     }
+        return;
+      }
 
-  //     //set options
-  //     select.innerHTML = "<option></option>";
-  //     response.data.forEach((line) => {
-  //       const option = document.createElement("option");
-  //       option.value = line.id_utilisateur;
-  //       option.innerText = `${line.id_utilisateur} - ${line.fullname}`;
+      //set options
+      select.innerHTML = "<option></option>";
+      response.data.forEach((line) => {
+        const option = document.createElement("option");
+        option.value = line.num_caisse;
+        option.innerText = line.num_caisse;
 
-  //       //append option to select
-  //       select.append(option);
-  //     });
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
+        //append option to select
+        select.append(option);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  //function - list caissier
+  async function listCaissier(select) {
+    try {
+      //FETCH api list caissier
+      const response = await apiRequest("/user/list_caissier");
+
+      //error
+      if (response.message_type === "error") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-danger");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
+        //message
+        alert.querySelector(".alert-message").innerHTML = response.message;
+        //progress bar
+        progressBar.style.transition = "width 20s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        select.closest("div").prepend(alert);
+
+        //progress launch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 20000);
+
+        return;
+      }
+
+      //set options
+      select.innerHTML = "<option></option>";
+      response.data.forEach((line) => {
+        const option = document.createElement("option");
+        option.value = line.id_utilisateur;
+        option.innerText = `${line.id_utilisateur} - ${line.fullname}`;
+
+        //append option to select
+        select.append(option);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  //function - cash report
+  function cashReport() {
+    //a - cash report
+    const aCashReport = container.querySelector("#a-cash-report");
+    //modal cash report
+    const modalCashReport = container.querySelector("#modal-cash-report");
+    //select - num_caisse
+    const cashReportSelectNumCaisse = modalCashReport.querySelector(
+      "#cash-report-select-num-caisse"
+    );
+    //select - date_by
+    const cashReportSelectDateBy = modalCashReport.querySelector(
+      "#cash-report-select-date-by"
+    );
+    //select per
+    const cashReportSelectPer = modalCashReport.querySelector(
+      "#cash-report-select-per"
+    );
+    //date - from
+    const cashReportDateFrom = modalCashReport.querySelector(
+      "#cash-report-date-from"
+    );
+    //date - to
+    const cashReportDateTo = modalCashReport.querySelector(
+      "#cash-report-date-to"
+    );
+    //select - month
+    const cashReportSelectMonth = modalCashReport.querySelector(
+      "#cash-report-select-month"
+    );
+    //select - year
+    const cashReportSelectYear = modalCashReport.querySelector(
+      "#cash-report-select-year"
+    );
+
+    //load select date_by value from local storage for div
+    const savedCashReportSelectDateBy = localStorage.getItem(
+      cashReportSelectDateBy.id
+    );
+    cashReportSelectDateBy.value = !savedCashReportSelectDateBy
+      ? "all"
+      : savedCashReportSelectDateBy;
+    switch (cashReportSelectDateBy.value) {
+      //per
+      case "per":
+        modalCashReport
+          .querySelector("#cash-report-div-per")
+          .classList.add("active");
+        break;
+      //between
+      case "between":
+        modalCashReport
+          .querySelector("#cash-report-div-between")
+          .classList.add("active");
+        break;
+      //month_year
+      case "month_year":
+        modalCashReport
+          .querySelector("#cash-report-div-month_year")
+          .classList.add("active");
+        break;
+    }
+
+    //list all caisse
+    listAllCaisse(cashReportSelectNumCaisse);
+
+    //===== EVENT select date_by
+    cashReportSelectDateBy.addEventListener("change", (e) => {
+      //hide all
+      modalCashReport.querySelectorAll(".date-by").forEach((dateBy) => {
+        if (dateBy.classList.contains("active")) {
+          dateBy.classList.remove("active");
+        }
+      });
+      //active
+      switch (e.target.value) {
+        //per
+        case "per":
+          modalCashReport
+            .querySelector("#cash-report-div-per")
+            .classList.add("active");
+          break;
+        //between
+        case "between":
+          modalCashReport
+            .querySelector("#cash-report-div-between")
+            .classList.add("active");
+          break;
+        //month_year
+        case "month_year":
+          modalCashReport
+            .querySelector("#cash-report-div-month_year")
+            .classList.add("active");
+          break;
+      }
+
+      localStorage.setItem(e.target.id, e.target.value);
+    });
+    //===== EVENT date from
+    cashReportDateFrom.addEventListener("input", (e) => {
+      cashReportDateTo.min = e.target.value;
+    });
+    //===== EVENT date to
+    cashReportDateTo.addEventListener("input", (e) => {
+      cashReportDateFrom.max = e.target.value;
+    });
+
+    ///===== EVENT a cash report
+    aCashReport.addEventListener("click", () => {
+      //show modal cash report
+      new bootstrap.Modal(modalCashReport).show();
+    });
+
+    //===== EVENT form submit
+    modalCashReport
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        //suspend submit
+        e.preventDefault();
+        //check validity
+        if (!e.target.checkValidity()) {
+          e.target.reportValidity();
+          return;
+        }
+
+        try {
+          //FETCH api cash report
+          const cashReport = await apiRequest(
+            `/caisse/cash_report?num_caisse=${cashReportSelectNumCaisse.value}&date_by=${cashReportSelectDateBy.value}&per=${cashReportSelectPer.value}&from=${cashReportDateFrom.value}&to=${cashReportDateTo.value}&month=${cashReportSelectMonth.value}&year=${cashReportSelectYear.value}`
+          );
+
+          //error
+          if (cashReport.message_type === "error") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-danger");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              cashReport.message;
+            //progress bar
+            progressBar.style.transition = "width 20s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalCashReport.querySelector("form").prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 20000);
+
+            return;
+          }
+          //invalid
+          else if (cashReport.message_type === "invalid") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-warning");
+            //icon
+            alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              cashReport.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalCashReport.querySelector("form").prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+
+            return;
+          }
+
+          //download cash report
+          const a = document.createElement("a");
+          a.href = `data:application/pdf;base64,${cashReport.pdf}`;
+          a.download = cashReport.file_name;
+          a.click();
+          //close modal
+          modalCashReport.querySelector("#btn-close-modal-cash-report").click();
+
+          return;
+        } catch (e) {
+          console.error(e);
+        }
+      });
+  }
+  //function - list all caisse
+  async function listAllCaisse(select) {
+    //initialize select2
+    $(select).select2({
+      theme: "bootstrap-5",
+      placeholder: lang.select.toLowerCase(),
+      dropdownParent: $(select.closest(".modal")),
+    });
+
+    try {
+      //FETCH api list all caisse
+      const response = await apiRequest("/caisse/list_all_caisse");
+
+      //error
+      if (response.message_type === "error") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-danger");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
+        //message
+        alert.querySelector(".alert-message").innerHTML = response.message;
+        //progress bar
+        progressBar.style.transition = "width 20s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        select.closest(".modal-body").prepend(alert);
+
+        //progress launch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 20000);
+
+        return;
+      }
+
+      //set options
+      select.innerHTML = "<option></option>";
+      response.data.forEach((line) => {
+        const option = document.createElement("option");
+        option.value = line.num_caisse;
+        option.innerText = line.num_caisse;
+
+        //append option to select
+        select.append(option);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
 });

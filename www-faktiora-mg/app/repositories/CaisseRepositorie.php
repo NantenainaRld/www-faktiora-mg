@@ -287,650 +287,181 @@ class CaisseRepositorie extends Database
         $paramsQuery = ['num_caisse' => $params['num_caisse']];
         $sql = "";
 
-        //date_by - all
-        if ($params['date_by'] === 'all') {
-            $sql = "SELECT
-    DATE,
-    numero,
-    libelle,
-    decaissement,
-    encaissement
-FROM
-    (
-    SELECT
-        DATE(ds.date_ds) AS DATE,
-        CONCAT('LS-', lds.id_lds) AS numero,
-        a.libelle_article AS libelle,
-        (
-            lds.quantite_article * lds.prix_article
-        ) AS decaissement,
-        '' AS encaissement
-    FROM
-        demande_sortie ds
-    JOIN ligne_ds lds ON
-        lds.id_ds = ds.id_ds
-    JOIN article a ON
-        a.id_article = lds.id_article
-    WHERE
-        a.etat_article != 'supprimé' 
-        AND ds.etat_ds != 'supprimé' 
-        AND ds.num_caisse = :num_caisse
-    UNION ALL
-SELECT
-    DATE(ae.date_ae) AS DATE,
-    ae.num_ae AS numero,
-    ae.libelle_ae AS libelle,
-    '' AS decaissement,
-    ae.montant_ae AS encaissement
-FROM
-    autre_entree ae
-WHERE
-    ae.etat_ae != 'supprimé' 
-    AND ae.num_caisse = :num_caisse
-UNION ALL
-SELECT
-    DATE(f.date_facture) AS DATE,
-    CONCAT('LF-', lf.id_lf) AS numero,
-    p.libelle_produit AS libelle,
-    '' AS decaissement,
-    (lf.quantite_produit * lf.prix) AS encaissement
-FROM
-    facture f
-JOIN ligne_facture lf ON
-    lf.id_facture = f.id_facture
-JOIN produit p ON
-    p.id_produit = lf.id_produit
-WHERE
-    p.etat_produit != 'supprimé' 
-    AND f.etat_facture != 'supprimé' 
-    AND f.num_caisse = :num_caisse
-UNION ALL
-SELECT
-    DATE(ds.date_ds) AS DATE,
-    CONCAT(ds.num_ds, '/TOTAL') AS numero,
-    'Total sortie' AS libelle,
-    SUM(
-        lds.quantite_article * lds.prix_article
-    ) AS decaissement,
-    '' AS encaissement
-FROM
-    demande_sortie ds
-JOIN ligne_ds lds ON
-    lds.id_ds = ds.id_ds
-WHERE
-    ds.etat_ds != ' supprimé ' 
-    AND ds.num_caisse = :num_caisse
-GROUP BY
-    ds.id_ds,
-    ds.date_ds
-UNION ALL
-SELECT
-    DATE(f.date_facture) AS DATE,
-    CONCAT(f.num_facture, '/TOTAL') AS numero,
-    'Total facture' AS libelle,
-    '' AS decaissement,
-    SUM(lf.quantite_produit * lf.prix) AS encaissement
-FROM
-    facture f
-JOIN ligne_facture lf ON
-    lf.id_facture = f.id_facture
-WHERE
-    f.etat_facture != ' supprimé ' 
-    AND f.num_caisse = :num_caisse
-GROUP BY
-    f.id_facture,
-    f.date_facture
-) AS DATA
-ORDER BY
-    DATE,
-    CASE WHEN numero LIKE 'A2%' THEN 1 WHEN numero LIKE 'LF-%' THEN 2 WHEN numero LIKE 'F2%/TOTAL' THEN 3 WHEN numero LIKE 'LS-%' THEN 4 WHEN numero LIKE 'S2%/TOTAL' THEN 5
-END,
-numero;";
-        }
-        //date_by - !=all
-        else {
-            switch ($params['date_by']) {
-                //per
-                case 'per':
-                    switch ($params['per']) {
-                        //per - DAY
-                        case 'DAY':
-                            $sql = "SELECT
-    DATE,
-    numero,
-    libelle,
-    decaissement,
-    encaissement
-FROM
-    (
-    SELECT
-        DATE(ds.date_ds) AS DATE,
-        CONCAT('LS-', lds.id_lds) AS numero,
-        a.libelle_article AS libelle,
-        (
-            lds.quantite_article * lds.prix_article
-        ) AS decaissement,
-        '' AS encaissement
-    FROM
-        demande_sortie ds
-    JOIN ligne_ds lds ON
-        lds.id_ds = ds.id_ds
-    JOIN article a ON
-        a.id_article = lds.id_article
-    WHERE
-        a.etat_article != 'supprimé' 
-        AND ds.etat_ds != 'supprimé' 
-        AND ds.num_caisse = :num_caisse 
-        AND DATE(ds.date_ds) = CURDATE() 
-    UNION ALL
-SELECT
-    DATE(ae.date_ae) AS DATE,
-    ae.num_ae AS numero,
-    ae.libelle_ae AS libelle,
-    '' AS decaissement,
-    ae.montant_ae AS encaissement
-FROM
-    autre_entree ae
-WHERE
-    ae.etat_ae != 'supprimé' 
-    AND ae.num_caisse = :num_caisse 
-    AND DATE(ae.date_ae) = CURDATE() 
-UNION ALL
-SELECT
-    DATE(f.date_facture) AS DATE,
-    CONCAT('LF-', lf.id_lf) AS numero,
-    p.libelle_produit AS libelle,
-    '' AS decaissement,
-    (lf.quantite_produit * lf.prix) AS encaissement
-FROM
-    facture f
-JOIN ligne_facture lf ON
-    lf.id_facture = f.id_facture
-JOIN produit p ON
-    p.id_produit = lf.id_produit
-WHERE
-    p.etat_produit != 'supprimé' 
-    AND f.etat_facture != 'supprimé' 
-    AND f.num_caisse = :num_caisse 
-    AND DATE(f.date_facture) = CURDATE() 
-UNION ALL
-SELECT
-    DATE(ds.date_ds) AS DATE,
-    CONCAT(ds.num_ds, '/TOTAL') AS numero,
-    'Total sortie' AS libelle,
-    SUM(
-        lds.quantite_article * lds.prix_article
-    ) AS decaissement,
-    '' AS encaissement
-FROM
-    demande_sortie ds
-JOIN ligne_ds lds ON
-    lds.id_ds = ds.id_ds
-WHERE
-    ds.etat_ds != ' supprimé ' 
-    AND ds.num_caisse = :num_caisse 
-    AND DATE(ds.date_ds) = CURDATE() 
-GROUP BY
-    ds.id_ds,
-    ds.date_ds
-UNION ALL
-SELECT
-    DATE(f.date_facture) AS DATE,
-    CONCAT(f.num_facture, '/TOTAL') AS numero,
-    'Total facture' AS libelle,
-    '' AS decaissement,
-    SUM(lf.quantite_produit * lf.prix) AS encaissement
-FROM
-    facture f
-JOIN ligne_facture lf ON
-    lf.id_facture = f.id_facture
-WHERE
-    f.etat_facture != ' supprimé ' 
-    AND f.num_caisse = :num_caisse 
-    AND DATE(f.date_facture) = CURDATE() 
-GROUP BY
-    f.id_facture,
-    f.date_facture
-) AS DATA
-ORDER BY
-    DATE,
-    CASE WHEN numero LIKE 'A2%' THEN 1 WHEN numero LIKE 'LF-%' THEN 2 WHEN numero LIKE 'F2%/TOTAL' THEN 3 WHEN numero LIKE 'LS-%' THEN 4 WHEN numero LIKE 'S2%/TOTAL' THEN 5
-END,
-numero;";
-                            break;
+        //date_by - 
+        $ae_cond = '';
+        $facture_cond = '';
+        $sortie_cond = '';
+        switch ($params['date_by']) {
 
-                        //per - !DAY
-                        default:
-                            $sql = "SELECT
-    DATE,
-    numero,
-    libelle,
-    decaissement,
-    encaissement
-FROM
-    (
-    SELECT
-        DATE(ds.date_ds) AS DATE,
-        CONCAT('LS-', lds.id_lds) AS numero,
-        a.libelle_article AS libelle,
-        (
-            lds.quantite_article * lds.prix_article
-        ) AS decaissement,
-        '' AS encaissement
-    FROM
-        demande_sortie ds
-    JOIN ligne_ds lds ON
-        lds.id_ds = ds.id_ds
-    JOIN article a ON
-        a.id_article = lds.id_article
-    WHERE
-        a.etat_article != 'supprimé' 
-        AND ds.etat_ds != 'supprimé' 
-        AND ds.num_caisse = :num_caisse 
-        AND {$params['per']}(ds.date_ds) = {$params['per']}(CURDATE()) 
-    UNION ALL
-SELECT
-    DATE(ae.date_ae) AS DATE,
-    ae.num_ae AS numero,
-    ae.libelle_ae AS libelle,
-    '' AS decaissement,
-    ae.montant_ae AS encaissement
-FROM
-    autre_entree ae
-WHERE
-    ae.etat_ae != 'supprimé' 
-    AND ae.num_caisse = :num_caisse 
-    AND {$params['per']}(ae.date_ae) = {$params['per']}(CURDATE()) 
-UNION ALL
-SELECT
-    DATE(f.date_facture) AS DATE,
-    CONCAT('LF-', lf.id_lf) AS numero,
-    p.libelle_produit AS libelle,
-    '' AS decaissement,
-    (lf.quantite_produit * lf.prix) AS encaissement
-FROM
-    facture f
-JOIN ligne_facture lf ON
-    lf.id_facture = f.id_facture
-JOIN produit p ON
-    p.id_produit = lf.id_produit
-WHERE
-    p.etat_produit != 'supprimé' 
-    AND f.etat_facture != 'supprimé' 
-    AND f.num_caisse = :num_caisse 
-    AND {$params['per']}(f.date_facture) = {$params['per']}(CURDATE()) 
-UNION ALL
-SELECT
-    DATE(ds.date_ds) AS DATE,
-    CONCAT(ds.num_ds, '/TOTAL') AS numero,
-    'Total sortie' AS libelle,
-    SUM(
-        lds.quantite_article * lds.prix_article
-    ) AS decaissement,
-    '' AS encaissement
-FROM
-    demande_sortie ds
-JOIN ligne_ds lds ON
-    lds.id_ds = ds.id_ds
-WHERE
-    ds.etat_ds != ' supprimé ' 
-    AND ds.num_caisse = :num_caisse 
-    AND {$params['per']}(ds.date_ds) = {$params['per']}(CURDATE()) 
-GROUP BY
-    ds.id_ds,
-    ds.date_ds
-UNION ALL
-SELECT
-    DATE(f.date_facture) AS DATE,
-    CONCAT(f.num_facture, '/TOTAL') AS numero,
-    'Total facture' AS libelle,
-    '' AS decaissement,
-    SUM(lf.quantite_produit * lf.prix) AS encaissement
-FROM
-    facture f
-JOIN ligne_facture lf ON
-    lf.id_facture = f.id_facture
-WHERE
-    f.etat_facture != ' supprimé ' 
-    AND f.num_caisse = :num_caisse 
-    AND {$params['per']}(f.date_facture) = {$params['per']}(CURDATE()) 
-GROUP BY
-    f.id_facture,
-    f.date_facture
-) AS DATA
-ORDER BY
-    DATE,
-    CASE WHEN numero LIKE 'A2%' THEN 1 WHEN numero LIKE 'LF-%' THEN 2 WHEN numero LIKE 'F2%/TOTAL' THEN 3 WHEN numero LIKE 'LS-%' THEN 4 WHEN numero LIKE 'S2%/TOTAL' THEN 5
-END,
-numero;";
-                            break;
-                    }
-                    break;
-                //between
-                case 'between':
-                    $sql = "SELECT
-    DATE,
-    numero,
-    libelle,
-    decaissement,
-    encaissement
-FROM
-    (
-    SELECT
-        DATE(ds.date_ds) AS DATE,
-        CONCAT('LS-', lds.id_lds) AS numero,
-        a.libelle_article AS libelle,
-        (
-            lds.quantite_article * lds.prix_article
-        ) AS decaissement,
-        '' AS encaissement
-    FROM
-        demande_sortie ds
-    JOIN ligne_ds lds ON
-        lds.id_ds = ds.id_ds
-    JOIN article a ON
-        a.id_article = lds.id_article
-    WHERE
-        a.etat_article != 'supprimé' 
-        AND ds.etat_ds != 'supprimé' 
-        AND ds.num_caisse = :num_caisse 
-        AND DATE(ds.date_ds) BETWEEN :from AND :to 
-    UNION ALL
-SELECT
-    DATE(ae.date_ae) AS DATE,
-    ae.num_ae AS numero,
-    ae.libelle_ae AS libelle,
-    '' AS decaissement,
-    ae.montant_ae AS encaissement
-FROM
-    autre_entree ae
-WHERE
-    ae.etat_ae != 'supprimé' 
-    AND ae.num_caisse = :num_caisse 
-    AND DATE(ae.date_ae) BETWEEN :from AND :to 
-UNION ALL
-SELECT
-    DATE(f.date_facture) AS DATE,
-    CONCAT('LF-', lf.id_lf) AS numero,
-    p.libelle_produit AS libelle,
-    '' AS decaissement,
-    (lf.quantite_produit * lf.prix) AS encaissement
-FROM
-    facture f
-JOIN ligne_facture lf ON
-    lf.id_facture = f.id_facture
-JOIN produit p ON
-    p.id_produit = lf.id_produit
-WHERE
-    p.etat_produit != 'supprimé' 
-    AND f.etat_facture != 'supprimé' 
-    AND f.num_caisse = :num_caisse 
-    AND DATE(f.date_facture) BETWEEN :from AND :to 
-UNION ALL
-SELECT
-    DATE(ds.date_ds) AS DATE,
-    CONCAT(ds.num_ds, '/TOTAL') AS numero,
-    'Total sortie' AS libelle,
-    SUM(
-        lds.quantite_article * lds.prix_article
-    ) AS decaissement,
-    '' AS encaissement
-FROM
-    demande_sortie ds
-JOIN ligne_ds lds ON
-    lds.id_ds = ds.id_ds
-WHERE
-    ds.etat_ds != ' supprimé ' 
-    AND ds.num_caisse = :num_caisse 
-    AND DATE(ds.date_ds) BETWEEN :from AND :to 
-GROUP BY
-    ds.id_ds,
-    ds.date_ds
-UNION ALL
-SELECT
-    DATE(f.date_facture) AS DATE,
-    CONCAT(f.num_facture, '/TOTAL') AS numero,
-    'Total facture' AS libelle,
-    '' AS decaissement,
-    SUM(lf.quantite_produit * lf.prix) AS encaissement
-FROM
-    facture f
-JOIN ligne_facture lf ON
-    lf.id_facture = f.id_facture
-WHERE
-    f.etat_facture != ' supprimé ' 
-    AND f.num_caisse = :num_caisse 
-    AND DATE(f.date_facture) BETWEEN :from AND :to 
-GROUP BY
-    f.id_facture,
-    f.date_facture
-) AS DATA
-ORDER BY
-    DATE,
-    CASE WHEN numero LIKE 'A2%' THEN 1 WHEN numero LIKE 'LF-%' THEN 2 WHEN numero LIKE 'F2%/TOTAL' THEN 3 WHEN numero LIKE 'LS-%' THEN 4 WHEN numero LIKE 'S2%/TOTAL' THEN 5
-END,
-numero;";
-                    $paramsQuery['from'] = $params['from'];
+            //date_by - all
+            case 'all':
+                break;
+            //date_by - per
+            case 'per':
+                switch ($params['per']) {
+
+                    //per - DAY
+                    case 'DAY':
+                        //ae
+                        $ae_cond = 'AND DATE(ae.date_ae) = CURDATE() ';
+                        //facture
+                        $facture_cond = 'AND DATE(f.date_facture) = CURDATE() ';
+                        //sortie
+                        $sortie_cond = 'AND DATE(ds.date_ds) = CURDATE() ';
+                        break;
+                    //per - !DAY
+                    default:
+                        //ae
+                        $ae_cond = "AND {$params['per']}(ae.date_ae) = {$params['per']}(CURDATE()) ";
+                        //facture
+                        $facture_cond = "AND {$params['per']}(f.date_facture) = {$params['per']}(CURDATE()) ";
+                        //sortie
+                        $sortie_cond = "AND {$params['per']}(ds.date_ds) = {$params['per']}(CURDATE()) ";
+                        break;
+                }
+                break;
+            //date_by - between
+            case 'between':
+                //from - empty
+                if ($params['from'] === '') {
+                    //to - !empty
+                    //ae
+                    $ae_cond = "AND DATE(ae.date_ae) <= :to ";
+                    //facture
+                    $facture_cond = "AND DATE(f.date_facture) <= :to ";
+                    //sortie
+                    $sortie_cond = "AND DATE(ds.date_ds) <= :to ";
                     $paramsQuery['to'] = $params['to'];
-                    break;
-                //month_year
-                case 'month_year':
-                    //month - none
-                    if ($params['month'] === 'none') {
-                        $sql = "SELECT
-    DATE,
-    numero,
-    libelle,
-    decaissement,
-    encaissement
-FROM
-    (
-    SELECT
-        DATE(ds.date_ds) AS DATE,
-        CONCAT('LS-', lds.id_lds) AS numero,
-        a.libelle_article AS libelle,
-        (
-            lds.quantite_article * lds.prix_article
-        ) AS decaissement,
-        '' AS encaissement
-    FROM
-        demande_sortie ds
-    JOIN ligne_ds lds ON
-        lds.id_ds = ds.id_ds
-    JOIN article a ON
-        a.id_article = lds.id_article
-    WHERE
-        a.etat_article != 'supprimé' 
-        AND ds.etat_ds != 'supprimé' 
-        AND ds.num_caisse = :num_caisse 
-        AND YEAR(ds.date_ds) = :year 
-    UNION ALL
-SELECT
-    DATE(ae.date_ae) AS DATE,
-    ae.num_ae AS numero,
-    ae.libelle_ae AS libelle,
-    '' AS decaissement,
-    ae.montant_ae AS encaissement
-FROM
-    autre_entree ae
-WHERE
-    ae.etat_ae != 'supprimé' 
-    AND ae.num_caisse = :num_caisse 
-    AND YEAR(ae.date_ae) = :year 
-UNION ALL
-SELECT
-    DATE(f.date_facture) AS DATE,
-    CONCAT('LF-', lf.id_lf) AS numero,
-    p.libelle_produit AS libelle,
-    '' AS decaissement,
-    (lf.quantite_produit * lf.prix) AS encaissement
-FROM
-    facture f
-JOIN ligne_facture lf ON
-    lf.id_facture = f.id_facture
-JOIN produit p ON
-    p.id_produit = lf.id_produit
-WHERE
-    p.etat_produit != 'supprimé' 
-    AND f.etat_facture != 'supprimé' 
-    AND f.num_caisse = :num_caisse 
-    AND YEAR(f.date_facture) = :year 
-UNION ALL
-SELECT
-    DATE(ds.date_ds) AS DATE,
-    CONCAT(ds.num_ds, '/TOTAL') AS numero,
-    'Total sortie' AS libelle,
-    SUM(
-        lds.quantite_article * lds.prix_article
-    ) AS decaissement,
-    '' AS encaissement
-FROM
-    demande_sortie ds
-JOIN ligne_ds lds ON
-    lds.id_ds = ds.id_ds
-WHERE
-    ds.etat_ds != ' supprimé ' 
-    AND ds.num_caisse = :num_caisse 
-    AND YEAR(ds.date_ds) = :year 
-GROUP BY
-    ds.id_ds,
-    ds.date_ds
-UNION ALL
-SELECT
-    DATE(f.date_facture) AS DATE,
-    CONCAT(f.num_facture, '/TOTAL') AS numero,
-    'Total facture' AS libelle,
-    '' AS decaissement,
-    SUM(lf.quantite_produit * lf.prix) AS encaissement
-FROM
-    facture f
-JOIN ligne_facture lf ON
-    lf.id_facture = f.id_facture
-WHERE
-    f.etat_facture != ' supprimé ' 
-    AND f.num_caisse = :num_caisse 
-    AND YEAR(f.date_facture) = :year 
-GROUP BY
-    f.id_facture,
-    f.date_facture
-) AS DATA
-ORDER BY
-    DATE,
-    CASE WHEN numero LIKE 'A2%' THEN 1 WHEN numero LIKE 'LF-%' THEN 2 WHEN numero LIKE 'F2%/TOTAL' THEN 3 WHEN numero LIKE 'LS-%' THEN 4 WHEN numero LIKE 'S2%/TOTAL' THEN 5
-END,
-numero;";
-                        $paramsQuery['year'] = $params['year'];
+                }
+                //from - !empty
+                else {
+                    //to - empty
+                    if ($params['to'] === '') {
+                        //ae
+                        $ae_cond = "AND DATE(ae.date_ae) >= :from ";
+                        //facture
+                        $facture_cond = "AND DATE(f.date_facture) >= :from ";
+                        //sortie
+                        $sortie_cond = "AND DATE(ds.date_ds) >= :from ";
+                        $paramsQuery['from'] = $params['from'];
                     }
-                    //month - !none
+                    //to - !empty
                     else {
-                        $sql = "SELECT
-    DATE,
-    numero,
-    libelle,
-    decaissement,
-    encaissement
-FROM
-    (
-    SELECT
-        DATE(ds.date_ds) AS DATE,
-        CONCAT('LS-', lds.id_lds) AS numero,
-        a.libelle_article AS libelle,
-        (
-            lds.quantite_article * lds.prix_article
-        ) AS decaissement,
-        '' AS encaissement
-    FROM
-        demande_sortie ds
-    JOIN ligne_ds lds ON
-        lds.id_ds = ds.id_ds
-    JOIN article a ON
-        a.id_article = lds.id_article
-    WHERE
-        a.etat_article != 'supprimé' 
-        AND ds.etat_ds != 'supprimé' 
-        AND ds.num_caisse = :num_caisse 
-        AND MONTH(ds.date_ds) = :month AND YEAR(ds.date_ds) = :year 
-    UNION ALL
-SELECT
-    DATE(ae.date_ae) AS DATE,
-    ae.num_ae AS numero,
-    ae.libelle_ae AS libelle,
-    '' AS decaissement,
-    ae.montant_ae AS encaissement
-FROM
-    autre_entree ae
-WHERE
-    ae.etat_ae != 'supprimé' 
-    AND ae.num_caisse = :num_caisse 
-    AND MONTH(ae.date_ae) = :month AND YEAR(ae.date_ae) = :year 
-UNION ALL
-SELECT
-    DATE(f.date_facture) AS DATE,
-    CONCAT('LF-', lf.id_lf) AS numero,
-    p.libelle_produit AS libelle,
-    '' AS decaissement,
-    (lf.quantite_produit * lf.prix) AS encaissement
-FROM
-    facture f
-JOIN ligne_facture lf ON
-    lf.id_facture = f.id_facture
-JOIN produit p ON
-    p.id_produit = lf.id_produit
-WHERE
-    p.etat_produit != 'supprimé' 
-    AND f.etat_facture != 'supprimé' 
-    AND f.num_caisse = :num_caisse 
-    AND MONTH(f.date_facture) = :month AND YEAR(f.date_facture) = :year 
-UNION ALL
-SELECT
-    DATE(ds.date_ds) AS DATE,
-    CONCAT(ds.num_ds, '/TOTAL') AS numero,
-    'Total sortie' AS libelle,
-    SUM(
-        lds.quantite_article * lds.prix_article
-    ) AS decaissement,
-    '' AS encaissement
-FROM
-    demande_sortie ds
-JOIN ligne_ds lds ON
-    lds.id_ds = ds.id_ds
-WHERE
-    ds.etat_ds != ' supprimé ' 
-    AND ds.num_caisse = :num_caisse 
-    AND MONTH(ds.date_ds) = :month AND YEAR(ds.date_ds) = :year 
-GROUP BY
-    ds.id_ds,
-    ds.date_ds
-UNION ALL
-SELECT
-    DATE(f.date_facture) AS DATE,
-    CONCAT(f.num_facture, '/TOTAL') AS numero,
-    'Total facture' AS libelle,
-    '' AS decaissement,
-    SUM(lf.quantite_produit * lf.prix) AS encaissement
-FROM
-    facture f
-JOIN ligne_facture lf ON
-    lf.id_facture = f.id_facture
-WHERE
-    f.etat_facture != ' supprimé ' 
-    AND f.num_caisse = :num_caisse 
-    AND MONTH(f.date_facture) = :month AND YEAR(f.date_facture) = :year 
-GROUP BY
-    f.id_facture,
-    f.date_facture
-) AS DATA
-ORDER BY
-    DATE,
-    CASE WHEN numero LIKE 'A2%' THEN 1 WHEN numero LIKE 'LF-%' THEN 2 WHEN numero LIKE 'F2%/TOTAL' THEN 3 WHEN numero LIKE 'LS-%' THEN 4 WHEN numero LIKE 'S2%/TOTAL' THEN 5
-END,
-numero;";
-                        $paramsQuery['year'] = $params['year'];
-                        $paramsQuery['month'] = $params['month'];
+                        //ae
+                        $ae_cond = "AND DATE(ae.date_ae) BETWEEN :from AND :to  ";
+                        //facture
+                        $facture_cond = "AND DATE(f.date_facture) BETWEEN :from AND :to  ";
+                        //sortie
+                        $sortie_cond = "AND DATE(ds.date_ds) BETWEEN :from AND :to  ";
+                        $paramsQuery['from'] = $params['from'];
+                        $paramsQuery['to'] = $params['to'];
                     }
-                    break;
-            }
+                }
+                break;
+            //date_by - month_year
+            case 'month_year':
+                //month - all
+                if ($params['month'] === 'all') {
+                    //year - 
+                    //ae
+                    $ae_cond = "AND YEAR(ae.date_ae) = :year ";
+                    //facture
+                    $facture_cond = "AND YEAR(f.date_facture) = :year ";
+                    //ds
+                    $sortie_cond = "AND YEAR(ds.date_ds) = :year ";
+                    $paramsQuery['year'] = $params['year'];
+                }
+                //month - !all
+                else {
+                    //year -
+                    //ae
+                    $ae_cond = "AND YEAR(ae.date_ae) = :year AND MONTH(ae.date_ae) = :month ";
+                    //facture
+                    $facture_cond = "AND YEAR(f.date_facture) = :year AND MONTH(f.date_facture) = :month ";
+                    //ds
+                    $sortie_cond = "AND YEAR(ds.date_ds) = :year AND MONTH(ds.date_ds) = :month ";
+                    $paramsQuery['month'] = $params['month'];
+                    $paramsQuery['year'] = $params['year'];
+                }
+                break;
         }
+
+        //sql
+        $sql = "SELECT
+                    DATE, 
+                    numero, 
+                    libelle, 
+                    decaissement, 
+                    encaissement 
+                    FROM 
+                    (SELECT 
+                        DATE(ds.date_ds) AS DATE, 
+                        CONCAT('LS-', lds.id_lds) AS numero, 
+                        a.libelle_article AS libelle, 
+                        (lds.quantite_article * lds.prix_article) AS decaissement, 
+                        '' AS encaissement
+                        FROM demande_sortie ds 
+                        JOIN ligne_ds lds ON
+                        lds.id_ds = ds.id_ds 
+                        JOIN article a ON a.id_article = lds.id_article 
+                        WHERE a.etat_article != 'supprimé' AND ds.etat_ds != 'supprimé' AND ds.num_caisse = :num_caisse {$sortie_cond} 
+
+                    UNION ALL
+
+                    SELECT
+                        DATE(ae.date_ae) AS DATE,
+                        ae.num_ae AS numero,
+                        ae.libelle_ae AS libelle,
+                        '' AS decaissement,
+                        ae.montant_ae AS encaissement
+                        FROM autre_entree ae
+                        WHERE ae.etat_ae != 'supprimé' AND ae.num_caisse = :num_caisse {$ae_cond} 
+
+                    UNION ALL
+
+                    SELECT
+                        DATE(f.date_facture) AS DATE,
+                        CONCAT('LF-', lf.id_lf) AS numero,
+                        p.libelle_produit AS libelle,
+                        '' AS decaissement,
+                        (lf.quantite_produit * lf.prix) AS encaissement
+                        FROM facture f
+                        JOIN ligne_facture lf ON lf.id_facture = f.id_facture
+                        JOIN produit p ON p.id_produit = lf.id_produit
+                        WHERE p.etat_produit != 'supprimé' AND f.etat_facture != 'supprimé' AND f.num_caisse = :num_caisse {$facture_cond} 
+
+                    UNION ALL
+
+                        SELECT
+                            DATE(ds.date_ds) AS DATE,
+                            CONCAT(ds.num_ds, '/TOTAL') AS numero,
+                            'Total sortie' AS libelle,
+                            SUM(lds.quantite_article * lds.prix_article) AS decaissement,
+                            '' AS encaissement
+                            FROM demande_sortie ds
+                            JOIN ligne_ds lds ON lds.id_ds = ds.id_ds
+                            WHERE ds.etat_ds != ' supprimé ' AND ds.num_caisse = :num_caisse {$sortie_cond} 
+                            GROUP BY ds.id_ds, ds.date_ds
+
+                        UNION ALL
+
+                        SELECT
+                            DATE(f.date_facture) AS DATE,
+                            CONCAT(f.num_facture, '/TOTAL') AS numero,
+                            'Total facture' AS libelle,
+                            '' AS decaissement,
+                            SUM(lf.quantite_produit * lf.prix) AS encaissement
+                        FROM facture f
+                        JOIN ligne_facture lf ON lf.id_facture = f.id_facture
+                        WHERE f.etat_facture != ' supprimé '  AND f.num_caisse = :num_caisse {$facture_cond} 
+                        GROUP BY f.id_facture, f.date_facture
+                        
+                    ) AS DATA
+                        ORDER BY
+                            DATE,
+                            CASE WHEN numero LIKE 'A2%' THEN 1 WHEN numero LIKE 'LF-%' THEN 2 WHEN numero LIKE 'F2%/TOTAL' THEN 3 WHEN numero LIKE 'LS-%' THEN 4 WHEN numero LIKE 'S2%/TOTAL' THEN 5
+                        END,
+                        numero;";
 
         try {
 
