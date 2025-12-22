@@ -258,6 +258,7 @@
                                                     </div>
                                                 </div>
                                             </dvi>
+                                            <!-- table  -->
                                             <div class="col-12">
                                                 <!-- btn  -->
                                                 <div class="row g-0 justify-content-start mb-2">
@@ -266,7 +267,7 @@
                                                         <i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?>
                                                     </button>
                                                     <!-- btn delete ligne_caisse  -->
-                                                    <button class="btn btn-danger fw-bold w-auto btn-sm me-2 my-2" id="btn-deconnect-user">
+                                                    <button class="btn btn-danger fw-bold w-auto btn-sm me-2 my-2" id="btn-delete-ligne-caisse">
                                                         <i class="fad fa-trash  me-2"></i><?= __('forms.labels.delete') ?>
                                                     </button>
                                                 </div>
@@ -592,7 +593,7 @@
             <div class="modal-content">
                 <!-- modal header  -->
                 <div class="modal-header bg-danger text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-trash me-2"></i>Suppréssion des caisses</h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-trash me-2"></i><?= __('forms.titles.cash_delete') ?></h6>
                 </div>
                 <!-- modal body  -->
                 <div class="modal-body">
@@ -674,7 +675,7 @@
                                 <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
                                 <input type="datetime-local" class="form-control form-control-sm text-secondary" id="input-add-date-fin" max="<?= date('Y-m-d\TH:i') ?>">
                             </div>
-                            <span class="form-text">(si vide : la caisse sera occupée si elle est libre)</span>
+                            <span class="form-text">(<?= __('forms.labels.message_date_end') ?>)</span>
                         </div>
                         <!-- select - id_utilisateur  -->
                         <div class="mb-3">
@@ -695,6 +696,78 @@
                         <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-add-ligne-caisse"><i class="fad fa-check me-2"></i><?= __('forms.labels.add') ?></button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+    <!-- modal update ligne_caisse  -->
+    <div class="modal fade" id="modal-update-ligne-caisse" tabindex="-1" aria-labelledby="modalUpdateLigneCaisse" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <!-- modal header  -->
+                <div class="modal-header bg-green-0 text-light">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-pen-to-square me-2"></i><?= __('forms.titles.update_ligne_caisse') ?></h6>
+                </div>
+                <form>
+                    <!-- modal body  -->
+                    <div class="modal-body">
+                        <!-- id_lc  -->
+                        <div class="text-center text-secondary mb-1"><span id="update-ligne-caisse-id-lc">00</span></div>
+                        <!-- date_debut  -->
+                        <div class="mb-3">
+                            <label for="input-update-date-debut" class="form-label"><?= __('forms.labels.date_start') ?> <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
+                                <input type="datetime-local" class="form-control form-control-sm text-secondary" id="input-update-date-debut" max="<?= date('Y-m-d\TH:i') ?>" required>
+                            </div>
+                        </div>
+                        <!-- date_fin  -->
+                        <div class="mb-3">
+                            <label for="input-update-date-fin" class="form-label"><?= __('forms.labels.date_end') ?> <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
+                                <input type="datetime-local" class="form-control form-control-sm text-secondary" id="input-update-date-fin" max="<?= date('Y-m-d\TH:i') ?>">
+                            </div>
+                            <span class="form-text">(<?= __('forms.labels.message_date_end') ?>)</span>
+                        </div>
+                        <!-- select - id_utilisateur  -->
+                        <div class="mb-3">
+                            <label for="select-update-id-utilisateur" class="form-label"><?= ucfirst(__('forms.labels.cashier')) ?> <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-user"></i></span>
+                                <select name="" id="select-update-id-utilisateur" class="form-select form-select-sm select2" required>
+                                    <option></option>
+                                    <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
+                                </select>
+                                <button type="button" class="input-group-text" id="btn-refresh-list-user"><i class="fad fa-arrow-rotate-left"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- modal footer  -->
+                    <div class="modal-footer d-flex flex-nowrap justify-content-end">
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-add-ligne-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-add-ligne-caisse"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- modal delete ligne caisse -->
+    <div class="modal fade" id="modal-delete-ligne-caisse" tabindex="-1" aria-labelledby="modalDeleteLigneCaisse" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <!-- modal header  -->
+                <div class="modal-header bg-danger text-light">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-trash me-2"></i><?= __('forms.titles.delete_ligne_caisse') ?></h6>
+                </div>
+                <!-- modal body  -->
+                <div class="modal-body">
+                    <div class="message">Voulez-vous vraiment supprimer ces ... lignes de caisse ?</div>
+                </div>
+                <!-- modal footer  -->
+                <div class="modal-footer d-flex flex-nowrap justify-content-end">
+                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-delete-ligne-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
+                    <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-delete-ligne-caisse"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_delete') ?></button>
+                </div>
             </div>
         </div>
     </div>

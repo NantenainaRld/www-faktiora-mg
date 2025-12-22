@@ -1586,6 +1586,209 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     //====================== ADD LIGNE CAISSE ========================
     addLigneCaisse();
+
+    //======================= DELETE LIGNE CAISSE =========================
+    //btn delete delete ligne caisse
+    const btnDeleteLigneCaisse = tbodyLC
+      .closest("table")
+      .parentElement.querySelector("#btn-delete-ligne-caisse");
+    //modal delete line caisse
+    const modalDeleteLigneCaisse = container.querySelector(
+      "#modal-delete-ligne-caisse"
+    );
+
+    //===== EVENT btn delete  ligne caisse
+    btnDeleteLigneCaisse.addEventListener("click", () => {
+      //selected ligne caisse
+      const selectedLigneCaisse = tbodyLC.querySelectorAll(
+        "input[type='checkbox']:checked"
+      );
+
+      //no selection
+      if (selectedLigneCaisse.length <= 0) {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-warning");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          lang.caisse_ids_lc_empty;
+        //progress bar
+        progressBar.style.transition = "width 10s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        tbodyLC.closest("div").prepend(alert);
+
+        //progress lanch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 10000);
+        return;
+      }
+      //selection
+      else {
+        // modal message 1
+        if (selectedLigneCaisse.length === 1) {
+          modalDeleteLigneCaisse.querySelector(".message").innerHTML =
+            lang.question_delete_ligne_caisse_1.replace(
+              ":field",
+              selectedLigneCaisse[0].closest("tr").dataset.idLC
+            );
+        }
+        //modal message plur
+        else {
+          modalDeleteLigneCaisse.querySelector(".message").innerHTML =
+            lang.question_delete_ligne_caisse_plur.replace(
+              ":field",
+              selectedLigneCaisse.length
+            );
+        }
+        //show modal delete ligne caisse
+        new bootstrap.Modal(modalDeleteLigneCaisse).show();
+        //===== EVENT btn confirm delete caisse
+        modalDeleteLigneCaisse
+          .querySelector("#btn-confirm-delete-ligne-caisse")
+          .addEventListener("click", async () => {
+            try {
+              //ids_lc
+              let ids_lc = [...selectedLigneCaisse];
+              ids_lc = ids_lc.map(
+                (selected) => selected.closest("tr").dataset.idLC
+              );
+              //FETCH api delete all caisse
+              const response = await apiRequest(
+                "/caisse/delete_all_ligne_caisse",
+                {
+                  method: "DELETE",
+                  body: { ids_lc: ids_lc },
+                }
+              );
+              //error
+              if (response.message_type === "error") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-triangle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalDeleteLigneCaisse
+                  .querySelector(".modal-body")
+                  .prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+                return;
+              }
+              //invalid
+              else if (response.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalDeleteLigneCaisse
+                  .querySelector(".modal-body")
+                  .prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                return;
+              }
+              //succcess
+              else {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-success");
+                //icon
+                alert.querySelector(".fad").classList.add("fa-check-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                tbodyLC.closest("div").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+
+                //close modal
+                modalDeleteLigneCaisse
+                  .querySelector("#btn-close-modal-delete-ligne-caisse")
+                  .click();
+
+                //refresh filter ligne caisse
+                filterLigneCaisse(tbodyLC);
+
+                return;
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      }
+    });
     // //   //====================== PRINT ALL USER ===========================
     // //   //modal print all user
     // //   const modalPrintAllUser = document.getElementById("modal-print-all-user");
@@ -2477,7 +2680,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         dateStyle: "short",
         timeStyle: "short",
       });
-      //
+      //set table list - ligne_caisse
       tbody.innerHTML = "";
       filterLigneCaisse.data.forEach((line) => {
         const tr = document.createElement("tr");
@@ -2523,16 +2726,55 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         //append
         tr.append(tdCheckbox, tdIdLC, tdDateDebut, tdDateFin, tdUser, tdAction);
-        // tr.dataset.numCaisse = line.num_caisse;
-        // tr.dataset.solde = line.solde;
-        // tr.dataset.seuil = line.seuil;
-        // tr.dataset.nbAe = line.nb_ae;
-        // tr.dataset.nbFacture = line.nb_facture;
-        // tr.dataset.nbSortie = line.nb_sortie;
-        // tr.dataset.totalAe = line.total_ae;
-        // tr.dataset.totalFacture = line.total_facture;
-        // tr.dataset.totalSortie = line.total_sortie;
+        tr.dataset.idLC = line.id_lc;
+        tr.dataset.dateDebut = line.date_debut;
+        tr.dataset.dateFin = line.date_fin;
+        tr.dataset.idUtilisateur = line.id_utilisateur;
         tbody.appendChild(tr);
+      });
+
+      //foreach tr
+      tbody.querySelectorAll("tr").forEach((tr) => {
+        //modal update ligne_caisse
+        const modalUpdateLigneCaisse = container.querySelector(
+          "#modal-update-ligne-caisse"
+        );
+        //modal id_lc
+        modalUpdateLigneCaisse.querySelector(
+          "#update-ligne-caisse-id-lc"
+        ).innerHTML = tr.dataset.idLC;
+        //input - update date_debut
+        const inputUpdateDateDebut = modalUpdateLigneCaisse.querySelector(
+          "#input-update-date-debut"
+        );
+        inputUpdateDateDebut.value = tr.dataset.dateDebut.replace(" ", "T");
+        //input - update date_fin
+        const inputUpdateDateFin = modalUpdateLigneCaisse.querySelector(
+          "#input-update-date-fin"
+        );
+        inputUpdateDateFin.value = tr.dataset.dateFin.replace(" ", "T");
+
+        //select - add id_utilisateur
+        const selectUpdateIdUtilisateur = modalUpdateLigneCaisse.querySelector(
+          "#select-update-id-utilisateur"
+        );
+
+        //initialize select2
+        const $modalUpdateligneCaisse = $(modalUpdateLigneCaisse);
+        $(".select2").select2({
+          theme: "bootstrap-5",
+          placeholder: lang.select.toLowerCase(),
+          dropdownParent: $modalUpdateligneCaisse,
+        });
+
+        //list user
+        listUser(selectUpdateIdUtilisateur);
+
+        //===== EVENT btn update ligne_caisse
+        tr.querySelector("button").addEventListener("click", async () => {
+          //show modal update ligne_caisse
+          new bootstrap.Modal(modalUpdateLigneCaisse).show();
+        });
       });
     } catch (e) {
       console.error(e);

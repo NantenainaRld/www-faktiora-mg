@@ -176,11 +176,11 @@ return [
         //caisse - delete all plur
         'caisse_deleteAll_plur' => "<b>:field</b> caisses ont été supprimées avec succès",
         //caisse - delete all ligne caisse 0
-        'caisse_deleteAllLigneCaisse_0' => "Aucune ligne caisse n'est supprimée",
+        'caisse_deleteAllLigneCaisse_0' => "Aucune ligne de caisse n'est supprimée",
         //caisse - delete all ligne caisse 1
-        'caisse_deleteAllLigneCaisse_1' => "Une ligne caisse a été supprimée avec succès",
+        'caisse_deleteAllLigneCaisse_1' => "Une ligne de caisse a été supprimée avec succès",
         //caisse - delete all ligne caisse plur
-        'caisse_deleteAllLigneCaisse_plur' => "<b>:field</b> lignes caisse ont été supprimées avec succès",
+        'caisse_deleteAllLigneCaisse_plur' => "<b>:field</b> lignes de caisse ont été supprimées avec succès",
         //caisse - add ligne caisse
         'caisse_addLigneCaisse' => "Ligne caisse ajoutée avec succès",
         //caisse - occup caisse

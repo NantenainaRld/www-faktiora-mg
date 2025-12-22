@@ -4,7 +4,6 @@
 class LigneCaisse extends Database
 {
     private $id_lc = 0;
-    private $id_update = 0;
     private $date_debut = "";
     private $date_fin = "";
     private $id_utilisateur = "";
@@ -22,13 +21,6 @@ class LigneCaisse extends Database
     public function setIdLc($id_lc)
     {
         $this->id_lc = $id_lc;
-        return $this;
-    }
-
-    //setter - id_update
-    public function setIdUpdate($id_update)
-    {
-        $this->id_update = $id_update;
         return $this;
     }
 
@@ -575,15 +567,13 @@ class LigneCaisse extends Database
 
             //date_fin - empty
             if ($this->date_fin === '') {
-                $sql = "UPDATE ligne_caisse SET id_lc = :id_update, date_debut = :date_debut WHERE id_lc = :id_lc ";
-                $paramsQuery['id_update'] = $this->id_update;
+                $sql = "UPDATE ligne_caisse SET date_debut = :date_debut WHERE id_lc = :id_lc ";
                 $paramsQuery['date_debut'] = $this->date_debut;
                 $paramsQuery['id_lc'] = $this->id_lc;
             }
             //date_fin - not empty
             else {
-                $sql = "UPDATE ligne_caisse SET id_lc = :id_update, date_debut = :date_debut, date_fin = :date_fin, id_utilisateur = :id_user, num_caisse = :num_caisse WHERE id_lc = :id_lc ";
-                $paramsQuery['id_update'] = $this->id_update;
+                $sql = "UPDATE ligne_caisse SET date_debut = :date_debut, date_fin = :date_fin, id_utilisateur = :id_user, num_caisse = :num_caisse WHERE id_lc = :id_lc ";
                 $paramsQuery['date_debut'] = $this->date_debut;
                 $paramsQuery['date_fin'] = $this->date_fin;
                 $paramsQuery['id_user'] = $this->id_utilisateur;

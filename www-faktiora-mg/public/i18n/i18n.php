@@ -51,5 +51,8 @@
         question_free_caisse_1: "<?= __('forms.labels.question_restore_caisse_1') ?>",
         question_free_caisse_plur: "<?= __('forms.labels.question_restore_caisse_plur') ?>",
         select: "<?= __('forms.labels.select') ?>",
+        caisse_ids_lc_empty: "<?= __('messages.invalids.caisse_ids_lc_empty') ?>",
+        question_delete_ligne_caisse_1: "<?= __('forms.labels.question_delete_ligne_caisse_1') ?>",
+        question_delete_ligne_caisse_plur: "<?= __('forms.labels.question_delete_ligne_caisse_plur') ?>",
     }
 </script>

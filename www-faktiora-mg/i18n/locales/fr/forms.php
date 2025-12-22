@@ -29,10 +29,13 @@ return [
         'cash_line' => 'Lignes de caisse',
         'distribution_status' => 'Répartition selon status',
         'cash_add' => "Ajout d'une nouvelle caisse",
+        'cash_delete' => "Suppréssion des caisses",
         'cash_update' => "Modification de caisse",
         'restore_caisse' => 'Récupération des caisses',
         'free_caisse' => "Libération des caisses",
-        'add_ligne_caisse' => "Ajout d'une ligne de caisse"
+        'add_ligne_caisse' => "Ajout d'une ligne de caisse",
+        'update_ligne_caisse' => "Modification de ligne de caisse",
+        'delete_ligne_caisse' => "Suppréssion des lignes de caisse"
     ],
     'labels' => [
         'all' => 'tout',
@@ -183,7 +186,10 @@ return [
         'question_free_caisse_plur' => "Voulez-vous vraiment libérer ces <b>:field</b> caisses ?",
         'yes_free' => 'Oui, libérer',
         'date_start' => 'Date de début',
-        'date_end' => 'Date de fin'
+        'date_end' => 'Date de fin',
+        'message_date_end' => "si vide : la caisse sera occupée si elle est libre",
+        'question_delete_ligne_caisse_1' => "Voulez-vous vraiment supprimer la ligne de caisse avec l'ID <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>.",
+        'question_delete_ligne_caisse_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> lignes de caisse ?. <span class='text-danger'>Cette action est irréversible</span>."
     ],
     'times' => [
         'minute' => "minute",
