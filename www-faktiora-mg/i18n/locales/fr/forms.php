@@ -38,7 +38,8 @@ return [
         'delete_ligne_caisse' => "Suppréssion des lignes de caisse",
         'cash_occupation' => "Occupation de caisse",
         'client_dashboard' => "Tableau de bord client",
-        'client_list' => "Liste des clients"
+        'client_list' => "Liste des clients",
+        'client_add' => "Ajout d'un client"
     ],
     'labels' => [
         'all' => 'tout',

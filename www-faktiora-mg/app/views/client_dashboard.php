@@ -47,7 +47,15 @@
                                         <div class="row justify-content-center  overflow-auto align-items-top flex-grow-1">
                                             <!-- table  -->
                                             <div class="col-12">
-                                                <table class="w-100 table-striped">
+                                                <!-- btns  -->
+                                                <div class="d-flex gp-2 justify-content-start w-100 my-2">
+                                                    <!-- btn add client  -->
+                                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                                        data-bs-target="#modal-add-client" id="btn-add-client"><i class="fad fa-user-circle-plus me-2">
+                                                        </i><?= __('forms.labels.add') ?>
+                                                    </button>
+                                                </div>
+                                                <table class=" w-100 table-striped">
                                                     <thead class="bg-success text-light align-items-center form-text">
                                                         <tr>
                                                             <th class="text-center"><i class="fad fa-hashtag me-2"></i>ID</th>
@@ -264,116 +272,65 @@
     </div>
     <!-- overlay searchbar  -->
     <div class="overlay-searchbar d-none min-vh-100 bg-dark bg-opacity-50 top-0 col-12 position-fixed "></div>
-    <!-- modal cash report -->
-    <div class="modal fade" id="modal-cash-report" tabindex="-1" aria-labelledby="modalCashRport" aria-hidden="true">
+    <!-- modal add client -->
+    <div class="modal fade" id="modal-add-client" tabindex="-1" aria-labelledby="modalAddClient" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- modal header  -->
-                <div class="modal-header bg-dark text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-file-pdf me-2"></i><?= ucfirst(strtolower(__('forms.titles.cash_report'))) ?></h6>
+                <div class="modal-header bg-green-0 text-light">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-user-circle-plus me-2"></i><?= __('forms.titles.client_add') ?></h6>
                 </div>
                 <form>
                     <!-- modal body  -->
                     <div class="modal-body">
-                        <!-- date_by  -->
-                        <div class="d-flex flex-column justify-content-center border align-items-center rounded-1 p-2">
-                            <!-- select date by  -->
-                            <div class="mb-2 w-100">
-                                <label for="cash-report-select-date-by" class="form-label"><?= __('forms.labels.date') ?></label>
-                                <div class="input-group">
-                                    <span class="text-success input-group-text"><i class="fad fa-calendar"></i></span>
-                                    <select name="" class="form-select form-select-sm" id="cash-report-select-date-by">
-                                        <option value="all" selected><?= __('forms.labels.all') ?></option>
-                                        <option value="per"><?= __('forms.labels.period') ?></option>
-                                        <option value="between"><?= __('forms.labels.between') ?></option>
-                                        <option value="month_year"><?= __('forms.labels.month_year') ?></option>
-                                    </select>
-                                </div>
+                        <!-- input - nom_client  -->
+                        <div class="mb-2">
+                            <label for="input-add-nom-client" class="form-label"><?= __('forms.labels.name') ?> <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-address-card"></i></span>
+                                <input type="text" maxlength="100" class="form-control form-control-sm" id="input-add-nom-client" placeholder="RALANDISON" required>
                             </div>
-                            <!-- per select  -->
-                            <div class="w-100 mb-2 date-by d-none" id="cash-report-div-per">
-                                <label for="cash-report-select-per" class="form-label"><?= ucfirst(__('forms.labels.period')) ?></label>
-                                <div class="flex-grow-1">
-                                    <div class="input-group">
-                                        <select name="" class="form-select form-select-sm" id="cash-report-select-per">
-                                            <option value="day" selected><?= __('forms.labels.this_day') ?></option>
-                                            <option value="week"><?= __('forms.labels.this_week') ?></option>
-                                            <option value="month"><?= __('forms.labels.this_month') ?></option>
-                                            <option value="year"><?= __('forms.labels.this_year') ?></option>
-                                        </select>
-                                    </div>
-                                </div>
+                        </div>
+                        <!-- input - prenoms_client  -->
+                        <div class="mb-2">
+                            <label for="input-add-prenoms-client" class="form-label"><?= __('forms.labels.firstname') ?></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-address-card"></i></span>
+                                <input type="text" maxlength="100" class="form-control form-control-sm" id="input-add-prenoms-client" placeholder="Nantenaina">
                             </div>
-                            <!-- between date_by  -->
-                            <div class="w-100 mb-2 date-by d-none" id="cash-report-div-between">
-                                <!-- from  -->
-                                <div class="input-group mb-1">
-                                    <label for="cash-report-date-from" class="form-label me-2"><?= __('forms.labels.on') ?></label>
-                                    <input type="date" name="" id="cash-report-date-from" class="form-control form-control-sm" max="<?= date('Y-m-d') ?>" min="1700-01-01">
-                                </div>
-                                <!-- to  -->
-                                <div class="input-group">
-                                    <label for="cash-report-date-to" class="form-label me-2"><?= ucfirst(__('forms.labels.to')) ?></label>
-                                    <input type="date" name="" id="cash-report-date-to" class="form-control form-control-sm" max="<?= date('Y-m-d') ?>">
-                                </div>
+                        </div>
+                        <!-- select - sexe_client  -->
+                        <div class="mb-2">
+                            <label for="select-add-sexe-client" class="form-label"><?= __('forms.labels.sex') ?></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-venus"></i></span>
+                                <select name="" id="select-add-sexe-client" class="form-select form-select-sm">
+                                    <option value="masculin"><?= __('forms.labels.male') ?></option>
+                                    <option value="féminin"><?= __('forms.labels.female') ?></option>
+                                </select>
                             </div>
-                            <!-- month_year date_by  -->
-                            <div class="w-100 mb-2 date-by d-none" id="cash-report-div-month_year">
-                                <!-- month -->
-                                <div class="input-group mb-1">
-                                    <label for="cash-report-select-month" class="form-label me-2"><?= ucfirst(__('forms.labels.month')) ?></label>
-                                    <select name="" id="cash-report-select-month" class="form-select form-select-sm">
-                                        <?php $formatter = ''; ?>
-                                        <?php if ($_COOKIE['lang'] === 'en'): ?>
-                                            <?php $formatter = new IntlDateFormatter(
-                                                'en-US',
-                                                IntlDateFormatter::FULL,
-                                                IntlDateFormatter::NONE,
-                                                null,
-                                                null,
-                                                'MMMM'
-                                            ); ?>
-                                        <?php elseif ($_COOKIE['lang'] === 'fr'): ?>
-                                            <?php $formatter = new IntlDateFormatter(
-                                                'fr-FR',
-                                                IntlDateFormatter::FULL,
-                                                IntlDateFormatter::NONE,
-                                                null,
-                                                null,
-                                                'MMMM'
-                                            ); ?>
-                                        <?php else: ?>
-                                            <?php $formatter = new IntlDateFormatter(
-                                                'mg-MG',
-                                                IntlDateFormatter::FULL,
-                                                IntlDateFormatter::NONE,
-                                                null,
-                                                null,
-                                                'MMMM'
-                                            ); ?>
-                                        <?php endif; ?>
-                                        <option value="all"><?= ucfirst(__('forms.labels.all')) ?></option>
-                                        <?php for ($i = 1; $i <= 12; $i++): ?>
-                                            <option value="<?= $i ?>"><?= ucfirst($formatter->format(DateTime::createFromFormat('!m', $i))); ?></option>
-                                        <?php endfor; ?>
-                                    </select>
-                                </div>
-                                <!-- year  -->
-                                <div class="input-group">
-                                    <label for="cash-report-select-year" class="form-label me-2"><?= ucfirst(__('forms.labels.year')) ?></label>
-                                    <select name="" id="cash-report-select-year" class="form-select form-select-sm">
-                                        <?php for ($i = date('Y'); $i >= 1700; $i--): ?>
-                                            <option value="<?= $i ?>"><?= $i ?></option>
-                                        <?php endfor; ?>
-                                    </select>
-                                </div>
+                        </div>
+                        <!-- input - telephone -->
+                        <div class="mb-2">
+                            <label for="input-add-telephone" class="form-label"><?= __('forms.labels.phone') ?> </label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-phone"></i></span>
+                                <input type="text" maxlength="20" minlength="10" class="form-control form-control-sm" id="input-add-telephone" placeholder="032 00 000 00">
+                            </div>
+                        </div>
+                        <!-- input - adresse -->
+                        <div class="mb-2">
+                            <label for="input-add-adresse" class="form-label"><?= __('forms.labels.address') ?> </label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-location-dot"></i></span>
+                                <input type="text" maxlength="20" class="form-control form-control-sm" id="input-add-adresse" placeholder="Andrainjato Fianarantsoa">
                             </div>
                         </div>
                     </div>
                     <!-- modal footer  -->
                     <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-cash-report"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
-                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-cash-report"><i class="fad fa-download me-2"></i><?= __('forms.labels.download') ?></button>
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-add-client"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-add-client"><i class="fad fa-user-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
                     </div>
                 </form>
             </div>
