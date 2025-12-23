@@ -221,10 +221,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       selectSex.value = "all";
       //reset select arrange_by
       selectArrangeBy.value = "name";
-      localStorage.removeItem(selectRole.id);
+      localStorage.removeItem(selectArrangeBy.id);
       //reset order
       selectOrder.value = "asc";
-      localStorage.removeItem(selectRole.id);
+      localStorage.removeItem(selectOrder.id);
       //reset select num_caisse
       selectNumCaisse.value = "all";
       localStorage.removeItem(selectNumCaisse.id);

@@ -208,10 +208,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       localStorage.removeItem(selectStatus.id);
       //reset select arrange_by
       selectArrangeBy.value = "num";
-      localStorage.removeItem(selectRole.id);
+      localStorage.removeItem(selectArrangeBy.id);
       //reset order
       selectOrder.value = "asc";
-      localStorage.removeItem(selectRole.id);
+      localStorage.removeItem(selectOrder.id);
       //reset date_by
       selectDateBy.value = "all";
       localStorage.removeItem(selectDateBy.id);

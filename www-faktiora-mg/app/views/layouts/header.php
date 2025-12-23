@@ -169,6 +169,10 @@
     <?php if ($_SESSION['menu'] === 'cash_admin' || $_SESSION['menu'] === 'cash_caissier'): ?>
         <link rel="stylesheet" href="<?= SITE_URL ?>/css/caisse-dashboard.css">
     <?php endif; ?>
+    <!-- style client dashboard  -->
+    <?php if ($_SESSION['menu'] === 'client'): ?>
+        <link rel="stylesheet" href="<?= SITE_URL ?>/css/client-dashboard.css">
+    <?php endif; ?>
     <!-- style select2  -->
     <link rel="stylesheet" href="<?= SITE_URL ?>/select2/css/select2.min.css">
     <link rel="stylesheet" href="<?= SITE_URL ?>/select2/css/select2-bootstrap-5-theme.min.css">
@@ -334,7 +338,7 @@
                     </ul>
                 </nav>
             </template>
-            <!-- template real side bar  -->
+            <!-- template real side bar -->
             <template id="template-sidebar">
                 <!-- sidebar  -->
                 <nav class="bg-sidebar overflow-y-auto h-100 sidebar col-6 col-lg-2 col-md-4 placeholder-glow ">
@@ -432,8 +436,8 @@
                                 </nav>
                             </li>
                             <!-- client -->
-                            <li class="nav-item action bg-success rounded-1 mb-2 text-light">
-                                <a href="#" class="nav-link fw-bold p-2 text-start" style="font-size: 0.85rem;">
+                            <li class="nav-item action bg-success rounded-1 mb-2 text-light <?= ($_SESSION['menu'] === 'client' || $_SESSION['menu'] === 'client') ? 'active' : '' ?>">
+                                <a href="<?= SITE_URL ?>/client/page_client" class="nav-link fw-bold p-2 text-start " style="font-size: 0.85rem;">
                                     <i class="fad fa-user-check me-2"></i><?= __('forms.labels.client') ?>
                                 </a>
                             </li>

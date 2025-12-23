@@ -8,7 +8,7 @@
         <header class="row justify-content-center flex-grow-0">
             <div class="col-12">
                 <!-- header  -->
-                <div class="row w-100g-3">
+                <div class="row w-100 g-3">
                     <!-- btn menu mobile-->
                     <div class="col-6 d-flex justify-content-start py-2 d-md-none">
                         <button class="btn btn-sm btn-second" type="button" id="btn-sidebar"><i class="fad fa-bars"></i></button>

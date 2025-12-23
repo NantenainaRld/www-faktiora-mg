@@ -17,7 +17,9 @@ class CaisseController extends Controller
     //page - index
     public function index()
     {
-        echo "page index";
+        //page caisse
+        header('Location: ' . SITE_URL . '/caisse/page_caisse');
+        return;
     }
 
     //page - caisse dashboard

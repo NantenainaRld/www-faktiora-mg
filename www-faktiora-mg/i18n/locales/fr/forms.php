@@ -36,7 +36,9 @@ return [
         'add_ligne_caisse' => "Ajout d'une ligne de caisse",
         'update_ligne_caisse' => "Modification de ligne de caisse",
         'delete_ligne_caisse' => "Suppréssion des lignes de caisse",
-        'cash_occupation' => "Occupation de caisse"
+        'cash_occupation' => "Occupation de caisse",
+        'client_dashboard' => "Tableau de bord client",
+        'client_list' => "Liste des clients"
     ],
     'labels' => [
         'all' => 'tout',
@@ -192,7 +194,10 @@ return [
         'question_delete_ligne_caisse_1' => "Voulez-vous vraiment supprimer la ligne de caisse avec l'ID <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>.",
         'question_delete_ligne_caisse_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> lignes de caisse ?. <span class='text-danger'>Cette action est irréversible</span>.",
         'occup' => "Occuper",
-        'quit_caisse' => "Quitter la caisse actuelle"
+        'quit_caisse' => "Quitter la caisse actuelle",
+        'phone' => "Téléphone",
+        'address' => "Adresse",
+        'actions' => "Actions"
     ],
     'times' => [
         'minute' => "minute",
@@ -210,7 +215,8 @@ return [
     ],
     'placeholders' => [
         'email' => 'nom@faktiora.mg',
-        'search_lc' => "ID ligne de caisse, ID utilisateur"
+        'search_lc' => "ID ligne de caisse, ID utilisateur",
+        'search_client' => "ID , nom ou prenoms, telephone, adresse"
     ]
 
 ];

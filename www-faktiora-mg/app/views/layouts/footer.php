@@ -86,6 +86,10 @@
    <?php if ($_SESSION['menu'] === 'cash_caissier'): ?>
       <script src="<?= SITE_URL ?>/js/caisse-dashboard-caissier.js"></script>
    <?php endif; ?>
+   <!-- script client  -->
+   <?php if ($_SESSION['menu'] === 'client'): ?>
+      <script src="<?= SITE_URL ?>/js/client-dashboard.js"></script>
+   <?php endif; ?>
    </body>
 
    </html>

@@ -4,7 +4,7 @@
 class ClientController extends Controller
 {
 
-    //============================  PAGES ==============================
+    //============================  PAGE ==============================
 
     //page - index
     public function index()
@@ -15,7 +15,62 @@ class ClientController extends Controller
     //page - client dashboard
     public function pageClient()
     {
-        $this->render('client_dashboard', ['title' => "Gestion des clients"]);
+        //is loged in ?
+        $is_loged_in = Auth::isLogedIn();
+        //loged
+        if ($is_loged_in->getLoged()) {
+
+            //get currency_units
+            $currency_units = '';
+            try {
+                $config = json_decode(file_get_contents(PUBLIC_PATH . '/config/config.json'), true);
+
+                //currency_units not found
+                if (!isset($config['currency_units'])) {
+                    //redirect to error page 
+                    header('Location:' . SITE_URL . '/errors?messages=' . __('errors.not_found.json', ['field' => 'currency_units']));
+
+                    return;
+                }
+
+                $currency_units = $config['currency_units'];
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.caisse_createCaisse',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
+
+                //redirect to error page
+                header('Location: ' . SITE_URL . '/errors?messages=' . $response['message']);
+
+                return;
+            }
+
+            //admin
+            $_SESSION['menu'] = 'client';
+            $this->render('client_dashboard', [
+                'title' => 'Faktiora - ' . __('forms.titles.client_dashboard'),
+                'role' => $is_loged_in->getRole(),
+                'currency_units' => $currency_units
+            ]);
+
+            return;
+        }
+        //not loged
+        else {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
     }
 
     //=========================== ACTIONS ================================
@@ -168,13 +223,15 @@ class ClientController extends Controller
         }
 
         //defaults
+        $status_default = ['active', 'deleted'];
         $sexe_default = ['masculin', 'féminin'];
-        $order_by_default = [
-            'nb_factures',
+        $arrange_by_default = [
+            'total_facture',
+            'nb_facture',
             'name',
             'id',
         ];
-        $arrange_default = ['DESC', 'ASC'];
+        $order_default = ['DESC', 'ASC'];
         $date_by_default = [
             'per',
             'between',
@@ -187,31 +244,22 @@ class ClientController extends Controller
             'YEAR'
         ];
 
-        // //status
-        $status = strtolower(trim($_GET['status'] ?? 'active'));
-        $status = ($status === 'deleted') ? $status : 'active';
-        $status = ($is_loged_in->getRole() === 'caissier') ? 'active' : $status;
-        switch ($status) {
-            case 'active':
-                $status = 'actif';
-                break;
-            case 'deleted':
-                $status = 'supprimé';
-                break;
-        }
+        //status
+        $status = strtolower(trim($_GET['status'] ?? 'all'));
+        $status = !in_array($status, $status_default) ? 'all' : $status;
 
         //sexe
         $sexe = strtolower(trim($_GET['sexe'] ?? 'all'));
         $sexe = in_array($sexe, $sexe_default, true) ? $sexe : 'all';
 
-        //order_by
-        $order_by = strtolower(trim($_GET['order_by'] ?? 'name'));
-        $order_by = in_array($order_by, $order_by_default, true) ? $order_by : 'name';
-        $order_by = ($order_by === 'name') ? 'cl.nom_client' : $order_by;
-        $order_by = ($order_by === 'id') ? 'cl.id_client' : $order_by;
-        //arrange
-        $arrange = strtoupper(trim($_GET['arrange'] ?? 'ASC'));
-        $arrange = in_array($arrange, $arrange_default, true) ? $arrange : 'ASC';
+        //arrange_by
+        $arrange_by = strtolower(trim($_GET['arrange_by'] ?? 'id'));
+        $arrange_by = in_array($arrange_by, $arrange_by_default, true) ? $arrange_by : 'id';
+        $arrange_by = $arrange_by === 'id' ? 'cl.id_client' : $arrange_by;
+        $arrange_by = $arrange_by === 'name' ? 'fullname' : $arrange_by;
+        //order
+        $order = strtoupper(trim($_GET['order'] ?? 'ASC'));
+        $order = in_array($order, $order_default, true) ? $order : 'ASC';
 
         //date_by
         $date_by = strtolower(trim($_GET['date_by'] ?? 'all'));
@@ -323,8 +371,8 @@ class ClientController extends Controller
         $params = [
             'status' => $status,
             'sexe' => $sexe,
-            'order_by' => $order_by,
-            'arrange' => $arrange,
+            'arrange_by' => $arrange_by,
+            'order' => $order,
             'date_by' => $date_by,
             'per' => $per,
             'from' => $from,
