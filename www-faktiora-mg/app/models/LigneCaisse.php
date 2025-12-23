@@ -129,7 +129,7 @@ class LigneCaisse extends Database
             }
 
             $response = [
-                'message_type' => 'success',
+                'message_type' => 'succes',
                 'message' => 'success',
                 'data' => $response['data']
             ];

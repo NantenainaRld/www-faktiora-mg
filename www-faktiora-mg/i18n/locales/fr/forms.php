@@ -191,7 +191,8 @@ return [
         'message_date_end' => "si vide : la caisse sera occupée si elle est libre",
         'question_delete_ligne_caisse_1' => "Voulez-vous vraiment supprimer la ligne de caisse avec l'ID <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>.",
         'question_delete_ligne_caisse_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> lignes de caisse ?. <span class='text-danger'>Cette action est irréversible</span>.",
-        'occup' => "Occuper"
+        'occup' => "Occuper",
+        'quit_caisse' => "Quitter la caisse actuelle"
     ],
     'times' => [
         'minute' => "minute",
@@ -209,7 +210,7 @@ return [
     ],
     'placeholders' => [
         'email' => 'nom@faktiora.mg',
-        'search_lc' => "ID ligne caisse, ID utilisateur"
+        'search_lc' => "ID ligne de caisse, ID utilisateur"
     ]
 
 ];

@@ -201,13 +201,13 @@
                                                 <table class="w-100 table-striped">
                                                     <thead class="bg-success text-light align-items-center form-text">
                                                         <tr>
-                                                            <th><input type="checkbox" class="form-check-input" id="check-all-caisse"></th>
-                                                            <th><i class="fad fa-hashtag me-2"></i><?= __('forms.labels.num') ?></th>
-                                                            <th><i class="fad fa-coins me-2"></i><?= __('forms.labels.balance') . " ({$currency_units})" ?></th>
-                                                            <th><i class="fad fa-badge-dollar me-2"></i><?= __('forms.labels.treshold') . " ({$currency_units})" ?></th>
-                                                            <th><i class="fad fa-circle-dot me-2"></i><?= __('forms.labels.status') ?></th>
-                                                            <th><i class="fad fa-user me-2"></i><?= __('forms.labels.user') ?></th>
-                                                            <th><i class="fad fa-gears me-2"></i><?= __('forms.labels.action') ?></th>
+                                                            <th class="text-center"><input type="checkbox" class="form-check-input" id="check-all-caisse"></th>
+                                                            <th class="text-center"><i class="fad fa-hashtag me-2"></i><?= __('forms.labels.num') ?></th>
+                                                            <th class="text-center"><i class="fad fa-coins me-2"></i><?= __('forms.labels.balance') . " ({$currency_units})" ?></th>
+                                                            <th class="text-center"><i class="fad fa-badge-dollar me-2"></i><?= __('forms.labels.treshold') . " ({$currency_units})" ?></th>
+                                                            <th class="text-center"><i class="fad fa-circle-dot me-2"></i><?= __('forms.labels.status') ?></th>
+                                                            <th class="text-center"><i class="fad fa-user me-2"></i><?= __('forms.labels.user') ?></th>
+                                                            <th class="text-center"><i class="fad fa-gears me-2"></i><?= __('forms.labels.action') ?></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tbody-caisse">
@@ -277,12 +277,12 @@
                                                 <table class="w-100 table-striped">
                                                     <thead class="bg-success text-light align-items-center form-text">
                                                         <tr>
-                                                            <th><input type="checkbox" class="form-check-input" id="check-all"></th>
-                                                            <th><i class="fad fa-hashtag me-2"></i>ID</th>
-                                                            <th><i class="fad fa-calendar me-2"></i>Date début</th>
-                                                            <th><i class="fad fa-calendar me-2"></i>Date fin</th>
-                                                            <th><i class="fad fa-user me-2"></i>Utilisateur</th>
-                                                            <th><i class="fad fa-gears me-2"></i>Action</th>
+                                                            <th class="text-center"><input type="checkbox" class="form-check-input" id="check-all"></th>
+                                                            <th class="text-center"><i class="fad fa-hashtag me-2"></i>ID</th>
+                                                            <th class="text-center"><i class="fad fa-calendar me-2"></i><?= __('forms.labels.date_start') ?></th>
+                                                            <th class="text-center"><i class="fad fa-calendar me-2"></i><?= __('forms.labels.date_end') ?></th>
+                                                            <th class="text-center"><i class="fad fa-user me-2"></i><?= __('forms.labels.user') ?></th>
+                                                            <th class="text-center"><i class="fad fa-gears me-2"></i><?= __('forms.labels.action') ?></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tbody-lc">

@@ -439,9 +439,42 @@ class EntreeController extends Controller
         ];
 
         //num_caisse
-        $num_caisse = trim($_GET['num_caisse'] ?? 'all');
-        $num_caisse = filter_var($num_caisse, FILTER_VALIDATE_INT);
-        $num_caisse = (!$num_caisse || $num_caisse < 0) ? 'all' : $num_caisse;
+        $num_caisse = "";
+        //role - admin
+        if ($is_loged_in->getRole() === 'admin') {
+            $num_caisse = trim($_GET['num_caisse'] ?? 'all');
+            $num_caisse = filter_var($num_caisse, FILTER_VALIDATE_INT);
+            $num_caisse = (!$num_caisse || $num_caisse < 0) ? 'all' : $num_caisse;
+        }
+        //role - caissier
+        else {
+            //find user caisse
+            $find_user_caisse = LigneCaisse::findCaisse($is_loged_in->getIdUtilisateur());
+
+            //error
+            if ($find_user_caisse['message_type'] === 'error') {
+                echo json_encode($response);
+
+                return;
+            }
+            //not found user caisse
+            elseif (!$find_user_caisse['found']) {
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'data' => [],
+                    'nb_ae' => 0,
+                    'total_ae' => 0,
+                ];
+
+                echo json_encode($response);
+
+                return;
+            }
+
+            //found user caisse
+            $num_caisse = $find_user_caisse['model']->getNumCaisse();
+        }
 
         //id_utilisateur
         $id_utilisateur = trim($_GET['id_utilisateur'] ?? 'all');
@@ -2148,9 +2181,42 @@ class EntreeController extends Controller
         ];
 
         //num_caisse
-        $num_caisse = trim($_GET['num_caisse'] ?? 'all');
-        $num_caisse = filter_var($num_caisse, FILTER_VALIDATE_INT);
-        $num_caisse = (!$num_caisse || $num_caisse < 0) ? 'all' : $num_caisse;
+        $num_caisse = '';
+        //role - admin
+        if ($is_loged_in->getRole() === 'admin') {
+            $num_caisse = trim($_GET['num_caisse'] ?? 'all');
+            $num_caisse = filter_var($num_caisse, FILTER_VALIDATE_INT);
+            $num_caisse = (!$num_caisse || $num_caisse < 0) ? 'all' : $num_caisse;
+        }
+        //role - caissier
+        else {
+            //find user caisse
+            $find_user_caisse = LigneCaisse::findCaisse($is_loged_in->getIdUtilisateur());
+
+            //error
+            if ($find_user_caisse['message_type'] === 'error') {
+                echo json_encode($response);
+
+                return;
+            }
+            //not found user caisse
+            elseif (!$find_user_caisse['found']) {
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'data' => [],
+                    'nb_facture' => 0,
+                    'total_facture' => 0,
+                ];
+
+                echo json_encode($response);
+
+                return;
+            }
+
+            //found user caisse
+            $num_caisse = $find_user_caisse['model']->getNumCaisse();
+        }
 
         //id_utilisateur
         $id_utilisateur = trim($_GET['id_utilisateur'] ?? 'all');

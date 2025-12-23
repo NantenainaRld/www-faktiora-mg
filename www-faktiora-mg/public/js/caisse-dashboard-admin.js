@@ -51,21 +51,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       minimumFractionDigits: 0,
       maximumFractionDigits: 2,
     });
-    if (cookieLangValue === "mg") {
-      formatterTotal = new Intl.NumberFormat("fr-FR", {
-        style: "currency",
-        currency: currencyUnits,
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      });
-    } else {
-      formatterTotal = new Intl.NumberFormat("fr-FR", {
-        style: "currency",
-        currency: currencyUnits,
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      });
-    }
+    formatterTotal = new Intl.NumberFormat("fr-FR", {
+      style: "currency",
+      currency: currencyUnits,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    });
     formatterInput = new Intl.NumberFormat("fr-FR", {
       style: "decimal",
       minimumFractionDigits: 0,
@@ -2018,75 +2009,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     //============================= CASH REPORT ====================
     cashReport();
-
-    // //   //====================== PRINT ALL USER ===========================
-    // //   //modal print all user
-    // //   const modalPrintAllUser = document.getElementById("modal-print-all-user");
-    // //   //a - print all user
-    // //   const aPrintAllUser = document.getElementById("a-print-all-user");
-    // //   //===== EVENT a print all user
-    // //   aPrintAllUser.addEventListener("click", () => {
-    // //     //show modal print all user
-    // //     new bootstrap.Modal(modalPrintAllUser).show();
-    // //     //===== EVENT btn confirm print all user
-    // //     modalPrintAllUser
-    // //       .querySelector("#btn-confirm-print-all-user")
-    // //       .addEventListener("click", async () => {
-    // //         //radio status
-    // //         const radioStatusUser = modalPrintAllUser.querySelector(
-    // //           "input[type='radio']:checked"
-    // //         );
-    // //         try {
-    // //           //FETCH api print all user
-    // //           const response = await apiRequest(
-    // //             `/user/print_all_user?status=${radioStatusUser.value.trim()}`
-    // //           );
-    // //           //error
-    // //           if (response.message_type === "error") {
-    // //             //alert
-    // //             const alertTemplate = document.getElementById("alert-template");
-    // //             const clone = alertTemplate.content.cloneNode(true);
-    // //             const alert = clone.querySelector(".alert");
-    // //             const progressBar = alert.querySelector(".progress-bar");
-    // //             //alert type
-    // //             alert.classList.add("alert-danger");
-    // //             //icon
-    // //             alert
-    // //               .querySelector(".fad")
-    // //               .classList.add("fa-exclamation-triangle");
-    // //             //message
-    // //             alert.querySelector(".alert-message").innerHTML =
-    // //               response.message;
-    // //             //progress bar
-    // //             progressBar.style.transition = "width 20s linear";
-    // //             progressBar.style.width = "100%";
-    // //             //add alert
-    // //             modalPrintAllUser.querySelector(".modal-body").prepend(alert);
-    // //             //progress lanch animation
-    // //             setTimeout(() => {
-    // //               progressBar.style.width = "0%";
-    // //             }, 10);
-    // //             //auto close alert
-    // //             setTimeout(() => {
-    // //               alert.querySelector(".btn-close").click();
-    // //             }, 20000);
-    // //             return;
-    // //           }
-    // //           //download user report list
-    // //           const a = document.createElement("a");
-    // //           a.href = `data:application/pdf;base64,${response.pdf}`;
-    // //           a.download = response.file_name;
-    // //           a.click();
-    // //           //close modal print all user
-    // //           modalPrintAllUser
-    // //             .querySelector("#btn-close-modal-print-all-user")
-    // //             .click();
-    // //           return;
-    // //         } catch (e) {
-    // //           console.error(e);
-    // //         }
-    // //       });
-    // //   });
   }, 1050);
 
   //================ FUNCTIONS ================
@@ -2226,20 +2148,23 @@ document.addEventListener("DOMContentLoaded", async () => {
         const tdCheckbox = document.createElement("td");
         const inputCheckbox = document.createElement("input");
         inputCheckbox.type = "checkbox";
-        inputCheckbox.classList.add("form-check-input");
+        inputCheckbox.classList.add("form-check-input", "text-center");
         tdCheckbox.appendChild(inputCheckbox);
 
         //td - num_caisse
         const tdNumeroCaisse = document.createElement("td");
         tdNumeroCaisse.textContent = line.num_caisse;
+        tdNumeroCaisse.classList.add("text-center");
 
         //td - solde
         const tdSolde = document.createElement("td");
         tdSolde.textContent = formatterNumber.format(Number(line.solde));
+        tdSolde.classList.add("text-center");
 
         //td - seuil
         const tdSeuil = document.createElement("td");
         tdSeuil.textContent = formatterNumber.format(Number(line.seuil));
+        tdSeuil.classList.add("text-center");
 
         //status
         const tdStatus = document.createElement("td");
@@ -2253,7 +2178,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           tdStatus.classList.add("text-dark");
           tdStatus.textContent = lang.deleted.toLowerCase();
         }
-        tdStatus.classList.add("form-text");
+        tdStatus.classList.add("form-text", "text-center");
 
         //td - id_utilisateur
         const tdUserId = document.createElement("td");
@@ -2919,15 +2844,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         const tdCheckbox = document.createElement("td");
         const inputCheckbox = document.createElement("input");
         inputCheckbox.type = "checkbox";
-        inputCheckbox.classList.add("form-check-input");
+        inputCheckbox.classList.add("form-check-input", "text-center");
         tdCheckbox.appendChild(inputCheckbox);
 
         //td - id_lc
         const tdIdLC = document.createElement("td");
         tdIdLC.textContent = line.id_lc;
+        tdIdLC.classList.add("text-center");
 
         //td - date_debut
         const tdDateDebut = document.createElement("td");
+        tdDateDebut.classList.add("text-center");
         if (line.date_debut) {
           const dateDebut = line.date_debut.replace(" ", "T");
           tdDateDebut.textContent = fromatterDate.format(new Date(dateDebut));
@@ -2937,12 +2864,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         //td - date_fin
         const tdDateFin = document.createElement("td");
+        tdDateFin.classList.add("text-center");
         if (line.date_fin) {
           const dateFin = line.date_fin.replace(" ", "T");
           tdDateFin.textContent = fromatterDate.format(new Date(dateFin));
         } else {
           tdDateFin.textContent = "-";
-          tdDateFin.classList.add("text-center");
         }
 
         //td - utilisateur
@@ -3881,7 +3808,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             progressBar.style.width = "100%";
 
             //add alert
-            modalCashReport.querySelector("form").prepend(alert);
+            modalCashReport.querySelector(".modal-body").prepend(alert);
 
             //progress launch animation
             setTimeout(() => {
@@ -3913,7 +3840,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             progressBar.style.width = "100%";
 
             //add alert
-            modalCashReport.querySelector("form").prepend(alert);
+            modalCashReport.querySelector(".modal-body").prepend(alert);
 
             //progress launch animation
             setTimeout(() => {

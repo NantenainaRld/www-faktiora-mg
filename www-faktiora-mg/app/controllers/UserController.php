@@ -755,6 +755,7 @@ class UserController extends Controller
             header('Location: ' . SITE_URL . '/auth');
             return;
         }
+
         //user exist?
         $response = User::findById($is_loged_in->getIdUtilisateur());
         //error
@@ -775,19 +776,20 @@ class UserController extends Controller
             echo json_encode($response);
             return;
         }
+
         // role caissier 
         $num_caisse = '';
         if ($is_loged_in->getRole() === 'caissier') {
             // user has caisse ?
-            $findUserCaisse = LigneCaisse::findCaisse($is_loged_in->getRole());
+            $find_user_caisse = LigneCaisse::findCaisse($is_loged_in->getIdUtilisateur());
             //error
-            if ($findUserCaisse['message_type'] === 'error') {
-                echo json_encode($findUserCaisse);
+            if ($find_user_caisse['message_type'] === 'error') {
+                echo json_encode($find_user_caisse);
                 return;
             }
             // found 
-            if ($findUserCaisse['found']) {
-                $num_caisse = $findUserCaisse['model']->getNumCaisse();
+            if ($find_user_caisse['found']) {
+                $num_caisse = $find_user_caisse['model']->getNumCaisse();
             }
         }
         //account info

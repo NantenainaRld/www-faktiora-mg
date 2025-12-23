@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   //template real content
   const templateRealContent = document.getElementById("template-user");
   // //container
-  // const container = document.getElementById("container");
   //config
   let config = "",
     currencyUnits = "",

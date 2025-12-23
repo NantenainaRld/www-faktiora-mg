@@ -5,6 +5,7 @@
 
    <!-- bootstrap  -->
    <script src="<?= SITE_URL ?>/bootstrap-5.3.3/js/bootstrap.bundle.min.js"></script>
+   <!-- script header  -->
    <script>
       document.addEventListener('DOMContentLoaded', () => {
          //template - placeholder
@@ -79,8 +80,11 @@
       <script src="<?= SITE_URL ?>/js/users/user-dashboard.js"></script>
    <?php endif; ?>
    <!-- script caisse -->
-   <?php if ($_SESSION['menu'] === 'cash'): ?>
-      <script src="<?= SITE_URL ?>/js/caisse-dashboard.js"></script>
+   <?php if ($_SESSION['menu'] === 'cash_admin'): ?>
+      <script src="<?= SITE_URL ?>/js/caisse-dashboard-admin.js"></script>
+   <?php endif; ?>
+   <?php if ($_SESSION['menu'] === 'cash_caissier'): ?>
+      <script src="<?= SITE_URL ?>/js/caisse-dashboard-caissier.js"></script>
    <?php endif; ?>
    </body>
 

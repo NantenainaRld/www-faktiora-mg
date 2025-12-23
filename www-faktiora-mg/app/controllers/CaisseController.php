@@ -27,12 +27,6 @@ class CaisseController extends Controller
         $is_loged_in = Auth::isLogedIn();
         //loged
         if ($is_loged_in->getLoged()) {
-            //not admin
-            if ($is_loged_in->getRole() !== 'admin') {
-                //redirect to caisse index
-                header('Location: ' . SITE_URL . '/caisse');
-                return;
-            }
 
             //get currency_units
             $currency_units = '';
@@ -69,9 +63,9 @@ class CaisseController extends Controller
                 return;
             }
 
-            $_SESSION['menu'] = 'cash';
             //admin
             if ($is_loged_in->getRole() === 'admin') {
+                $_SESSION['menu'] = 'cash_admin';
                 $this->render('caisse_dashboard_admin', [
                     'title' => 'Faktiora - ' . __('forms.titles.caisse_dashboard'),
                     'role' => $is_loged_in->getRole(),
@@ -81,6 +75,7 @@ class CaisseController extends Controller
             }
             //caissier
             else {
+                $_SESSION['menu'] = 'cash_caissier';
                 $this->render('caisse_dashboard_caissier', [
                     'title' => 'Faktiora - ' . __('forms.titles.caisse_dashboard'),
                     'role' => $is_loged_in->getRole(),
@@ -441,24 +436,47 @@ class CaisseController extends Controller
             return;
         }
 
-        //role - not admin
-        if ($is_loged_in->getRole() !== 'admin') {
-            //redirect to caisse index
-            header("Location: " . SITE_URL . '/caisse');
-            return;
-        }
-
         //num_caisse
-        $num_caisse = trim($_GET['num_caisse'] ?? '');
-        //num_caisse - empty
-        if ($num_caisse === '') {
-            $response = [
-                'message_type' => 'invalid',
-                'message' => __('messages.invalids.caisse_not_selected')
-            ];
+        $num_caisse = '';
+        //role - admin
+        if ($is_loged_in->getRole() === 'admin') {
+            $num_caisse = trim($_GET['num_caisse'] ?? '');
+            //num_caisse - empty
+            if ($num_caisse === '') {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.caisse_not_selected')
+                ];
 
-            echo json_encode($response);
-            return;
+                echo json_encode($response);
+                return;
+            }
+        }
+        //role - caissier
+        else {
+            //find user caisse
+            $find_user_caisse = LigneCaisse::findCaisse($is_loged_in->getIdUtilisateur());
+
+            //error
+            if ($find_user_caisse['message_type'] === 'error') {
+                echo json_encode($response);
+
+                return;
+            }
+            //not found user caisse
+            elseif (!$find_user_caisse['found']) {
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'data' => []
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            //found user caisse
+            $num_caisse = $find_user_caisse['model']->getNumCaisse();
         }
         //num_caisse exist ?
         $response = Caisse::findById($num_caisse);
@@ -1808,13 +1826,6 @@ class CaisseController extends Controller
             header("Location: " . SITE_URL . '/auth');
             return;
         }
-
-        // //role - not admin
-        // if ($is_loged_in->getRole() !== 'admin') {
-        //     //redirect to caisse index
-        //     header("Location: " . SITE_URL . '/caisse');
-        //     return;
-        // }
 
         //list all caisse
         $response = Caisse::listAllCaisse();
