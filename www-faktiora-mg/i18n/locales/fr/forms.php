@@ -41,7 +41,8 @@ return [
         'client_list' => "Liste des clients",
         'client_add' => "Ajout d'un client",
         'client_update' => "Modification de client",
-        'histo_facture' => "Histogramme des factures"
+        'histo_facture' => "Histogramme des factures",
+        'delete_client' => "Suppréssion des clients"
     ],
     'labels' => [
         'all' => 'tout',
@@ -200,7 +201,9 @@ return [
         'quit_caisse' => "Quitter la caisse actuelle",
         'phone' => "Téléphone",
         'address' => "Adresse",
-        'actions' => "Actions"
+        'actions' => "Actions",
+        'question_delete_client_1' => "Voulez-vous vraiment supprimer le client avec l'ID <b>:field</b> ?",
+        'question_delete_client_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> clients ?"
     ],
     'times' => [
         'minute' => "minute",

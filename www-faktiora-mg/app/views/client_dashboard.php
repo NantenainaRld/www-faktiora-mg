@@ -48,16 +48,25 @@
                                             <!-- table  -->
                                             <div class="col-12">
                                                 <!-- btns  -->
-                                                <div class="d-flex gp-2 justify-content-start w-100 my-2">
+                                                <div class="d-flex gap-2 justify-content-start w-100 my-2">
                                                     <!-- btn add client  -->
                                                     <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                                                         data-bs-target="#modal-add-client" id="btn-add-client"><i class="fad fa-user-circle-plus me-2">
                                                         </i><?= __('forms.labels.add') ?>
                                                     </button>
+                                                    <?php if ($role === 'admin'): ?>
+                                                        <!-- btn delete client  -->
+                                                        <button class="btn btn-sm btn-outline-danger" id="btn-delete-client"><i class="fad fa-user-circle-minus me-2">
+                                                            </i><?= __('forms.labels.delete') ?>
+                                                        </button>
+                                                    <?php endif; ?>
                                                 </div>
                                                 <table class=" w-100 table-striped">
                                                     <thead class="bg-success text-light align-items-center form-text">
                                                         <tr>
+                                                            <?php if ($role === 'admin'): ?>
+                                                                <th class="text-center"><input type="checkbox" id="check-all-client" class="form-check-input"></th>
+                                                            <?php endif; ?>
                                                             <th class="text-center"><i class="fad fa-hashtag me-2"></i>ID</th>
                                                             <th class="text-center"><i class="fad fa-address-card me-2"></i><?= __('forms.labels.name_firstname') ?></th>
                                                             <th class="text-center"><i class="fad fa-venus me-2"></i><?= ucfirst(__('forms.labels.sex')) ?></th>
@@ -423,6 +432,26 @@
                         <!-- chart total_facture  -->
                         <div class="col-12 d-flex flex-column justify-content-center align-items-center" id="div-histo-facture-total"></div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal delete client -->
+    <div class="modal fade" id="modal-delete-client" tabindex="-1" aria-labelledby="modalDeleteClient" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <!-- modal header  -->
+                <div class="modal-header bg-danger text-light">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-user-circle-minus me-2"></i><?= __('forms.titles.delete_client') ?></h6>
+                </div>
+                <!-- modal body  -->
+                <div class="modal-body">
+                    <div class="message">Voulez-vous vraiment supprimer ces ... clients ?</div>
+                </div>
+                <!-- modal footer  -->
+                <div class="modal-footer d-flex flex-nowrap justify-content-end">
+                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-delete-client"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
+                    <button class="btn btn-primary btn-sm fw-bold" id="btn-confirm-modal-delete-client"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_delete') ?></button>
                 </div>
             </div>
         </div>
