@@ -64,8 +64,8 @@
                                                             <th class="text-center"><i class="fad fa-phone me-2"></i><?= __('forms.labels.phone') ?></th>
                                                             <th class="text-center"><i class="fad fa-location-dot me-2"></i><?= __('forms.labels.address') ?></th>
                                                             <th class="text-center"><i class="fad fa-dot-circle me-2"></i><?= __('forms.labels.status') ?></th>
-                                                            <th class="text-center"><i class="fad fa-money-bill-transfer me-2"></i><?= ucfirst(__('forms.labels.nb_facture')) ?></th>
-                                                            <th class="text-center"><i class="fad fa-money-bill-transfer me-2"></i><?= ucfirst(__('forms.labels.total_facture')) ?> (<?= $currency_units ?>)</th>
+                                                            <th class="text-center"><i class="fad fa-file-invoice me-2"></i><?= ucfirst(__('forms.labels.nb_facture')) ?></th>
+                                                            <th class="text-center"><i class="fad fa-file-invoice me-2"></i><?= ucfirst(__('forms.labels.total_facture')) ?> (<?= $currency_units ?>)</th>
                                                             <th class="text-center"><i class="fad fa-gears me-2"></i><?= __('forms.labels.actions') ?></th>
                                                         </tr>
                                                     </thead>
@@ -336,7 +336,7 @@
             </div>
         </div>
     </div>
-    <!-- modal add client -->
+    <!-- modal update client -->
     <div class="modal fade" id="modal-update-client" tabindex="-1" aria-labelledby="modalUpdateClient" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
@@ -399,6 +399,31 @@
                         <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-update-client"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+    <!-- modal histo facture -->
+    <div class="modal fade" id="modal-histo-facture" tabindex="-1" aria-labelledby="modalHistoFacture" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <!-- modal header  -->
+                <div class="modal-header bg-green-0 text-light">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-chart-mixed-up-circle-dollar me-2"></i><?= __('forms.titles.histo_facture') ?></h6>
+                    <button class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                </div>
+                <!-- modal body  -->
+                <div class="modal-body">
+                    <!-- id client  -->
+                    <div class="mb-2 text-center text-secondary w-100 "><?= strtolower(__('forms.labels.client')) ?> : <span id="histo-facture-id-client" class="fw-bold"></span></div>
+                    <div class="mb-2 alert-container"></div>
+                    <!-- chart -->
+                    <div class="row">
+                        <!-- chart nb_facture  -->
+                        <div class="col-12 d-flex flex-column justify-content-center align-items-center" id="div-histo-facture-nb"></div>
+                        <!-- chart total_facture  -->
+                        <div class="col-12 d-flex flex-column justify-content-center align-items-center" id="div-histo-facture-total"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -299,9 +299,16 @@ class Facture extends Database
             $paramsQuery['user_id'] = $params['id_utilisateur'];
         }
 
+        //id_client - not empty
+        $client_cond = '';
+        if (!empty($params['id_client'])) {
+            $client_cond = " AND f.id_client = :id_client ";
+            $paramsQuery['id_client'] = $params['id_client'];
+        }
+
         try {
 
-            $response = parent::selectQuery("SELECT f.num_facture, (lf.prix * lf.quantite_produit) AS montant, DATE(date_facture) AS date FROM facture f JOIN ligne_facture lf ON lf.id_facture = f.id_facture WHERE etat_facture != 'supprimé' AND num_facture IS NOT NULL {$facture_cond} {$caisse_cond} {$user_cond} ORDER BY date ASC", $paramsQuery);
+            $response = parent::selectQuery("SELECT f.num_facture, (lf.prix * lf.quantite_produit) AS montant, DATE(date_facture) AS date FROM facture f JOIN ligne_facture lf ON lf.id_facture = f.id_facture WHERE etat_facture != 'supprimé' AND f.num_facture IS NOT NULL {$facture_cond} {$caisse_cond} {$user_cond} {$client_cond} ORDER BY date ASC", $paramsQuery);
 
             //error
             if ($response['message_type'] === 'error') {

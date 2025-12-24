@@ -288,7 +288,7 @@ class DemandeSortie extends Database
 
         try {
 
-            $response = parent::selectQuery("SELECT ds.num_ds, (lds.quantite_article * lds.prix_article) AS montant, DATE(date_ds) AS date FROM demande_sortie ds JOIN ligne_ds lds ON lds.id_ds = ds.id_ds WHERE etat_ds != 'supprimé' AND num_ds IS NOT NULL {$ds_cond} {$caisse_cond} {$user_cond} ORDER BY date ASC", $paramsQuery);
+            $response = parent::selectQuery("SELECT ds.num_ds, (lds.quantite_article * lds.prix_article) AS montant, DATE(date_ds) AS date FROM demande_sortie ds JOIN ligne_ds lds ON lds.id_ds = ds.id_ds WHERE etat_ds != 'supprimé' AND ds.num_ds IS NOT NULL {$ds_cond} {$caisse_cond} {$user_cond} ORDER BY date ASC", $paramsQuery);
 
             //error
             if ($response['message_type'] === 'error') {

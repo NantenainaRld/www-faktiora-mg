@@ -40,7 +40,8 @@ return [
         'client_dashboard' => "Tableau de bord client",
         'client_list' => "Liste des clients",
         'client_add' => "Ajout d'un client",
-        'client_update' => "Modification de client"
+        'client_update' => "Modification de client",
+        'histo_facture' => "Histogramme des factures"
     ],
     'labels' => [
         'all' => 'tout',

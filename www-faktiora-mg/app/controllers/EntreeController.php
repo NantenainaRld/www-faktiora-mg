@@ -2180,6 +2180,9 @@ class EntreeController extends Controller
             'YEAR'
         ];
 
+        //id_client
+        $id_client = trim($_GET['id_client'] ?? '');
+
         //num_caisse
         $num_caisse = '';
         //role - admin
@@ -2188,8 +2191,8 @@ class EntreeController extends Controller
             $num_caisse = filter_var($num_caisse, FILTER_VALIDATE_INT);
             $num_caisse = (!$num_caisse || $num_caisse < 0) ? 'all' : $num_caisse;
         }
-        //role - caissier
-        else {
+        //role - caissier and id_client empty
+        elseif (empty($id_client)) {
             //find user caisse
             $find_user_caisse = LigneCaisse::findCaisse($is_loged_in->getIdUtilisateur());
 
@@ -2335,6 +2338,7 @@ class EntreeController extends Controller
             'to' => $to,
             'month' => $month,
             'year' => $year,
+            'id_client' => $id_client
         ];
 
         //list all facture

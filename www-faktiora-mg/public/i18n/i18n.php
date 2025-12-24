@@ -58,5 +58,7 @@
         question_delete_ligne_caisse_1: "<?= __('forms.labels.question_delete_ligne_caisse_1') ?>",
         question_delete_ligne_caisse_plur: "<?= __('forms.labels.question_delete_ligne_caisse_plur') ?>",
         caisse_not_selected: "<?= __('messages.invalids.caisse_not_selected') ?>",
+        nb_facture: "<?= ucfirst(__('forms.labels.nb_facture')) ?>",
+        total_facture: "<?= ucfirst(__('forms.labels.total_facture')) ?>",
     }
 </script>
