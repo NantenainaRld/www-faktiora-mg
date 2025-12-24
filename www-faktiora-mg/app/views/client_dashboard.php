@@ -60,6 +60,12 @@
                                                             </i><?= __('forms.labels.delete') ?>
                                                         </button>
                                                     <?php endif; ?>
+                                                    <?php if ($role === 'admin'): ?>
+                                                        <!-- btn delete permanent client  -->
+                                                        <button class="btn btn-sm btn-danger" id="btn-delete-permanent-client"><i class="fad fa-user-circle-minus me-2">
+                                                            </i><?= __('forms.labels.delete_permanent') ?>
+                                                        </button>
+                                                    <?php endif; ?>
                                                 </div>
                                                 <table class=" w-100 table-striped">
                                                     <thead class="bg-success text-light align-items-center form-text">

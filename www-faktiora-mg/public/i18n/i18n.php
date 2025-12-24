@@ -63,5 +63,8 @@
         client_ids_client_empty: "<?= ucfirst(__('messages.invalids.client_ids_client_empty')) ?>",
         question_delete_client_1: "<?= __('forms.labels.question_delete_client_1') ?>",
         question_delete_client_plur: "<?= __('forms.labels.question_delete_client_plur') ?>",
+        question_delete_permanent_client_1: "<?= __('forms.labels.question_delete_permanent_client_1') ?>",
+        question_delete_permanent_client_plur: "<?= __('forms.labels.question_delete_permanent_client_plur') ?>",
+
     }
 </script>

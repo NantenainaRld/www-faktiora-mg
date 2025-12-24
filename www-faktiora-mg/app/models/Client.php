@@ -402,8 +402,8 @@ class Client extends Database
         return $response;
     }
 
-    //static - permanent delete all client
-    public static function permanentDeleteAllClient($ids_client)
+    //static - delete permanent all client
+    public static function deletePermanentAllClient($ids_client)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 

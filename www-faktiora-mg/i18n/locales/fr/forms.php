@@ -203,7 +203,10 @@ return [
         'address' => "Adresse",
         'actions' => "Actions",
         'question_delete_client_1' => "Voulez-vous vraiment supprimer le client avec l'ID <b>:field</b> ?",
-        'question_delete_client_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> clients ?"
+        'question_delete_client_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> clients ?",
+        'question_delete_permanent_client_1' => "Voulez-vous vraiment supprimer le client avec l'ID <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>.",
+        'question_delete_permanent_client_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> clients ?. <span class='text-danger'>Cette action est irréversible</span>.",
+
     ],
     'times' => [
         'minute' => "minute",

@@ -640,8 +640,8 @@ class ClientController extends Controller
         return;
     }
 
-    //action - permanent delete all client
-    public function permanentDeleteAllClient()
+    //action - delete permanent all client
+    public function deletePermanentAllClient()
     {
         header('Content-Type: application/json');
         $response = null;
@@ -681,7 +681,7 @@ class ClientController extends Controller
             try {
 
                 //permanent delete all client
-                $response = Client::permanentDeleteAllClient($ids_client);
+                $response = Client::deletePermanentAllClient($ids_client);
 
                 echo json_encode($response);
                 return;

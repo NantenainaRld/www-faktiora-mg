@@ -1025,6 +1025,223 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
           });
       });
+
+    //========================= DELETE PERMANENT CLIENT =================
+    //===== EVENT btn delete permanent client
+    container
+      .querySelector("#btn-delete-permanent-client")
+      .addEventListener("click", () => {
+        //modal delete client
+        const modalDeleteClient = container.querySelector(
+          "#modal-delete-client"
+        );
+        //selected client
+        const selectedClient = container.querySelectorAll(
+          "#tbody-client input[type='checkbox']:checked"
+        );
+
+        //no selection
+        if (selectedClient.length <= 0) {
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-warning");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            lang.client_ids_client_empty;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          container
+            .querySelector("#tbody-client")
+            .closest("div")
+            .prepend(alert);
+
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+          return;
+        }
+
+        //modal message 1
+        if (selectedClient.length === 1) {
+          modalDeleteClient.querySelector(".message").innerHTML =
+            lang.question_delete_permanent_client_1.replace(
+              ":field",
+              selectedClient[0].closest("tr").dataset.idClient
+            );
+        }
+        //modal message plur
+        else {
+          modalDeleteClient.querySelector(".message").innerHTML =
+            lang.question_delete_permanent_client_plur.replace(
+              ":field",
+              selectedClient.length
+            );
+        }
+
+        //show modal delete client
+        new bootstrap.Modal(modalDeleteClient).show();
+
+        //==== EVENT btn confirm modal delete client
+        modalDeleteClient
+          .querySelector("#btn-confirm-modal-delete-client")
+          .addEventListener("click", async () => {
+            try {
+              //ids_client
+              let ids_client = [...selectedClient];
+              ids_client = ids_client.map(
+                (selected) => selected.closest("tr").dataset.idClient
+              );
+
+              //FETCH api delete client
+              const apiDeleteClient = await apiRequest(
+                "/client/delete_permanent_all_client",
+                {
+                  method: "DELETE",
+                  body: {
+                    ids_client: ids_client,
+                  },
+                }
+              );
+
+              //error
+              if (apiDeleteClient.message_type === "error") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiDeleteClient.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalDeleteClient.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+                return;
+              }
+              //invalid
+              else if (apiDeleteClient.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiDeleteClient.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalDeleteClient.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                return;
+              }
+
+              //success
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-success");
+              //icon
+              alert.querySelector(".fad").classList.add("fa-check-circle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                apiDeleteClient.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              container
+                .querySelector("#tbody-client")
+                .closest("div")
+                .prepend(alert);
+
+              //progress launch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
+
+              //auto hide modal
+              modalDeleteClient
+                .querySelector("#btn-close-modal-delete-client")
+                .click();
+
+              //refresh filter client
+              filterClient(
+                selectStatus.value.trim(),
+                selectSex.value.trim(),
+                selectArrangeBy.value.trim(),
+                selectOrder.value.trim(),
+                selectDateBy.value.trim(),
+                selectPer.value.trim(),
+                dateFrom.value.trim(),
+                dateTo.value.trim(),
+                selectMonth.value.trim(),
+                selectYear.value.trim(),
+                inputSearch.value.trim()
+              );
+
+              return;
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      });
   }, 1050);
 
   //====================== FUNCTIONS ========================
