@@ -265,6 +265,12 @@ return [
         'client_deleteAllClient_1' => "Un client a été supprimé avec succès",
         //client - delete all client plur
         'client_deleteAllClient_plur' => "<b>:field</b> on été supprimés avec succès",
+        //client - restore all client 0
+        'client_restoreAllClient_0' => "Aucun client n'est récupéré",
+        //client - restore all client 1
+        'client_restoreAllClient_1' => "Un client a été récupéré avec succès",
+        //client - restore all client plur
+        'client_restoreAllClient_plur' => "<b>:field</b> clients ont été récupérés avec succès",
         //print
         'print' => "PDF généré avec succès",
     ],

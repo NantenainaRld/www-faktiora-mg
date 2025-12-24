@@ -65,6 +65,8 @@
         question_delete_client_plur: "<?= __('forms.labels.question_delete_client_plur') ?>",
         question_delete_permanent_client_1: "<?= __('forms.labels.question_delete_permanent_client_1') ?>",
         question_delete_permanent_client_plur: "<?= __('forms.labels.question_delete_permanent_client_plur') ?>",
+        question_restore_client_1: "<?= __('forms.labels.question_restore_client_1') ?>",
+        question_restore_client_plur: "<?= __('forms.labels.question_restore_client_plur') ?>",
 
     }
 </script>

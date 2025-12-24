@@ -459,4 +459,62 @@ class Client extends Database
 
         return $response;
     }
+
+    //static - restore all client
+    public static function restoreAllClient($ids_client)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        $placeholders = implode(', ', array_fill(0, count($ids_client), '?'));
+        $sql = "UPDATE client SET etat_client = 'actif' WHERE id_client IN ({$placeholders}) ";
+
+        try {
+
+            $response = parent::executeQuery($sql, $ids_client);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //success
+            //0
+            if ($response['row_count'] === 0) {
+                $response['message'] = __('messages.success.client_restoreAllClient_0');
+            }
+            //1
+            elseif ($response['row_count'] === 1) {
+                $response['message'] = __('messages.success.client_restoreAllClient_1');
+            }
+            //plur
+            else {
+                $response['message'] = __('messages.success.client_restoreAllClient_plur', ['field' => $response['row_count']]);
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => $response['message']
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.client_restoreAllClient',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
 }

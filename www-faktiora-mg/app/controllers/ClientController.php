@@ -716,4 +716,81 @@ class ClientController extends Controller
         echo json_encode($response);
         return;
     }
+
+    //action - restore all client
+    public function restoreAllClient()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //role - not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to client index
+            header("Location: " . SITE_URL . '/client');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            $json = json_decode(file_get_contents('php://input'), true);
+
+            $ids_client = array_values(array_map(fn($x) => strtoupper(trim($x)), $json['ids_client']));
+
+            //ids_client - empty
+            if (count($ids_client) <= 0) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.client_ids_client_empty')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+
+                //restore all client
+                $response = Client::restoreAllClient($ids_client);
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.client_restoreAllClient',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            echo json_encode($response);
+            return;
+        }
+        //redirect to client index
+        else {
+            header('Location: ' . SITE_URL . '/client');
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
 }

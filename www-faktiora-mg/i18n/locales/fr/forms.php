@@ -42,7 +42,8 @@ return [
         'client_add' => "Ajout d'un client",
         'client_update' => "Modification de client",
         'histo_facture' => "Histogramme des factures",
-        'delete_client' => "Suppréssion des clients"
+        'delete_client' => "Suppréssion des clients",
+        'restore_client' => "Récupération des clients"
     ],
     'labels' => [
         'all' => 'tout',
@@ -206,6 +207,8 @@ return [
         'question_delete_client_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> clients ?",
         'question_delete_permanent_client_1' => "Voulez-vous vraiment supprimer le client avec l'ID <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>.",
         'question_delete_permanent_client_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> clients ?. <span class='text-danger'>Cette action est irréversible</span>.",
+        'question_restore_client_1' => "Voulez-vous vraiment récupérer le client avec l'ID <b>:field</b> ?",
+        'question_restore_client_plur' => "Voulez-vous vraiment récupérer ces <b>:field</b> clients ?",
 
     ],
     'times' => [
