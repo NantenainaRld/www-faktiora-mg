@@ -401,7 +401,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     //======================== FILTER CLIENT ==================
-    filterClient(
+    await filterClient(
       selectStatus.value.trim(),
       selectSex.value.trim(),
       selectArrangeBy.value.trim(),
@@ -645,6 +645,169 @@ document.addEventListener("DOMContentLoaded", async () => {
           console.error(e);
         }
       });
+
+    //========================= UPDATE CLIENT ======================
+    //modal update client
+    const modalUpdateClient = container.querySelector("#modal-update-client");
+    //===== EVENT form update client submit
+    modalUpdateClient
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        //suspend submit
+        e.preventDefault();
+        //check validity
+        if (!e.target.checkValidity()) {
+          e.target.reportValidity();
+        }
+
+        try {
+          //FETCH api update client
+          const apiUpdateClient = await apiRequest("/client/update_client", {
+            method: "PUT",
+            body: {
+              id_client: modalUpdateClient
+                .querySelector("#update-id-client")
+                .textContent.trim(),
+              nom_client: modalUpdateClient
+                .querySelector("#input-update-nom-client")
+                .value.trim(),
+              prenoms_client: modalUpdateClient
+                .querySelector("#input-update-prenoms-client")
+                .value.trim(),
+              sexe_client: modalUpdateClient
+                .querySelector("#select-update-sexe-client")
+                .value.trim(),
+              telephone: modalUpdateClient
+                .querySelector("#input-update-telephone")
+                .value.trim(),
+              adresse: modalUpdateClient
+                .querySelector("#input-update-adresse")
+                .value.trim(),
+            },
+          });
+
+          //error
+          if (apiUpdateClient.message_type === "error") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-danger");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiUpdateClient.message;
+            //progress bar
+            progressBar.style.transition = "width 20s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalUpdateClient.querySelector(".modal-body").prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 20000);
+
+            return;
+          }
+          //invalid
+          else if (apiUpdateClient.message_type === "invalid") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-warning");
+            //icon
+            alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiUpdateClient.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalUpdateClient.querySelector(".modal-body").prepend(alert);
+
+            //progress lanch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+
+            return;
+          }
+
+          //success update client
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-success");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-check-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            apiUpdateClient.message;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          container
+            .querySelector("#tbody-client")
+            .closest("div")
+            .prepend(alert);
+
+          //progress lanch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+
+          //auto close modal
+          modalUpdateClient
+            .querySelector("#btn-close-modal-update-client")
+            .click();
+
+          //refresh filter client
+          filterClient(
+            selectStatus.value.trim(),
+            selectSex.value.trim(),
+            selectArrangeBy.value.trim(),
+            selectOrder.value.trim(),
+            selectDateBy.value.trim(),
+            selectPer.value.trim(),
+            dateFrom.value.trim(),
+            dateTo.value.trim(),
+            selectMonth.value.trim(),
+            selectYear.value.trim(),
+            inputSearch.value.trim()
+          );
+        } catch (e) {
+          console.error(e);
+        }
+      });
   }, 1050);
 
   //====================== FUNCTIONS ========================
@@ -804,7 +967,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           "btn-light",
           "btn",
           "btn-sm",
-          "text-primary"
+          "text-primary",
+          "btn-update-client"
         );
         btnUpdateClient.innerHTML = "<i class='fad fa-user-pen'></i>";
         //btn view facture
@@ -819,7 +983,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           "d-flex",
           "justify-content-center",
           "align-items-center",
-          "gap-2"
+          "gap-2",
+          "btn-view-facture"
         );
         divActions.append(btnUpdateClient, btnViewFacture);
         tdActions.append(divActions);
@@ -836,7 +1001,79 @@ document.addEventListener("DOMContentLoaded", async () => {
           tdTotalFacture,
           tdActions
         );
+        tr.dataset.idClient = line.id_client;
+        tr.dataset.nomClient = line.nom_client;
+        tr.dataset.prenomsClient = line.prenoms_client;
+        tr.dataset.sexeClient = line.sexe_client;
+        tr.dataset.telephone = line.telephone;
+        tr.dataset.adresse = line.adresse;
         tbodyClient.appendChild(tr);
+      });
+
+      //========================== UPDATE CLIENT ===========================
+      //modal update client
+      const modalUpdateClient = container.querySelector("#modal-update-client");
+
+      //foreach all tr
+      tbodyClient.querySelectorAll("tr").forEach((tr) => {
+        //===== EVENT btn update client
+        tr.querySelector(".btn-update-client").addEventListener("click", () => {
+          //modal id_client
+          modalUpdateClient.querySelector("#update-id-client").innerHTML =
+            tr.dataset.idClient;
+          //input -  update nom_client
+          const inputUpdateNomClient = modalUpdateClient.querySelector(
+            "#input-update-nom-client"
+          );
+          inputUpdateNomClient.value = tr.dataset.nomClient;
+          //input - update prenoms_client
+          const inputUpdatePrenomsClient = modalUpdateClient.querySelector(
+            "#input-update-prenoms-client"
+          );
+          inputUpdatePrenomsClient.value = tr.dataset.prenomsClient;
+          //select - update sexe_client
+          const selectUpdateSexeClient = modalUpdateClient.querySelector(
+            "#select-update-sexe-client"
+          );
+          selectUpdateSexeClient.value = tr.dataset.sexeClient;
+          //input - update telephone
+          const inputUpdateTelephone = modalUpdateClient.querySelector(
+            "#input-update-telephone"
+          );
+          inputUpdateTelephone.value = tr.dataset.telephone;
+          //input - update adresse
+          const inputUpdateAdresse = modalUpdateClient.querySelector(
+            "#input-update-adresse"
+          );
+          inputUpdateAdresse.value = tr.dataset.adresse;
+
+          //show modal update client
+          new bootstrap.Modal(modalUpdateClient).show();
+
+          //===== EVENT input update nom_client
+          inputUpdateNomClient.addEventListener("input", (e) => {
+            //remove double space && change into uppercase
+            e.target.value = e.target.value.replace("  ", " ").toUpperCase();
+          });
+          //===== EVENT input update prenoms_client
+          inputUpdatePrenomsClient.addEventListener("input", (e) => {
+            //remove double space && change into uppercase
+            e.target.value = e.target.value.replace("  ", " ");
+          });
+          //===== EVENT input update telephone
+          inputUpdateTelephone.addEventListener("input", (e) => {
+            //remove invalid
+            e.target.value = e.target.value.replace(/[^\d+\s]/g, "");
+            //remove double space
+            e.target.value = e.target.value.replace("  ", " ");
+          });
+          //===== EVENT input update adresse
+          inputUpdateAdresse.addEventListener("input", (e) => {
+            //remove double space
+            e.target.value = e.target.value.replace("  ", " ");
+            localStorage.setItem(e.target.id, e.target.value);
+          });
+        });
       });
     } catch (e) {
       console.error(e);

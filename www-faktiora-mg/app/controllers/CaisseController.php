@@ -1576,18 +1576,6 @@ class CaisseController extends Controller
             //trim
             $json = array_map(fn($x) => trim($x), $json);
 
-            //num_caisse - invalid
-            $num_caisse = filter_var($json['num_caisse'], FILTER_VALIDATE_INT);
-            if ($num_caisse === false || $num_caisse < 0) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.invalids.caisse_num_caisse')
-                ];
-
-                echo json_encode($response);
-                return;
-            }
-
             //id_utilisateur - invalid
             $id_utilisateur = filter_var($json['id_utilisateur'], FILTER_VALIDATE_INT);
             if ($id_utilisateur === false || $id_utilisateur < 10000) {
@@ -1723,34 +1711,6 @@ class CaisseController extends Controller
                     echo json_encode($response);
                     return;
                 }
-                //to empty - num_caisse modified
-                if ($json['date_fin'] === '' && $response['model']->getNumCaisse() !== (int)$json['num_caisse']) {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => __('messages.invalids.caisse_line_open_num_caisse')
-                    ];
-
-                    echo json_encode($response);
-                    return;
-                }
-
-                //is num_caisse exist ?
-                $response = Caisse::findById($json['num_caisse']);
-                //error
-                if ($response['message_type'] === 'error') {
-                    echo json_encode($response);
-                    return;
-                }
-                //not found
-                if (!$response['found']) {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
-                    ];
-
-                    echo json_encode($response);
-                    return;
-                }
 
                 //is user exist?
                 $response = User::findById($json['id_utilisateur']);
@@ -1776,8 +1736,7 @@ class CaisseController extends Controller
                     ->setIdLc($json['id_lc'])
                     ->setDateDebut($json['date_debut'])
                     ->setDateFin($json['date_fin'])
-                    ->setIdUtilsateur($json['id_utilisateur'])
-                    ->setNumCaisse($json['num_caisse']);
+                    ->setIdUtilsateur($json['id_utilisateur']);
                 $response = $ligne_caisse_model->updateLigneCaisse();
 
                 echo json_encode($response);

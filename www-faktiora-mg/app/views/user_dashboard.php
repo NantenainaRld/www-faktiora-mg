@@ -200,7 +200,7 @@
                                                     <th><i class="fad fa-gears me-2"></i><?= ucfirst(__('forms.labels.action')) ?></th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody id="tbody-user">
                                                 <tr>
                                                     <td colspan="9">
                                                         <span class="bg-second placeholder w-100 rounded-1" style="height: 2vh !important;"></span>

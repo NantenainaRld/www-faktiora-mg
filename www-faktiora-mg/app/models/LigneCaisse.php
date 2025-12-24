@@ -573,11 +573,10 @@ class LigneCaisse extends Database
             }
             //date_fin - not empty
             else {
-                $sql = "UPDATE ligne_caisse SET date_debut = :date_debut, date_fin = :date_fin, id_utilisateur = :id_user, num_caisse = :num_caisse WHERE id_lc = :id_lc ";
+                $sql = "UPDATE ligne_caisse SET date_debut = :date_debut, date_fin = :date_fin, id_utilisateur = :id_user WHERE id_lc = :id_lc ";
                 $paramsQuery['date_debut'] = $this->date_debut;
                 $paramsQuery['date_fin'] = $this->date_fin;
                 $paramsQuery['id_user'] = $this->id_utilisateur;
-                $paramsQuery['num_caisse'] = $this->num_caisse;
                 $paramsQuery['id_lc'] = $this->id_lc;
             }
 

@@ -336,6 +336,72 @@
             </div>
         </div>
     </div>
+    <!-- modal add client -->
+    <div class="modal fade" id="modal-update-client" tabindex="-1" aria-labelledby="modalUpdateClient" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <!-- modal header  -->
+                <div class="modal-header bg-green-0 text-light">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-user-pen me-2"></i><?= __('forms.titles.client_update') ?></h6>
+                </div>
+                <form>
+                    <!-- modal body  -->
+                    <div class="modal-body">
+                        <!-- id client  -->
+                        <div class="mb-2 text-center text-secondary w-100 fw-bold" id="update-id-client"></div>
+                        <!-- input - nom_client  -->
+                        <div class="mb-2">
+                            <label for="input-update-nom-client" class="form-label"><?= __('forms.labels.name') ?> <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-address-card"></i></span>
+                                <input type="text" maxlength="100" class="form-control form-control-sm" id="input-update-nom-client" placeholder="RALANDISON" required>
+                            </div>
+                        </div>
+                        <!-- input - prenoms_client  -->
+                        <div class="mb-2">
+                            <label for="input-update-prenoms-client" class="form-label"><?= __('forms.labels.firstname') ?></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-address-card"></i></span>
+                                <input type="text" maxlength="100" class="form-control form-control-sm" id="input-update-prenoms-client" placeholder="Nantenaina">
+                            </div>
+                        </div>
+                        <!-- select - sexe_client  -->
+                        <div class="mb-2">
+                            <label for="select-update-sexe-client" class="form-label"><?= __('forms.labels.sex') ?></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-venus"></i></span>
+                                <select name="" id="select-update-sexe-client" class="form-select form-select-sm">
+                                    <option value="masculin"><?= __('forms.labels.male') ?></option>
+                                    <option value="féminin"><?= __('forms.labels.female') ?></option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- input - telephone -->
+                        <div class="mb-2">
+                            <label for="input-update-telephone" class="form-label"><?= __('forms.labels.phone') ?> </label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-phone"></i></span>
+                                <input type="text" maxlength="20" minlength="10" class="form-control form-control-sm" id="input-update-telephone" placeholder="032 00 000 00">
+                            </div>
+                        </div>
+                        <!-- input - adresse -->
+                        <div class="mb-2">
+                            <label for="input-update-adresse" class="form-label"><?= __('forms.labels.address') ?> </label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-location-dot"></i></span>
+                                <input type="text" maxlength="20" class="form-control form-control-sm" id="input-update-adresse" placeholder="Andrainjato Fianarantsoa">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- modal footer  -->
+                    <div class="modal-footer d-flex flex-nowrap justify-content-end">
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-update-client"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-update-client"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <!-- template alert  -->
     <template class="alert-template">
         <div class="alert alert-dismissible fade show alert-slide w-100" role="alert">

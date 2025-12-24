@@ -746,6 +746,168 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
 
+    //==================== UPDATE CAISSE ===================
+    //modal update caisse
+    const modalUpdateCaisse = container.querySelector("#modal-update-caisse");
+    //===== EVENT form update caisse submit
+    modalUpdateCaisse
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        //suspend submit
+        e.preventDefault();
+
+        //inputs - not valid
+        if (!e.target.checkValidity()) {
+          e.target.reportValidity();
+          return;
+        } else {
+          try {
+            //FETCH api update caisse
+            const response = await apiRequest("/caisse/update_caisse", {
+              method: "PUT",
+              body: {
+                num_caisse: modalUpdateCaisse
+                  .querySelector("#num-caisse")
+                  .textContent.trim(),
+                num_caisse_update: modalUpdateCaisse
+                  .querySelector("#input-update-num-caisse-update")
+                  .value.trim(),
+                solde: modalUpdateCaisse
+                  .querySelector("#input-update-solde")
+                  .value.replace(/[\u202F\u00A0 ]/g, "")
+                  .replace(",", ".")
+                  .trim(),
+                seuil: modalUpdateCaisse
+                  .querySelector("#input-update-seuil")
+                  .value.replace(/[\u202F\u00A0 ]/g, "")
+                  .replace(",", ".")
+                  .trim(),
+              },
+            });
+            //invalid
+            if (response.message_type === "invalid") {
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-warning");
+              //icon
+              alert
+                .querySelector(".fad")
+                .classList.add("fa-exclamation-circle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                response.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              modalUpdateCaisse.querySelector(".modal-body").prepend(alert);
+
+              //progress launch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
+            }
+            //error
+            else if (response.message_type === "error") {
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-danger");
+              //icon
+              alert
+                .querySelector(".fad")
+                .classList.add("fa-exclamation-triangle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                response.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              modalUpdateCaisse.querySelector(".modal-body").prepend(alert);
+
+              //progress lanch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
+            }
+            //success
+            else {
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-success");
+              //icon
+              alert.querySelector(".fad").classList.add("fa-check-circle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                response.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              container
+                .querySelector("#tbody-caisse")
+                .closest("div")
+                .prepend(alert);
+
+              //progress launch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
+
+              //hide modal
+              modalUpdateCaisse
+                .querySelector("#btn-close-modal-update-caisse")
+                .click();
+
+              //refesh filter caisse
+              filterCaisse(
+                tbodyCaisse,
+                container.querySelector("#chart-cash-number"),
+                selectStatus.value.trim(),
+                selectArrangeBy.value.trim(),
+                selectOrder.value.trim(),
+                selectDateBy.value.trim(),
+                selectPer.value.trim(),
+                dateFrom.value.trim(),
+                dateTo.value.trim(),
+                selectMonth.value.trim(),
+                selectYear.value.trim(),
+                inputSearch.value.trim()
+              );
+            }
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      });
+
     //=======================  DELETE CAISSE ==========================
     //modal delete caisse
     const modalDeleteCaisse = document.getElementById("modal-delete-caisse");
@@ -1581,6 +1743,157 @@ document.addEventListener("DOMContentLoaded", async () => {
     //====================== ADD LIGNE CAISSE ========================
     addLigneCaisse();
 
+    //======================= UPDATE LIGNE CAISSE ======================
+    //modal update ligne caisse
+    const modalUpdateLigneCaisse = container.querySelector(
+      "#modal-update-ligne-caisse"
+    );
+    //===== EVENT form update ligne_caisse submit
+    modalUpdateLigneCaisse
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        //suspend submit
+        e.preventDefault();
+
+        //inputs - not valid
+        if (!e.target.checkValidity()) {
+          e.target.reportValidity();
+          return;
+        } else {
+          try {
+            //FETCH api update ligne_caisse
+            const response = await apiRequest("/caisse/update_ligne_caisse", {
+              method: "PUT",
+              body: {
+                id_lc: modalUpdateLigneCaisse
+                  .querySelector("#update-ligne-caisse-id-lc")
+                  .textContent.trim(),
+                date_debut: modalUpdateLigneCaisse
+                  .querySelector("#input-update-date-debut")
+                  .value.trim(),
+                date_fin: modalUpdateLigneCaisse
+                  .querySelector("#input-update-date-fin")
+                  .value.trim(),
+                id_utilisateur: $(
+                  modalUpdateLigneCaisse.querySelector(
+                    "#select-update-id-utilisateur"
+                  )
+                )
+                  .val()
+                  .trim(),
+              },
+            });
+            //invalid
+            if (response.message_type === "invalid") {
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-warning");
+              //icon
+              alert
+                .querySelector(".fad")
+                .classList.add("fa-exclamation-circle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                response.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              modalUpdateLigneCaisse
+                .querySelector(".modal-body")
+                .prepend(alert);
+
+              //progress launch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
+            }
+            //error
+            else if (response.message_type === "error") {
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-danger");
+              //icon
+              alert
+                .querySelector(".fad")
+                .classList.add("fa-exclamation-triangle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                response.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              modalUpdateLigneCaisse
+                .querySelector(".modal-body")
+                .prepend(alert);
+
+              //progress lanch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
+            }
+            //success
+            else {
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-success");
+              //icon
+              alert.querySelector(".fad").classList.add("fa-check-circle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                response.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              container
+                .querySelector("#tbody-lc")
+                .closest("div")
+                .prepend(alert);
+
+              //progress launch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
+
+              //hide modal
+              modalUpdateLigneCaisse
+                .querySelector("#btn-close-modal-update-ligne-caisse")
+                .click();
+            }
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      });
     //======================= DELETE LIGNE CAISSE =========================
     //btn delete delete ligne caisse
     const btnDeleteLigneCaisse = tbodyLC
@@ -1797,7 +2110,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     //====== EVENT btn occup caisse
     btnOccupCaisse.addEventListener("click", () => {
       //num_caisse
-      const num_caisse = selectOccupCaisse.value.trim();
+      const num_caisse = $(selectOccupCaisse).val().trim();
       modalOccupCaisse.querySelector("#occup-caisse-cash-num").innerHTML =
         num_caisse;
       //select - caissier
@@ -1878,7 +2191,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             method: "POST",
             body: {
               num_caisse: num_caisse.trim(),
-              id_utilisateur: selectCaissier.value.trim(),
+              id_utilisateur: $(selectCaissier).val().trim(),
             },
           });
 
@@ -2404,22 +2717,160 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
         });
 
-        //===== EVENT btn update
-        updateCaisse(
-          tr,
-          tbody,
-          divChartCashNumber,
-          status,
-          arrange_by,
-          order,
-          date_by,
-          per,
-          from,
-          to,
-          month,
-          year,
-          search_user
-        );
+        //========================== UPDATE CAISSE ====================
+        tr.querySelector("button").addEventListener("click", async () => {
+          //modal update caisse
+          const modalUpdateCaisse = document.getElementById(
+            "modal-update-caisse"
+          );
+          //form update caisse
+          const formUpdateCaisse = modalUpdateCaisse.querySelector("form");
+          //num_caisse
+          modalUpdateCaisse.querySelector("#num-caisse").textContent =
+            tr.dataset.numCaisse;
+          //input - update num_caisse
+          const inputUpdateNumCaisse = modalUpdateCaisse.querySelector(
+            "#input-update-num-caisse-update"
+          );
+          inputUpdateNumCaisse.value = tr.dataset.numCaisse;
+          //input - update solde
+          const inputUpdateSolde = modalUpdateCaisse.querySelector(
+            "#input-update-solde"
+          );
+          inputUpdateSolde.value = formatterInput.format(
+            Number(tr.dataset.solde)
+          );
+          //input - update seuil
+          const inputUpdateSeuil = modalUpdateCaisse.querySelector(
+            "#input-update-seuil"
+          );
+          inputUpdateSeuil.value = formatterInput.format(
+            Number(tr.dataset.seuil)
+          );
+
+          //===== EVENT input - update num_caisse
+          inputUpdateNumCaisse.addEventListener("input", (e) => {
+            e.target.value = e.target.value.replace(/[^0-9]/g, "");
+          });
+          //===== EVENT input - update solde
+          inputUpdateSolde.addEventListener("input", (e) => {
+            if (cookieLangValue === "en") {
+              e.target.value = e.target.value.replace(/[^0-9.]/g, "");
+              if (!/^\d*\.?\d*$/.test(e.target.value)) {
+                e.target.value = e.target.value.slice(0, -1);
+              }
+
+              // add 0 in the start if ,
+              if (e.target.value.startsWith(".")) {
+                e.target.value = "0" + e.target.value;
+              }
+
+              //real value for calcul
+              e.target.dataset.val = e.target.value.replace(
+                /[\u202F\u00A0 ]/g,
+                ""
+              );
+            } else {
+              //number and , only
+              e.target.value = e.target.value.replace(/[^0-9,]/g, "");
+              if (!/^\d*\,?\d*$/.test(e.target.value)) {
+                e.target.value = e.target.value.slice(0, -1);
+              }
+              // add 0 in the start if ,
+              if (e.target.value.startsWith(",")) {
+                e.target.value = "0" + e.target.value;
+              }
+
+              //real value for calcul
+              e.target.dataset.val = e.target.value
+                .replace(",", ".")
+                .replace(/[\u202F\u00A0 ]/g, "");
+            }
+          });
+          inputUpdateSolde.addEventListener("blur", (e) => {
+            if (e.target.value.endsWith(",")) {
+              e.target.value += "0";
+            }
+            e.target.value = formatterInput.format(
+              e.target.value.replace(/[\u202F\u00A0 ]/g, "").replace(",", ".")
+            );
+
+            inputUpdateSeuil.dispatchEvent(new Event("input"));
+            inputUpdateSeuil.dispatchEvent(new Event("blur"));
+          });
+          //====== EVENT input - update seuil
+          inputUpdateSeuil.addEventListener("input", (e) => {
+            if (cookieLangValue === "en") {
+              e.target.value = e.target.value.replace(/[^0-9.]/g, "");
+              if (!/^\d*\.?\d*$/.test(e.target.value)) {
+                e.target.value = e.target.value.slice(0, -1);
+              }
+
+              // add 0 in the start if ,
+              if (e.target.value.startsWith(".")) {
+                e.target.value = "0" + e.target.value;
+              }
+
+              //real value for calcul
+              e.target.dataset.val = e.target.value.replace(
+                /[\u202F\u00A0 ]/g,
+                ""
+              );
+
+              //seuil > solde
+              const rest =
+                Number(e.target.dataset.val) -
+                Number(
+                  inputUpdateSolde.value
+                    .replace(/[\u202F\u00A0 ]/g, "")
+                    .replace(",", ".")
+                );
+              if (rest > 0) {
+                e.target.dataset.val = inputUpdateSolde.dataset.val;
+                e.target.value = e.target.dataset.val;
+              }
+            } else {
+              //number and , only
+              e.target.value = e.target.value.replace(/[^0-9,]/g, "");
+              if (!/^\d*\,?\d*$/.test(e.target.value)) {
+                e.target.value = e.target.value.slice(0, -1);
+              }
+              // add 0 in the start if ,
+              if (e.target.value.startsWith(",")) {
+                e.target.value = "0" + e.target.value;
+              }
+
+              //real value for calcul
+              e.target.dataset.val = e.target.value
+                .replace(",", ".")
+                .replace(/[\u202F\u00A0 ]/g, "");
+
+              //seuil > solde
+              const rest =
+                Number(e.target.dataset.val) -
+                Number(
+                  inputUpdateSolde.value
+                    .replace(/[\u202F\u00A0 ]/g, "")
+                    .replace(",", ".")
+                );
+              if (rest > 0) {
+                e.target.dataset.val = inputUpdateSolde.dataset.val;
+                e.target.value = e.target.dataset.val;
+              }
+            }
+          });
+          inputUpdateSeuil.addEventListener("blur", (e) => {
+            if (e.target.value.endsWith(",")) {
+              e.target.value += "0";
+            }
+            e.target.value = formatterInput.format(
+              e.target.value.replace(/[\u202F\u00A0 ]/g, "").replace(",", ".")
+            );
+          });
+
+          //show modal update caisse
+          new bootstrap.Modal(modalUpdateCaisse).show();
+        });
       });
 
       //===== EVENT check all caisse
@@ -2885,51 +3336,69 @@ document.addEventListener("DOMContentLoaded", async () => {
         //append
         tr.append(tdCheckbox, tdIdLC, tdDateDebut, tdDateFin, tdUser, tdAction);
         tr.dataset.idLC = line.id_lc;
-        tr.dataset.dateDebut = line.date_debut;
-        tr.dataset.dateFin = line.date_fin;
+        tr.dataset.dateDebut = !line.date_debut
+          ? ""
+          : line.date_debut.slice(0, 16);
+        tr.dataset.dateFin = !line.date_fin ? "" : line.date_fin.slice(0, 16);
         tr.dataset.idUtilisateur = line.id_utilisateur;
         tbody.appendChild(tr);
       });
 
       //foreach tr
-      tbody.querySelectorAll("tr").forEach((tr) => {
-        //modal update ligne_caisse
-        const modalUpdateLigneCaisse = container.querySelector(
-          "#modal-update-ligne-caisse"
-        );
-        //modal id_lc
-        modalUpdateLigneCaisse.querySelector(
-          "#update-ligne-caisse-id-lc"
-        ).innerHTML = tr.dataset.idLC;
-        //input - update date_debut
-        const inputUpdateDateDebut = modalUpdateLigneCaisse.querySelector(
-          "#input-update-date-debut"
-        );
-        inputUpdateDateDebut.value = tr.dataset.dateDebut.replace(" ", "T");
-        //input - update date_fin
-        const inputUpdateDateFin = modalUpdateLigneCaisse.querySelector(
-          "#input-update-date-fin"
-        );
-        inputUpdateDateFin.value = tr.dataset.dateFin.replace(" ", "T");
-
-        //select - add id_utilisateur
-        const selectUpdateIdUtilisateur = modalUpdateLigneCaisse.querySelector(
-          "#select-update-id-utilisateur"
-        );
-
-        //initialize select2
-        const $modalUpdateligneCaisse = $(modalUpdateLigneCaisse);
-        $(".select2").select2({
-          theme: "bootstrap-5",
-          placeholder: lang.select.toLowerCase(),
-          dropdownParent: $modalUpdateligneCaisse,
-        });
-
-        //list user
-        listUser(selectUpdateIdUtilisateur);
-
+      tbody.querySelectorAll("tr").forEach(async (tr) => {
+        //========================= UPDATE LIGNE CAISSE ===================
         //===== EVENT btn update ligne_caisse
         tr.querySelector("button").addEventListener("click", async () => {
+          //modal update ligne_caisse
+          const modalUpdateLigneCaisse = container.querySelector(
+            "#modal-update-ligne-caisse"
+          );
+          //modal id_lc
+          modalUpdateLigneCaisse.querySelector(
+            "#update-ligne-caisse-id-lc"
+          ).innerHTML = tr.dataset.idLC;
+          //input - update date_debut
+          const inputUpdateDateDebut = modalUpdateLigneCaisse.querySelector(
+            "#input-update-date-debut"
+          );
+          inputUpdateDateDebut.value = tr.dataset.dateDebut.replace(" ", "T");
+          //input - update date_fin
+          const inputUpdateDateFin = modalUpdateLigneCaisse.querySelector(
+            "#input-update-date-fin"
+          );
+          inputUpdateDateFin.value = tr.dataset.dateFin.replace(" ", "T");
+
+          //select - add id_utilisateur
+          const selectUpdateIdUtilisateur =
+            modalUpdateLigneCaisse.querySelector(
+              "#select-update-id-utilisateur"
+            );
+
+          //initialize select2
+          const $modalUpdateligneCaisse = $(modalUpdateLigneCaisse);
+          $(selectUpdateIdUtilisateur).select2({
+            theme: "bootstrap-5",
+            placeholder: lang.select.toLowerCase(),
+            dropdownParent: $modalUpdateligneCaisse,
+          });
+
+          //list user
+          await listUser(selectUpdateIdUtilisateur);
+          $(selectUpdateIdUtilisateur)
+            .val(tr.dataset.idUtilisateur)
+            .trigger("change");
+
+          //===== EVENT - input update date_date_debut
+          inputUpdateDateDebut.addEventListener("input", (e) => {
+            //set min date_fin
+            inputUpdateDateFin.min = e.target.value;
+          });
+          //===== EVENT - input add date_fin
+          inputUpdateDateFin.addEventListener("input", (e) => {
+            //set max date_debut
+            inputUpdateDateDebut.max = e.target.value;
+          });
+
           //show modal update ligne_caisse
           new bootstrap.Modal(modalUpdateLigneCaisse).show();
         });
@@ -2937,310 +3406,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (e) {
       console.error(e);
     }
-  }
-  //function - update caisse
-  function updateCaisse(
-    tr,
-    tbody,
-    divChartCashNumber,
-    status,
-    arrange_by,
-    order,
-    date_by,
-    per,
-    from,
-    to,
-    month,
-    year,
-    search_user
-  ) {
-    tr.querySelector("button").addEventListener("click", async () => {
-      //modal upddate caisse
-      const modalUpdateCaisse = document.getElementById("modal-update-caisse");
-      //form update caisse
-      const formUpdateCaisse = modalUpdateCaisse.querySelector("form");
-      //num_caisse
-      modalUpdateCaisse.querySelector("#num-caisse").textContent =
-        tr.dataset.numCaisse;
-      //input - update num_caisse
-      const inputUpdateNumCaisse = modalUpdateCaisse.querySelector(
-        "#input-update-num-caisse-update"
-      );
-      inputUpdateNumCaisse.value = tr.dataset.numCaisse;
-      //input - update solde
-      const inputUpdateSolde = modalUpdateCaisse.querySelector(
-        "#input-update-solde"
-      );
-      inputUpdateSolde.value = formatterInput.format(Number(tr.dataset.solde));
-      //input - update seuil
-      const inputUpdateSeuil = modalUpdateCaisse.querySelector(
-        "#input-update-seuil"
-      );
-      inputUpdateSeuil.value = formatterInput.format(Number(tr.dataset.seuil));
-
-      //===== EVENT input - update num_caisse
-      inputUpdateNumCaisse.addEventListener("input", (e) => {
-        e.target.value = e.target.value.replace(/[^0-9]/g, "");
-      });
-      //===== EVENT input - update solde
-      inputUpdateSolde.addEventListener("input", (e) => {
-        if (cookieLangValue === "en") {
-          e.target.value = e.target.value.replace(/[^0-9.]/g, "");
-          if (!/^\d*\.?\d*$/.test(e.target.value)) {
-            e.target.value = e.target.value.slice(0, -1);
-          }
-
-          // add 0 in the start if ,
-          if (e.target.value.startsWith(".")) {
-            e.target.value = "0" + e.target.value;
-          }
-
-          //real value for calcul
-          e.target.dataset.val = e.target.value.replace(/[\u202F\u00A0 ]/g, "");
-        } else {
-          //number and , only
-          e.target.value = e.target.value.replace(/[^0-9,]/g, "");
-          if (!/^\d*\,?\d*$/.test(e.target.value)) {
-            e.target.value = e.target.value.slice(0, -1);
-          }
-          // add 0 in the start if ,
-          if (e.target.value.startsWith(",")) {
-            e.target.value = "0" + e.target.value;
-          }
-
-          //real value for calcul
-          e.target.dataset.val = e.target.value
-            .replace(",", ".")
-            .replace(/[\u202F\u00A0 ]/g, "");
-        }
-      });
-      inputUpdateSolde.addEventListener("blur", (e) => {
-        if (e.target.value.endsWith(",")) {
-          e.target.value += "0";
-        }
-        e.target.value = formatterInput.format(
-          e.target.value.replace(/[\u202F\u00A0 ]/g, "").replace(",", ".")
-        );
-
-        inputUpdateSeuil.dispatchEvent(new Event("input"));
-        inputUpdateSeuil.dispatchEvent(new Event("blur"));
-      });
-      //====== EVENT input - update seuil
-      inputUpdateSeuil.addEventListener("input", (e) => {
-        if (cookieLangValue === "en") {
-          e.target.value = e.target.value.replace(/[^0-9.]/g, "");
-          if (!/^\d*\.?\d*$/.test(e.target.value)) {
-            e.target.value = e.target.value.slice(0, -1);
-          }
-
-          // add 0 in the start if ,
-          if (e.target.value.startsWith(".")) {
-            e.target.value = "0" + e.target.value;
-          }
-
-          //real value for calcul
-          e.target.dataset.val = e.target.value.replace(/[\u202F\u00A0 ]/g, "");
-
-          //seuil > solde
-          const rest =
-            Number(e.target.dataset.val) -
-            Number(
-              inputUpdateSolde.value
-                .replace(/[\u202F\u00A0 ]/g, "")
-                .replace(",", ".")
-            );
-          if (rest > 0) {
-            e.target.dataset.val = inputUpdateSolde.dataset.val;
-            e.target.value = e.target.dataset.val;
-          }
-        } else {
-          //number and , only
-          e.target.value = e.target.value.replace(/[^0-9,]/g, "");
-          if (!/^\d*\,?\d*$/.test(e.target.value)) {
-            e.target.value = e.target.value.slice(0, -1);
-          }
-          // add 0 in the start if ,
-          if (e.target.value.startsWith(",")) {
-            e.target.value = "0" + e.target.value;
-          }
-
-          //real value for calcul
-          e.target.dataset.val = e.target.value
-            .replace(",", ".")
-            .replace(/[\u202F\u00A0 ]/g, "");
-
-          //seuil > solde
-          const rest =
-            Number(e.target.dataset.val) -
-            Number(
-              inputUpdateSolde.value
-                .replace(/[\u202F\u00A0 ]/g, "")
-                .replace(",", ".")
-            );
-          if (rest > 0) {
-            e.target.dataset.val = inputUpdateSolde.dataset.val;
-            e.target.value = e.target.dataset.val;
-          }
-        }
-      });
-      inputUpdateSeuil.addEventListener("blur", (e) => {
-        if (e.target.value.endsWith(",")) {
-          e.target.value += "0";
-        }
-        e.target.value = formatterInput.format(
-          e.target.value.replace(/[\u202F\u00A0 ]/g, "").replace(",", ".")
-        );
-      });
-
-      //show modal update caisse
-      new bootstrap.Modal(modalUpdateCaisse).show();
-
-      //===== EVENT form update caisse submit
-      formUpdateCaisse.addEventListener("submit", async (e) => {
-        //suspend submit
-        e.preventDefault();
-
-        //inputs - not valid
-        if (!e.target.checkValidity()) {
-          e.target.reportValidity();
-          return;
-        } else {
-          try {
-            //FETCH api update caisse
-            const response = await apiRequest("/caisse/update_caisse", {
-              method: "PUT",
-              body: {
-                num_caisse: tr.dataset.numCaisse.trim(),
-                num_caisse_update: inputUpdateNumCaisse.value.trim(),
-                solde: inputUpdateSolde.value
-                  .replace(/[\u202F\u00A0 ]/g, "")
-                  .replace(",", "."),
-                seuil: inputUpdateSeuil.value
-                  .replace(/[\u202F\u00A0 ]/g, "")
-                  .replace(",", "."),
-              },
-            });
-            //invalid
-            if (response.message_type === "invalid") {
-              //alert
-              const alertTemplate = document.querySelector(".alert-template");
-              const clone = alertTemplate.content.cloneNode(true);
-              const alert = clone.querySelector(".alert");
-              const progressBar = alert.querySelector(".progress-bar");
-              //alert type
-              alert.classList.add("alert-warning");
-              //icon
-              alert
-                .querySelector(".fad")
-                .classList.add("fa-exclamation-circle");
-              //message
-              alert.querySelector(".alert-message").innerHTML =
-                response.message;
-              //progress bar
-              progressBar.style.transition = "width 10s linear";
-              progressBar.style.width = "100%";
-
-              //add alert
-              formUpdateCaisse.querySelector(".modal-body").prepend(alert);
-
-              //progress launch animation
-              setTimeout(() => {
-                progressBar.style.width = "0%";
-              }, 10);
-              //auto close alert
-              setTimeout(() => {
-                alert.querySelector(".btn-close").click();
-              }, 10000);
-            }
-            //error
-            else if (response.message_type === "error") {
-              //alert
-              const alertTemplate = document.querySelector(".alert-template");
-              const clone = alertTemplate.content.cloneNode(true);
-              const alert = clone.querySelector(".alert");
-              const progressBar = alert.querySelector(".progress-bar");
-              //alert type
-              alert.classList.add("alert-danger");
-              //icon
-              alert
-                .querySelector(".fad")
-                .classList.add("fa-exclamation-triangle");
-              //message
-              alert.querySelector(".alert-message").innerHTML =
-                response.message;
-              //progress bar
-              progressBar.style.transition = "width 10s linear";
-              progressBar.style.width = "100%";
-
-              //add alert
-              formUpdateCaisse.querySelector(".modal-body").prepend(alert);
-
-              //progress lanch animation
-              setTimeout(() => {
-                progressBar.style.width = "0%";
-              }, 10);
-              //auto close alert
-              setTimeout(() => {
-                alert.querySelector(".btn-close").click();
-              }, 10000);
-            }
-            //success
-            else {
-              //alert
-              const alertTemplate = document.querySelector(".alert-template");
-              const clone = alertTemplate.content.cloneNode(true);
-              const alert = clone.querySelector(".alert");
-              const progressBar = alert.querySelector(".progress-bar");
-              //alert type
-              alert.classList.add("alert-success");
-              //icon
-              alert.querySelector(".fad").classList.add("fa-check-circle");
-              //message
-              alert.querySelector(".alert-message").innerHTML =
-                response.message;
-              //progress bar
-              progressBar.style.transition = "width 10s linear";
-              progressBar.style.width = "100%";
-
-              //add alert
-              tbody.closest("div").prepend(alert);
-
-              //progress lanch animation
-              setTimeout(() => {
-                progressBar.style.width = "0%";
-              }, 10);
-              //auto close alert
-              setTimeout(() => {
-                alert.querySelector(".btn-close").click();
-              }, 10000);
-
-              //hide modal
-              modalUpdateCaisse
-                .querySelector("#btn-close-modal-update-caisse")
-                .click();
-
-              //refesh filter caisse
-              filterCaisse(
-                tbody,
-                divChartCashNumber,
-                status,
-                arrange_by,
-                order,
-                date_by,
-                per,
-                from,
-                to,
-                month,
-                year,
-                search_user
-              );
-            }
-          } catch (e) {
-            console.error(e);
-          }
-        }
-      });
-    });
   }
   //function - add ligne_caisse
   function addLigneCaisse(tbodyLC) {
@@ -3309,7 +3474,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       //initialize select2
       const $modalAddligneCaisse = $(modalAddLigneCaisse);
-      $(".select2").select2({
+      $(selectAddIdUtilisateur).select2({
         theme: "bootstrap-5",
         placeholder: lang.select.toLowerCase(),
         dropdownParent: $modalAddligneCaisse,
@@ -3362,7 +3527,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                   num_caisse: numCaisse,
                   date_debut: inputAddDateDebut.value.trim(),
                   date_fin: inputAddDateFin.value.trim(),
-                  id_utilisateur: selectAddIdUtilisateur.value.trim(),
+                  id_utilisateur: $(selectAddIdUtilisateur).val().trim(),
                 },
               }
             );

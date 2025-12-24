@@ -88,6 +88,8 @@ class ClientRepositorie extends Database
         $sql = "SELECT
                 cl.id_client,
                 CONCAT(cl.nom_client, ' ', cl.prenoms_client) AS fullname,
+                cl.nom_client,
+                cl.prenoms_client,
                 cl.sexe_client,
                 cl.telephone,
                 cl.adresse,

@@ -747,8 +747,8 @@
                     </div>
                     <!-- modal footer  -->
                     <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-add-ligne-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
-                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-add-ligne-caisse"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-update-ligne-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-update-ligne-caisse"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
                     </div>
                 </form>
             </div>
