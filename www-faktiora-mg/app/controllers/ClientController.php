@@ -1,6 +1,9 @@
 <?php
 
 //CLASS - client controller
+
+use FontLib\Table\Type\head;
+
 class ClientController extends Controller
 {
 
@@ -9,7 +12,9 @@ class ClientController extends Controller
     //page - index
     public function index()
     {
-        echo "page index client";
+        //redirect to page client
+        header('Location: ' . SITE_URL . '/client/page_client');
+        return;
     }
 
     //page - client dashboard
