@@ -244,6 +244,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       inputSearchSearchBar.value = e.target.value;
       localStorage.setItem(e.target.id, e.target.value);
     });
+    //===== EVENT input searchbar
+    inputSearchSearchBar.addEventListener("input", (e) => {
+      inputSearch.value = e.target.value;
+      inputSearch.dispatchEvent(new Event("input"));
+    });
     //===== EVENT select status
     selectStatus.addEventListener("change", (e) => {
       filterClient(

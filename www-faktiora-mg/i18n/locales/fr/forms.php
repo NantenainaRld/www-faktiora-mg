@@ -43,7 +43,9 @@ return [
         'client_update' => "Modification de client",
         'histo_facture' => "Histogramme des factures",
         'delete_client' => "Suppréssion des clients",
-        'restore_client' => "Récupération des clients"
+        'restore_client' => "Récupération des clients",
+        'facture_dashboard' => "Tableau de bord facture",
+        'facture_list' => "Liste des factures"
     ],
     'labels' => [
         'all' => 'tout',
@@ -209,7 +211,9 @@ return [
         'question_delete_permanent_client_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> clients ?. <span class='text-danger'>Cette action est irréversible</span>.",
         'question_restore_client_1' => "Voulez-vous vraiment récupérer le client avec l'ID <b>:field</b> ?",
         'question_restore_client_plur' => "Voulez-vous vraiment récupérer ces <b>:field</b> clients ?",
-
+        'facture_number' => "numéro de la facture",
+        'facture_date' => "date de la facture",
+        'facture_montant' => "montant de la facture"
     ],
     'times' => [
         'minute' => "minute",
@@ -228,7 +232,8 @@ return [
     'placeholders' => [
         'email' => 'nom@faktiora.mg',
         'search_lc' => "ID ligne de caisse, ID utilisateur",
-        'search_client' => "ID , nom ou prenoms, telephone, adresse"
+        'search_client' => "ID , nom ou prenoms, telephone, adresse",
+        'search_facture' => "numéro facture, ID client"
     ]
 
 ];

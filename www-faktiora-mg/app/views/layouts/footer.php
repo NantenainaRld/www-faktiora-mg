@@ -90,6 +90,10 @@
    <?php if ($_SESSION['menu'] === 'client'): ?>
       <script src="<?= SITE_URL ?>/js/client-dashboard.js"></script>
    <?php endif; ?>
+   <!-- script facture  -->
+   <?php if ($_SESSION['menu'] === 'facture'): ?>
+      <script src="<?= SITE_URL ?>/js/facture-dashboard.js"></script>
+   <?php endif; ?>
    </body>
 
    </html>

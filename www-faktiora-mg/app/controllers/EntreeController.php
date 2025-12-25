@@ -27,9 +27,61 @@ class EntreeController extends Controller
     //page - facture dashboard
     public function pageFacture()
     {
-        $this->render('facture_dashboard', ['title' => "Gestion des factures"]);
-    }
+        //is loged in ?
+        $is_loged_in = Auth::isLogedIn();
+        //loged
+        if ($is_loged_in->getLoged()) {
 
+            //get currency_units
+            $currency_units = '';
+            try {
+                $config = json_decode(file_get_contents(PUBLIC_PATH . '/config/config.json'), true);
+
+                //currency_units not found
+                if (!isset($config['currency_units'])) {
+                    //redirect to error page 
+                    header('Location:' . SITE_URL . '/errors?messages=' . __('errors.not_found.json', ['field' => 'currency_units']));
+
+                    return;
+                }
+
+                $currency_units = $config['currency_units'];
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.caisse_createCaisse',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
+
+                //redirect to error page
+                header('Location: ' . SITE_URL . '/errors?messages=' . $response['message']);
+
+                return;
+            }
+
+            $_SESSION['menu'] = 'facture';
+            $this->render('facture_dashboard', [
+                'title' => 'Faktiora - ' . __('forms.titles.facture_dashboard'),
+                'role' => $is_loged_in->getRole(),
+                'currency_units' => $currency_units
+            ]);
+            return;
+        }
+        //not loged
+        else {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+    }
     //========================== ACTIONS ============================
 
     //action - create autree entree
@@ -2008,52 +2060,73 @@ class EntreeController extends Controller
         }
 
         //defaults
-        $order_by_default = ['num', 'date', 'montant'];
-        $arrange_default = ['ASC', 'DESC'];
+        $arrange_by_default = ['num', 'date', 'montant'];
+        $order_default = ['ASC', 'DESC'];
 
         //status
         $status = strtolower(trim($_GET['status'] ?? 'active'));
         $status = ($status === 'deleted') ? 'deleted' : 'active';
-        if ($is_loged_in->getRole() === 'caissier') {
-            $status = 'active';
-        }
-        switch ($status) {
-            case 'active':
-                $status = 'actif';
-                break;
-            case 'deleted':
-                $status = 'supprimé';
-                break;
-        }
 
         //num_caisse
-        $num_caisse = 'all';
-        $num_caisse = trim($_GET['num_caisse'] ?? 'all');
-        $num_caisse = filter_var($num_caisse, FILTER_VALIDATE_INT);
-        $num_caisse = ($num_caisse === false || $num_caisse < 0) ? 'all' : $num_caisse;
+        $num_caisse = "";
+        //role - admin
+        if ($is_loged_in->getRole() === 'admin') {
+            $num_caisse = trim($_GET['num_caisse'] ?? 'all');
+            $num_caisse = filter_var($num_caisse, FILTER_VALIDATE_INT);
+            $num_caisse = (!$num_caisse || $num_caisse < 0) ? 'all' : $num_caisse;
+        }
+        //role - caissier
+        else {
+            //find user caisse
+            $find_user_caisse = LigneCaisse::findCaisse($is_loged_in->getIdUtilisateur());
+
+            //error
+            if ($find_user_caisse['message_type'] === 'error') {
+                echo json_encode($response);
+
+                return;
+            }
+            //not found user caisse
+            elseif (!$find_user_caisse['found']) {
+                $response = [
+                    'message_type' => 'success',
+                    'message' => 'success',
+                    'data' => [],
+                    'nb_sortie' => 0,
+                    'total_sortie' => 0,
+                ];
+
+                echo json_encode($response);
+
+                return;
+            }
+
+            //found user caisse
+            $num_caisse = $find_user_caisse['model']->getNumCaisse();
+        }
 
         //id_user
         $id_user = trim($_GET['id_user'] ?? 'all');
         $id_user = filter_var($id_user, FILTER_VALIDATE_INT);
         $id_user = ($id_user === false || $id_user < 10000) ? 'all' : $id_user;
 
-        //oder_by
-        $order_by = strtolower(trim($_GET['order_by']) ?? 'num');
-        $order_by = in_array($order_by, $order_by_default, true) ? $order_by : 'num';
-        switch ($order_by) {
+        //arrange_by
+        $arrange_by = strtolower(trim($_GET['arrange_by'] ?? 'num'));
+        $arrange_by = in_array($arrange_by, $arrange_by_default, true) ? $arrange_by : 'num';
+        switch ($arrange_by) {
             case 'num':
-                $order_by = 'f.num_facture';
+                $arrange_by = 'f.num_facture';
                 break;
             case 'date':
-                $order_by = 'f.date_facture';
+                $arrange_by = 'f.date_facture';
                 break;
             case 'montant':
-                $order_by = 'montant_facture';
+                $arrange_by = 'montant_facture';
                 break;
         }
-        //arrange
-        $arrange = strtoupper(trim($_GET['arrange'] ?? 'ASC'));
-        $arrange = in_array($arrange, $arrange_default, true) ? $arrange : 'ASC';
+        //order
+        $order = strtoupper(trim($_GET['order'] ?? 'ASC'));
+        $order = in_array($order, $order_default, true) ? $order : 'ASC';
 
         $date = new DateTime();
 
@@ -2138,8 +2211,8 @@ class EntreeController extends Controller
             'status' => $status,
             'num_caisse' => $num_caisse,
             'id_user' => $id_user,
-            'order_by' => $order_by,
-            'arrange' => $arrange,
+            'arrange_by' => $arrange_by,
+            'order' => $order,
             'from' => $from,
             'to' => $to,
             'search_facture' => $search_facture

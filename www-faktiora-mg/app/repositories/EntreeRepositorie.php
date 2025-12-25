@@ -14,14 +14,19 @@ class EntreeRepositorie extends Database
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
         $paramsQuery = [];
-        $sql = "SELECT f.num_facture, f.date_facture, f.id_utilisateur, f.num_caisse, f.id_client, COALESCE(SUM(lf.prix * lf.quantite_produit), 0)  AS montant_facture FROM facture f LEFT JOIN ligne_facture lf ON lf.id_facture = f.id_facture LEFT JOIN utilisateur u ON u.id_utilisateur = f.id_utilisateur LEFT JOIN client cl ON cl.id_client = f.id_client LEFT JOIN caisse c ON c.num_caisse = f.num_caisse  ";
+        $sql = "SELECT f.num_facture, f.date_facture, f.id_utilisateur, f.num_caisse, f.id_client, COALESCE(SUM(lf.prix * lf.quantite_produit), 0)  AS montant_facture FROM facture f LEFT JOIN ligne_facture lf ON lf.id_facture = f.id_facture ";
 
         //where 1=1
         $sql .= "WHERE 1=1 ";
 
-        //status
-        $sql .= "AND f.etat_facture = :status ";
-        $paramsQuery['status'] = $params['status'];
+        //status - deleted
+        if ($params['status'] === 'deleted') {
+            $sql .= "AND f.etat_facture = 'supprimé' ";
+        }
+        //status - actif
+        else {
+            $sql .= "AND f.etat_facture = 'actif' ";
+        }
 
         //num_caisse - !all
         if ($params['num_caisse'] !== 'all') {
@@ -60,12 +65,12 @@ class EntreeRepositorie extends Database
 
         //search facture
         if ($params['search_facture'] !== '') {
-            $sql .= "AND (f.num_facture LIKE :search) ";
+            $sql .= "AND (f.num_facture LIKE :search OR f.id_client LIKE :search) ";
             $paramsQuery['search'] = '%' . $params['search_facture'] . '%';
         }
 
-        // group by and order by
-        $sql .= "GROUP BY f.id_facture ORDER BY {$params['order_by']} {$params['arrange']} ";
+        //group by and order by
+        $sql .= "GROUP BY f.id_facture ORDER BY {$params['arrange_by']} {$params['order']} ";
 
         try {
 

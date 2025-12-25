@@ -152,7 +152,7 @@
             <div class="text-secondary w-100 row justify-content-between mb-2">
                 <div class="flex-grow-0">
                     <label for="select-arrange-by" class="w-auto form-label
-                    "><i class="fad fa-venus me-2"></i><?= __('forms.labels.arrange_by') ?></label>
+                    "><i class="fad fa-arrow-down-short-wide me-2"></i><?= __('forms.labels.arrange_by') ?></label>
                 </div>
                 <div class="flex-grow-1">
                     <div class="input-group">
