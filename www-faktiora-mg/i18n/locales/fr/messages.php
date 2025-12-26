@@ -26,6 +26,7 @@ return [
         'adresse' => "L'adresse ne doît pas dépasser de 100 caractères",
         'correction_quantite' => "Quantité invalide pour la ligne avec l'ID <b>:field</b> : la quantité de correction ne doît pas supérieure au quantité originale",
         'mdp_incorrect' => "Mot de passe incorrecte",
+        'quantite' => "Veuiller entrer une quantité valide",
         //
         //user - ids_user empty
         'user_ids_user_empty' => "Veuiller séléctionner au moins un utilisateur",
@@ -83,6 +84,8 @@ return [
         'produit_deleted' => "Le produit avec l'ID <b>:field</b> est déjà supprimé",
         //produit - nb stock less
         'produit_nb_stock_less' => "Le nombre de stock n'est pas suffisant pour le produit avec l'ID <b>:id_produit</b>, stock reste : :nb_stock",
+        //produit - not selected
+        'produit_not_selected' => "Veuiller séléctionner un produit",
         //article - libelle_article 
         'article_libelle_article' => "L'article avec le libellé <b>:field</b> existe déjà",
         //article - ids_article empty

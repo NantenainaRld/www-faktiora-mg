@@ -45,7 +45,8 @@ return [
         'delete_client' => "Suppréssion des clients",
         'restore_client' => "Récupération des clients",
         'facture_dashboard' => "Tableau de bord facture",
-        'facture_list' => "Liste des factures"
+        'facture_list' => "Liste des factures",
+        'facture_add' => "Ajout d'une nouvelle facture"
     ],
     'labels' => [
         'all' => 'tout',
@@ -213,7 +214,9 @@ return [
         'question_restore_client_plur' => "Voulez-vous vraiment récupérer ces <b>:field</b> clients ?",
         'facture_number' => "numéro de la facture",
         'facture_date' => "date de la facture",
-        'facture_montant' => "montant de la facture"
+        'facture_montant' => "montant de la facture",
+        'or' => "ou",
+        'to_empty' => "Vider"
     ],
     'times' => [
         'minute' => "minute",

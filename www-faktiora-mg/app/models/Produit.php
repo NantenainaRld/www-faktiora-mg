@@ -151,7 +151,7 @@ class Produit extends Database
 
         try {
 
-            $response = parent::selectQuery("SELECT p.id_produit, p.libelle_produit, p.prix_produit , MAX(ls.quantite_produit) AS quantite FROM produit p LEFT JOIN ligne_facture lf ON lf.id_produit = p.od_produit WHERE etat_produit != 'supprimé' GROUP BY p.id_produit");
+            $response = parent::selectQuery("SELECT id_produit, libelle_produit, prix_produit FROM produit WHERE etat_produit != 'supprimé'");
 
             //error
             if ($response['message_type'] == 'error') {

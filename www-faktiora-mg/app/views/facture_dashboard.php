@@ -46,6 +46,11 @@
                                         </div>
                                         <div class="row justify-content-center  overflow-auto align-items-top flex-grow-1">
                                             <div class="col-12">
+                                                <!-- btns  -->
+                                                <div class="d-flex justify-content-start my-2">
+                                                    <!-- btn add facture  -->
+                                                    <button class="btn btn-sm btn-outline-primary fw-bold" id="btn-add-facture"><i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
+                                                </div>
                                                 <!-- table  -->
                                                 <table class="w-100 table-striped">
                                                     <thead class="bg-success text-light align-items-center form-text">
@@ -58,8 +63,8 @@
                                                             <th class="text-center"><i class="fad fa-hashtag me-2"></i><?= __('forms.labels.num') ?></th>
                                                             <th class="text-center"><i class="fad fa-calendar me-2"></i><?= __('forms.labels.date') ?></th>
                                                             <th class="text-center"><i class="fad fa-coins me-2"></i><?= __('forms.labels.amount') . ' (' . $currency_units . ')' ?></th>
-                                                            <th class="text-center"><i class="fad fa-user me-2"></i><?= __('forms.labels.user') ?></th>
                                                             <th class="text-center"><i class="fad fa-user-check me-2"></i><?= __('forms.labels.client') ?></th>
+                                                            <th class="text-center"><i class="fad fa-user me-2"></i><?= __('forms.labels.user') ?></th>
                                                             <th class="text-center"><i class="fad fa-cash-register me-2"></i><?= __('forms.labels.cash') ?></th>
                                                             <th class="text-center"><i class="fad fa-circle-dot me-2"></i><?= __('forms.labels.status') ?></th>
                                                             <th class="text-center"><i class="fad fa-gears me-2"></i><?= __('forms.labels.actions') ?></th>
@@ -249,21 +254,19 @@
                 </div>
             <?php endif; ?>
             <!-- select id_utilisateur -->
-            <?php if ($role === 'admin'): ?>
-                <div class="text-secondary w-100 row justify-content-between mb-2">
-                    <div class="flex-grow-0">
-                        <label for="select-id-utilisateur" class="w-auto form-label "><i class="fad fa-user me-2"></i><?= __('forms.labels.user') ?></label>
-                    </div>
-                    <div class="flex-grow-1">
-                        <div class="input-group">
-                            <select class="form-select form-select-sm select2" id="select-id-utilisateur">
-                                <option></option>
-                                <option value="loading" disabled><?= strtolower(__('forms.labels.loading')) ?>...</option>
-                            </select>
-                        </div>
+            <div class="text-secondary w-100 row justify-content-between mb-2">
+                <div class="flex-grow-0">
+                    <label for="select-id-utilisateur" class="w-auto form-label "><i class="fad fa-user me-2"></i><?= __('forms.labels.user') ?></label>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="input-group">
+                        <select class="form-select form-select-sm select2" id="select-id-utilisateur">
+                            <option></option>
+                            <option value="loading" disabled><?= strtolower(__('forms.labels.loading')) ?>...</option>
+                        </select>
                     </div>
                 </div>
-            <?php endif; ?>
+            </div>
             <!-- btn reset  -->
             <div class="text-secondary w-100 row justify-content-center mt-4">
                 <button class="btn btn-second border-light border btn-sm w-auto" id="btn-reset"><i class="fad fa-arrow-rotate-left me-2"></i><?= __('forms.labels.reset') ?></button>
@@ -272,53 +275,101 @@
     </div>
     <!-- overlay searchbar  -->
     <div class="overlay-searchbar d-none min-vh-100 bg-dark bg-opacity-50 top-0 col-12 position-fixed "></div>
-    <!-- modal add caisse  -->
-    <div class="modal fade" id="modal-add-caisse" tabindex="-1" aria-labelledby="modalAddCaisse" aria-hidden="true">
+    <!-- modal add facture -->
+    <div class="modal fade" id="modal-add-facture" tabindex="-1" aria-labelledby="modalAddFacture" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
+            <div class="modal-content d-flex flex-column justify-content-between">
                 <!-- modal header  -->
-                <div class="modal-header bg-green-0 text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-plus me-2"></i><?= __('forms.titles.cash_add') ?></h6>
+                <div class="modal-header bg-green-0 text-light flex-frow-0">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-plus me-2"></i><?= __('forms.titles.facture_add') ?></h6>
                 </div>
-                <!-- form add caisse  -->
-                <form>
+                <!-- form add facture -->
+                <form class="flex-grow-1 overflow-auto">
                     <!-- modal body  -->
                     <div class="modal-body">
-                        <!-- add num_caisse  -->
+                        <?php if ($role === 'admin'): ?>
+                            <!--input add facture date facture -->
+                            <div class="mb-2">
+                                <label for="input-add-facture-date-facture" class="form-label"><?= __('forms.labels.date') ?> <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
+                                    <input type="datetime-local" max="<?= date('Y-m-d\TH:i') ?>" class="form-control form-control-sm" id="input-add-facture-date-facture" required>
+                                </div>
+                            </div>
+                            <!-- select add facture id_utilisateur -->
+                            <div class="mb-2">
+                                <label for="select-add-facture-id-utilisateur" class="form-label"><?= __('forms.labels.user') ?> <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text text-success"><i class="fad fa-user"></i></span>
+                                    <select name="" id="select-add-facture-id-utilisateur" class="form-select form-select-sm select2" required>
+                                        <option></option>
+                                        <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
+                                    </select>
+                                    <button type="button" class="input-group-text" id="btn-add-facture-refresh-id-utilisateur"><i class="fad fa-arrow-rotate-left"></i></button>
+                                </div>
+                            </div>
+                            <!-- select add facture num_caisse -->
+                            <div class="mb-2">
+                                <label for="select-add-facture-num-caisse" class="form-label"><?= ucfirst(__('forms.labels.cash')) ?> <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text text-success"><i class="fad fa-cash-register"></i></span>
+                                    <select name="" id="select-add-facture-num-caisse" class="form-select form-select-sm select2" required>
+                                        <option></option>
+                                        <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
+                                    </select>
+                                    <button type="button" class="input-group-text" id="btn-add-facture-refresh-num-caisse"><i class="fad fa-arrow-rotate-left"></i></button>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                        <!-- select add facture id_client  -->
                         <div class="mb-2">
-                            <label for="input-add-num-caisse" class="form-label"><?= __('forms.labels.cash_num') ?> <span class="text-danger">*</span></label>
+                            <label for="select-add-facture-id-client" class="form-label"><?= __('forms.labels.client') ?> <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <span class="input-group-text text-success">
-                                    <i class="fad fa-hashtag"></i>
-                                </span>
-                                <input type="text" class="form-control form-control-sm text-secondary" id="input-add-num-caisse" min="0" required>
+                                <span class="input-group-text text-success"><i class="fad fa-user-check"></i></span>
+                                <select name="" id="select-add-facture-id-client" class="form-select form-select-sm select2" required>
+                                    <option></option>
+                                    <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
+                                </select>
+                                <button type="button" class="input-group-text" id="btn-add-facture-refresh-id-client"><i class="fad fa-arrow-rotate-left"></i></button>
+                                <!-- btn add client -->
+                                <span class="mx-2 text-secondary"> <?= __('forms.labels.or') ?> </span><button type="button" class="btn btn-sm btn-light text-primary" data-bs-toggle="modal" data-bs-target="#modal-add-client"><i class="fad fa-user-circle-plus"></i></button>
                             </div>
                         </div>
-                        <!--  add solde -->
+                        <!-- select add facture id_produit -->
                         <div class="mb-2">
-                            <label for="input-add-solde" class="form-label"><?= __('forms.labels.balance') ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success">
-                                    <i class="fad fa-coins"></i>
-                                </span>
-                                <input type="text" class="form-control form-control-sm text-secondary" id="input-add-solde" required>
+                            <label for="select-add-facture-id-produit" class="form-label"><?= __('forms.labels.product') ?></label>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <div class="input-group">
+                                    <span class="input-group-text text-success"><i class="fad fa-bin-bottles"></i></span>
+                                    <select name="" id="select-add-facture-id-produit" class="form-select form-select-sm select2">
+                                        <option></option>
+                                        <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
+                                    </select>
+                                    <button type="button" class="input-group-text" id="btn-add-facture-refresh-id-produit"><i class="fad fa-arrow-rotate-left"></i></button>
+                                </div>
+                                <!-- input produit quantity and btn add produit-->
+                                <div class="input-group w-50">
+                                    <input type="number" min="1" class="form-control form-control-sm" id="input-add-facture-quantite-produit" value="1">
+                                    <button type="button" class="input-group-text text-primary"><i class="fad fa-plus" id="btn-add-facture-add-produit"></i></button>
+                                </div>
+                                <!-- message produit select  -->
+                                <span class="form-text text-danger" id="message-produit-select"></span>
                             </div>
-                        </div>
-                        <!--  add seuil -->
-                        <div class="mb-2">
-                            <label for="select-add-seuil" class="form-label me-2 mt-1"><?= __('forms.labels.treshold') ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success">
-                                    <i class="fad fa-badge-dollar"></i>
-                                </span>
-                                <input type="text" class="form-control form-control-sm text-secondary" id="input-add-seuil" required>
+                            <!-- card added produit  -->
+                            <div class="card mt-2 w-auto">
+                                <div class="card-body">
+                                    <div class="d-flex flex-wrap gap-2" id="card-produit"></div>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-center flex-column align-items-center">
+                                    <span class="text-secondary"><b><?= __('forms.labels.total') ?> : </b><span id="add-facture-total" data-value="0">0 <?= $currency_units ?></span></span>
+                                    <button type="button" class="btn btn-light btn-sm" id="btn-add-facture-empty-produit"><?= __('forms.labels.to_empty') ?></button>
+                                </div>
                             </div>
-                            <span class="form-text text-secondary">(<?= strtolower(__('forms.labels.less_equal_balance')) ?>)</span>
                         </div>
                     </div>
                     <!-- modal footer  -->
                     <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-add-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-add-facture"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
                         <button class="btn btn-primary btn-sm fw-bold" type="submit"><i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
                     </div>
                 </form>
@@ -326,7 +377,7 @@
         </div>
     </div>
     <!-- modal update caisse  -->
-    <div class="modal fade" id="modal-update-caisse" tabindex="-1" aria-labelledby="modalUpdateCaisse" aria-hidden="true">
+    <div class="modal fade" id="modal-add-client" tabindex="-1" aria-labelledby="modalUpdateCaisse" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- modal header  -->

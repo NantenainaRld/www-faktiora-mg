@@ -114,13 +114,13 @@ class Facture extends Database
 
         try {
 
-            //create sortie
             $sql = "";
             $paramsQuery = [
                 'id_utilisateur' => $this->id_utilisateur,
                 'num_caisse' => $this->num_caisse,
                 'id_client' => $this->id_client
             ];
+
             //date_facture - empty
             if ($this->date_facture === '') {
                 $sql = "INSERT INTO facture (date_facture, id_utilisateur, num_caisse, id_client) VALUES (NOW(), :id_utilisateur, :num_caisse, :id_client) ";
@@ -130,6 +130,7 @@ class Facture extends Database
                 $sql = "INSERT INTO facture (date_facture, id_utilisateur, num_caisse, id_client) VALUES (:date_facture, :id_utilisateur, :num_caisse, :id_client) ";
                 $paramsQuery['date_facture'] = $this->date_facture;
             }
+
             $response = parent::executeQuery($sql, $paramsQuery);
             //error
             if ($response['message_type'] === 'error') {

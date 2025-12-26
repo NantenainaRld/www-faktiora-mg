@@ -283,7 +283,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       localStorage.setItem(e.target.id, e.target.value);
       dateFrom.max = e.target.value;
     });
-    //EVENT select num_caisse
+    //===== EVENT select num_caisse
     if (selectNumCaisse)
       $(selectNumCaisse).on("change", function (e) {
         filterFacture(
@@ -298,7 +298,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
         localStorage.setItem(e.target.id, $(this).val());
       });
-    //EVENT select id_utilisateur
+    //===== EVENT select id_utilisateur
     $(selectIdUtilisateur).on("change", function (e) {
       filterFacture(
         selectStatus.value.trim(),
@@ -323,6 +323,400 @@ document.addEventListener("DOMContentLoaded", async () => {
       $(selectIdUtilisateur).val().trim(),
       inputSearch.value.trim()
     );
+
+    //========================= ADD FACTURE =========================
+    //modal add facture
+    const modalAddFacture = container.querySelector("#modal-add-facture");
+    //modal add facture - intialize select 2
+    $(modalAddFacture.querySelectorAll(".select2")).select2({
+      theme: "bootstrap-5",
+      placeholder: lang.select.toLowerCase(),
+      dropdownParent: $(modalAddFacture),
+    });
+    //input - add facture date facture
+    const inputAddFactureDateFacture = modalAddFacture.querySelector(
+      "#input-add-facture-date-facture"
+    );
+    if (inputAddFactureDateFacture) {
+      const savedInputAddFactureDateFacture = localStorage.getItem(
+        inputAddFactureDateFacture.id
+      );
+      inputAddFactureDateFacture.value = !savedInputAddFactureDateFacture
+        ? ""
+        : savedInputAddFactureDateFacture;
+
+      //===== EVENT input add facture date facture
+      inputAddFactureDateFacture.addEventListener("input", (e) => {
+        localStorage.setItem(e.target.id, e.target.value);
+      });
+    }
+    //select - add facture id_utilisateur
+    const selectAddFactureIdUtilisateur = modalAddFacture.querySelector(
+      "#select-add-facture-id-utilisateur"
+    );
+    if (selectAddFactureIdUtilisateur) {
+      //list all user
+      await listUser(selectAddFactureIdUtilisateur, true);
+      //load value from localstorage
+      const savedSelectAddFactureIdUtilisateur = localStorage.getItem(
+        selectAddFactureIdUtilisateur.id
+      );
+      $(selectAddFactureIdUtilisateur)
+        .val(
+          !savedSelectAddFactureIdUtilisateur
+            ? ""
+            : savedSelectAddFactureIdUtilisateur
+        )
+        .trigger("change");
+
+      //===== EVENT btn add facture refresh id_utilisateur
+      modalAddFacture
+        .querySelector("#btn-add-facture-refresh-id-utilisateur")
+        .addEventListener("click", () => {
+          listUser(selectAddFactureIdUtilisateur, true);
+        });
+
+      //===== EVENT select add facture id_utilisateur
+      $(selectAddFactureIdUtilisateur).on("change", function (e) {
+        localStorage.setItem(e.target.id, $(this).val());
+      });
+    }
+    //select - add facture num_caisse
+    const selectAddFactureNumCaisse = modalAddFacture.querySelector(
+      "#select-add-facture-num-caisse"
+    );
+    if (selectAddFactureNumCaisse) {
+      //list num_caisse
+      await listNumCaisse(selectAddFactureNumCaisse, true);
+      //load value from localstorage
+      const savedSelectAddFactureNumCaisse = localStorage.getItem(
+        selectAddFactureNumCaisse.id
+      );
+      $(selectAddFactureNumCaisse)
+        .val(
+          !savedSelectAddFactureNumCaisse ? "" : savedSelectAddFactureNumCaisse
+        )
+        .trigger("change");
+
+      //===== EVENT btn add facture refresh num_caisse
+      modalAddFacture
+        .querySelector("#btn-add-facture-refresh-num-caisse")
+        .addEventListener("click", () => {
+          listNumCaisse(selectAddFactureNumCaisse, true);
+        });
+
+      //===== EVENT select add facture num_caisse
+      $(selectAddFactureNumCaisse).on("change", function (e) {
+        localStorage.setItem(e.target.id, $(this).val());
+      });
+    }
+    //select - add facture id_client
+    const selectAddFactureIdClient = modalAddFacture.querySelector(
+      "#select-add-facture-id-client"
+    );
+    if (selectAddFactureIdClient) {
+      //list all client
+      await listClient(selectAddFactureIdClient);
+      //load value from localstorage
+      const savedSelectAddFactureIdClient = localStorage.getItem(
+        selectAddFactureIdClient.id
+      );
+      $(selectAddFactureIdClient)
+        .val(
+          !savedSelectAddFactureIdClient ? "" : savedSelectAddFactureIdClient
+        )
+        .trigger("change");
+
+      //===== EVENT btn add facture refresh id_client
+      modalAddFacture
+        .querySelector("#btn-add-facture-refresh-id-client")
+        .addEventListener("click", () => {
+          listClient(selectAddFactureIdClient);
+        });
+
+      //===== EVENT select add facture id_client
+      $(selectAddFactureIdClient).on("change", function (e) {
+        localStorage.setItem(e.target.id, $(this).val());
+      });
+    }
+    //select - add facture id_produit
+    const selectAddFactureIdProduit = modalAddFacture.querySelector(
+      "#select-add-facture-id-produit"
+    );
+    if (selectAddFactureIdProduit) {
+      //list all produit
+      listProduit(selectAddFactureIdProduit);
+      //===== EVENT btn add facture refresh id_produit
+      modalAddFacture
+        .querySelector("#btn-add-facture-refresh-id-produit")
+        .addEventListener("click", () => {
+          listProduit(selectAddFactureIdProduit);
+        });
+    }
+    //input - add facture quantite_produit
+    const inputAddFactureQauntiteProduit = modalAddFacture.querySelector(
+      "#input-add-facture-quantite-produit"
+    );
+
+    //===== EVENT input add facture quantite_produit
+    inputAddFactureQauntiteProduit.addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, "");
+    });
+    //===== EVENT btn add facture add produit
+    modalAddFacture
+      .querySelector("#btn-add-facture-add-produit")
+      .addEventListener("click", () => {
+        //no produit selected
+        if (!$(selectAddFactureIdProduit).val()) {
+          modalAddFacture.querySelector("#message-produit-select").innerHTML =
+            lang.produit_not_selected;
+          setTimeout(() => {
+            modalAddFacture.querySelector("#message-produit-select").innerHTML =
+              "";
+          }, 3000);
+          return;
+        }
+        //quantite invalid
+        else if (!inputAddFactureQauntiteProduit.value) {
+          modalAddFacture.querySelector("#message-produit-select").innerHTML =
+            lang.invalids_quantite;
+          setTimeout(() => {
+            modalAddFacture.querySelector("#message-produit-select").innerHTML =
+              "";
+          }, 3000);
+          return;
+        }
+
+        //add produit into the card
+        const spanProduit = document.createElement("span");
+        spanProduit.dataset.idProduit = $(selectAddFactureIdProduit).val();
+        spanProduit.dataset.quantiteProduit =
+          inputAddFactureQauntiteProduit.value.trim();
+        spanProduit.classList.add(
+          "rounded-1",
+          "bg-second",
+          "p-1",
+          "text-secondary",
+          "form-text",
+          "produit"
+        );
+        //span prix total
+        spanProduit.dataset.prixTotal =
+          Number(inputAddFactureQauntiteProduit.value) *
+          Number(
+            $(selectAddFactureIdProduit).select2("data")[0].element.dataset.prix
+          );
+        //span html
+        spanProduit.innerHTML = `${
+          $(selectAddFactureIdProduit).select2("data")[0].text
+        }<span class="badge bg-light text-success">${inputAddFactureQauntiteProduit.value.trim()}</span><button type="button" class="btn btn-light btn-sm ms-1 btn-close-produit"><i class="fad fa-x"></i></button>`;
+        //append to card
+        modalAddFacture.querySelector("#card-produit").append(spanProduit);
+
+        //add facture total
+        const addFactureTotal =
+          modalAddFacture.querySelector("#add-facture-total");
+        addFactureTotal.dataset.value =
+          Number(addFactureTotal.dataset.value) +
+          Number(
+            $(selectAddFactureIdProduit).select2("data")[0].element.dataset.prix
+          ) *
+            Number(inputAddFactureQauntiteProduit.value);
+        addFactureTotal.innerHTML = formatterTotal.format(
+          Number(addFactureTotal.dataset.value)
+        );
+        //===== EVENT btn close produit
+        const btn = spanProduit.querySelector(".btn-close-produit");
+        btn.addEventListener("click", () => {
+          addFactureTotal.dataset.value =
+            Number(addFactureTotal.dataset.value) -
+            Number(btn.closest("span").dataset.prixTotal);
+          addFactureTotal.innerHTML = formatterTotal.format(
+            Number(addFactureTotal.dataset.value)
+          );
+          //remove span produit
+          btn.closest("span").remove();
+        });
+      });
+    //===== EVENT btn empty produit
+    modalAddFacture
+      .querySelector("#btn-add-facture-empty-produit")
+      .addEventListener("click", () => {
+        modalAddFacture.querySelector("#card-produit").innerHTML = "";
+        modalAddFacture.querySelector("#add-facture-total").dataset.value = 0;
+        modalAddFacture.querySelector("#add-facture-total").innerHTML =
+          formatterNumber.format(0);
+      });
+
+    //===== EVENT btn add facture
+    container
+      .querySelector("#btn-add-facture")
+      .addEventListener("click", () => {
+        //show modal add facture
+        new bootstrap.Modal(modalAddFacture).show();
+      });
+
+    //===== EVENT form add facture submit
+    modalAddFacture
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        //suspend submit
+        e.preventDefault();
+        //check validity
+        if (!e.target.checkValidity()) {
+          e.target.reportValidity();
+          return;
+        }
+
+        //produits
+        let produits = [];
+        modalAddFacture
+          .querySelectorAll("#card-produit .produit")
+          .forEach((span) => {
+            const produit = {
+              id_produit: span.dataset.idProduit.trim(),
+              quantite_produit: span.dataset.quantiteProduit.trim(),
+            };
+
+            produits.push(produit);
+          });
+
+        try {
+          //FETH api add facture
+          const apiAddFacture = await apiRequest("/entree/create_facture", {
+            method: "POST",
+            body: {
+              date_facture: !inputAddFactureDateFacture
+                ? ""
+                : inputAddFactureDateFacture.value.trim(),
+              id_utilisateur: !selectAddFactureIdUtilisateur
+                ? ""
+                : $(selectAddFactureIdUtilisateur).val().trim(),
+              num_caisse: !selectAddFactureNumCaisse
+                ? ""
+                : $(selectAddFactureNumCaisse).val().trim(),
+              id_client: $(selectAddFactureIdClient).val().trim(),
+              produits: produits,
+            },
+          });
+
+          //error
+          if (apiAddFacture.message_type === "error") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-danger");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiAddFacture.message;
+            //progress bar
+            progressBar.style.transition = "width 20s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalAddFacture.querySelector(".modal-body").prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 20000);
+            return;
+          }
+          //invalid
+          else if (apiAddFacture.message_type === "invalid") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-warning");
+            //icon
+            alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiAddFacture.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalAddFacture.querySelector(".modal-body").prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+            return;
+          }
+
+          //success
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-success");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-check-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            apiAddFacture.message;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          container
+            .querySelector("#tbody-facture")
+            .closest("div")
+            .prepend(alert);
+
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+
+          //close modal
+          modalAddFacture.querySelector("#btn-close-modal-add-facture").click();
+
+          //refresh filter facture
+          filterFacture(
+            selectStatus.value.trim(),
+            selectArrangeBy.value.trim(),
+            selectOrder.value.trim(),
+            dateFrom.value.trim(),
+            dateTo.value.trim(),
+            selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
+            $(selectIdUtilisateur).val().trim(),
+            inputSearch.value.trim()
+          );
+
+          return;
+        } catch (e) {
+          console.error(e);
+        }
+      });
     //   //======================== ADD CLIENT ======================
     //   //modal add client
     //   const modalAddClient = container.querySelector("#modal-add-client");
@@ -1450,20 +1844,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           "align-items-center",
           "gap-2"
         );
-        //btn update facture
-        if (container.querySelector("#check-all-facture")) {
-          const btnUpdateFacture = document.createElement("button");
-          btnUpdateFacture.type = "button";
-          btnUpdateFacture.classList.add(
-            "btn-light",
-            "btn",
-            "btn-sm",
-            "text-primary",
-            "btn-update-facture"
-          );
-          btnUpdateFacture.innerHTML = "<i class='fad fa-pen-to-square'></i>";
-          divActions.append(btnUpdateFacture);
-        }
         //btn correct facture outflow
         const btnCorrectFactureOutflow = document.createElement("button");
         btnCorrectFactureOutflow.type = "button";
@@ -1495,8 +1875,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           tdNumFacture,
           tdDateFacture,
           tdMontantFacture,
-          tdIdUtilisateur,
           tdIdClient,
+          tdIdUtilisateur,
           tdNumCaisse,
           tdStatus,
           tdActions
@@ -1510,114 +1890,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         tbodyFacture.appendChild(tr);
       });
 
-      //foreach all tr
-      // tbodyClient.querySelectorAll("tr").forEach((tr) => {
-      //   //========================== UPDATE CLIENT ===========================
-      //   //modal update client
-      //   const modalUpdateClient = container.querySelector(
-      //     "#modal-update-client"
-      //   );
-      //   //===== EVENT btn update client
-      //   tr.querySelector(".btn-update-client").addEventListener("click", () => {
-      //     //modal id_client
-      //     modalUpdateClient.querySelector("#update-id-client").innerHTML =
-      //       tr.dataset.idClient;
-      //     //input -  update nom_client
-      //     const inputUpdateNomClient = modalUpdateClient.querySelector(
-      //       "#input-update-nom-client"
-      //     );
-      //     inputUpdateNomClient.value = tr.dataset.nomClient;
-      //     //input - update prenoms_client
-      //     const inputUpdatePrenomsClient = modalUpdateClient.querySelector(
-      //       "#input-update-prenoms-client"
-      //     );
-      //     inputUpdatePrenomsClient.value = tr.dataset.prenomsClient;
-      //     //select - update sexe_client
-      //     const selectUpdateSexeClient = modalUpdateClient.querySelector(
-      //       "#select-update-sexe-client"
-      //     );
-      //     selectUpdateSexeClient.value = tr.dataset.sexeClient;
-      //     //input - update telephone
-      //     const inputUpdateTelephone = modalUpdateClient.querySelector(
-      //       "#input-update-telephone"
-      //     );
-      //     inputUpdateTelephone.value = tr.dataset.telephone;
-      //     //input - update adresse
-      //     const inputUpdateAdresse = modalUpdateClient.querySelector(
-      //       "#input-update-adresse"
-      //     );
-      //     inputUpdateAdresse.value = tr.dataset.adresse;
-      //     //show modal update client
-      //     new bootstrap.Modal(modalUpdateClient).show();
-      //     //===== EVENT input update nom_client
-      //     inputUpdateNomClient.addEventListener("input", (e) => {
-      //       //remove double space && change into uppercase
-      //       e.target.value = e.target.value.replace("  ", " ").toUpperCase();
-      //     });
-      //     //===== EVENT input update prenoms_client
-      //     inputUpdatePrenomsClient.addEventListener("input", (e) => {
-      //       //remove double space && change into uppercase
-      //       e.target.value = e.target.value.replace("  ", " ");
-      //     });
-      //     //===== EVENT input update telephone
-      //     inputUpdateTelephone.addEventListener("input", (e) => {
-      //       //remove invalid
-      //       e.target.value = e.target.value.replace(/[^\d+\s]/g, "");
-      //       //remove double space
-      //       e.target.value = e.target.value.replace("  ", " ");
-      //     });
-      //     //===== EVENT input update adresse
-      //     inputUpdateAdresse.addEventListener("input", (e) => {
-      //       //remove double space
-      //       e.target.value = e.target.value.replace("  ", " ");
-      //       localStorage.setItem(e.target.id, e.target.value);
-      //     });
-      //   });
-      //   //======================== HISTO FACTURE ===========================
-      //   //modal histo facture
-      //   const modalHistoFacture = container.querySelector(
-      //     "#modal-histo-facture"
-      //   );
-      //   //===== EVENT btn histo facture
-      //   tr.querySelector(".btn-histo-facture").addEventListener("click", () => {
-      //     //modal id_client
-      //     modalHistoFacture.querySelector(
-      //       "#histo-facture-id-client"
-      //     ).innerHTML = tr.dataset.idClient;
-      //     //div chart nb_facture
-      //     const divChartNbFacture = modalHistoFacture.querySelector(
-      //       "#div-histo-facture-nb"
-      //     );
-      //     //div chart total_facture
-      //     const divChartTotalFacture = modalHistoFacture.querySelector(
-      //       "#div-histo-facture-total"
-      //     );
-      //     //chart nb_facture
-      //     chartNbFacture(
-      //       divChartNbFacture,
-      //       tr.dataset.idClient,
-      //       date_by,
-      //       per,
-      //       from,
-      //       to,
-      //       month,
-      //       year
-      //     );
-      //     //chart total_facture
-      //     chartTotalFacture(
-      //       divChartTotalFacture,
-      //       tr.dataset.idClient,
-      //       date_by,
-      //       per,
-      //       from,
-      //       to,
-      //       month,
-      //       year
-      //     );
-      //     //show modal histo facture
-      //     new bootstrap.Modal(modalHistoFacture).show();
-      //   });
-      // });
       // //===== EVENT check all
       // const inputCheckAll = container.querySelector("#check-all-client");
       // if (inputCheckAll) {
@@ -1633,8 +1905,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error(e);
     }
   }
-  //function - lis num_caisse
-  async function listNumCaisse(select) {
+  //function - list num_caisse
+  async function listNumCaisse(select, add = false) {
     try {
       //FETCH api list all caisse
       const apiListAllCaisse = await apiRequest("/caisse/list_all_caisse");
@@ -1672,8 +1944,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       //success api list num_caisse
-      select.innerHTML = `<option></option>
+      if (!add)
+        select.innerHTML = `<option></option>
                           <option value='all' selected>${lang.all}</option>`;
+      else select.innerHTML = `<option></option>`;
+
       apiListAllCaisse.data.forEach((line) => {
         const option = document.createElement("option");
         option.value = line.num_caisse;
@@ -1685,8 +1960,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error(e);
     }
   }
-  //function - lis user
-  async function listUser(select) {
+  //function - list user
+  async function listUser(select, add = false) {
     try {
       //FETCH api list all user
       const apiListAllUser = await apiRequest("/user/list_all_user");
@@ -1724,12 +1999,122 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       //success api list user
-      select.innerHTML = `<option></option>
+      if (!add)
+        select.innerHTML = `<option></option>
                           <option value='all' selected>${lang.all}</option>`;
+      else select.innerHTML = `<option></option>`;
+
       apiListAllUser.data.forEach((line) => {
         const option = document.createElement("option");
         option.value = line.id_utilisateur;
         option.innerText = `${line.id_utilisateur} - ${line.nom_prenoms}`;
+
+        select.append(option);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  //function - list client
+  async function listClient(select) {
+    try {
+      //FETCH api list all client
+      const apiListAllClient = await apiRequest("/client/list_all_client");
+
+      //error
+      if (apiListAllClient.message_type === "error") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-danger");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          apiListAllClient.message;
+        //progress bar
+        progressBar.style.transition = "width 20s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        select.closest("div").prepend(alert);
+
+        //progress launch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 20000);
+        return;
+      }
+
+      //success api list client
+      select.innerHTML = `<option></option>`;
+
+      apiListAllClient.data.forEach((line) => {
+        const option = document.createElement("option");
+        option.value = line.id_client;
+        option.innerText = `${line.id_client} - ${line.fullname}`;
+
+        select.append(option);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  //function - list produit
+  async function listProduit(select) {
+    try {
+      //FETCH api list all produit
+      const apiListAllProduit = await apiRequest("/produit/list_all_produit");
+
+      //error
+      if (apiListAllProduit.message_type === "error") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-danger");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          apiListAllProduit.message;
+        //progress bar
+        progressBar.style.transition = "width 20s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        select.closest("div").prepend(alert);
+
+        //progress launch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 20000);
+        return;
+      }
+
+      //success api list produit
+      select.innerHTML = `<option></option>`;
+
+      apiListAllProduit.data.forEach((line) => {
+        const option = document.createElement("option");
+        option.value = line.id_produit;
+        option.innerText = `${line.id_produit} - ${
+          line.libelle_produit
+        } (${formatterTotal.format(Number(line.prix_produit))})`;
+        option.dataset.prix = line.prix_produit;
 
         select.append(option);
       });

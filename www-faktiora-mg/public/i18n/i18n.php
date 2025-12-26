@@ -67,6 +67,8 @@
         question_delete_permanent_client_plur: "<?= __('forms.labels.question_delete_permanent_client_plur') ?>",
         question_restore_client_1: "<?= __('forms.labels.question_restore_client_1') ?>",
         question_restore_client_plur: "<?= __('forms.labels.question_restore_client_plur') ?>",
+        produit_not_selected: "<?= __('messages.invalids.produit_not_selected') ?>",
+        invalids_quantite: "<?= __('messages.invalids.quantite') ?>",
 
     }
 </script>

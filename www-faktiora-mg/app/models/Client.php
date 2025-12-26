@@ -168,7 +168,7 @@ class Client extends Database
 
         try {
 
-            $response = parent::selectQuery("SELECT id_client, nom_client, prenoms_client, sexe_client FROM client WHERE etat_client != 'supprimé' ");
+            $response = parent::selectQuery("SELECT id_client, nom_client, prenoms_client,CONCAT(nom_client, ' ', prenoms_client)AS fullname, sexe_client FROM client WHERE etat_client != 'supprimé' ");
 
             //error
             if ($response['message_type'] === 'error') {
