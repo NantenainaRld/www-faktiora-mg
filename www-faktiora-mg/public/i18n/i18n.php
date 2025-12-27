@@ -69,6 +69,9 @@
         question_restore_client_plur: "<?= __('forms.labels.question_restore_client_plur') ?>",
         produit_not_selected: "<?= __('messages.invalids.produit_not_selected') ?>",
         invalids_quantite: "<?= __('messages.invalids.quantite') ?>",
+        entree_nums_facture_empty: "<?= __('messages.invalids.entree_nums_facture_empty') ?>",
+        question_delete_facture_1: "<?= __('forms.labels.question_delete_facture_1') ?>",
+        question_delete_facture_plur: "<?= __('forms.labels.question_delete_facture_plur') ?>",
 
     }
 </script>

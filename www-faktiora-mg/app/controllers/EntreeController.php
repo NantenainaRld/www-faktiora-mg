@@ -2064,8 +2064,8 @@ class EntreeController extends Controller
         $order_default = ['ASC', 'DESC'];
 
         //status
-        $status = strtolower(trim($_GET['status'] ?? 'active'));
-        $status = ($status === 'deleted') ? 'deleted' : 'active';
+        $status = strtolower(trim($_GET['status'] ?? 'all'));
+        $status = ($status === 'deleted') ? 'deleted' : 'all';
 
         //num_caisse
         $num_caisse = "";

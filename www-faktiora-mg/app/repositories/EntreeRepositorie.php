@@ -14,7 +14,7 @@ class EntreeRepositorie extends Database
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
         $paramsQuery = [];
-        $sql = "SELECT f.num_facture, f.date_facture, f.id_utilisateur, f.num_caisse, f.id_client, COALESCE(SUM(lf.prix * lf.quantite_produit), 0)  AS montant_facture FROM facture f LEFT JOIN ligne_facture lf ON lf.id_facture = f.id_facture ";
+        $sql = "SELECT f.num_facture, f.date_facture, f.id_utilisateur, f.num_caisse, f.id_client, f.etat_facture, COALESCE(SUM(lf.prix * lf.quantite_produit), 0)  AS montant_facture FROM facture f LEFT JOIN ligne_facture lf ON lf.id_facture = f.id_facture ";
 
         //where 1=1
         $sql .= "WHERE 1=1 ";
@@ -24,7 +24,7 @@ class EntreeRepositorie extends Database
             $sql .= "AND f.etat_facture = 'supprimé' ";
         }
         //status - actif
-        else {
+        elseif ($params['status'] === 'active') {
             $sql .= "AND f.etat_facture = 'actif' ";
         }
 

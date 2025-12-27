@@ -47,7 +47,8 @@ return [
         'facture_dashboard' => "Tableau de bord facture",
         'facture_list' => "Liste des factures",
         'facture_add' => "Ajout d'une nouvelle facture",
-        'facture_correction' => "Correction de la facture"
+        'facture_correction' => "Correction de la facture",
+        'facture_delete' => "Supprésion des factures"
     ],
     'labels' => [
         'all' => 'tout',
@@ -220,7 +221,9 @@ return [
         'to_empty' => "Vider",
         'facture_correction_message' => "Cette correction créera une nouvelle sortie, affectera le solde de la caisse, et aussi le nombre de stock des produits. Vous pouvez réduire les quantités jusqu'à 0.",
         'ligne_facture' => "Ligne de facture",
-        'refresh' => "Actualiser"
+        'refresh' => "Actualiser",
+        'question_delete_facture_1' => "Voulez-vous vraiment supprimer la facture numéro <b>:field</b> ?",
+        'question_delete_facture_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> factures ?",
     ],
     'times' => [
         'minute' => "minute",

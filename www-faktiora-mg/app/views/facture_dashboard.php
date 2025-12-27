@@ -47,9 +47,15 @@
                                         <div class="row justify-content-center  overflow-auto align-items-top flex-grow-1">
                                             <div class="col-12">
                                                 <!-- btns  -->
-                                                <div class="d-flex justify-content-start my-2">
+                                                <div class="d-flex justify-content-start my-2 gap-2">
                                                     <!-- btn add facture  -->
                                                     <button class="btn btn-sm btn-outline-primary fw-bold" id="btn-add-facture"><i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
+                                                    <?php if ($role === 'admin'): ?>
+                                                        <!-- btn delete facture -->
+                                                        <button class="btn btn-sm btn-outline-danger" id="btn-delete-facture"><i class="fad fa-trash me-2">
+                                                            </i><?= __('forms.labels.delete') ?>
+                                                        </button>
+                                                    <?php endif; ?>
                                                 </div>
                                                 <!-- table  -->
                                                 <table class="w-100 table-striped">
@@ -500,22 +506,22 @@
             </div>
         </div>
     </div>
-    <!-- modal delete caisse -->
-    <div class="modal fade" id="modal-delete-caisse" tabindex="-1" aria-labelledby="modalDeleteCaisse" aria-hidden="true">
+    <!-- modal delete facture -->
+    <div class="modal fade" id="modal-delete-facture" tabindex="-1" aria-labelledby="modalDeleteFacture" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- modal header  -->
                 <div class="modal-header bg-danger text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-trash me-2"></i><?= __('forms.titles.cash_delete') ?></h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-trash me-2"></i><?= __('forms.titles.facture_delete') ?></h6>
                 </div>
                 <!-- modal body  -->
                 <div class="modal-body">
-                    <div class="message">Voulez-vous vraiment supprimer ces ... caisses ?</div>
+                    <div class="message">Voulez-vous vraiment supprimer ces ... factures ?</div>
                 </div>
                 <!-- modal footer  -->
                 <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-delete-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
-                    <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-delete-caisse"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_delete') ?></button>
+                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-delete-facture"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
+                    <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-modal-delete-facture"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_delete') ?></button>
                 </div>
             </div>
         </div>
