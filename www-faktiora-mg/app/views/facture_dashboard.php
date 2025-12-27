@@ -97,69 +97,28 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- table ligne_caisse -->
+                            <!-- table ligne_facture -->
                             <div class="col-12 h-100 ms-2 col-lg-5">
                                 <div class="card h-100">
                                     <div class="card-body d-flex flex-column justify-content-between">
                                         <!-- title table -->
-                                        <div class="card-title text-secondary flex-grow-0" id="chart-transactions-curves-title">
-                                            <i class="fad fa-list-dropdown me-2"></i><?= __('forms.titles.cash_line') . ' (' . strtolower(__('forms.labels.cash_num')) ?>: <span id="table-lc-cash-num"></span>)
+                                        <div class="card-title text-secondary flex-grow-0">
+                                            <i class="fad fa-list-dropdown me-2"></i><?= __('forms.titles.ligne_facture') . ' (' . strtolower(__('forms.labels.facture_num')) ?>: <span id="table-lf-facture-num"></span>)
                                         </div>
                                         <div class="row justify-content-center  overflow-auto align-items-top flex-grow-1">
-                                            <!-- search ligne_caisse  -->
-                                            <dvi class="col-12 bg-second rounded-1 py-2 align-items-center d-flex flex-column">
-                                                <!-- input - search ligne_caisse  -->
-                                                <div class="row w-100 mb-2">
-                                                    <div class="me-2 input-group">
-                                                        <input type="text" class="form-control form-control-sm text-secondary" placeholder="<?= __('forms.placeholders.search_lc') ?>" id="input-search-lc-id">
-                                                        <span class="input-group-text"><i class="fad fa-magnifying-glass"></i></span>
-                                                    </div>
-                                                </div>
-                                                <div class="row w-100 flex-nowrap overflow-x-auto">
-                                                    <!-- input - search date_debut  -->
-                                                    <div class="me-2 col-6 
-                                                    d-flex gap-1">
-                                                        <label for="input-search-lc-from" class="form-label text-secondary mt-1"><?= __('forms.labels.on') ?></label>
-                                                        <div class="input-group">
-                                                            <span class="input-group-text"><i class="fad fa-calendar"></i></span>
-                                                            <input type="datetime-local" class="form-control form-control-sm text-secondary" id="input-search-lc-from" max="<?= date('Y-m-d\TH:i') ?>">
-                                                        </div>
-                                                    </div>
-                                                    <!-- input - search date_fin  -->
-                                                    <div class="me-2 col-6 d-flex gap-1">
-                                                        <label for="input-search-lc-to" class="form-label text-secondary mt-1"><?= ucfirst(__('forms.labels.to')) ?></label>
-                                                        <div class="input-group">
-                                                            <span class="input-group-text"><i class="fad fa-calendar"></i></span>
-                                                            <input type="datetime-local" class="form-control form-control-sm text-secondary" id="input-search-lc-to" max="<?= date('Y-m-d\TH:i') ?>">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </dvi>
-                                            <!-- table  -->
+                                            <!-- table -->
                                             <div class="col-12">
-                                                <!-- btn  -->
-                                                <div class="row g-0 justify-content-start mb-2">
-                                                    <!-- btn add ligne_caisse  -->
-                                                    <button class="btn btn-outline-primary fw-bold w-auto btn-sm me-2 my-2" id="btn-add-ligne-caisse">
-                                                        <i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?>
-                                                    </button>
-                                                    <!-- btn delete ligne_caisse  -->
-                                                    <button class="btn btn-danger fw-bold w-auto btn-sm me-2 my-2" id="btn-delete-ligne-caisse">
-                                                        <i class="fad fa-trash  me-2"></i><?= __('forms.labels.delete') ?>
-                                                    </button>
-                                                </div>
                                                 <table class="w-100 table-striped">
                                                     <thead class="bg-success text-light align-items-center form-text">
                                                         <tr>
-                                                            <th class="text-center"><input type="checkbox" class="form-check-input" id="check-all"></th>
                                                             <th class="text-center"><i class="fad fa-hashtag me-2"></i>ID</th>
-                                                            <th class="text-center"><i class="fad fa-calendar me-2"></i><?= __('forms.labels.date_start') ?></th>
-                                                            <th class="text-center"><i class="fad fa-calendar me-2"></i><?= __('forms.labels.date_end') ?></th>
-                                                            <th class="text-center"><i class="fad fa-user me-2"></i><?= __('forms.labels.user') ?></th>
-                                                            <th class="text-center"><i class="fad fa-gears me-2"></i><?= __('forms.labels.action') ?></th>
+                                                            <th class="text-center"><i class="fad fa-tag me-2"></i><?= __('forms.labels.label') ?></th>
+                                                            <th class="text-center"><i class="fad fa-calculator me-2"></i><?= __('forms.labels.quantity') ?></th>
+                                                            <th class="text-center"><i class="fad fa-coins me-2"></i><?= __('forms.labels.unit_price') . " ({$currency_units})" ?></th>
+                                                            <th class="text-center"><i class="fad fa-coins me-2"></i><?= __('forms.labels.amount') . " ({$currency_units})" ?></th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody id="tbody-lc">
+                                                    <tbody id="tbody-lf">
                                                         <tr>
                                                             <td colspan="9">
                                                                 <span class="bg-second placeholder w-100 rounded-1" style="height: 2vh !important;"></span>

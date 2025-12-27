@@ -14,6 +14,7 @@
         clients_users: "<?= __('forms.labels.clients_users') ?>",
         autre_entree: "<?= __('forms.labels.autre_entree') ?>",
         bill: "<?= ucfirst(__('forms.labels.bill')) ?>",
+        inflow: "<?= ucfirst(__('forms.labels.inflow')) ?>",
         outflow: "<?= ucfirst(__('forms.labels.outflow')) ?>",
         nb_transactions: "<?= ucfirst(__('forms.labels.nb_transactions')) ?>",
         total_transactions: "<?= ucfirst(__('forms.labels.total_transactions')) ?>",
@@ -75,6 +76,7 @@
         question_delete_permanent_facture_1: "<?= __('forms.labels.question_delete_permanent_facture_1') ?>",
         question_restore_facture_1: "<?= __('forms.labels.question_restore_facture_1') ?>",
         question_restore_facture_plur: "<?= __('forms.labels.question_restore_facture_plur') ?>",
+        correction: "<?= __('forms.labels.correction') ?>",
 
     }
 </script>

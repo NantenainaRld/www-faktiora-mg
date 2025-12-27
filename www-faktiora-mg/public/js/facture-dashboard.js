@@ -1956,7 +1956,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
 
       //foreach tr
-      tbodyFacture.querySelectorAll("tr").forEach((tr) => {
+      let selectedRow = null;
+      const allTr = tbodyFacture.querySelectorAll("tr");
+      allTr.forEach((tr) => {
         //===================== CORRECTION FACTURE ==================
         //modal correction facture
         const modalCorrectionFacture = container.querySelector(
@@ -2109,6 +2111,43 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
           }
         );
+
+        //===== EVENT tr selection
+        tr.addEventListener("click", () => {
+          //remove selection
+          if (selectedRow && selectedRow === tr) {
+            tr.classList.remove("active");
+            selectedRow = null;
+
+            //remove table lf facture num
+            container.querySelector("#table-lf-facture-num").innerHTML = "";
+
+            //remove tbody lf
+            container.querySelector("#tbody-lf").innerHTML = `  <tr>
+                                                            <td colspan="9">
+                                                                <span class="bg-second placeholder w-100 rounded-1" style="height: 2vh !important;"></span>
+                                                            </td>
+                                                        </tr>`;
+          }
+          //add selection
+          else {
+            //deselect all
+            allTr.forEach((tr0) => {
+              tr0.classList.remove("active");
+            });
+
+            //add selection
+            tr.classList.add("active");
+            selectedRow = tr;
+
+            //add table lf facture num
+            container.querySelector("#table-lf-facture-num").innerHTML =
+              tr.dataset.numFacture;
+
+            //list facture connection
+            listConnectionFacture(tr.dataset.numFacture.trim());
+          }
+        });
       });
 
       //===== EVENT check all
@@ -2484,356 +2523,209 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error(e);
     }
   }
-  // //function - chart nb_facture
-  // async function chartNbFacture(
-  //   divChartNbFacture,
-  //   id_client,
-  //   date_by,
-  //   per,
-  //   from,
-  //   to,
-  //   month,
-  //   year
-  // ) {
-  //   try {
-  //     //FETCH api facture effective
-  //     const factureEffective = await apiRequest(
-  //       `/entree/list_all_facture?date_by=${date_by}&per=${per}&from=${from}&to=${to}&month=${month}&year=${year}&id_client=${id_client}`
-  //     );
-  //     //error
-  //     if (factureEffective.message_type === "error") {
-  //       //alert
-  //       const alertTemplate = document.querySelector(".alert-template");
-  //       const clone = alertTemplate.content.cloneNode(true);
-  //       const alert = clone.querySelector(".alert");
-  //       const progressBar = alert.querySelector(".progress-bar");
-  //       //alert type
-  //       alert.classList.add("alert-danger");
-  //       //icon
-  //       alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
-  //       //message
-  //       alert.querySelector(".alert-message").innerHTML =
-  //         factureEffective.message;
-  //       //progress bar
-  //       progressBar.style.transition = "width 20s linear";
-  //       progressBar.style.width = "100%";
-  //       //add alert
-  //       divChartNbFacture
-  //         .closest(".modal-body")
-  //         .querySelector(".alert-container")
-  //         .prepend(alert);
-  //       //progress launch animation
-  //       setTimeout(() => {
-  //         progressBar.style.width = "0%";
-  //       }, 10);
-  //       //auto close alert
-  //       setTimeout(() => {
-  //         alert.querySelector(".btn-close").click();
-  //       }, 20000);
-  //       return;
-  //     }
-  //     //invalid
-  //     else if (factureEffective.message_type === "invalid") {
-  //       //alert
-  //       const alertTemplate = document.querySelector(".alert-template");
-  //       const clone = alertTemplate.content.cloneNode(true);
-  //       const alert = clone.querySelector(".alert");
-  //       const progressBar = alert.querySelector(".progress-bar");
-  //       //alert type
-  //       alert.classList.add("alert-warning");
-  //       //icon
-  //       alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-  //       //message
-  //       alert.querySelector(".alert-message").innerHTML =
-  //         factureEffective.message;
-  //       //progress bar
-  //       progressBar.style.transition = "width 10s linear";
-  //       progressBar.style.width = "100%";
-  //       //add alert
-  //       divChartNbFacture
-  //         .closest(".modal-body")
-  //         .querySelector(".alert-container")
-  //         .prepend(alert);
-  //       //progress lanch animation
-  //       setTimeout(() => {
-  //         progressBar.style.width = "0%";
-  //       }, 10);
-  //       //auto close alert
-  //       setTimeout(() => {
-  //         alert.querySelector(".btn-close").click();
-  //       }, 10000);
-  //       return;
-  //     }
-  //     //success effective transactions
-  //     //all dates
-  //     const allDates = [
-  //       ...new Set([...factureEffective.data.map((d) => d.date)]),
-  //     ].sort();
-  //     Chart.defaults.locale = cookieLangValue;
-  //     //count par date
-  //     const countNbTotalFacture = countNbTotal(factureEffective);
-  //     //=====show chart histo nb_facture
-  //     const canvasHistoNbFacture = document.createElement("canvas");
-  //     new Chart(canvasHistoNbFacture, {
-  //       type: "line",
-  //       data: {
-  //         labels: allDates,
-  //         datasets: [
-  //           {
-  //             label: lang.bill,
-  //             data: prepareCount(countNbTotalFacture, allDates),
-  //             borderColor: "#01a7b9ff",
-  //             borderWidth: 1,
-  //             backgroundColor: "#2ec4b5a1",
-  //             // barThickness: 10,
-  //             borderRadius: 5,
-  //           },
-  //         ],
-  //       },
-  //       options: {
-  //         responsive: true,
-  //         plugins: {
-  //           title: {
-  //             display: true,
-  //             text: `${lang.nb_facture} (${formatterNumber.format(
-  //               factureEffective.nb_facture
-  //             )})`,
-  //           },
-  //           legend: { display: true, position: "bottom", align: "center" },
-  //         },
-  //         scales: {
-  //           x: {
-  //             title: {
-  //               display: true,
-  //               text: lang.date,
-  //             },
-  //             type: "time",
-  //             time: { unit: "day" },
-  //           },
-  //           y: {
-  //             title: { display: true, text: lang.number },
-  //             beginAtZero: true,
-  //             ticks: { stepSize: 1 },
-  //           },
-  //         },
-  //         zoom: {
-  //           // zoom: {
-  //           //   wheel: {
-  //           //     enabled: true,
-  //           //     minScale: 0.5,
-  //           //     maxScale: 10,
-  //           //     wheelEvent: "wheel",
-  //           //   },
-  //           //   pinch: { enabled: true },
-  //           //   pan: {
-  //           //     enabled: true,
-  //           //     mode: "xy",
-  //           //     modifierKey: "alt",
-  //           //   },
-  //           //   drag: {
-  //           //     mode: "xy",
-  //           //     enabled: true,
-  //           //     backgroundColor: "red",
-  //           //     animation: 100,
-  //           //   },
-  //           // },
-  //         },
-  //       },
-  //       plugins: [ChartZoom],
-  //     });
-  //     divChartNbFacture.innerHTML = "";
-  //     divChartNbFacture.append(canvasHistoNbFacture);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
-  // //function - chart total_facture
-  // async function chartTotalFacture(
-  //   divChartTotalFacture,
-  //   id_client,
-  //   date_by,
-  //   per,
-  //   from,
-  //   to,
-  //   month,
-  //   year
-  // ) {
-  //   try {
-  //     //FETCH api facture effective
-  //     const factureEffective = await apiRequest(
-  //       `/entree/list_all_facture?date_by=${date_by}&per=${per}&from=${from}&to=${to}&month=${month}&year=${year}&id_client=${id_client}`
-  //     );
-  //     //error
-  //     if (factureEffective.message_type === "error") {
-  //       //alert
-  //       const alertTemplate = document.querySelector(".alert-template");
-  //       const clone = alertTemplate.content.cloneNode(true);
-  //       const alert = clone.querySelector(".alert");
-  //       const progressBar = alert.querySelector(".progress-bar");
-  //       //alert type
-  //       alert.classList.add("alert-danger");
-  //       //icon
-  //       alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
-  //       //message
-  //       alert.querySelector(".alert-message").innerHTML =
-  //         factureEffective.message;
-  //       //progress bar
-  //       progressBar.style.transition = "width 20s linear";
-  //       progressBar.style.width = "100%";
-  //       //add alert
-  //       divChartTotalFacture
-  //         .closest(".modal-body")
-  //         .querySelector(".alert-container")
-  //         .prepend(alert);
-  //       //progress launch animation
-  //       setTimeout(() => {
-  //         progressBar.style.width = "0%";
-  //       }, 10);
-  //       //auto close alert
-  //       setTimeout(() => {
-  //         alert.querySelector(".btn-close").click();
-  //       }, 20000);
-  //       return;
-  //     }
-  //     //invalid
-  //     else if (factureEffective.message_type === "invalid") {
-  //       //alert
-  //       const alertTemplate = document.querySelector(".alert-template");
-  //       const clone = alertTemplate.content.cloneNode(true);
-  //       const alert = clone.querySelector(".alert");
-  //       const progressBar = alert.querySelector(".progress-bar");
-  //       //alert type
-  //       alert.classList.add("alert-warning");
-  //       //icon
-  //       alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-  //       //message
-  //       alert.querySelector(".alert-message").innerHTML =
-  //         factureEffective.message;
-  //       //progress bar
-  //       progressBar.style.transition = "width 10s linear";
-  //       progressBar.style.width = "100%";
-  //       //add alert
-  //       divChartTotalFacture
-  //         .closest(".modal-body")
-  //         .querySelector(".alert-container")
-  //         .prepend(alert);
-  //       //progress lanch animation
-  //       setTimeout(() => {
-  //         progressBar.style.width = "0%";
-  //       }, 10);
-  //       //auto close alert
-  //       setTimeout(() => {
-  //         alert.querySelector(".btn-close").click();
-  //       }, 10000);
-  //       return;
-  //     }
-  //     //success effective transactions
-  //     //all dates
-  //     const allDates = [
-  //       ...new Set([...factureEffective.data.map((d) => d.date)]),
-  //     ].sort();
-  //     Chart.defaults.locale = cookieLangValue;
-  //     //count par date
-  //     const countNbTotalFacture = countNbTotal(factureEffective);
-  //     //=====show chart histo total_facture
-  //     const canvasHistoTotalFacture = document.createElement("canvas");
-  //     new Chart(canvasHistoTotalFacture, {
-  //       type: "line",
-  //       data: {
-  //         labels: allDates,
-  //         datasets: [
-  //           {
-  //             label: lang.bill,
-  //             data: prepareTotal(countNbTotalFacture, allDates),
-  //             borderColor: "#01a7b9ff",
-  //             borderWidth: 1,
-  //             backgroundColor: "#2ec4b5a1",
-  //             // barThickness: 10,
-  //             borderRadius: 5,
-  //           },
-  //         ],
-  //       },
-  //       options: {
-  //         responsive: true,
-  //         plugins: {
-  //           title: {
-  //             display: true,
-  //             text: `${lang.total_facture} (${formatterTotal.format(
-  //               factureEffective.total_facture
-  //             )})`,
-  //           },
-  //           legend: { display: true, position: "bottom", align: "center" },
-  //         },
-  //         scales: {
-  //           x: {
-  //             title: {
-  //               display: true,
-  //               text: lang.date,
-  //             },
-  //             type: "time",
-  //             time: { unit: "day" },
-  //           },
-  //           y: {
-  //             title: {
-  //               display: true,
-  //               text: `${lang.total} (${currencyUnits})`,
-  //             },
-  //             beginAtZero: true,
-  //             ticks: { stepSize: 1 },
-  //           },
-  //         },
-  //         zoom: {
-  //           // zoom: {
-  //           //   wheel: {
-  //           //     enabled: true,
-  //           //     minScale: 0.5,
-  //           //     maxScale: 10,
-  //           //     wheelEvent: "wheel",
-  //           //   },
-  //           //   pinch: { enabled: true },
-  //           //   pan: {
-  //           //     enabled: true,
-  //           //     mode: "xy",
-  //           //     modifierKey: "alt",
-  //           //   },
-  //           //   drag: {
-  //           //     mode: "xy",
-  //           //     enabled: true,
-  //           //     backgroundColor: "red",
-  //           //     animation: 100,
-  //           //   },
-  //           // },
-  //         },
-  //       },
-  //       plugins: [ChartZoom],
-  //     });
-  //     divChartTotalFacture.innerHTML = "";
-  //     divChartTotalFacture.append(canvasHistoTotalFacture);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
-  // //function - count nb && total per date
-  // const countNbTotal = (effective) => {
-  //   const result = {};
-  //   effective.data.forEach((item) => {
-  //     if (!result[item.date]) {
-  //       //object date {} not exist
-  //       result[item.date] = {
-  //         count: 0,
-  //         total: 0,
-  //       };
-  //     }
-  //     //increment
-  //     result[item.date].count++;
-  //     result[item.date].total += Number(item.montant);
-  //   });
-  //   return result;
-  // };
-  // //function - prepare count
-  // const prepareCount = (countNbTotal, allDates) =>
-  //   allDates.map((date) => countNbTotal[date]?.count || 0);
-  // //function - prepare total
-  // const prepareTotal = (countNbTotal, allDates) =>
-  //   allDates.map((date) => countNbTotal[date]?.total || 0);
+  //function - list connection facture
+  async function listConnectionFacture(numFacture) {
+    //tbody lf
+    const tbodyLF = container.querySelector("#tbody-lf");
+    try {
+      //FETCH api list connection facture
+      const apiListConnectionFacture = await apiRequest(
+        `/entree/list_connection_facture?num_facture=${numFacture}`
+      );
+
+      //error
+      if (apiListConnectionFacture.message_type === "error") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-danger");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          apiListConnectionFacture.message;
+        //progress bar
+        progressBar.style.transition = "width 20s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        tbodyLF.closest("div").prepend(alert);
+
+        //progress launch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 20000);
+        return;
+      }
+      //invalid
+      else if (apiListConnectionFacture.message_type === "invalid") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-warning");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          apiListConnectionFacture.message;
+        //progress bar
+        progressBar.style.transition = "width 10s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        tbodyLF.closest("div").prepend(alert);
+
+        //progress lanch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 10000);
+        return;
+      }
+
+      //===== TABLE ligne_facture
+
+      //set table list connection facture
+      tbodyLF.innerHTML = "";
+      //lf
+      apiListConnectionFacture.lf.forEach((line) => {
+        const tr = document.createElement("tr");
+
+        //td - id_lf
+        const tdIdLF = document.createElement("td");
+        tdIdLF.textContent = line.id_lf;
+        tdIdLF.classList.add("text-center");
+
+        //td - libelle_produit
+        const tdLibelle = document.createElement("td");
+        tdLibelle.textContent = line.libelle_produit;
+        tdLibelle.classList.add("text-center");
+
+        //td - quantite_produit
+        const tdQuantite = document.createElement("td");
+        tdQuantite.textContent = formatterNumber.format(
+          Number(line.quantite_produit)
+        );
+        tdQuantite.classList.add("text-center");
+
+        //td - prix
+        const tdPrix = document.createElement("td");
+        tdPrix.textContent = formatterNumber.format(Number(line.prix));
+        tdPrix.classList.add("text-center");
+
+        //td - montant
+        const tdMontant = document.createElement("td");
+        tdMontant.textContent = formatterNumber.format(Number(line.prix_total));
+        tdMontant.classList.add("text-center");
+
+        tr.append(tdIdLF, tdLibelle, tdQuantite, tdPrix, tdMontant);
+        tbodyLF.appendChild(tr);
+      });
+      //ae
+      if (apiListConnectionFacture.autre_entree.length > 0) {
+        const trCorrectionAe = document.createElement("tr");
+        trCorrectionAe.innerHTML = `<td colspan='5' class='text-center text-light p-2 bg-secondary'><b>${
+          lang.correction
+        }</b> (${lang.inflow.toLowerCase()})</td>`;
+
+        tbodyLF.append(trCorrectionAe);
+
+        //list correction ae
+        apiListConnectionFacture.autre_entree.forEach((line) => {
+          const tr = document.createElement("tr");
+
+          //td - id_ae
+          const tdIdAe = document.createElement("td");
+          tdIdAe.textContent = line.id_ae;
+          tdIdAe.classList.add("text-center");
+
+          //td - libelle_ae
+          const tdLibelle = document.createElement("td");
+          tdLibelle.textContent = line.libelle_ae;
+          tdLibelle.classList.add("text-center");
+
+          //td - quantite_ae
+          const tdQuantite = document.createElement("td");
+          tdQuantite.textContent = 1;
+          tdQuantite.classList.add("text-center");
+
+          //td - prix
+          const tdPrix = document.createElement("td");
+          tdPrix.textContent = formatterNumber.format(Number(line.montant_ae));
+          tdPrix.classList.add("text-center");
+
+          //td - montant
+          const tdMontant = document.createElement("td");
+          tdMontant.textContent = formatterNumber.format(
+            Number(line.montant_ae)
+          );
+          tdMontant.classList.add("text-center");
+
+          tr.append(tdIdAe, tdLibelle, tdQuantite, tdPrix, tdMontant);
+          tbodyLF.appendChild(tr);
+        });
+      }
+      //ae
+      if (apiListConnectionFacture.sortie.length > 0) {
+        const trCorrectionDs = document.createElement("tr");
+        trCorrectionDs.innerHTML = `<td colspan='5' class='text-center text-light p-2 bg-secondary'><b>${
+          lang.correction
+        }</b> (${lang.outflow.toLowerCase()})</td>`;
+
+        tbodyLF.append(trCorrectionDs);
+
+        //list correction ds
+        apiListConnectionFacture.sortie.forEach((line) => {
+          const tr = document.createElement("tr");
+
+          //td - id_ds
+          const tdIdDs = document.createElement("td");
+          tdIdDs.textContent = line.num_ds;
+          tdIdDs.classList.add("text-center");
+
+          //td - libelle_ds
+          const tdLibelle = document.createElement("td");
+          tdLibelle.textContent = line.libelle_article;
+          tdLibelle.classList.add("text-center");
+
+          //td - quantite_ds
+          const tdQuantite = document.createElement("td");
+          tdQuantite.textContent = 1;
+          tdQuantite.classList.add("text-center");
+
+          //td - prix
+          const tdPrix = document.createElement("td");
+          tdPrix.textContent = formatterNumber.format(
+            Number(line.prix_article)
+          );
+          tdPrix.classList.add("text-center");
+
+          //td - montant
+          const tdMontant = document.createElement("td");
+          tdMontant.textContent = formatterNumber.format(
+            Number(line.prix_article)
+          );
+          tdMontant.classList.add("text-center");
+
+          tr.append(tdIdDs, tdLibelle, tdQuantite, tdPrix, tdMontant);
+          tbodyLF.appendChild(tr);
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
 });
