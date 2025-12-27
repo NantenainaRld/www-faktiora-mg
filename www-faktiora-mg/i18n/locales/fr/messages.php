@@ -107,11 +107,11 @@ return [
         //sortie - correction demande sortie
         'sortie_correctionDemandeSortie' => "Cette sortie n'est pas enregistrée sur votre caisse actuelle",
         //sortie - articles empty
-        'sortie_articles_empty' => "Veuiller ajouter au moins un produit",
+        'sortie_articles_empty' => "Veuiller ajouter au moins un article",
         //sortie - correction facture
         'sortie_correctionFacture' => "Cette facture n'est pas enregistrée sur votre caisse actuelle",
         //sortie - not selected
-        'sortie_not_selected' => "Veuiller séléctionner une caisse",
+        'sortie_not_selected' => "Veuiller séléctionner une sortie",
         //sortie - not ds
         'sortie_not_ds' => "La sortie numéro <b>:field</b> n'est pas une demande d'engagement de dépense",
         //client - ids client empty

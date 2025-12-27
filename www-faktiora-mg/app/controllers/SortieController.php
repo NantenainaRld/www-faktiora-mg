@@ -1804,7 +1804,7 @@ class SortieController extends Controller
                     //lf - not empty
                     else {
                         foreach ($value as &$line) {
-                            foreach ($line as $index => &$lf) {
+                            foreach ($line as &$lf) {
                                 $lf = trim($lf);
                             }
                         }
@@ -1874,24 +1874,11 @@ class SortieController extends Controller
                 $id_utilisateur = $is_loged_in->getIdUtilisateur();
             }
 
-            //lf
-            $lf = unserialize(serialize($json['lf']));
-            $json['lf'] = [$json['lf'][0]];
-            $ids_lf = [$json['lf'][0]['id_lf']];
-            foreach ($lf as $index => $line) {
-                // id_lf - exist
-                if (in_array($line['id_lf'], $ids_lf, true)) {
-                    continue;
-                }
-                $ids_lf[] = $line['id_lf'];
-                $json['lf'][] = $line;
-            }
-
             //does produits valides ?
-            foreach ($json['lf'] as $index => $line) {
+            foreach ($json['lf'] as $line) {
                 //quantite - invalid
                 $quantite = filter_var($line['quantite_produit'], FILTER_VALIDATE_INT);
-                if ($quantite === false || $quantite < 0) {
+                if (!$quantite || $quantite < 0) {
                     $response = [
                         'message_type' => 'invalid',
                         'message' => __(
@@ -1939,10 +1926,38 @@ class SortieController extends Controller
                     return;
                 }
 
+                //num_caisse
+                $num_caisse = "";
+                //role admin
+                if ($is_loged_in->getRole() === 'admin') {
+                    $num_caisse = $response['model']->getNumCaisse();
+                }
+                //role caissier
+                else {
+                    //does user have caisse ?
+                    $response = LigneCaisse::findCaisse($id_utilisateur);
+                    //error
+                    if ($response['message_type'] === 'error') {
+                        echo json_encode($response);
+                        return;
+                    }
+                    //not found
+                    if (!$response['found']) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.not_found.user_caisse')
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
+                    $num_caisse = $response['model']->getNumCaisse();
+                }
+
                 //does lf valid ?
                 $change = false;
                 $produits = [];
-                foreach ($json['lf'] as $index => $line) {
+                foreach ($json['lf'] as $line) {
                     //does id_lf exist ?
                     $response = LigneFacture::findById($line['id_lf']);
                     //error
@@ -1960,7 +1975,7 @@ class SortieController extends Controller
                         echo json_encode($response);
                         return;
                     }
-                    //num_facture != lf id facture
+                    //num_facture != lf id facture (lf.id_facture = num_facture)
                     if ($json['num_facture'] != $response['model']->getIdFacture()) {
                         $response = [
                             'message_type' => 'invalid',
@@ -2001,39 +2016,40 @@ class SortieController extends Controller
                         }
 
                         //calcul substraction
-                        $p = [
+                        $pr = [
                             'id_produit' => $line['id_produit'],
                             'nb' => ($response['model']->getQuantiteProduit() - $line['quantite_produit']),
                             'prix_produit' => $response['model']->getPrix()
                         ];
-                        $produits[] = $p;
-                    }
-                    //does produit exist ?
-                    $response = Produit::findById($line['id_produit']);
-                    //error
-                    if ($response['message_type'] === 'error') {
-                        echo json_encode($response);
-                        return;
-                    }
-                    //not found
-                    if (!$response['found']) {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.not_found.produit_id_produit', ['field' => $line['id_produit']])
-                        ];
+                        $produits[] = $pr;
 
-                        echo json_encode($response);
-                        return;
-                    }
-                    //produit - deleted
-                    if ($response['model']->getEtatProduit() === 'supprimé') {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.invalids.produit_deleted', ['field' => $line['id_produit']])
-                        ];
+                        //does produit exist ?
+                        $response = Produit::findById($line['id_produit']);
+                        //error
+                        if ($response['message_type'] === 'error') {
+                            echo json_encode($response);
+                            return;
+                        }
+                        //not found
+                        if (!$response['found']) {
+                            $response = [
+                                'message_type' => 'invalid',
+                                'message' => __('messages.not_found.produit_id_produit', ['field' => $line['id_produit']])
+                            ];
 
-                        echo json_encode($response);
-                        return;
+                            echo json_encode($response);
+                            return;
+                        }
+                        //produit - deleted
+                        if ($response['model']->getEtatProduit() === 'supprimé') {
+                            $response = [
+                                'message_type' => 'invalid',
+                                'message' => __('messages.invalids.produit_deleted', ['field' => $line['id_produit']])
+                            ];
+
+                            echo json_encode($response);
+                            return;
+                        }
                     }
                 }
 
@@ -2051,74 +2067,9 @@ class SortieController extends Controller
                 //libelle_article && prix_article
                 $libelle_article = "correction/{$json['num_facture']} - ";
                 $prix_article = 0;
-                foreach ($produits as $index => $line) {
+                foreach ($produits as $line) {
                     $libelle_article .= "/produit {$line['id_produit']} : -{$line['nb']} ";
                     $prix_article += $line['prix_produit'] * $line['nb'];
-                }
-
-                //num_caisse
-                $num_caisse = "";
-                //role admin
-                if ($is_loged_in->getRole() === 'admin') {
-                    //does num_caisse exist ?
-                    $response = Caisse::findById($json['num_caisse']);
-                    //error
-                    if ($response['message_type'] === 'error') {
-                        echo json_encode($response);
-                        return;
-                    }
-                    //not found
-                    if (!$response['found']) {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                    //caisse - deleted
-                    if ($response['model']->getEtatCaisse() === 'supprimé') {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.invalids.caisse_deleted', ['field' => $json['num_caisse']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                    $num_caisse = $json['num_caisse'];
-                }
-                //role caissier
-                else {
-                    //is user hash caisse ?
-                    $response = LigneCaisse::findCaisse($id_utilisateur);
-                    //error
-                    if ($response['message_type'] === 'error') {
-                        echo json_encode($response);
-                        return;
-                    }
-                    //not found
-                    if (!$response['found']) {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.not_found.user_caisse')
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                    $num_caisse = $response['model']->getNumCaisse();
-                    //facture num_caisse != user num_caisse
-                    if ($json['num_caisse'] != $num_caisse) {
-                        $response = [
-                            'message_type' => 'success',
-                            'message' => __('messages.invalids.sortie_correctionFacture', ['field' => $json['num_facture']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
                 }
 
                 //role admin - does user exist ?

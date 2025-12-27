@@ -46,7 +46,8 @@ return [
         'restore_client' => "Récupération des clients",
         'facture_dashboard' => "Tableau de bord facture",
         'facture_list' => "Liste des factures",
-        'facture_add' => "Ajout d'une nouvelle facture"
+        'facture_add' => "Ajout d'une nouvelle facture",
+        'facture_correction' => "Correction de la facture"
     ],
     'labels' => [
         'all' => 'tout',
@@ -216,7 +217,10 @@ return [
         'facture_date' => "date de la facture",
         'facture_montant' => "montant de la facture",
         'or' => "ou",
-        'to_empty' => "Vider"
+        'to_empty' => "Vider",
+        'facture_correction_message' => "Cette correction créera une nouvelle sortie, affectera le solde de la caisse, et aussi le nombre de stock des produits. Vous pouvez réduire les quantités jusqu'à 0.",
+        'ligne_facture' => "Ligne de facture",
+        'refresh' => "Actualiser"
     ],
     'times' => [
         'minute' => "minute",

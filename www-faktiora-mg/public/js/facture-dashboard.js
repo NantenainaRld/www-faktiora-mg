@@ -717,6 +717,180 @@ document.addEventListener("DOMContentLoaded", async () => {
           console.error(e);
         }
       });
+
+    //======================= CORRECION FACTURE ===================
+    //modal correction facture
+    const modalCorrectionFacture = container.querySelector(
+      "#modal-correction-facture"
+    );
+    //====== EVENT form correction facture submit
+    modalCorrectionFacture
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        //suspend submit
+        e.preventDefault();
+        //check validity
+        if (!e.target.checkValidity()) {
+          e.target.reportValidity();
+          return;
+        }
+
+        try {
+          //ligne facture
+          let lf = [];
+          modalCorrectionFacture
+            .querySelectorAll(".div-lf")
+            .forEach((divLF) => {
+              const lfObject = {
+                id_lf: divLF.dataset.idLf.trim(),
+                id_produit: divLF.dataset.idProduit.trim(),
+                quantite_produit: divLF
+                  .querySelector("input[type='number']")
+                  .value.trim(),
+              };
+
+              lf.push(lfObject);
+            });
+
+          //FETCH api correction facture
+          const apiCorrectionFacture = await apiRequest(
+            "/sortie/correction_facture",
+            {
+              method: "POST",
+              body: {
+                num_facture: modalCorrectionFacture
+                  .querySelector("#correction-facture-num-facture")
+                  .textContent.trim(),
+                date_ds: !modalCorrectionFacture.querySelector(
+                  "#input-correction-facture-date-ds"
+                )
+                  ? ""
+                  : modalCorrectionFacture
+                      .querySelector("#input-correction-facture-date-ds")
+                      .value.trim(),
+                id_utilisateur: !modalCorrectionFacture.querySelector(
+                  "#select-correction-facture-id-utilisateur"
+                )
+                  ? ""
+                  : $(
+                      modalCorrectionFacture.querySelector(
+                        "#select-correction-facture-id-utilisateur"
+                      )
+                    )
+                      .val()
+                      .trim(),
+                lf: lf,
+              },
+            }
+          );
+
+          //error
+          if (apiCorrectionFacture.message_type === "error") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-danger");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiCorrectionFacture.message;
+            //progress bar
+            progressBar.style.transition = "width 20s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalCorrectionFacture.querySelector(".modal-body").prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 20000);
+            return;
+          }
+          //invalid
+          else if (apiCorrectionFacture.message_type === "invalid") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-warning");
+            //icon
+            alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiCorrectionFacture.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalCorrectionFacture.querySelector(".modal-body").prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+            return;
+          }
+
+          //success
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-success");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-check-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            apiCorrectionFacture.message;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          container
+            .querySelector("#tbody-facture")
+            .closest("div")
+            .prepend(alert);
+
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+
+          //close modal
+          modalCorrectionFacture
+            .querySelector("#btn-close-modal-correction-facture")
+            .click();
+
+          return;
+        } catch (e) {
+          console.error(e);
+        }
+      });
     //   //======================== ADD CLIENT ======================
     //   //modal add client
     //   const modalAddClient = container.querySelector("#modal-add-client");
@@ -1844,18 +2018,17 @@ document.addEventListener("DOMContentLoaded", async () => {
           "align-items-center",
           "gap-2"
         );
-        //btn correct facture outflow
-        const btnCorrectFactureOutflow = document.createElement("button");
-        btnCorrectFactureOutflow.type = "button";
-        btnCorrectFactureOutflow.classList.add(
+        //btn correct facture
+        const btnCorrectFacture = document.createElement("button");
+        btnCorrectFacture.type = "button";
+        btnCorrectFacture.classList.add(
           "btn-light",
           "btn",
           "btn-sm",
           "text-danger",
-          "btn-correct-facture-outflow"
+          "btn-correct-facture"
         );
-        btnCorrectFactureOutflow.innerHTML =
-          "<i class='fad fa-circle-minus'></i>";
+        btnCorrectFacture.innerHTML = "<i class='fad fa-circle-minus'></i>";
         //btn print facture
         const btnPrintFacture = document.createElement("button");
         btnPrintFacture.type = "button";
@@ -1867,7 +2040,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
         btnPrintFacture.innerHTML = "<i class='fad fa-print'></i>";
         //append btn actions
-        divActions.append(btnCorrectFactureOutflow, btnPrintFacture);
+        divActions.append(btnCorrectFacture, btnPrintFacture);
         tdActions.append(divActions);
 
         //append
@@ -1890,6 +2063,63 @@ document.addEventListener("DOMContentLoaded", async () => {
         tbodyFacture.appendChild(tr);
       });
 
+      //foreach tr
+      tbodyFacture.querySelectorAll("tr").forEach((tr) => {
+        //===================== CORRECTION FACTURE ==================
+        //modal correction facture
+        const modalCorrectionFacture = container.querySelector(
+          "#modal-correction-facture"
+        );
+
+        //===== EVENT btn correct facture
+        tr.querySelector(".btn-correct-facture").addEventListener(
+          "click",
+          async () => {
+            //num_facture
+            modalCorrectionFacture.querySelector(
+              "#correction-facture-num-facture"
+            ).innerHTML = tr.dataset.numFacture;
+            //select - correction facture id_utilisateur
+            const selectCorrectionFactureIdUtilisateur =
+              modalCorrectionFacture.querySelector(
+                "#select-correction-facture-id-utilisateur"
+              );
+            if (selectCorrectionFactureIdUtilisateur) {
+              $(selectCorrectionFactureIdUtilisateur).select2({
+                theme: "bootstrap-5",
+                placeholder: lang.select.toLowerCase(),
+                dropdownParent: $(modalCorrectionFacture),
+              });
+              listUser(selectCorrectionFactureIdUtilisateur, true);
+
+              //===== EVENT refresh list user
+              modalCorrectionFacture
+                .querySelector("#btn-correction-facture-refresh-id-utilisateur")
+                .addEventListener("click", () => {
+                  listUser(selectCorrectionFactureIdUtilisateur, true);
+                });
+            }
+
+            //list ligne_facture
+            await listLigneFacture(
+              tr.dataset.numFacture,
+              modalCorrectionFacture.querySelector("#div-ligne-facture")
+            );
+            //===== EVENT btn refresh list ligne_caisse
+            modalCorrectionFacture
+              .querySelector("#btn-correction-facture-refresh-ligne-facture")
+              .addEventListener("click", () => {
+                listLigneFacture(
+                  tr.dataset.numFacture,
+                  modalCorrectionFacture.querySelector("#div-ligne-facture")
+                );
+              });
+
+            //show modal correction facture
+            new bootstrap.Modal(modalCorrectionFacture).show();
+          }
+        );
+      });
       // //===== EVENT check all
       // const inputCheckAll = container.querySelector("#check-all-client");
       // if (inputCheckAll) {
@@ -2118,6 +2348,147 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         select.append(option);
       });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  //function - list ligne_facture
+  async function listLigneFacture(numFacture, div) {
+    try {
+      //FETCH api list ligne_facture
+      const apiListLigneFacture = await apiRequest(
+        `/entree/list_ligne_facture?num_facture=${numFacture}`
+      );
+
+      //error
+      if (apiListLigneFacture.message_type === "error") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-danger");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          apiListLigneFacture.message;
+        //progress bar
+        progressBar.style.transition = "width 20s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        div.prepend(alert);
+
+        //progress launch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 20000);
+        return;
+      }
+      //invalid
+      else if (apiListLigneFacture.message_type === "invalid") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-warning");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          apiListLigneFacture.message;
+        //progress bar
+        progressBar.style.transition = "width 10s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        div.prepend(alert);
+
+        //progress launch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 10000);
+        return;
+      }
+
+      //success api list ligne_facture
+      div.innerHTML = "";
+      apiListLigneFacture.data.forEach((line) => {
+        const divLF = document.createElement("div");
+        divLF.classList.add(
+          "p-2",
+          "d-flex",
+          "gap-2",
+          "bg-second",
+          "rounded-1",
+          "text-secondary",
+          "div-lf",
+          "flex-wrap"
+        );
+        divLF.dataset.prixTotal = line.prix_total;
+        divLF.dataset.idLf = line.id_lf;
+        divLF.dataset.prix = line.prix;
+        divLF.dataset.idProduit = line.id_produit;
+        divLF.innerHTML = `${line.id_lf} - ${
+          line.libelle_produit
+        } <span class='total-prix me-2'>(${formatterTotal.format(
+          Number(divLF.dataset.prixTotal)
+        )})</span><input class='form-control form-control-sm' type='number' min='0' max='${
+          line.quantite_produit
+        }' value='${line.quantite_produit}'>`;
+
+        //append div lf
+        div.append(divLF);
+      });
+
+      //correction facture total
+      const correctionFactureTotal = container.querySelector(
+        "#correction-facture-total"
+      );
+      let prixTotal = 0;
+      //foreach divLF
+      div.querySelectorAll(".div-lf").forEach((divLF) => {
+        //prix total
+        prixTotal += Number(divLF.dataset.prixTotal);
+
+        //===== EVENT input quantite_produit
+        divLF
+          .querySelector("input[type='number']")
+          .addEventListener("input", (e) => {
+            e.target.value = e.target.value.replace(/[^0-9]/g, "");
+
+            //div prix total
+            divLF.dataset.prixTotal =
+              Number(divLF.dataset.prix) * Number(e.target.value);
+            divLF.querySelector(
+              ".total-prix"
+            ).innerHTML = `(${formatterTotal.format(
+              Number(divLF.dataset.prixTotal)
+            )})`;
+
+            //prix total
+            let prixTotal0 = 0;
+            div.querySelectorAll(".div-lf").forEach((divLF0) => {
+              //prix total 0
+              prixTotal0 += Number(divLF0.dataset.prixTotal);
+            });
+            correctionFactureTotal.innerHTML =
+              formatterTotal.format(prixTotal0);
+          });
+      });
+      correctionFactureTotal.innerHTML = formatterTotal.format(prixTotal);
     } catch (e) {
       console.error(e);
     }

@@ -2421,7 +2421,7 @@ class EntreeController extends Controller
         return;
     }
     //action - list lf and produit
-    public function listLfProduit()
+    public function listLigneFacture()
     {
         header('Content-Type: application/json');
         $response = null;

@@ -360,9 +360,9 @@
                                 <div class="card-body">
                                     <div class="d-flex flex-wrap gap-2" id="card-produit"></div>
                                 </div>
-                                <div class="modal-footer d-flex justify-content-center flex-column align-items-center">
+                                <div class="card-footer d-flex justify-content-center flex-column align-items-center">
                                     <span class="text-secondary"><b><?= __('forms.labels.total') ?> : </b><span id="add-facture-total" data-value="0">0 <?= $currency_units ?></span></span>
-                                    <button type="button" class="btn btn-light btn-sm" id="btn-add-facture-empty-produit"><?= __('forms.labels.to_empty') ?></button>
+                                    <button type="button" class="btn btn-second btn-sm" id="btn-add-facture-empty-produit"><?= __('forms.labels.to_empty') ?></button>
                                 </div>
                             </div>
                         </div>
@@ -376,55 +376,60 @@
             </div>
         </div>
     </div>
-    <!-- modal update caisse  -->
-    <div class="modal fade" id="modal-add-client" tabindex="-1" aria-labelledby="modalUpdateCaisse" aria-hidden="true">
+    <!-- modal correction facture -->
+    <div class="modal fade" id="modal-correction-facture" tabindex="-1" aria-labelledby="modalCorrectionFacture" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
+            <div class="modal-content d-flex flex-column justify-content-between">
                 <!-- modal header  -->
-                <div class="modal-header bg-green-0 text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-pen-to-square me-2"></i><?= __('forms.titles.cash_update') ?></h6>
+                <div class="modal-header bg-green-0 text-light flex-frow-0">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-minus me-2"></i><?= __('forms.titles.facture_correction') ?></h6>
                 </div>
-                <!-- form update caisse  -->
-                <form>
-                    <!-- modal body  -->
+                <!-- form correction facture facture -->
+                <form class="flex-grow-1 overflow-auto">
+                    <!-- modal body -->
                     <div class="modal-body">
-                        <!-- num_caisse  -->
-                        <div class="text-center text-secondary mb-1" id="num-caisse">0</div>
-                        <!-- update num_caisse_update  -->
-                        <div class="mb-2">
-                            <label for="input-update-num-caisse-update" class="form-label"><?= __('forms.labels.cash_num') ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success">
-                                    <i class="fad fa-hashtag"></i>
-                                </span>
-                                <input type="text" class="form-control form-control-sm text-secondary" id="input-update-num-caisse-update" min="0" required>
+                        <!-- correction facture num_facture -->
+                        <div class="text-secondary fw-bold mb-2 text-center" id="correction-facture-num-facture"></div>
+                        <!-- message -->
+                        <div class="mb-2 text-secondary text-center"><?= __('forms.labels.facture_correction_message') ?></div>
+                        <?php if ($role === 'admin'): ?>
+                            <!--input correction facture date_ds -->
+                            <div class="mb-2">
+                                <label for="input-correction-facture-date-ds" class="form-label"><?= __('forms.labels.date') ?> <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
+                                    <input type="datetime-local" max="<?= date('Y-m-d\TH:i') ?>" class="form-control form-control-sm" id="input-correction-facture-date-ds" required>
+                                </div>
                             </div>
-                        </div>
-                        <!--  update solde -->
-                        <div class="mb-2">
-                            <label for="input-update-solde" class="form-label"><?= __('forms.labels.balance') ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success">
-                                    <i class="fad fa-coins"></i>
-                                </span>
-                                <input type="text" class="form-control form-control-sm text-secondary" id="input-update-solde" required>
+                            <!-- select correction facture id_utilisateur -->
+                            <div class="mb-2">
+                                <label for="select-correction-facture-id-utilisateur" class="form-label"><?= __('forms.labels.user') ?> <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text text-success"><i class="fad fa-user"></i></span>
+                                    <select name="" id="select-correction-facture-id-utilisateur" class="form-select form-select-sm select2" required>
+                                        <option></option>
+                                        <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
+                                    </select>
+                                    <button type="button" class="input-group-text" id="btn-correction-facture-refresh-id-utilisateur"><i class="fad fa-arrow-rotate-left"></i></button>
+                                </div>
                             </div>
-                        </div>
-                        <!-- update seuil -->
-                        <div class="mb-2">
-                            <label for="select-update-seuil" class="form-label me-2 mt-1"><?= __('forms.labels.treshold') ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success">
-                                    <i class="fad fa-badge-dollar"></i>
-                                </span>
-                                <input type="text" class="form-control form-control-sm text-secondary" id="input-update-seuil" required>
+                        <?php endif; ?>
+                        <!-- ligne_facture -->
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title text-secondary"><?= __('forms.labels.ligne_facture') ?></div>
+                                <div class="d-flex flex-column gap-2" id="div-ligne-facture">
+                                </div>
                             </div>
-                            <span class="form-text text-secondary">(<?= strtolower(__('forms.labels.less_equal_balance')) ?>)</span>
+                            <div class="card-footer d-flex justify-content-center flex-column align-items-center">
+                                <span class="text-secondary"><b><?= __('forms.labels.total') ?> : </b><span id="correction-facture-total" data-value="0">0 <?= $currency_units ?></span></span>
+                                <button type="button" class="btn btn-second btn-sm" id="btn-correction-facture-refresh-ligne-facture"><?= __('forms.labels.refresh') ?></button>
+                            </div>
                         </div>
                     </div>
                     <!-- modal footer  -->
                     <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-update-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-correction-facture"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
                         <button class="btn btn-primary btn-sm fw-bold" type="submit"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
                     </div>
                 </form>
