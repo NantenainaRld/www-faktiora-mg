@@ -2740,6 +2740,14 @@ class EntreeController extends Controller
                 break;
         }
 
+        //formatters
+        //number
+        $formatterNumber = new NumberFormatter($lang, NumberFormatter::DECIMAL);
+        $formatterNumber->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 2);
+        //total
+        $formatterTotal = new NumberFormatter($lang, NumberFormatter::CURRENCY);
+        $formatterTotal->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 2);
+
         //num_facture
         $num_facture = strtoupper(trim($_GET['num_facture'] ?? ''));
         //num_ds - empty
@@ -2963,20 +2971,40 @@ class EntreeController extends Controller
                             </tr>";
             $html .= "<tbody>";
             foreach ($connection_facture['lf'] as $line) {
+                $quantite_produit_f = str_replace(
+                    ["\u{00A0}", "\u{202F}"],
+                    ' ',
+                    $formatterNumber->format((int)$line['quantite_produit'])
+                );
+                $prix_f = str_replace(
+                    ["\u{00A0}", "\u{202F}"],
+                    ' ',
+                    $formatterNumber->format((float)$line['prix'])
+                );
+                $prix_total_f = str_replace(
+                    ["\u{00A0}", "\u{202F}"],
+                    ' ',
+                    $formatterNumber->format((float)$line['prix_total'])
+                );
                 $html .= "<tr>
                             <td>{$line['id_lf']}</td>
                             <td>{$line['libelle_produit']}</td>
-                            <td>{$line['quantite_produit']}</td>
-                            <td>{$line['prix']}</td>
-                            <td>{$line['prix_total']}</td>
+                            <td>{$quantite_produit_f}</td>
+                            <td>{$prix_f}</td>
+                            <td>{$prix_total_f}</td>
                         </tr>";
             }
             //montant_facture
+            $montant_facture_f = str_replace(
+                ["\u{00A0}", "\u{202F}"],
+                ' ',
+                $formatterNumber->format((float)$connection_facture['montant_facture'])
+            );
             $html .= "<tr>
                             <td style='border: none;'></td>
                             <td style='border: none;'></td>
                             <td colspan='2'>{$strings['total']}</td>
-                            <td>{$connection_facture['montant_facture']}</td>
+                            <td>{$montant_facture_f}</td>
                         </tr>";
 
             //correction ae
@@ -2985,12 +3013,17 @@ class EntreeController extends Controller
                             <td style='text-align: center; border: none; padding: 20px; color: blue;' colspan='5'><b>{$strings['correction']}</b> ({$strings['inflow']})</td>
                         </tr>";
                 foreach ($connection_facture['autre_entree'] as $line) {
+                    $montant_ae_f = str_replace(
+                        ["\u{00A0}", "\u{202F}"],
+                        ' ',
+                        $formatterNumber->format((float)$line['montant_ae'])
+                    );
                     $html .= "<tr>
                             <td>{$line['num_ae']}</td>
                             <td>{$line['libelle_ae']}</td>
                             <td>1</td>
-                            <td>{$line['montant_ae']}</td>
-                            <td>{$line['montant_ae']}</td>
+                            <td>{$montant_ae_f}</td>
+                            <td>{$montant_ae_f}</td>
                         </tr>";
                     $total += $line['montant_ae'];
                 }
@@ -3002,12 +3035,17 @@ class EntreeController extends Controller
                             <td style='text-align: center; border: none; padding: 20px; color: tomato;' colspan='5'><b>{$strings['correction']}</b> ({$strings['outflow']})</td>
                         </tr>";
                 foreach ($connection_facture['sortie'] as $line) {
+                    $prix_article_f = str_replace(
+                        ["\u{00A0}", "\u{202F}"],
+                        ' ',
+                        $formatterNumber->format((float)$line['prix_article'])
+                    );
                     $html .= "<tr>
                             <td>{$line['num_ds']}</td>
                             <td>{$line['libelle_article']}</td>
                             <td>1</td>
-                            <td>{$line['prix_article']}</td>
-                            <td>{$line['prix_article']}</td>
+                            <td>{$prix_article_f}</td>
+                            <td>{$prix_article_f}</td>
                         </tr>";
                     $total -= $line['prix_article'];
                 }
@@ -3017,7 +3055,12 @@ class EntreeController extends Controller
                     </table>";
 
             //total
-            $html .= "<div><span style='float: left;'><b>{$strings['total']} :</b>  {$total} {$config['currency_units']}</span></div>";
+            $total_f = str_replace(
+                ["\u{00A0}", "\u{202F}"],
+                ' ',
+                $formatterTotal->formatCurrency((float)$total, $config['currency_units'])
+            );
+            $html .= "<div><span style='float: left;'><b>{$strings['total']} :</b>  {$total_f}</span></div>";
 
             //sign
             $html .= "<div style='margin-top: 50px;'>
@@ -3041,7 +3084,7 @@ class EntreeController extends Controller
             $response = [
                 'message_type' => 'success',
                 'pdf' => base64_encode($dompdf->output()),
-                'file_name' => str_replace(' ', '_', strtolower('test' . '.pdf')),
+                'file_name' => str_replace(' ', '_', strtolower($num_facture . '.pdf')),
                 'message' => __('messages.success.print')
             ];
 

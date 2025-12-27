@@ -1094,156 +1094,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           console.error(e);
         }
       });
-    //
-    //   //========================= UPDATE CLIENT ======================
-    //   //modal update client
-    //   const modalUpdateClient = container.querySelector("#modal-update-client");
-    //   //===== EVENT form update client submit
-    //   modalUpdateClient
-    //     .querySelector("form")
-    //     .addEventListener("submit", async (e) => {
-    //       //suspend submit
-    //       e.preventDefault();
-    //       //check validity
-    //       if (!e.target.checkValidity()) {
-    //         e.target.reportValidity();
-    //       }
-    //       try {
-    //         //FETCH api update client
-    //         const apiUpdateClient = await apiRequest("/client/update_client", {
-    //           method: "PUT",
-    //           body: {
-    //             id_client: modalUpdateClient
-    //               .querySelector("#update-id-client")
-    //               .textContent.trim(),
-    //             nom_client: modalUpdateClient
-    //               .querySelector("#input-update-nom-client")
-    //               .value.trim(),
-    //             prenoms_client: modalUpdateClient
-    //               .querySelector("#input-update-prenoms-client")
-    //               .value.trim(),
-    //             sexe_client: modalUpdateClient
-    //               .querySelector("#select-update-sexe-client")
-    //               .value.trim(),
-    //             telephone: modalUpdateClient
-    //               .querySelector("#input-update-telephone")
-    //               .value.trim(),
-    //             adresse: modalUpdateClient
-    //               .querySelector("#input-update-adresse")
-    //               .value.trim(),
-    //           },
-    //         });
-    //         //error
-    //         if (apiUpdateClient.message_type === "error") {
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-danger");
-    //           //icon
-    //           alert
-    //             .querySelector(".fad")
-    //             .classList.add("fa-exclamation-triangle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             apiUpdateClient.message;
-    //           //progress bar
-    //           progressBar.style.transition = "width 20s linear";
-    //           progressBar.style.width = "100%";
-    //           //add alert
-    //           modalUpdateClient.querySelector(".modal-body").prepend(alert);
-    //           //progress launch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 20000);
-    //           return;
-    //         }
-    //         //invalid
-    //         else if (apiUpdateClient.message_type === "invalid") {
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-warning");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             apiUpdateClient.message;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
-    //           //add alert
-    //           modalUpdateClient.querySelector(".modal-body").prepend(alert);
-    //           //progress lanch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
-    //           return;
-    //         }
-    //         //success update client
-    //         //alert
-    //         const alertTemplate = document.querySelector(".alert-template");
-    //         const clone = alertTemplate.content.cloneNode(true);
-    //         const alert = clone.querySelector(".alert");
-    //         const progressBar = alert.querySelector(".progress-bar");
-    //         //alert type
-    //         alert.classList.add("alert-success");
-    //         //icon
-    //         alert.querySelector(".fad").classList.add("fa-check-circle");
-    //         //message
-    //         alert.querySelector(".alert-message").innerHTML =
-    //           apiUpdateClient.message;
-    //         //progress bar
-    //         progressBar.style.transition = "width 10s linear";
-    //         progressBar.style.width = "100%";
-    //         //add alert
-    //         container
-    //           .querySelector("#tbody-client")
-    //           .closest("div")
-    //           .prepend(alert);
-    //         //progress lanch animation
-    //         setTimeout(() => {
-    //           progressBar.style.width = "0%";
-    //         }, 10);
-    //         //auto close alert
-    //         setTimeout(() => {
-    //           alert.querySelector(".btn-close").click();
-    //         }, 10000);
-    //         //auto close modal
-    //         modalUpdateClient
-    //           .querySelector("#btn-close-modal-update-client")
-    //           .click();
-    //         //refresh filter client
-    //         filterClient(
-    //           selectStatus.value.trim(),
-    //           selectSex.value.trim(),
-    //           selectArrangeBy.value.trim(),
-    //           selectOrder.value.trim(),
-    //           selectDateBy.value.trim(),
-    //           selectPer.value.trim(),
-    //           dateFrom.value.trim(),
-    //           dateTo.value.trim(),
-    //           selectMonth.value.trim(),
-    //           selectYear.value.trim(),
-    //           inputSearch.value.trim()
-    //         );
-    //       } catch (e) {
-    //         console.error(e);
-    //       }
-    //     });
     //   //========================== DELETE CLIENT =====================
     //   //btn delete client
     //   const btnDeleteClient = container.querySelector("#btn-delete-client");
@@ -2111,6 +1961,104 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             //show modal correction facture
             new bootstrap.Modal(modalCorrectionFacture).show();
+          }
+        );
+
+        //===== EVENT btn print facture
+        tr.querySelector(".btn-print-facture").addEventListener(
+          "click",
+          async () => {
+            try {
+              //FETCH api print facture
+              const apiPrintFacture = await apiRequest(
+                `/entree/print_facture?num_facture=${tr.dataset.numFacture}`
+              );
+
+              //error
+              if (apiPrintFacture.message_type === "error") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-triangle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  cashReport.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                container
+                  .querySelector("#tbody-facture")
+                  .closest("div")
+                  .prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+
+                return;
+              }
+              //invalid
+              else if (apiPrintFacture.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiPrintFacture.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                container
+                  .querySelector("#tbody-facture")
+                  .closest("div")
+                  .prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+
+                return;
+              }
+
+              //download facture
+              const a = document.createElement("a");
+              a.href = `data:application/pdf;base64,${apiPrintFacture.pdf}`;
+              a.download = apiPrintFacture.file_name;
+              a.click();
+
+              return;
+            } catch (e) {
+              console.error(e);
+            }
           }
         );
       });
