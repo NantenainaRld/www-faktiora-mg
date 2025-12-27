@@ -472,11 +472,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     //====================== CASH REPORT ==================
     cashReport();
+
+    //===================== SOLDE SEUIL ==============
+    soldeSeuil(
+      container.querySelector("#div-balance"),
+      container.querySelector("#div-treshold")
+    );
   }, 1050);
 
   //====================== FUNCTIONS ========================
 
-  //function - caisse
+  //function - chart caisse
   async function chartCaisse(date_by, per, from, to, month, year) {
     //div chart nb_transactions
     const divChartNbTransactions = container.querySelector(
@@ -1380,5 +1386,56 @@ document.addEventListener("DOMContentLoaded", async () => {
           console.error(e);
         }
       });
+  }
+  //function - solde seuil
+  async function soldeSeuil(divBalance, divTresholde) {
+    try {
+      //FETCH api solde seuil
+      const apiSodleSeuil = await apiRequest("/caisse/solde_seuil");
+
+      //error
+      if (apiSodleSeuil.message_type === "error") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-danger");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
+        //message
+        alert.querySelector(".alert-message").innerHTML = apiSodleSeuil.message;
+        //progress bar
+        progressBar.style.transition = "width 20s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        divBalance.closest("div").prepend(alert);
+
+        //progress launch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 20000);
+
+        return;
+      }
+
+      if (!Array.isArray(apiSodleSeuil.data)) {
+        divBalance.innerHTML = formatterTotal.format(
+          Number(apiSodleSeuil.data.solde)
+        );
+        divTresholde.innerHTML = formatterTotal.format(
+          Number(apiSodleSeuil.data.seuil)
+        );
+      }
+      return;
+    } catch (e) {
+      console.error(e);
+    }
   }
 });

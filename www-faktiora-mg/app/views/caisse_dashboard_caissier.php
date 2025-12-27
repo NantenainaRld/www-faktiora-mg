@@ -23,9 +23,10 @@
         <!-- main -->
         <main class="row mt-4 mb-2 flex-grow-1 overflow-y-auto">
             <div class="col-12 d-flex flex-column justify-content-between overflow-y-auto h-100">
-                <!-- occupation  -->
+                <!-- occupation  and solde and caisse -->
                 <div class="row">
-                    <div class="col-12">
+                    <!-- occupation  -->
+                    <div class="col-12 col-lg-4 my-2">
                         <div class="card">
                             <div class="card-body">
                                 <div class="card-title text-secondary">
@@ -47,6 +48,34 @@
                                 <!-- btn quit caisse  -->
                                 <div class="d-flex justify-content-center">
                                     <button type="button" class="btn btn-outline-danger btn-sm" id="btn-quit-caisse"><i class="fad fa-arrow-left-from-bracket me-2"></i><?= __('forms.labels.quit_caisse') ?></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- solde and seuil  -->
+                    <div class="col-12 col-lg-8 my-2">
+                        <div class="row">
+                            <!-- solde  -->
+                            <div class="col-12 col-md-6 my-2">
+                                <div class="card p-2 w-100">
+                                    <div class="card-title text-secondary">
+                                        <i class="fad fa-coins me-2">
+                                        </i><?= __('forms.labels.balance') ?>
+                                    </div>
+                                    <div class="card-body d-flex flex-column justify-content-center align-items-center w-100">
+                                        <div class="text-center text-success w-100 fs-4" id="div-balance"><span class="placeholder bg-second rounded-1 w-75"></span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- seuil -->
+                            <div class="col-12 col-md-6 my-2">
+                                <div class="card p-2 h-100 w-100">
+                                    <div class="card-title text-secondary">
+                                        <i class="fad fa-badge-dollar me-2"></i><?= __('forms.labels.treshold') ?>
+                                    </div>
+                                    <div class="card-body d-flex flex-column justify-content-center align-items-center w-100">
+                                        <div class="text-center text-danger w-100 fs-4" id="div-treshold"><span class="placeholder bg-second rounded-1 w-75"></span></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

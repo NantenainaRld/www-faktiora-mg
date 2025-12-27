@@ -2439,4 +2439,77 @@ class CaisseController extends Controller
         echo json_encode($response);
         return;
     }
+
+
+    //action - solde seuil
+    public function soldeSeuil()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //role not caissier
+        if ($is_loged_in->getRole() !== 'caissier') {
+            //redirect to caisse index
+            header('Location: ' . SITE_URL . '/caisse');
+        }
+
+        //does user has caisse ?
+        $response = LigneCaisse::findCaisse($is_loged_in->getIdUtilisateur());
+        //error
+        if ($response['message_type'] === 'error') {
+            echo json_encode($response);
+            return;
+        }
+        //not found user caisse
+        if (!$response['found']) {
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+                'data' => []
+            ];
+
+            echo json_encode($response);
+            return;
+        }
+
+        //find caisse
+        $response = Caisse::findById($response['model']->getNumCaisse());
+        //error
+        if ($response['message_type'] === 'error') {
+            echo json_encode($response);
+            return;
+        }
+        //not found caisse
+        if (!$response['found']) {
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+                'data' => []
+            ];
+
+            echo json_encode($response);
+            return;
+        }
+
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+            'data' => [
+                "solde" => $response['model']->getSolde(),
+                "seuil" => $response['model']->getSeuil()
+            ]
+        ];
+
+        echo json_encode($response);
+        return;
+    }
 }
