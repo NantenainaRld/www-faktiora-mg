@@ -72,6 +72,8 @@
         entree_nums_facture_empty: "<?= __('messages.invalids.entree_nums_facture_empty') ?>",
         question_delete_facture_1: "<?= __('forms.labels.question_delete_facture_1') ?>",
         question_delete_facture_plur: "<?= __('forms.labels.question_delete_facture_plur') ?>",
+        question_delete_permanent_facture_1: "<?= __('forms.labels.question_delete_permanent_facture_1') ?>",
+        question_delete_permanent_facture_plur: "<?= __('forms.labels.question_delete_permanent_facture_plur') ?>",
 
     }
 </script>

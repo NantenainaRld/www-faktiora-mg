@@ -224,6 +224,10 @@ return [
         'refresh' => "Actualiser",
         'question_delete_facture_1' => "Voulez-vous vraiment supprimer la facture numéro <b>:field</b> ?",
         'question_delete_facture_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> factures ?",
+        'question_delete_permanent_facture_1' => "Voulez-vous vraiment supprimer définitivement la facture numéro <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible",
+        'question_delete_permanent_facture_1' => "Voulez-vous vraiment supprimer définitivement la facture numéro <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>.",
+        'question_delete_permanent_facture_plur' => "Voulez-vous vraiment supprimer définitivement ces <b>:field</b> factures ?. <span class='text-danger'>Cette action est irréversible</span>.",
+
     ],
     'times' => [
         'minute' => "minute",

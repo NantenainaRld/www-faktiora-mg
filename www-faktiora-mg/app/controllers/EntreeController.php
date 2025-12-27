@@ -2631,8 +2631,8 @@ class EntreeController extends Controller
         return;
     }
 
-    //action - permanent delete all facture
-    public function permanentDeleteAllFacture()
+    //action - delete permanent all facture
+    public function deletePermanentAllFacture()
     {
         header('Content-Type: application/json');
         $response = null;
@@ -2653,7 +2653,7 @@ class EntreeController extends Controller
             return;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
             $json = json_decode(file_get_contents('php://input'), true);
 
             $nums_facture = array_values(array_map(fn($x) => strtoupper(trim($x)), $json['nums_facture']));
@@ -2671,8 +2671,8 @@ class EntreeController extends Controller
 
             try {
 
-                //permanent delete all facture
-                $response = Facture::permanentDeleteAllFacture($nums_facture);
+                //delete permanent all facture
+                $response = Facture::deletePermanentAllFacture($nums_facture);
 
                 echo json_encode($response);
                 return;

@@ -542,8 +542,8 @@ class Facture extends Database
         return $response;
     }
 
-    //static - permanent delete all facture
-    public static function permanentDeleteAllFacture($nums_facture)
+    //static - delete permanent all facture
+    public static function deletePermanentAllFacture($nums_facture)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 

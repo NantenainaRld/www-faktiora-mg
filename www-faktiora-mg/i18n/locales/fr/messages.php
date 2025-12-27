@@ -221,9 +221,9 @@ return [
         //entree - delete all facture 0
         'entree_deleteAllFacture_0' => "Aucune facture n'est supprimée",
         //entree - delete all facture 1
-        'entree_deleteAllFacture_1' => "Une facture est supprimée avec succès",
+        'entree_deleteAllFacture_1' => "Une facture a été supprimée avec succès",
         //entree - delete all facture plur
-        'entree_deleteAllFacture_plur' => "<b>:field</b> factures sont supprimées avec succès",
+        'entree_deleteAllFacture_plur' => "<b>:field</b> factures ont été supprimées avec succès",
         //produit - create produit
         'produit_createProduit' => "Nouveau produit ajouté avec succès",
         //produit - update produit
