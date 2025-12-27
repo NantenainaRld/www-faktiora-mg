@@ -3112,4 +3112,81 @@ class EntreeController extends Controller
         echo json_encode($response);
         return;
     }
+
+    //action - restore all facture
+    public function restoreAllFacture()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //role - not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to entree index
+            header("Location: " . SITE_URL . '/entree');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            $json = json_decode(file_get_contents('php://input'), true);
+
+            $nums_facture = array_values(array_map(fn($x) => strtoupper(trim($x)), $json['nums_facture']));
+
+            //nums_facture - empty
+            if (count($nums_facture) <= 0) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.entree_nums_facture_empty')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+
+                //restore all facture
+                $response = Facture::restoreAllFacture($nums_facture);
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.entree_restoreAllFacture',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            echo json_encode($response);
+            return;
+        }
+        //redirect to entree index
+        else {
+            header('Location: ' . SITE_URL . '/entree');
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
 }

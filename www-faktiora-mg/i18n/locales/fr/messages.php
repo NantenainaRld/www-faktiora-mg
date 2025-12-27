@@ -222,6 +222,12 @@ return [
         'entree_deleteAllFacture_0' => "Aucune facture n'est supprimée",
         //entree - delete all facture 1
         'entree_deleteAllFacture_1' => "Une facture a été supprimée avec succès",
+        //entree - restore all facture 0
+        'entree_restoreAllFacture_0' => "Aucune facture n'est récupérée",
+        //entree - restore all facture 1
+        'entree_restoreAllFacture_1' => "Une facture a été récupérée avec succès",
+        //entree - restore all facture plur
+        'entree_restoreAllFacture_plur' => ":field</b> factures ont été récupérées <b>avec succès",
         //entree - delete all facture plur
         'entree_deleteAllFacture_plur' => "<b>:field</b> factures ont été supprimées avec succès",
         //produit - create produit

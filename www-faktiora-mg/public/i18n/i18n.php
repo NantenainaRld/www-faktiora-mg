@@ -73,7 +73,8 @@
         question_delete_facture_1: "<?= __('forms.labels.question_delete_facture_1') ?>",
         question_delete_facture_plur: "<?= __('forms.labels.question_delete_facture_plur') ?>",
         question_delete_permanent_facture_1: "<?= __('forms.labels.question_delete_permanent_facture_1') ?>",
-        question_delete_permanent_facture_plur: "<?= __('forms.labels.question_delete_permanent_facture_plur') ?>",
+        question_restore_facture_1: "<?= __('forms.labels.question_restore_facture_1') ?>",
+        question_restore_facture_plur: "<?= __('forms.labels.question_restore_facture_plur') ?>",
 
     }
 </script>

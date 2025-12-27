@@ -51,6 +51,10 @@
                                                     <!-- btn add facture  -->
                                                     <button class="btn btn-sm btn-outline-primary fw-bold" id="btn-add-facture"><i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
                                                     <?php if ($role === 'admin'): ?>
+                                                        <!-- btn rrstore facture -->
+                                                        <button class="btn btn-sm btn-outline-warning" id="btn-restore-facture"><i class="fad fa-arrow-rotate-left me-2">
+                                                            </i><?= __('forms.labels.restore') ?>
+                                                        </button>
                                                         <!-- btn delete facture -->
                                                         <button class="btn btn-sm btn-outline-danger" id="btn-delete-facture"><i class="fad fa-trash me-2">
                                                             </i><?= __('forms.labels.delete') ?>
@@ -530,328 +534,23 @@
             </div>
         </div>
     </div>
-    <!-- modal restore caisse  -->
-    <div class="modal fade" id="modal-restore-caisse" tabindex="-1" aria-labelledby="modalRestoreCaisse" aria-hidden="true">
+    <!-- modal restore facture -->
+    <div class="modal fade" id="modal-restore-facture" tabindex="-1" aria-labelledby="modalRestoreCaisse" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- modal header  -->
                 <div class="modal-header bg-warning text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-arrow-rotate-left me-2"></i><?= __('forms.titles.restore_caisse') ?></h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-arrow-rotate-left me-2"></i><?= __('forms.titles.facture_restore') ?></h6>
                 </div>
                 <!-- modal body  -->
                 <div class="modal-body">
-                    <div class="message">Voulez-vous vraiment récupérer ces ... caisses ?</div>
+                    <div class="message">Voulez-vous vraiment récupérer ces ... factures ?</div>
                 </div>
                 <!-- modal footer  -->
                 <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-restore-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
-                    <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-restore-caisse"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_restore') ?></button>
+                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-restore-facture"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
+                    <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-modal-restore-facture"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_restore') ?></button>
                 </div>
-            </div>
-        </div>
-    </div>
-    <!-- modal free caisse  -->
-    <div class="modal fade" id="modal-free-caisse" tabindex="-1" aria-labelledby="modalFreeCaisse" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <!-- modal header  -->
-                <div class="modal-header bg-info text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-minus me-2"></i><?= __('forms.titles.free_caisse') ?></h6>
-                </div>
-                <!-- modal body  -->
-                <div class="modal-body">
-                    <div class="message">Voulez-vous vraiment libérer ces ... caisses ?</div>
-                </div>
-                <!-- modal footer  -->
-                <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-free-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
-                    <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-free-caisse"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_free') ?></button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- modal add ligne_caisse  -->
-    <div class="modal fade" id="modal-add-ligne-caisse" tabindex="-1" aria-labelledby="modalAddLigneCaisse" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <!-- modal header  -->
-                <div class="modal-header bg-green-0 text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-plus me-2"></i><?= __('forms.titles.add_ligne_caisse') ?></h6>
-                </div>
-                <form>
-                    <!-- modal body  -->
-                    <div class="modal-body">
-                        <!-- cash num  -->
-                        <div class="text-center text-secondary mb-1"><?= strtolower(__('forms.labels.cash_num')) ?> : <b><span id="add-ligne-caisse-cash-num"></span></b></div>
-                        <!-- date_debut  -->
-                        <div class="mb-3">
-                            <label for="input-add-date-debut" class="form-label"><?= __('forms.labels.date_start') ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
-                                <input type="datetime-local" class="form-control form-control-sm text-secondary" id="input-add-date-debut" max="<?= date('Y-m-d\TH:i') ?>" required>
-                            </div>
-                        </div>
-                        <!-- date_fin  -->
-                        <div class="mb-3">
-                            <label for="input-add-date-fin" class="form-label"><?= __('forms.labels.date_end') ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
-                                <input type="datetime-local" class="form-control form-control-sm text-secondary" id="input-add-date-fin" max="<?= date('Y-m-d\TH:i') ?>">
-                            </div>
-                            <span class="form-text">(<?= __('forms.labels.message_date_end') ?>)</span>
-                        </div>
-                        <!-- select - id_utilisateur  -->
-                        <div class="mb-3">
-                            <label for="select-add-id-utilisateur" class="form-label"><?= ucfirst(__('forms.labels.cashier')) ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-user"></i></span>
-                                <select name="" id="select-add-id-utilisateur" class="form-select form-select-sm select2" required>
-                                    <option></option>
-                                    <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
-                                </select>
-                                <button type="button" class="input-group-text" id="btn-refresh-list-user"><i class="fad fa-arrow-rotate-left"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- modal footer  -->
-                    <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-add-ligne-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
-                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-add-ligne-caisse"><i class="fad fa-check me-2"></i><?= __('forms.labels.add') ?></button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- modal update ligne_caisse  -->
-    <div class="modal fade" id="modal-update-ligne-caisse" tabindex="-1" aria-labelledby="modalUpdateLigneCaisse" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <!-- modal header  -->
-                <div class="modal-header bg-green-0 text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-pen-to-square me-2"></i><?= __('forms.titles.update_ligne_caisse') ?></h6>
-                </div>
-                <form>
-                    <!-- modal body  -->
-                    <div class="modal-body">
-                        <!-- id_lc  -->
-                        <div class="text-center text-secondary mb-1"><span id="update-ligne-caisse-id-lc">00</span></div>
-                        <!-- date_debut  -->
-                        <div class="mb-3">
-                            <label for="input-update-date-debut" class="form-label"><?= __('forms.labels.date_start') ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
-                                <input type="datetime-local" class="form-control form-control-sm text-secondary" id="input-update-date-debut" max="<?= date('Y-m-d\TH:i') ?>" required>
-                            </div>
-                        </div>
-                        <!-- date_fin  -->
-                        <div class="mb-3">
-                            <label for="input-update-date-fin" class="form-label"><?= __('forms.labels.date_end') ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
-                                <input type="datetime-local" class="form-control form-control-sm text-secondary" id="input-update-date-fin" max="<?= date('Y-m-d\TH:i') ?>">
-                            </div>
-                            <span class="form-text">(<?= __('forms.labels.message_date_end') ?>)</span>
-                        </div>
-                        <!-- select - id_utilisateur  -->
-                        <div class="mb-3">
-                            <label for="select-update-id-utilisateur" class="form-label"><?= ucfirst(__('forms.labels.cashier')) ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-user"></i></span>
-                                <select name="" id="select-update-id-utilisateur" class="form-select form-select-sm select2" required>
-                                    <option></option>
-                                    <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
-                                </select>
-                                <button type="button" class="input-group-text" id="btn-refresh-list-user"><i class="fad fa-arrow-rotate-left"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- modal footer  -->
-                    <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-update-ligne-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
-                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-update-ligne-caisse"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- modal delete ligne caisse -->
-    <div class="modal fade" id="modal-delete-ligne-caisse" tabindex="-1" aria-labelledby="modalDeleteLigneCaisse" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <!-- modal header  -->
-                <div class="modal-header bg-danger text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-trash me-2"></i><?= __('forms.titles.delete_ligne_caisse') ?></h6>
-                </div>
-                <!-- modal body  -->
-                <div class="modal-body">
-                    <div class="message">Voulez-vous vraiment supprimer ces ... lignes de caisse ?</div>
-                </div>
-                <!-- modal footer  -->
-                <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-delete-ligne-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
-                    <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-delete-ligne-caisse"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_delete') ?></button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- modal occup caisse  -->
-    <div class="modal fade" id="modal-occup-caisse" tabindex="-1" aria-labelledby="modalOccupCaisse" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <!-- modal header  -->
-                <div class="modal-header bg-green-0 text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-key-skeleton-left-right me-2"></i><?= __('forms.titles.cash_occupation') ?></h6>
-                </div>
-                <form>
-                    <!-- modal body  -->
-                    <div class="modal-body">
-                        <!-- cash num  -->
-                        <div class="text-center text-secondary mb-1"><?= strtolower(__('forms.labels.cash_num')) ?> : <b><span id="occup-caisse-cash-num"></span></b></div>
-                        <!-- select - id_utilisateur -->
-                        <div class="mb-3">
-                            <label for="select-occup-caisse-id-utilisateur" class="form-label"><?= ucfirst(__('forms.labels.cashier')) ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-user"></i></span>
-                                <select name="" id="select-occup-caisse-id-utilisateur" class="form-select form-select-sm select2" required>
-                                    <option></option>
-                                    <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
-                                </select>
-                                <button type="button" class="input-group-text" id="btn-refresh-list-caissier"><i class="fad fa-arrow-rotate-left"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- modal footer  -->
-                    <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-occup-caisse"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
-                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-occup-caisse"><i class="fad fa-key me-2"></i><?= __('forms.labels.occup') ?></button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- modal cash report -->
-    <div class="modal fade" id="modal-cash-report" tabindex="-1" aria-labelledby="modalCashRport" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <!-- modal header  -->
-                <div class="modal-header bg-dark text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-file-pdf me-2"></i><?= ucfirst(strtolower(__('forms.titles.cash_report'))) ?></h6>
-                </div>
-                <form>
-                    <!-- modal body  -->
-                    <div class="modal-body">
-                        <!-- caisse  -->
-                        <div class="mb-2">
-                            <label for="cash-report-select-num-caisse" class="form-label"><?= ucfirst(__('forms.labels.cash')) ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-cash-register"></i></span>
-                                <select name="" id="cash-report-select-num-caisse" class="select2 form-select form-select-sm" required>
-                                    <option></option>
-                                    <option value="loading" disabled><?= __('forms.labels.loading') ?>....</option>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- date_by  -->
-                        <div class="d-flex flex-column justify-content-center border align-items-center rounded-1 p-2">
-                            <!-- select date by  -->
-                            <div class="mb-2 w-100">
-                                <label for="cash-report-select-date-by" class="form-label"><?= __('forms.labels.date') ?></label>
-                                <div class="input-group">
-                                    <span class="text-success input-group-text"><i class="fad fa-calendar"></i></span>
-                                    <select name="" class="form-select form-select-sm" id="cash-report-select-date-by">
-                                        <option value="all" selected><?= __('forms.labels.all') ?></option>
-                                        <option value="per"><?= __('forms.labels.period') ?></option>
-                                        <option value="between"><?= __('forms.labels.between') ?></option>
-                                        <option value="month_year"><?= __('forms.labels.month_year') ?></option>
-                                    </select>
-                                </div>
-                            </div>
-                            <!-- per select  -->
-                            <div class="w-100 mb-2 date-by d-none" id="cash-report-div-per">
-                                <label for="cash-report-select-per" class="form-label"><?= ucfirst(__('forms.labels.period')) ?></label>
-                                <div class="flex-grow-1">
-                                    <div class="input-group">
-                                        <select name="" class="form-select form-select-sm" id="cash-report-select-per">
-                                            <option value="day" selected><?= __('forms.labels.this_day') ?></option>
-                                            <option value="week"><?= __('forms.labels.this_week') ?></option>
-                                            <option value="month"><?= __('forms.labels.this_month') ?></option>
-                                            <option value="year"><?= __('forms.labels.this_year') ?></option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- between date_by  -->
-                            <div class="w-100 mb-2 date-by d-none" id="cash-report-div-between">
-                                <!-- from  -->
-                                <div class="input-group mb-1">
-                                    <label for="cash-report-date-from" class="form-label me-2"><?= __('forms.labels.on') ?></label>
-                                    <input type="date" name="" id="cash-report-date-from" class="form-control form-control-sm" max="<?= date('Y-m-d') ?>" min="1700-01-01">
-                                </div>
-                                <!-- to  -->
-                                <div class="input-group">
-                                    <label for="cash-report-date-to" class="form-label me-2"><?= ucfirst(__('forms.labels.to')) ?></label>
-                                    <input type="date" name="" id="cash-report-date-to" class="form-control form-control-sm" max="<?= date('Y-m-d') ?>">
-                                </div>
-                            </div>
-                            <!-- month_year date_by  -->
-                            <div class="w-100 mb-2 date-by d-none" id="cash-report-div-month_year">
-                                <!-- month -->
-                                <div class="input-group mb-1">
-                                    <label for="cash-report-select-month" class="form-label me-2"><?= ucfirst(__('forms.labels.month')) ?></label>
-                                    <select name="" id="cash-report-select-month" class="form-select form-select-sm">
-                                        <?php $formatter = ''; ?>
-                                        <?php if ($_COOKIE['lang'] === 'en'): ?>
-                                            <?php $formatter = new IntlDateFormatter(
-                                                'en-US',
-                                                IntlDateFormatter::FULL,
-                                                IntlDateFormatter::NONE,
-                                                null,
-                                                null,
-                                                'MMMM'
-                                            ); ?>
-                                        <?php elseif ($_COOKIE['lang'] === 'fr'): ?>
-                                            <?php $formatter = new IntlDateFormatter(
-                                                'fr-FR',
-                                                IntlDateFormatter::FULL,
-                                                IntlDateFormatter::NONE,
-                                                null,
-                                                null,
-                                                'MMMM'
-                                            ); ?>
-                                        <?php else: ?>
-                                            <?php $formatter = new IntlDateFormatter(
-                                                'mg-MG',
-                                                IntlDateFormatter::FULL,
-                                                IntlDateFormatter::NONE,
-                                                null,
-                                                null,
-                                                'MMMM'
-                                            ); ?>
-                                        <?php endif; ?>
-                                        <option value="all"><?= ucfirst(__('forms.labels.all')) ?></option>
-                                        <?php for ($i = 1; $i <= 12; $i++): ?>
-                                            <option value="<?= $i ?>"><?= ucfirst($formatter->format(DateTime::createFromFormat('!m', $i))); ?></option>
-                                        <?php endfor; ?>
-                                    </select>
-                                </div>
-                                <!-- year  -->
-                                <div class="input-group">
-                                    <label for="cash-report-select-year" class="form-label me-2"><?= ucfirst(__('forms.labels.year')) ?></label>
-                                    <select name="" id="cash-report-select-year" class="form-select form-select-sm">
-                                        <?php for ($i = date('Y'); $i >= 1700; $i--): ?>
-                                            <option value="<?= $i ?>"><?= $i ?></option>
-                                        <?php endfor; ?>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- modal footer  -->
-                    <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-cash-report"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
-                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-cash-report"><i class="fad fa-download me-2"></i><?= __('forms.labels.download') ?></button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>

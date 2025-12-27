@@ -126,6 +126,8 @@ return [
         'entree_deleteAllFacture' => DEBUG ? "Erreur dans entree/deleteAllFacture : :field" : "Une erreur est survenue lors de la suppréssion des factures",
         //entree - lf find by id
         'entree_lf_findById' => DEBUG ? "Erreur dans entree_lf/findById : :field" : "Une erreur est survenue lors de la vérification d'ID de ligne facture",
+        //entree - restore all facture
+        'entree_restoreAllFacture' => DEBUG ? "Erreur dans entree/restoreAllFacture : :field" : "Une erreur est survenue lors de la récupération des factures",
         //sortie - connection sortie
         'sortie_connectionSortie' => DEBUG ? "Erreur dans sortie/connectionSortie : :field" : "Une erreur est survenue lors de listage des connections pour les sorties",
         //sortie - create sortie 
@@ -193,7 +195,7 @@ return [
         //client - delete all client
         'client_deleteAllClient' => DEBUG ? "Erreur dans client/deleteAllClient : :field" : "Une erreur est survenue lors de la suppréssion des clients",
         //client - restore all client
-        'client_restoreAllClient' => DEBUG ? "Erreur dans client/restoreAllClient : :field" : "Une erreur est survenue lors de la récupération des clients"
+        'client_restoreAllClient' => DEBUG ? "Erreur dans client/restoreAllClient : :field" : "Une erreur est survenue lors de la récupération des clients",
     ],
     'not_found' => [
         'page' => "La page demandée n'est pas trouvée : :field",

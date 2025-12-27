@@ -48,7 +48,8 @@ return [
         'facture_list' => "Liste des factures",
         'facture_add' => "Ajout d'une nouvelle facture",
         'facture_correction' => "Correction de la facture",
-        'facture_delete' => "Supprésion des factures"
+        'facture_delete' => "Supprésion des factures",
+        'facture_restore' => "Récupération des factures"
     ],
     'labels' => [
         'all' => 'tout',
@@ -227,6 +228,8 @@ return [
         'question_delete_permanent_facture_1' => "Voulez-vous vraiment supprimer définitivement la facture numéro <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible",
         'question_delete_permanent_facture_1' => "Voulez-vous vraiment supprimer définitivement la facture numéro <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>.",
         'question_delete_permanent_facture_plur' => "Voulez-vous vraiment supprimer définitivement ces <b>:field</b> factures ?. <span class='text-danger'>Cette action est irréversible</span>.",
+        'question_restore_facture_1' => "Voulez-vous vraiment récupérer la facture numéro <b>:field</b> ?",
+        'question_restore_facture_plur' => "Voulez-vous vraiment récupérer ces <b>:field</b> factures ?",
 
     ],
     'times' => [
