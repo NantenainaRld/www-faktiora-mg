@@ -133,7 +133,8 @@ class Client extends Database
 
             $response = [
                 'message_type' => 'success',
-                'message' => __('messages.success.client_createClient')
+                'message' => __('messages.success.client_createClient'),
+                'last_inserted' => $response['last_inserted']
             ];
 
             return $response;
@@ -196,7 +197,7 @@ class Client extends Database
                 'data' => $response['data'],
                 'nb_client' => count($response['data']),
                 'nb_male' => $nb_male,
-                'nb_female' => $nb_female
+                'nb_female' => $nb_female,
             ];
 
             return $response;

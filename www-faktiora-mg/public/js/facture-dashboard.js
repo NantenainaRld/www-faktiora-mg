@@ -718,6 +718,209 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       });
 
+    //======================== ADD CLIENT ======================
+    //modal add client
+    const modalAddClient = container.querySelector("#modal-add-client");
+    //input - add nom_client
+    const inputAddNomClient = modalAddClient.querySelector(
+      "#input-add-nom-client"
+    );
+    const savedInputAddNomClient = localStorage.getItem(inputAddNomClient.id);
+    inputAddNomClient.value = !savedInputAddNomClient
+      ? ""
+      : savedInputAddNomClient;
+    //input - add prenoms_client
+    const inputAddPrenomsClient = modalAddClient.querySelector(
+      "#input-add-prenoms-client"
+    );
+    const savedInputAddPrenomsClient = localStorage.getItem(
+      inputAddPrenomsClient.id
+    );
+    inputAddPrenomsClient.value = !savedInputAddPrenomsClient
+      ? ""
+      : savedInputAddPrenomsClient;
+    //select - add sexe_client
+    const selectAddSexeClient = modalAddClient.querySelector(
+      "#select-add-sexe-client"
+    );
+    const savedSelectAddSexeClient = localStorage.getItem(
+      selectAddSexeClient.id
+    );
+    selectAddSexeClient.value = !savedSelectAddSexeClient
+      ? "masculin"
+      : savedSelectAddSexeClient;
+    //input - add telephone
+    const inputAddTelephone = modalAddClient.querySelector(
+      "#input-add-telephone"
+    );
+    const savedInputAddTelephone = localStorage.getItem(inputAddTelephone.id);
+    inputAddTelephone.value = !savedInputAddTelephone
+      ? ""
+      : savedInputAddTelephone;
+    //input - add adresse
+    const inputAddAdresse = modalAddClient.querySelector("#input-add-adresse");
+    const savedInputAddAdresse = localStorage.getItem(inputAddAdresse.id);
+    inputAddAdresse.value = !savedInputAddAdresse ? "" : savedInputAddAdresse;
+    //===== EVENT input add nom_client
+    inputAddNomClient.addEventListener("input", (e) => {
+      //remove double space && change into uppercase
+      e.target.value = e.target.value.replace("  ", " ").toUpperCase();
+      //save value into localstorage
+      localStorage.setItem(e.target.id, e.target.value);
+    });
+    //===== EVENT input add prenoms_client
+    inputAddPrenomsClient.addEventListener("input", (e) => {
+      //remove double space && change into uppercase
+      e.target.value = e.target.value.replace("  ", " ");
+      //save value into localstorage
+      localStorage.setItem(e.target.id, e.target.value);
+    });
+    //===== EVENT select add sexe_client
+    selectAddSexeClient.addEventListener("change", (e) => {
+      //save value into localstorage
+      localStorage.setItem(e.target.id, e.target.value);
+    });
+    //===== EVENT input add telephone
+    inputAddTelephone.addEventListener("input", (e) => {
+      //remove invalid
+      e.target.value = e.target.value.replace(/[^\d+\s]/g, "");
+      //remove double space
+      e.target.value = e.target.value.replace("  ", " ");
+      //save value into localstorage
+      localStorage.setItem(e.target.id, e.target.value);
+    });
+    //===== EVENT input add adresse
+    inputAddAdresse.addEventListener("input", (e) => {
+      //remove double space
+      e.target.value = e.target.value.replace("  ", " ");
+      //save value into localstorage
+      localStorage.setItem(e.target.id, e.target.value);
+    });
+    //===== EVENT form add client submit
+    modalAddClient
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        //suspend submit
+        e.preventDefault();
+        //check validity
+        if (!e.target.checkValidity()) {
+          e.target.reportValidity();
+        }
+        try {
+          //FETCH api add client
+          const apiAddClient = await apiRequest("/client/create_client", {
+            method: "POST",
+            body: {
+              nom_client: inputAddNomClient.value.trim(),
+              prenoms_client: inputAddPrenomsClient.value.trim(),
+              sexe_client: selectAddSexeClient.value.trim(),
+              telephone: inputAddTelephone.value.trim(),
+              adresse: inputAddAdresse.value.trim(),
+            },
+          });
+          //error
+          if (apiAddClient.message_type === "error") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-danger");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiAddClient.message;
+            //progress bar
+            progressBar.style.transition = "width 20s linear";
+            progressBar.style.width = "100%";
+            //add alert
+            modalAddClient.querySelector(".modal-body").prepend(alert);
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 20000);
+            return;
+          }
+          //invalid
+          else if (apiAddClient.message_type === "invalid") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-warning");
+            //icon
+            alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiAddClient.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
+            //add alert
+            modalAddClient.querySelector(".modal-body").prepend(alert);
+            //progress lanch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+            return;
+          }
+          //success add client
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-success");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-check-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            apiAddClient.message;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          modalAddFacture.querySelector(".modal-body").prepend(alert);
+
+          //progress lanch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+          //auto close modal
+          modalAddClient.querySelector("#btn-close-modal-add-client").click();
+
+          //refresh list client
+          await listClient(selectAddFactureIdClient);
+          $(selectAddFactureIdClient)
+            .val(apiAddClient.last_inserted)
+            .trigger("change");
+
+          return;
+        } catch (e) {
+          console.error(e);
+        }
+      });
+
     //======================= CORRECION FACTURE ===================
     //modal correction facture
     const modalCorrectionFacture = container.querySelector(
@@ -891,216 +1094,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           console.error(e);
         }
       });
-    //   //======================== ADD CLIENT ======================
-    //   //modal add client
-    //   const modalAddClient = container.querySelector("#modal-add-client");
-    //   //input - add nom_client
-    //   const inputAddNomClient = modalAddClient.querySelector(
-    //     "#input-add-nom-client"
-    //   );
-    //   const savedInputAddNomClient = localStorage.getItem(inputAddNomClient.id);
-    //   inputAddNomClient.value = !savedInputAddNomClient
-    //     ? ""
-    //     : savedInputAddNomClient;
-    //   //input - add prenoms_client
-    //   const inputAddPrenomsClient = modalAddClient.querySelector(
-    //     "#input-add-prenoms-client"
-    //   );
-    //   const savedInputAddPrenomsClient = localStorage.getItem(
-    //     inputAddPrenomsClient.id
-    //   );
-    //   inputAddPrenomsClient.value = !savedInputAddPrenomsClient
-    //     ? ""
-    //     : savedInputAddPrenomsClient;
-    //   //select - add sexe_client
-    //   const selectAddSexeClient = modalAddClient.querySelector(
-    //     "#select-add-sexe-client"
-    //   );
-    //   const savedSelectAddSexeClient = localStorage.getItem(
-    //     selectAddSexeClient.id
-    //   );
-    //   selectAddSexeClient.value = !savedSelectAddSexeClient
-    //     ? "masculin"
-    //     : savedSelectAddSexeClient;
-    //   //input - add telephone
-    //   const inputAddTelephone = modalAddClient.querySelector(
-    //     "#input-add-telephone"
-    //   );
-    //   const savedInputAddTelephone = localStorage.getItem(inputAddTelephone.id);
-    //   inputAddTelephone.value = !savedInputAddTelephone
-    //     ? ""
-    //     : savedInputAddTelephone;
-    //   //input - add adresse
-    //   const inputAddAdresse = modalAddClient.querySelector("#input-add-adresse");
-    //   const savedInputAddAdresse = localStorage.getItem(inputAddAdresse.id);
-    //   inputAddAdresse.value = !savedInputAddAdresse ? "" : savedInputAddAdresse;
-    //   //===== EVENT input add nom_client
-    //   inputAddNomClient.addEventListener("input", (e) => {
-    //     //remove double space && change into uppercase
-    //     e.target.value = e.target.value.replace("  ", " ").toUpperCase();
-    //     //save value into localstorage
-    //     localStorage.setItem(e.target.id, e.target.value);
-    //   });
-    //   //===== EVENT input add prenoms_client
-    //   inputAddPrenomsClient.addEventListener("input", (e) => {
-    //     //remove double space && change into uppercase
-    //     e.target.value = e.target.value.replace("  ", " ");
-    //     //save value into localstorage
-    //     localStorage.setItem(e.target.id, e.target.value);
-    //   });
-    //   //===== EVENT select add sexe_client
-    //   selectAddSexeClient.addEventListener("change", (e) => {
-    //     //save value into localstorage
-    //     localStorage.setItem(e.target.id, e.target.value);
-    //   });
-    //   //===== EVENT input add telephone
-    //   inputAddTelephone.addEventListener("input", (e) => {
-    //     //remove invalid
-    //     e.target.value = e.target.value.replace(/[^\d+\s]/g, "");
-    //     //remove double space
-    //     e.target.value = e.target.value.replace("  ", " ");
-    //     //save value into localstorage
-    //     localStorage.setItem(e.target.id, e.target.value);
-    //   });
-    //   //===== EVENT input add adresse
-    //   inputAddAdresse.addEventListener("input", (e) => {
-    //     //remove double space
-    //     e.target.value = e.target.value.replace("  ", " ");
-    //     //save value into localstorage
-    //     localStorage.setItem(e.target.id, e.target.value);
-    //   });
-    //   //===== EVENT form add client submit
-    //   modalAddClient
-    //     .querySelector("form")
-    //     .addEventListener("submit", async (e) => {
-    //       //suspend submit
-    //       e.preventDefault();
-    //       //check validity
-    //       if (!e.target.checkValidity()) {
-    //         e.target.reportValidity();
-    //       }
-    //       try {
-    //         //FETCH api add client
-    //         const apiAddClient = await apiRequest("/client/create_client", {
-    //           method: "POST",
-    //           body: {
-    //             nom_client: inputAddNomClient.value.trim(),
-    //             prenoms_client: inputAddPrenomsClient.value.trim(),
-    //             sexe_client: selectAddSexeClient.value.trim(),
-    //             telephone: inputAddTelephone.value.trim(),
-    //             adresse: inputAddAdresse.value.trim(),
-    //           },
-    //         });
-    //         //error
-    //         if (apiAddClient.message_type === "error") {
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-danger");
-    //           //icon
-    //           alert
-    //             .querySelector(".fad")
-    //             .classList.add("fa-exclamation-triangle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             apiAddClient.message;
-    //           //progress bar
-    //           progressBar.style.transition = "width 20s linear";
-    //           progressBar.style.width = "100%";
-    //           //add alert
-    //           modalAddClient.querySelector(".modal-body").prepend(alert);
-    //           //progress launch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 20000);
-    //           return;
-    //         }
-    //         //invalid
-    //         else if (apiAddClient.message_type === "invalid") {
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-warning");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             apiAddClient.message;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
-    //           //add alert
-    //           modalAddClient.querySelector(".modal-body").prepend(alert);
-    //           //progress lanch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
-    //           return;
-    //         }
-    //         //success add client
-    //         //alert
-    //         const alertTemplate = document.querySelector(".alert-template");
-    //         const clone = alertTemplate.content.cloneNode(true);
-    //         const alert = clone.querySelector(".alert");
-    //         const progressBar = alert.querySelector(".progress-bar");
-    //         //alert type
-    //         alert.classList.add("alert-success");
-    //         //icon
-    //         alert.querySelector(".fad").classList.add("fa-check-circle");
-    //         //message
-    //         alert.querySelector(".alert-message").innerHTML =
-    //           apiAddClient.message;
-    //         //progress bar
-    //         progressBar.style.transition = "width 10s linear";
-    //         progressBar.style.width = "100%";
-    //         //add alert
-    //         container
-    //           .querySelector("#tbody-client")
-    //           .closest("div")
-    //           .prepend(alert);
-    //         //progress lanch animation
-    //         setTimeout(() => {
-    //           progressBar.style.width = "0%";
-    //         }, 10);
-    //         //auto close alert
-    //         setTimeout(() => {
-    //           alert.querySelector(".btn-close").click();
-    //         }, 10000);
-    //         //auto close modal
-    //         modalAddClient.querySelector("#btn-close-modal-add-client").click();
-    //         //refresh filter client
-    //         filterClient(
-    //           selectStatus.value.trim(),
-    //           selectSex.value.trim(),
-    //           selectArrangeBy.value.trim(),
-    //           selectOrder.value.trim(),
-    //           selectDateBy.value.trim(),
-    //           selectPer.value.trim(),
-    //           dateFrom.value.trim(),
-    //           dateTo.value.trim(),
-    //           selectMonth.value.trim(),
-    //           selectYear.value.trim(),
-    //           inputSearch.value.trim()
-    //         );
-    //         return;
-    //       } catch (e) {
-    //         console.error(e);
-    //       }
-    //     });
+    //
     //   //========================= UPDATE CLIENT ======================
     //   //modal update client
     //   const modalUpdateClient = container.querySelector("#modal-update-client");
