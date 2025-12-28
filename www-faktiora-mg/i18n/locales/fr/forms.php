@@ -50,7 +50,9 @@ return [
         'facture_correction' => "Correction de la facture",
         'facture_delete' => "Supprésion des factures",
         'facture_restore' => "Récupération des factures",
-        'ligne_facture' => "Lignes de facture"
+        'ligne_facture' => "Lignes de facture",
+        'autre_entree_dashboard' => "Tableau de bord autre entrée",
+        'ae_list' => "Liste des autres entrées"
     ],
     'labels' => [
         'all' => 'tout',
@@ -233,6 +235,9 @@ return [
         'question_restore_facture_plur' => "Voulez-vous vraiment récupérer ces <b>:field</b> factures ?",
         'facture_num' => "Facture numéro",
         'label' => "Libéllé",
+        'ae_number' => "Numéro d'autre entrée",
+        'ae_date' => "Date d'autre entrée",
+        'ae_montant' => "Montant d'autre entrée"
     ],
     'times' => [
         'minute' => "minute",
@@ -252,7 +257,8 @@ return [
         'email' => 'nom@faktiora.mg',
         'search_lc' => "ID ligne de caisse, ID utilisateur",
         'search_client' => "ID , nom ou prenoms, telephone, adresse",
-        'search_facture' => "numéro facture, ID client"
+        'search_facture' => "numéro facture, ID client",
+        'search_ae' => "numéro autre entrée, libéllé"
     ]
 
 ];

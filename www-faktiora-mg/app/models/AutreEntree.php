@@ -212,13 +212,14 @@ class AutreEntree extends Database
     }
 
     //static - filter autre entree
-    public static function filterAutreEntree($params)
+    public static function filterAe($params)
     {
         $response = [
             'message_type' => 'success',
             'message' => 'success'
         ];
-        $sql = "SELECT num_ae, libelle_ae, date_ae, montant_ae, id_utilisateur, num_caisse FROM autre_entree ";
+
+        $sql = "SELECT num_ae, libelle_ae, date_ae, montant_ae, id_utilisateur, num_caisse, etat_ae FROM autre_entree ";
         $paramsQuery = [];
 
         //where 1=1
@@ -229,7 +230,7 @@ class AutreEntree extends Database
             $sql .= "AND etat_ae = 'actif' ";
         }
         //status - deleted
-        else {
+        elseif ($params['status'] === 'deleted') {
             $sql .= "AND etat_ae = 'supprimé' ";
         }
 
@@ -275,7 +276,7 @@ class AutreEntree extends Database
         }
 
         //group by and order by
-        $sql .= "GROUP BY id_ae ORDER BY {$params['order_by']} {$params['arrange']} ";
+        $sql .= "ORDER BY {$params['arrange_by']} {$params['order']} ";
 
         try {
 

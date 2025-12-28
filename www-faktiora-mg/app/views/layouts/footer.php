@@ -94,6 +94,10 @@
    <?php if ($_SESSION['menu'] === 'facture'): ?>
       <script src="<?= SITE_URL ?>/js/facture-dashboard.js"></script>
    <?php endif; ?>
+   <!-- script autre entree -->
+   <?php if ($_SESSION['menu'] === 'autre_entree'): ?>
+      <script src="<?= SITE_URL ?>/js/autre-entree-dashboard.js"></script>
+   <?php endif; ?>
    </body>
 
    </html>

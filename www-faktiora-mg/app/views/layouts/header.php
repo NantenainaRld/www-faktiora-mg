@@ -177,6 +177,10 @@
     <?php if ($_SESSION['menu'] === 'facture'): ?>
         <link rel="stylesheet" href="<?= SITE_URL ?>/css/facture-dashboard.css">
     <?php endif; ?>
+    <!-- style autre_entree dashboard  -->
+    <?php if ($_SESSION['menu'] === 'autre_entree'): ?>
+        <link rel="stylesheet" href="<?= SITE_URL ?>/css/autre-entree-dashboard.css">
+    <?php endif; ?>
     <!-- style select2  -->
     <link rel="stylesheet" href="<?= SITE_URL ?>/select2/css/select2.min.css">
     <link rel="stylesheet" href="<?= SITE_URL ?>/select2/css/select2-bootstrap-5-theme.min.css">
@@ -462,15 +466,15 @@
                                     <div class="collapse navbar-collapse" id="entree-menu-navbar">
                                         <ul class="navbar-nav py-2 px-1" style="font-size: 0.75rem;">
                                             <!-- facture  -->
-                                            <li class="nav-item green-second rounded-1 mb-1 text-start px-3 <?= ($_SESSION['menu'] === 'facture' || $_SESSION['menu'] === 'autre_entree') ? 'bg-success' : 'bg-green-third' ?>">
+                                            <li class="nav-item green-second rounded-1 mb-1 text-start px-3 <?= ($_SESSION['menu'] === 'facture') ? 'bg-success' : 'bg-green-third' ?>">
                                                 <a href="<?= SITE_URL ?>/entree/page_facture" class="nav-link text-light green-second">
                                                     <i class="fad fa-file-invoice me-2">
                                                     </i><?= ucfirst(__('forms.labels.bill')) ?>
                                                 </a>
                                             </li>
                                             <!-- autre entree -->
-                                            <li class="nav-item green-second bg-green-third rounded-1 text-start px-3">
-                                                <a href="" class="nav-link text-light green-second">
+                                            <li class="nav-item green-second rounded-1 text-start px-3 <?= ($_SESSION['menu'] === 'autre_entree') ? 'bg-success' : 'bg-green-third' ?>">
+                                                <a href="<?= SITE_URL ?>/entree/page_autre_entree" class="nav-link text-light green-second">
                                                     <i class="fad fa-file-invoice-dollar me-2">
                                                     </i><?= __('forms.labels.autre_entree') ?>
                                                 </a>
