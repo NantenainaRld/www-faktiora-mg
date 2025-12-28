@@ -53,7 +53,8 @@ return [
         'ligne_facture' => "Lignes de facture",
         'autre_entree_dashboard' => "Tableau de bord autre entrée",
         'ae_list' => "Liste des autres entrées",
-        'ae_add' => "Ajout d'une autre entrée"
+        'ae_add' => "Ajout d'une autre entrée",
+        'ae_update' => "Modification d'autre entrée"
     ],
     'labels' => [
         'all' => 'tout',

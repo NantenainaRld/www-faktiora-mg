@@ -205,7 +205,7 @@ return [
         //entree - add autre entree
         'entree_createAutreEntree' => "Autre entrée ajoutée avec succès",
         //entree - update autre entree
-        'entree_updateAutreEntree' => "Autre entrée numéro <b>:field</b> modifiée avec succès",
+        'entree_updateAutreEntree' => "Autre entrée numéro <b>:field</b> a été modifiée avec succès",
         //entree - delete all autre entree 0
         'entree_deleteAllAutreEntree_0' => "Aucune autre entrée n'est supprimée",
         //entree - delete all autre entree 1

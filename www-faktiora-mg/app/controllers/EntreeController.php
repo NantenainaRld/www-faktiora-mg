@@ -819,18 +819,8 @@ class EntreeController extends Controller
                     return;
                 }
                 $date_ae = $date_ae->format('Y-m-d H:i:s');
-
-                //id_utilisateur - empty
-                if ($json['id_utilisateur'] === '') {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => __('messages.empty.user_id')
-                    ];
-
-                    echo json_encode($response);
-                    return;
-                }
             }
+
 
             try {
 
@@ -852,65 +842,13 @@ class EntreeController extends Controller
                     echo json_encode($response);
                     return;
                 }
-                //role caissier - num_ae deleted
-                if ($is_loged_in->getRole() === 'caissier' && $response['model']->getEtatAe() === 'supprimé') {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => __('messages.not_found.entree_num_ae', ['field' => $json['num_ae']])
-                    ];
-
-                    echo json_encode($response);
-                    return;
-                }
-
-                //role admin
-                if ($is_loged_in->getRole() === 'admin') {
-
-                    //is num_caisse exist ?
-                    $response = Caisse::findById($json['num_caisse']);
-                    //error
-                    if ($response['message_type'] === 'error') {
-                        echo json_encode($response);
-                        return;
-                    }
-                    //not found
-                    if (!$response['found']) {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-
-                    //is user exist ?
-                    $response = User::findById($json['id_utilisateur']);
-                    //error
-                    if ($response['message_type'] === 'error') {
-                        echo json_encode($response);
-                        return;
-                    }
-                    //not found
-                    if (!$response['found']) {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.not_found.user_id', ['field' => $json['id_utilisateur']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                }
 
                 //update autre entree
                 $autre_entree_model = new AutreEntree();
                 $autre_entree_model
                     ->setNumAe($json['num_ae'])
                     ->setLibelleAe($json['libelle_ae'])
-                    ->setDateAe($date_ae)
-                    ->setIdUtilsateur($json['id_utilisateur'])
-                    ->setNumCaisse($json['num_caisse']);
+                    ->setDateAe($date_ae);
                 $response = $autre_entree_model->updateAutreEntree($is_loged_in->getRole());
 
                 echo json_encode($response);

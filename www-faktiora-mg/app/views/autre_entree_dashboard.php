@@ -39,7 +39,7 @@
                             <!-- table ae -->
                             <div class="col-12 h-100">
                                 <div class="card h-100 w-100">
-                                    <div class="card-body d-flex flex-column justify-content-between">
+                                    <div class="card-body h-100 overflow-auto d-flex flex-column justify-content-between">
                                         <!-- title ae -->
                                         <div class="card-title text-secondary flex-grow-0">
                                             <i class="fad fa-list-dropdown me-2"></i><?= __('forms.titles.ae_list') ?>
@@ -286,65 +286,43 @@
             </div>
         </div>
     </div>
-    <!-- modal add client -->
-    <div class="modal fade" id="modal-add-client" tabindex="-1" aria-labelledby="modalAddClient" aria-hidden="true">
+    <!-- modal update ae -->
+    <div class="modal fade" id="modal-update-ae" tabindex="-1" aria-labelledby="modalUpdateAe" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
+            <div class="modal-content d-flex flex-column justify-content-between">
                 <!-- modal header  -->
-                <div class="modal-header bg-green-0 text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-user-circle-plus me-2"></i><?= __('forms.titles.client_add') ?></h6>
+                <div class="modal-header bg-green-0 text-light flex-frow-0">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-pen-to-square me-2"></i><?= __('forms.titles.ae_update') ?></h6>
                 </div>
-                <form>
-                    <!-- modal body  -->
+                <!-- form update ae -->
+                <form class="flex-grow-1 overflow-auto">
+                    <!-- modal body -->
                     <div class="modal-body">
-                        <!-- input - nom_client  -->
+                        <!-- num_ae -->
+                        <div class="mb-2 text-center text-secondary fw-bold" id="update-ae-num-ae"></div>
+                        <!-- libelle_ae -->
                         <div class="mb-2">
-                            <label for="input-add-nom-client" class="form-label"><?= __('forms.labels.name') ?> <span class="text-danger">*</span></label>
+                            <label for="input-update-ae-libelle-ae" class="form-label"><?= __('forms.labels.label') ?><span class="text-danger"> *</span></label>
                             <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-address-card"></i></span>
-                                <input type="text" maxlength="100" class="form-control form-control-sm" id="input-add-nom-client" placeholder="RALANDISON" required>
+                                <span class="input-group-text text-success"><i class="fad fa-tag"></i></span>
+                                <input type="text" maxlength="100" id="input-update-ae-libelle-ae" class="form-control form-control-sm" placeholder="<?= __('forms.placeholders.libelle_ae') ?>" required>
                             </div>
                         </div>
-                        <!-- input - prenoms_client  -->
-                        <div class="mb-2">
-                            <label for="input-add-prenoms-client" class="form-label"><?= __('forms.labels.firstname') ?></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-address-card"></i></span>
-                                <input type="text" maxlength="100" class="form-control form-control-sm" id="input-add-prenoms-client" placeholder="Nantenaina">
+                        <?php if ($role === 'admin'): ?>
+                            <!--input update ae date ae -->
+                            <div class="mb-2">
+                                <label for="input-update-ae-date-ae" class="form-label"><?= __('forms.labels.date') ?> <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
+                                    <input type="datetime-local" max="<?= date('Y-m-d\TH:i') ?>" class="form-control form-control-sm" id="input-update-ae-date-ae" required>
+                                </div>
                             </div>
-                        </div>
-                        <!-- select - sexe_client  -->
-                        <div class="mb-2">
-                            <label for="select-add-sexe-client" class="form-label"><?= __('forms.labels.sex') ?></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-venus"></i></span>
-                                <select name="" id="select-add-sexe-client" class="form-select form-select-sm">
-                                    <option value="masculin"><?= __('forms.labels.male') ?></option>
-                                    <option value="féminin"><?= __('forms.labels.female') ?></option>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- input - telephone -->
-                        <div class="mb-2">
-                            <label for="input-add-telephone" class="form-label"><?= __('forms.labels.phone') ?> </label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-phone"></i></span>
-                                <input type="text" maxlength="20" minlength="10" class="form-control form-control-sm" id="input-add-telephone" placeholder="032 00 000 00">
-                            </div>
-                        </div>
-                        <!-- input - adresse -->
-                        <div class="mb-2">
-                            <label for="input-add-adresse" class="form-label"><?= __('forms.labels.address') ?> </label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-location-dot"></i></span>
-                                <input type="text" maxlength="20" class="form-control form-control-sm" id="input-add-adresse" placeholder="Andrainjato Fianarantsoa">
-                            </div>
-                        </div>
+                        <?php endif; ?>
                     </div>
                     <!-- modal footer  -->
                     <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modal-add-facture" type="button" id="btn-close-modal-add-client"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
-                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-add-client"><i class="fad fa-user-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-update-ae"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-primary btn-sm fw-bold" type="submit"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
                     </div>
                 </form>
             </div>

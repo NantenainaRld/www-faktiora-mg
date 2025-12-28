@@ -542,11 +542,9 @@ class AutreEntree extends Database
         }
         //role - admin
         else {
-            $sql = "UPDATE autre_entree SET libelle_ae = :libelle, date_ae = :date, id_utilisateur = :id_user, num_caisse = :num_caisse WHERE num_ae = :num_ae";
+            $sql = "UPDATE autre_entree SET libelle_ae = :libelle, date_ae = :date WHERE num_ae = :num_ae";
             $paramsQuery['libelle'] = $this->libelle_ae;
             $paramsQuery['date'] = $this->date_ae;
-            $paramsQuery['id_user'] = $this->id_utilisateur;
-            $paramsQuery['num_caisse'] = $this->num_caisse;
             $paramsQuery['num_ae'] = $this->num_ae;
         }
 
