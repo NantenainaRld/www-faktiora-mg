@@ -233,7 +233,7 @@ class EntreeController extends Controller
             }
             //montant_ae - invalid
             $montant_ae = filter_var($json['montant_ae'], FILTER_VALIDATE_FLOAT);
-            if ($montant_ae === false || $montant_ae < 1) {
+            if (!$montant_ae || $montant_ae < 1) {
                 $response = [
                     'message_type' => 'invalid',
                     'message' => __('messages.invalids.montant')

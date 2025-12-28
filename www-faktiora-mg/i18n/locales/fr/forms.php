@@ -52,7 +52,8 @@ return [
         'facture_restore' => "Récupération des factures",
         'ligne_facture' => "Lignes de facture",
         'autre_entree_dashboard' => "Tableau de bord autre entrée",
-        'ae_list' => "Liste des autres entrées"
+        'ae_list' => "Liste des autres entrées",
+        'ae_add' => "Ajout d'une autre entrée"
     ],
     'labels' => [
         'all' => 'tout',
@@ -258,7 +259,8 @@ return [
         'search_lc' => "ID ligne de caisse, ID utilisateur",
         'search_client' => "ID , nom ou prenoms, telephone, adresse",
         'search_facture' => "numéro facture, ID client",
-        'search_ae' => "numéro autre entrée, libéllé"
+        'search_ae' => "numéro autre entrée, libéllé",
+        'libelle_ae' => "ex: apport de caisse"
     ]
 
 ];

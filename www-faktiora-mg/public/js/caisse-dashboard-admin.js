@@ -30,13 +30,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     formatterNumber = new Intl.NumberFormat("en-US", {
       style: "decimal",
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
+      maximumFractionDigits: 2,
     });
     formatterTotal = new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: currencyUnits,
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
+      maximumFractionDigits: 2,
     });
     formatterInput = new Intl.NumberFormat("en-US", {
       style: "decimal",

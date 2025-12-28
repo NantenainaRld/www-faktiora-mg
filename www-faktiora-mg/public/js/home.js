@@ -60,13 +60,13 @@ document.addEventListener("DOMContentLoaded", () => {
         formatterNumber = new Intl.NumberFormat("en-US", {
           style: "decimal",
           minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
+          maximumFractionDigits: 2,
         });
         formatterTotal = new Intl.NumberFormat("en-US", {
           style: "currency",
           currency: currencyUnits,
           minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
+          maximumFractionDigits: 2,
         });
       }
       //fr && mg

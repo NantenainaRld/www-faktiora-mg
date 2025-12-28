@@ -29,13 +29,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     formatterNumber = new Intl.NumberFormat("en-US", {
       style: "decimal",
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
+      maximumFractionDigits: 2,
     });
     formatterTotal = new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: currencyUnits,
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
+      maximumFractionDigits: 2,
     });
   }
   //fr && mg
@@ -320,571 +320,291 @@ document.addEventListener("DOMContentLoaded", async () => {
       $(selectIdUtilisateur).val().trim(),
       inputSearch.value.trim()
     );
-    //     //========================= ADD FACTURE =========================
-    //     //modal add facture
-    //     const modalAddFacture = container.querySelector("#modal-add-facture");
-    //     //modal add facture - intialize select 2
-    //     $(modalAddFacture.querySelectorAll(".select2")).select2({
-    //       theme: "bootstrap-5",
-    //       placeholder: lang.select.toLowerCase(),
-    //       dropdownParent: $(modalAddFacture),
-    //     });
-    //     //input - add facture date facture
-    //     const inputAddFactureDateFacture = modalAddFacture.querySelector(
-    //       "#input-add-facture-date-facture"
-    //     );
-    //     if (inputAddFactureDateFacture) {
-    //       const savedInputAddFactureDateFacture = localStorage.getItem(
-    //         inputAddFactureDateFacture.id
-    //       );
-    //       inputAddFactureDateFacture.value = !savedInputAddFactureDateFacture
-    //         ? ""
-    //         : savedInputAddFactureDateFacture;
-    //       //===== EVENT input add facture date facture
-    //       inputAddFactureDateFacture.addEventListener("input", (e) => {
-    //         localStorage.setItem(e.target.id, e.target.value);
-    //       });
-    //     }
-    //     //select - add facture id_utilisateur
-    //     const selectAddFactureIdUtilisateur = modalAddFacture.querySelector(
-    //       "#select-add-facture-id-utilisateur"
-    //     );
-    //     if (selectAddFactureIdUtilisateur) {
-    //       //list all user
-    //       await listUser(selectAddFactureIdUtilisateur, true);
-    //       //load value from localstorage
-    //       const savedSelectAddFactureIdUtilisateur = localStorage.getItem(
-    //         selectAddFactureIdUtilisateur.id
-    //       );
-    //       $(selectAddFactureIdUtilisateur)
-    //         .val(
-    //           !savedSelectAddFactureIdUtilisateur
-    //             ? ""
-    //             : savedSelectAddFactureIdUtilisateur
-    //         )
-    //         .trigger("change");
-    //       //===== EVENT btn add facture refresh id_utilisateur
-    //       modalAddFacture
-    //         .querySelector("#btn-add-facture-refresh-id-utilisateur")
-    //         .addEventListener("click", () => {
-    //           listUser(selectAddFactureIdUtilisateur, true);
-    //         });
-    //       //===== EVENT select add facture id_utilisateur
-    //       $(selectAddFactureIdUtilisateur).on("change", function (e) {
-    //         localStorage.setItem(e.target.id, $(this).val());
-    //       });
-    //     }
-    //     //select - add facture num_caisse
-    //     const selectAddFactureNumCaisse = modalAddFacture.querySelector(
-    //       "#select-add-facture-num-caisse"
-    //     );
-    //     if (selectAddFactureNumCaisse) {
-    //       //list num_caisse
-    //       await listNumCaisse(selectAddFactureNumCaisse, true);
-    //       //load value from localstorage
-    //       const savedSelectAddFactureNumCaisse = localStorage.getItem(
-    //         selectAddFactureNumCaisse.id
-    //       );
-    //       $(selectAddFactureNumCaisse)
-    //         .val(
-    //           !savedSelectAddFactureNumCaisse ? "" : savedSelectAddFactureNumCaisse
-    //         )
-    //         .trigger("change");
-    //       //===== EVENT btn add facture refresh num_caisse
-    //       modalAddFacture
-    //         .querySelector("#btn-add-facture-refresh-num-caisse")
-    //         .addEventListener("click", () => {
-    //           listNumCaisse(selectAddFactureNumCaisse, true);
-    //         });
-    //       //===== EVENT select add facture num_caisse
-    //       $(selectAddFactureNumCaisse).on("change", function (e) {
-    //         localStorage.setItem(e.target.id, $(this).val());
-    //       });
-    //     }
-    //     //select - add facture id_client
-    //     const selectAddFactureIdClient = modalAddFacture.querySelector(
-    //       "#select-add-facture-id-client"
-    //     );
-    //     if (selectAddFactureIdClient) {
-    //       //list all client
-    //       await listClient(selectAddFactureIdClient);
-    //       //load value from localstorage
-    //       const savedSelectAddFactureIdClient = localStorage.getItem(
-    //         selectAddFactureIdClient.id
-    //       );
-    //       $(selectAddFactureIdClient)
-    //         .val(
-    //           !savedSelectAddFactureIdClient ? "" : savedSelectAddFactureIdClient
-    //         )
-    //         .trigger("change");
-    //       //===== EVENT btn add facture refresh id_client
-    //       modalAddFacture
-    //         .querySelector("#btn-add-facture-refresh-id-client")
-    //         .addEventListener("click", () => {
-    //           listClient(selectAddFactureIdClient);
-    //         });
-    //       //===== EVENT select add facture id_client
-    //       $(selectAddFactureIdClient).on("change", function (e) {
-    //         localStorage.setItem(e.target.id, $(this).val());
-    //       });
-    //     }
-    //     //select - add facture id_produit
-    //     const selectAddFactureIdProduit = modalAddFacture.querySelector(
-    //       "#select-add-facture-id-produit"
-    //     );
-    //     if (selectAddFactureIdProduit) {
-    //       //list all produit
-    //       listProduit(selectAddFactureIdProduit);
-    //       //===== EVENT btn add facture refresh id_produit
-    //       modalAddFacture
-    //         .querySelector("#btn-add-facture-refresh-id-produit")
-    //         .addEventListener("click", () => {
-    //           listProduit(selectAddFactureIdProduit);
-    //         });
-    //     }
-    //     //input - add facture quantite_produit
-    //     const inputAddFactureQauntiteProduit = modalAddFacture.querySelector(
-    //       "#input-add-facture-quantite-produit"
-    //     );
-    //     //===== EVENT input add facture quantite_produit
-    //     inputAddFactureQauntiteProduit.addEventListener("input", (e) => {
-    //       e.target.value = e.target.value.replace(/[^0-9]/g, "");
-    //     });
-    //     //===== EVENT btn add facture add produit
-    //     modalAddFacture
-    //       .querySelector("#btn-add-facture-add-produit")
-    //       .addEventListener("click", () => {
-    //         //no produit selected
-    //         if (!$(selectAddFactureIdProduit).val()) {
-    //           modalAddFacture.querySelector("#message-produit-select").innerHTML =
-    //             lang.produit_not_selected;
-    //           setTimeout(() => {
-    //             modalAddFacture.querySelector("#message-produit-select").innerHTML =
-    //               "";
-    //           }, 3000);
-    //           return;
-    //         }
-    //         //quantite invalid
-    //         else if (!inputAddFactureQauntiteProduit.value) {
-    //           modalAddFacture.querySelector("#message-produit-select").innerHTML =
-    //             lang.invalids_quantite;
-    //           setTimeout(() => {
-    //             modalAddFacture.querySelector("#message-produit-select").innerHTML =
-    //               "";
-    //           }, 3000);
-    //           return;
-    //         }
-    //         //add produit into the card
-    //         const spanProduit = document.createElement("span");
-    //         spanProduit.dataset.idProduit = $(selectAddFactureIdProduit).val();
-    //         spanProduit.dataset.quantiteProduit =
-    //           inputAddFactureQauntiteProduit.value.trim();
-    //         spanProduit.classList.add(
-    //           "rounded-1",
-    //           "bg-second",
-    //           "p-1",
-    //           "text-secondary",
-    //           "form-text",
-    //           "produit"
-    //         );
-    //         //span prix total
-    //         spanProduit.dataset.prixTotal =
-    //           Number(inputAddFactureQauntiteProduit.value) *
-    //           Number(
-    //             $(selectAddFactureIdProduit).select2("data")[0].element.dataset.prix
-    //           );
-    //         //span html
-    //         spanProduit.innerHTML = `${
-    //           $(selectAddFactureIdProduit).select2("data")[0].text
-    //         }<span class="badge bg-light text-success">${inputAddFactureQauntiteProduit.value.trim()}</span><button type="button" class="btn btn-light btn-sm ms-1 btn-close-produit"><i class="fad fa-x"></i></button>`;
-    //         //append to card
-    //         modalAddFacture.querySelector("#card-produit").append(spanProduit);
-    //         //add facture total
-    //         const addFactureTotal =
-    //           modalAddFacture.querySelector("#add-facture-total");
-    //         addFactureTotal.dataset.value =
-    //           Number(addFactureTotal.dataset.value) +
-    //           Number(
-    //             $(selectAddFactureIdProduit).select2("data")[0].element.dataset.prix
-    //           ) *
-    //             Number(inputAddFactureQauntiteProduit.value);
-    //         addFactureTotal.innerHTML = formatterTotal.format(
-    //           Number(addFactureTotal.dataset.value)
-    //         );
-    //         //===== EVENT btn close produit
-    //         const btn = spanProduit.querySelector(".btn-close-produit");
-    //         btn.addEventListener("click", () => {
-    //           addFactureTotal.dataset.value =
-    //             Number(addFactureTotal.dataset.value) -
-    //             Number(btn.closest("span").dataset.prixTotal);
-    //           addFactureTotal.innerHTML = formatterTotal.format(
-    //             Number(addFactureTotal.dataset.value)
-    //           );
-    //           //remove span produit
-    //           btn.closest("span").remove();
-    //         });
-    //       });
-    //     //===== EVENT btn empty produit
-    //     modalAddFacture
-    //       .querySelector("#btn-add-facture-empty-produit")
-    //       .addEventListener("click", () => {
-    //         modalAddFacture.querySelector("#card-produit").innerHTML = "";
-    //         modalAddFacture.querySelector("#add-facture-total").dataset.value = 0;
-    //         modalAddFacture.querySelector("#add-facture-total").innerHTML =
-    //           formatterNumber.format(0);
-    //       });
-    //     //===== EVENT btn add facture
-    //     container
-    //       .querySelector("#btn-add-facture")
-    //       .addEventListener("click", () => {
-    //         //show modal add facture
-    //         new bootstrap.Modal(modalAddFacture).show();
-    //       });
-    //     //===== EVENT form add facture submit
-    //     modalAddFacture
-    //       .querySelector("form")
-    //       .addEventListener("submit", async (e) => {
-    //         //suspend submit
-    //         e.preventDefault();
-    //         //check validity
-    //         if (!e.target.checkValidity()) {
-    //           e.target.reportValidity();
-    //           return;
-    //         }
-    //         //produits
-    //         let produits = [];
-    //         modalAddFacture
-    //           .querySelectorAll("#card-produit .produit")
-    //           .forEach((span) => {
-    //             const produit = {
-    //               id_produit: span.dataset.idProduit.trim(),
-    //               quantite_produit: span.dataset.quantiteProduit.trim(),
-    //             };
-    //             produits.push(produit);
-    //           });
-    //         try {
-    //           //FETH api add facture
-    //           const apiAddFacture = await apiRequest("/entree/create_facture", {
-    //             method: "POST",
-    //             body: {
-    //               date_facture: !inputAddFactureDateFacture
-    //                 ? ""
-    //                 : inputAddFactureDateFacture.value.trim(),
-    //               id_utilisateur: !selectAddFactureIdUtilisateur
-    //                 ? ""
-    //                 : $(selectAddFactureIdUtilisateur).val().trim(),
-    //               num_caisse: !selectAddFactureNumCaisse
-    //                 ? ""
-    //                 : $(selectAddFactureNumCaisse).val().trim(),
-    //               id_client: $(selectAddFactureIdClient).val().trim(),
-    //               produits: produits,
-    //             },
-    //           });
-    //           //error
-    //           if (apiAddFacture.message_type === "error") {
-    //             //alert
-    //             const alertTemplate = document.querySelector(".alert-template");
-    //             const clone = alertTemplate.content.cloneNode(true);
-    //             const alert = clone.querySelector(".alert");
-    //             const progressBar = alert.querySelector(".progress-bar");
-    //             //alert type
-    //             alert.classList.add("alert-danger");
-    //             //icon
-    //             alert
-    //               .querySelector(".fad")
-    //               .classList.add("fa-exclamation-triangle");
-    //             //message
-    //             alert.querySelector(".alert-message").innerHTML =
-    //               apiAddFacture.message;
-    //             //progress bar
-    //             progressBar.style.transition = "width 20s linear";
-    //             progressBar.style.width = "100%";
-    //             //add alert
-    //             modalAddFacture.querySelector(".modal-body").prepend(alert);
-    //             //progress launch animation
-    //             setTimeout(() => {
-    //               progressBar.style.width = "0%";
-    //             }, 10);
-    //             //auto close alert
-    //             setTimeout(() => {
-    //               alert.querySelector(".btn-close").click();
-    //             }, 20000);
-    //             return;
-    //           }
-    //           //invalid
-    //           else if (apiAddFacture.message_type === "invalid") {
-    //             //alert
-    //             const alertTemplate = document.querySelector(".alert-template");
-    //             const clone = alertTemplate.content.cloneNode(true);
-    //             const alert = clone.querySelector(".alert");
-    //             const progressBar = alert.querySelector(".progress-bar");
-    //             //alert type
-    //             alert.classList.add("alert-warning");
-    //             //icon
-    //             alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //             //message
-    //             alert.querySelector(".alert-message").innerHTML =
-    //               apiAddFacture.message;
-    //             //progress bar
-    //             progressBar.style.transition = "width 10s linear";
-    //             progressBar.style.width = "100%";
-    //             //add alert
-    //             modalAddFacture.querySelector(".modal-body").prepend(alert);
-    //             //progress launch animation
-    //             setTimeout(() => {
-    //               progressBar.style.width = "0%";
-    //             }, 10);
-    //             //auto close alert
-    //             setTimeout(() => {
-    //               alert.querySelector(".btn-close").click();
-    //             }, 10000);
-    //             return;
-    //           }
-    //           //success
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-success");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-check-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             apiAddFacture.message;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
-    //           //add alert
-    //           container
-    //             .querySelector("#tbody-facture")
-    //             .closest("div")
-    //             .prepend(alert);
-    //           //progress launch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
-    //           //close modal
-    //           modalAddFacture.querySelector("#btn-close-modal-add-facture").click();
-    //           //refresh filter facture
-    //           filterFacture(
-    //             selectStatus.value.trim(),
-    //             selectArrangeBy.value.trim(),
-    //             selectOrder.value.trim(),
-    //             dateFrom.value.trim(),
-    //             dateTo.value.trim(),
-    //             selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
-    //             $(selectIdUtilisateur).val().trim(),
-    //             inputSearch.value.trim()
-    //           );
-    //           return;
-    //         } catch (e) {
-    //           console.error(e);
-    //         }
-    //       });
-    //     //======================== ADD CLIENT ======================
-    //     //modal add client
-    //     const modalAddClient = container.querySelector("#modal-add-client");
-    //     //input - add nom_client
-    //     const inputAddNomClient = modalAddClient.querySelector(
-    //       "#input-add-nom-client"
-    //     );
-    //     const savedInputAddNomClient = localStorage.getItem(inputAddNomClient.id);
-    //     inputAddNomClient.value = !savedInputAddNomClient
-    //       ? ""
-    //       : savedInputAddNomClient;
-    //     //input - add prenoms_client
-    //     const inputAddPrenomsClient = modalAddClient.querySelector(
-    //       "#input-add-prenoms-client"
-    //     );
-    //     const savedInputAddPrenomsClient = localStorage.getItem(
-    //       inputAddPrenomsClient.id
-    //     );
-    //     inputAddPrenomsClient.value = !savedInputAddPrenomsClient
-    //       ? ""
-    //       : savedInputAddPrenomsClient;
-    //     //select - add sexe_client
-    //     const selectAddSexeClient = modalAddClient.querySelector(
-    //       "#select-add-sexe-client"
-    //     );
-    //     const savedSelectAddSexeClient = localStorage.getItem(
-    //       selectAddSexeClient.id
-    //     );
-    //     selectAddSexeClient.value = !savedSelectAddSexeClient
-    //       ? "masculin"
-    //       : savedSelectAddSexeClient;
-    //     //input - add telephone
-    //     const inputAddTelephone = modalAddClient.querySelector(
-    //       "#input-add-telephone"
-    //     );
-    //     const savedInputAddTelephone = localStorage.getItem(inputAddTelephone.id);
-    //     inputAddTelephone.value = !savedInputAddTelephone
-    //       ? ""
-    //       : savedInputAddTelephone;
-    //     //input - add adresse
-    //     const inputAddAdresse = modalAddClient.querySelector("#input-add-adresse");
-    //     const savedInputAddAdresse = localStorage.getItem(inputAddAdresse.id);
-    //     inputAddAdresse.value = !savedInputAddAdresse ? "" : savedInputAddAdresse;
-    //     //===== EVENT input add nom_client
-    //     inputAddNomClient.addEventListener("input", (e) => {
-    //       //remove double space && change into uppercase
-    //       e.target.value = e.target.value.replace("  ", " ").toUpperCase();
-    //       //save value into localstorage
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
-    //     //===== EVENT input add prenoms_client
-    //     inputAddPrenomsClient.addEventListener("input", (e) => {
-    //       //remove double space && change into uppercase
-    //       e.target.value = e.target.value.replace("  ", " ");
-    //       //save value into localstorage
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
-    //     //===== EVENT select add sexe_client
-    //     selectAddSexeClient.addEventListener("change", (e) => {
-    //       //save value into localstorage
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
-    //     //===== EVENT input add telephone
-    //     inputAddTelephone.addEventListener("input", (e) => {
-    //       //remove invalid
-    //       e.target.value = e.target.value.replace(/[^\d+\s]/g, "");
-    //       //remove double space
-    //       e.target.value = e.target.value.replace("  ", " ");
-    //       //save value into localstorage
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
-    //     //===== EVENT input add adresse
-    //     inputAddAdresse.addEventListener("input", (e) => {
-    //       //remove double space
-    //       e.target.value = e.target.value.replace("  ", " ");
-    //       //save value into localstorage
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
-    //     //===== EVENT form add client submit
-    //     modalAddClient
-    //       .querySelector("form")
-    //       .addEventListener("submit", async (e) => {
-    //         //suspend submit
-    //         e.preventDefault();
-    //         //check validity
-    //         if (!e.target.checkValidity()) {
-    //           e.target.reportValidity();
-    //         }
-    //         try {
-    //           //FETCH api add client
-    //           const apiAddClient = await apiRequest("/client/create_client", {
-    //             method: "POST",
-    //             body: {
-    //               nom_client: inputAddNomClient.value.trim(),
-    //               prenoms_client: inputAddPrenomsClient.value.trim(),
-    //               sexe_client: selectAddSexeClient.value.trim(),
-    //               telephone: inputAddTelephone.value.trim(),
-    //               adresse: inputAddAdresse.value.trim(),
-    //             },
-    //           });
-    //           //error
-    //           if (apiAddClient.message_type === "error") {
-    //             //alert
-    //             const alertTemplate = document.querySelector(".alert-template");
-    //             const clone = alertTemplate.content.cloneNode(true);
-    //             const alert = clone.querySelector(".alert");
-    //             const progressBar = alert.querySelector(".progress-bar");
-    //             //alert type
-    //             alert.classList.add("alert-danger");
-    //             //icon
-    //             alert
-    //               .querySelector(".fad")
-    //               .classList.add("fa-exclamation-triangle");
-    //             //message
-    //             alert.querySelector(".alert-message").innerHTML =
-    //               apiAddClient.message;
-    //             //progress bar
-    //             progressBar.style.transition = "width 20s linear";
-    //             progressBar.style.width = "100%";
-    //             //add alert
-    //             modalAddClient.querySelector(".modal-body").prepend(alert);
-    //             //progress launch animation
-    //             setTimeout(() => {
-    //               progressBar.style.width = "0%";
-    //             }, 10);
-    //             //auto close alert
-    //             setTimeout(() => {
-    //               alert.querySelector(".btn-close").click();
-    //             }, 20000);
-    //             return;
-    //           }
-    //           //invalid
-    //           else if (apiAddClient.message_type === "invalid") {
-    //             //alert
-    //             const alertTemplate = document.querySelector(".alert-template");
-    //             const clone = alertTemplate.content.cloneNode(true);
-    //             const alert = clone.querySelector(".alert");
-    //             const progressBar = alert.querySelector(".progress-bar");
-    //             //alert type
-    //             alert.classList.add("alert-warning");
-    //             //icon
-    //             alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //             //message
-    //             alert.querySelector(".alert-message").innerHTML =
-    //               apiAddClient.message;
-    //             //progress bar
-    //             progressBar.style.transition = "width 10s linear";
-    //             progressBar.style.width = "100%";
-    //             //add alert
-    //             modalAddClient.querySelector(".modal-body").prepend(alert);
-    //             //progress lanch animation
-    //             setTimeout(() => {
-    //               progressBar.style.width = "0%";
-    //             }, 10);
-    //             //auto close alert
-    //             setTimeout(() => {
-    //               alert.querySelector(".btn-close").click();
-    //             }, 10000);
-    //             return;
-    //           }
-    //           //success add client
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-success");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-check-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             apiAddClient.message;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
-    //           //add alert
-    //           modalAddFacture.querySelector(".modal-body").prepend(alert);
-    //           //progress lanch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
-    //           //auto close modal
-    //           modalAddClient.querySelector("#btn-close-modal-add-client").click();
-    //           //refresh list client
-    //           await listClient(selectAddFactureIdClient);
-    //           $(selectAddFactureIdClient)
-    //             .val(apiAddClient.last_inserted)
-    //             .trigger("change");
-    //           return;
-    //         } catch (e) {
-    //           console.error(e);
-    //         }
-    //       });
+
+    //========================= ADD AE =========================
+    //modal add ae
+    const modalAddAe = container.querySelector("#modal-add-ae");
+    //modal add ae - intialize select 2
+    $(modalAddAe.querySelectorAll(".select2")).select2({
+      theme: "bootstrap-5",
+      placeholder: lang.select.toLowerCase(),
+      dropdownParent: $(modalAddAe),
+    });
+    //input - add ae libelle_ae
+    const inputAddAeLibelleAe = modalAddAe.querySelector(
+      "#input-add-ae-libelle-ae"
+    );
+    const savedInputAddAeLibelleAe = localStorage.getItem(
+      inputAddAeLibelleAe.id
+    );
+    inputAddAeLibelleAe.value = !savedInputAddAeLibelleAe
+      ? ""
+      : savedInputAddAeLibelleAe;
+    //input - add ae montant_ae
+    const inputAddAeMontantAe = modalAddAe.querySelector(
+      "#input-add-ae-montant-ae"
+    );
+    const savedInputAddAeMontantAe = localStorage.getItem(
+      inputAddAeMontantAe.id
+    );
+    inputAddAeMontantAe.value = !savedInputAddAeMontantAe
+      ? "1"
+      : savedInputAddAeMontantAe;
+    inputAddAeMontantAe.dataset.val = inputAddAeMontantAe.value;
+    //input - add ae date_ae
+    const inputAddAeDateAe = modalAddAe.querySelector("#input-add-ae-date-ae");
+    if (inputAddAeDateAe) {
+      const savedInputAddAeDateAe = localStorage.getItem(inputAddAeDateAe.id);
+      inputAddAeDateAe.value = !savedInputAddAeDateAe
+        ? ""
+        : savedInputAddAeDateAe;
+
+      //===== EVENT input add ae date_ae
+      inputAddAeDateAe.addEventListener("input", (e) => {
+        localStorage.setItem(e.target.id, e.target.value);
+      });
+    }
+    //select - add ae id_utilisateur
+    const selectAddAeIdUtilisateur = modalAddAe.querySelector(
+      "#select-add-ae-id-utilisateur"
+    );
+    if (selectAddAeIdUtilisateur) {
+      //list all user
+      await listUser(selectAddAeIdUtilisateur, true);
+      //load value from localstorage
+      const savedSelectAddAeIdUtilisateur = localStorage.getItem(
+        selectAddAeIdUtilisateur.id
+      );
+      $(selectAddAeIdUtilisateur)
+        .val(
+          !savedSelectAddAeIdUtilisateur ? "" : savedSelectAddAeIdUtilisateur
+        )
+        .trigger("change");
+
+      //===== EVENT btn add ae refresh id_utilisateur
+      modalAddAe
+        .querySelector("#btn-add-ae-refresh-id-utilisateur")
+        .addEventListener("click", () => {
+          listUser(selectAddAeIdUtilisateur, true);
+        });
+      //===== EVENT select add ae id_utilisateur
+      $(selectAddAeIdUtilisateur).on("change", function (e) {
+        localStorage.setItem(e.target.id, $(this).val());
+      });
+    }
+    //select - add ae num_caisse
+    const selectAddAeNumCaisse = modalAddAe.querySelector(
+      "#select-add-ae-num-caisse"
+    );
+    if (selectAddAeNumCaisse) {
+      //list num_caisse
+      await listNumCaisse(selectAddAeNumCaisse, true);
+      //load value from localstorage
+      const savedSelectAddAeNumCaisse = localStorage.getItem(
+        selectAddAeNumCaisse.id
+      );
+      $(selectAddAeNumCaisse)
+        .val(!savedSelectAddAeNumCaisse ? "" : savedSelectAddAeNumCaisse)
+        .trigger("change");
+      //===== EVENT btn add ae refresh num_caisse
+      modalAddAe
+        .querySelector("#btn-add-ae-refresh-num-caisse")
+        .addEventListener("click", () => {
+          listNumCaisse(selectAddAeNumCaisse, true);
+        });
+
+      //===== EVENT select add ae num_caisse
+      $(selectAddAeNumCaisse).on("change", function (e) {
+        localStorage.setItem(e.target.id, $(this).val());
+      });
+    }
+
+    //===== EVENT input add ae libelle_ae
+    inputAddAeLibelleAe.addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace("  ", " ");
+
+      localStorage.setItem(e.target.id, e.target.value);
+    });
+    //===== EVENT input add ae montant_ae
+    inputAddAeMontantAe.addEventListener("input", (e) => {
+      if (cookieLangValue === "en") {
+        e.target.value = e.target.value.replace(/[^0-9.]/g, "");
+        if (!/^\d*\.?\d*$/.test(e.target.value)) {
+          e.target.value = e.target.value.slice(0, -1);
+        }
+
+        // add 0 in the start if ,
+        if (e.target.value.startsWith(".")) {
+          e.target.value = "0" + e.target.value;
+        }
+
+        //real value for calcul
+        e.target.dataset.val = e.target.value.replace(/[\u202F\u00A0 ]/g, "");
+      } else {
+        //number and , only
+        e.target.value = e.target.value.replace(/[^0-9,]/g, "");
+        if (!/^\d*\,?\d*$/.test(e.target.value)) {
+          e.target.value = e.target.value.slice(0, -1);
+        }
+        // add 0 in the start if ,
+        if (e.target.value.startsWith(",")) {
+          e.target.value = "0" + e.target.value;
+        }
+
+        //real value for calcul
+        e.target.dataset.val = e.target.value
+          .replace(",", ".")
+          .replace(/[\u202F\u00A0 ]/g, "");
+      }
+    });
+    inputAddAeMontantAe.addEventListener("blur", (e) => {
+      if (e.target.value.endsWith(",")) {
+        e.target.value += "0";
+      }
+      e.target.value = formatterNumber.format(
+        e.target.value.replace(/[\u202F\u00A0 ]/g, "").replace(",", ".")
+      );
+      //save to local storage
+      localStorage.setItem(e.target.id, e.target.value);
+    });
+
+    //===== EVENT btn add ae
+    container.querySelector("#btn-add-ae").addEventListener("click", () => {
+      //show modal add ae
+      new bootstrap.Modal(modalAddAe).show();
+    });
+
+    //===== EVENT form add ae submit
+    modalAddAe.querySelector("form").addEventListener("submit", async (e) => {
+      //suspend submit
+      e.preventDefault();
+      //check validity
+      if (!e.target.checkValidity()) {
+        e.target.reportValidity();
+        return;
+      }
+
+      try {
+        //FETH api add ae
+        const apiAddAe = await apiRequest("/entree/create_autre_entree", {
+          method: "POST",
+          body: {
+            libelle_ae: inputAddAeLibelleAe.value.trim(),
+            montant_ae: inputAddAeMontantAe.value
+              .replace(/[\u202F\u00A0 ]/g, "")
+              .replace(",", "."),
+            date_ae: !inputAddAeDateAe ? "" : inputAddAeDateAe.value.trim(),
+            id_utilisateur: !selectAddAeIdUtilisateur
+              ? ""
+              : $(selectAddAeIdUtilisateur).val().trim(),
+            num_caisse: !selectAddAeNumCaisse
+              ? ""
+              : $(selectAddAeNumCaisse).val().trim(),
+          },
+        });
+
+        //error
+        if (apiAddAe.message_type === "error") {
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-danger");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
+          //message
+          alert.querySelector(".alert-message").innerHTML = apiAddAe.message;
+          //progress bar
+          progressBar.style.transition = "width 20s linear";
+          progressBar.style.width = "100%";
+          //add alert
+          modalAddAe.querySelector(".modal-body").prepend(alert);
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 20000);
+          return;
+        }
+        //invalid
+        else if (apiAddAe.message_type === "invalid") {
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-warning");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML = apiAddAe.message;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+          //add alert
+          modalAddAe.querySelector(".modal-body").prepend(alert);
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+          return;
+        }
+
+        //success
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-success");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-check-circle");
+        //message
+        alert.querySelector(".alert-message").innerHTML = apiAddAe.message;
+        //progress bar
+        progressBar.style.transition = "width 10s linear";
+        progressBar.style.width = "100%";
+        //add alert
+        container.querySelector("#tbody-ae").closest("div").prepend(alert);
+        //progress launch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 10000);
+
+        //close modal
+        modalAddAe.querySelector("#btn-close-modal-add-ae").click();
+
+        //refresh filter ae
+        filterAE(
+          selectStatus.value.trim(),
+          selectArrangeBy.value.trim(),
+          selectOrder.value.trim(),
+          dateFrom.value.trim(),
+          dateTo.value.trim(),
+          selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
+          $(selectIdUtilisateur).val().trim(),
+          inputSearch.value.trim()
+        );
+        return;
+      } catch (e) {
+        console.error(e);
+      }
+    });
     //     //======================= CORRECION FACTURE ===================
     //     //modal correction facture
     //     const modalCorrectionFacture = container.querySelector(

@@ -48,8 +48,8 @@
                                             <div class="col-12">
                                                 <!-- btns  -->
                                                 <div class="d-flex justify-content-start my-2 gap-2">
-                                                    <!-- btn add facture  -->
-                                                    <button class="btn btn-sm btn-outline-primary fw-bold" id="btn-add-facture"><i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
+                                                    <!-- btn add ae -->
+                                                    <button class="btn btn-sm btn-outline-primary fw-bold" id="btn-add-ae"><i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
                                                     <?php if ($role === 'admin'): ?>
                                                         <!-- btn rrstore facture -->
                                                         <button class="btn btn-sm btn-outline-warning" id="btn-restore-facture"><i class="fad fa-arrow-rotate-left me-2">
@@ -214,101 +214,72 @@
     </div>
     <!-- overlay searchbar  -->
     <div class="overlay-searchbar d-none min-vh-100 bg-dark bg-opacity-50 top-0 col-12 position-fixed "></div>
-    <!-- modal add facture -->
-    <div class="modal fade" id="modal-add-facture" tabindex="-1" aria-labelledby="modalAddFacture" aria-hidden="true">
+    <!-- modal add ae -->
+    <div class="modal fade" id="modal-add-ae" tabindex="-1" aria-labelledby="modalAddAe" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content d-flex flex-column justify-content-between">
                 <!-- modal header  -->
                 <div class="modal-header bg-green-0 text-light flex-frow-0">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-plus me-2"></i><?= __('forms.titles.facture_add') ?></h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-plus me-2"></i><?= __('forms.titles.ae_add') ?></h6>
                 </div>
-                <!-- form add facture -->
+                <!-- form add ae -->
                 <form class="flex-grow-1 overflow-auto">
-                    <!-- modal body  -->
+                    <!-- modal body -->
                     <div class="modal-body">
+                        <!-- libelle_ae -->
+                        <div class="mb-2">
+                            <label for="input-add-ae-libelle-ae" class="form-label"><?= __('forms.labels.label') ?><span class="text-danger"> *</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-tag"></i></span>
+                                <input type="text" maxlength="100" id="input-add-ae-libelle-ae" class="form-control form-control-sm" placeholder="<?= __('forms.placeholders.libelle_ae') ?>" required>
+                            </div>
+                        </div>
+                        <!-- montant_ae -->
+                        <div class="mb-2">
+                            <label for="input-add-ae-montant-ae" class="form-label"><?= __('forms.labels.amount') ?><span class="text-danger"> *</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-coins"></i></span>
+                                <input type="text" class="form-control form-control-sm" id="input-add-ae-montant-ae" required>
+                            </div>
+                        </div>
                         <?php if ($role === 'admin'): ?>
-                            <!--input add facture date facture -->
+                            <!--input add ae date ae -->
                             <div class="mb-2">
-                                <label for="input-add-facture-date-facture" class="form-label"><?= __('forms.labels.date') ?> <span class="text-danger">*</span></label>
+                                <label for="input-add-ae-date-ae" class="form-label"><?= __('forms.labels.date') ?> <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
-                                    <input type="datetime-local" max="<?= date('Y-m-d\TH:i') ?>" class="form-control form-control-sm" id="input-add-facture-date-facture" required>
+                                    <input type="datetime-local" max="<?= date('Y-m-d\TH:i') ?>" class="form-control form-control-sm" id="input-add-ae-date-ae" required>
                                 </div>
                             </div>
-                            <!-- select add facture id_utilisateur -->
+                            <!-- select add ae id_utilisateur -->
                             <div class="mb-2">
-                                <label for="select-add-facture-id-utilisateur" class="form-label"><?= __('forms.labels.user') ?> <span class="text-danger">*</span></label>
+                                <label for="select-add-ae-id-utilisateur" class="form-label"><?= __('forms.labels.user') ?> <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text text-success"><i class="fad fa-user"></i></span>
-                                    <select name="" id="select-add-facture-id-utilisateur" class="form-select form-select-sm select2" required>
+                                    <select name="" id="select-add-ae-id-utilisateur" class="form-select form-select-sm select2" required>
                                         <option></option>
                                         <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
                                     </select>
-                                    <button type="button" class="input-group-text" id="btn-add-facture-refresh-id-utilisateur"><i class="fad fa-arrow-rotate-left"></i></button>
+                                    <button type="button" class="input-group-text" id="btn-add-ae-refresh-id-utilisateur"><i class="fad fa-arrow-rotate-left"></i></button>
                                 </div>
                             </div>
-                            <!-- select add facture num_caisse -->
+                            <!-- select add ae num_caisse -->
                             <div class="mb-2">
-                                <label for="select-add-facture-num-caisse" class="form-label"><?= ucfirst(__('forms.labels.cash')) ?> <span class="text-danger">*</span></label>
+                                <label for="select-add-ae-num-caisse" class="form-label"><?= ucfirst(__('forms.labels.cash')) ?> <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text text-success"><i class="fad fa-cash-register"></i></span>
-                                    <select name="" id="select-add-facture-num-caisse" class="form-select form-select-sm select2" required>
+                                    <select name="" id="select-add-ae-num-caisse" class="form-select form-select-sm select2" required>
                                         <option></option>
                                         <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
                                     </select>
-                                    <button type="button" class="input-group-text" id="btn-add-facture-refresh-num-caisse"><i class="fad fa-arrow-rotate-left"></i></button>
+                                    <button type="button" class="input-group-text" id="btn-add-ae-refresh-num-caisse"><i class="fad fa-arrow-rotate-left"></i></button>
                                 </div>
                             </div>
                         <?php endif; ?>
-                        <!-- select add facture id_client  -->
-                        <div class="mb-2">
-                            <label for="select-add-facture-id-client" class="form-label"><?= __('forms.labels.client') ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-user-check"></i></span>
-                                <select name="" id="select-add-facture-id-client" class="form-select form-select-sm select2" required>
-                                    <option></option>
-                                    <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
-                                </select>
-                                <button type="button" class="input-group-text" id="btn-add-facture-refresh-id-client"><i class="fad fa-arrow-rotate-left"></i></button>
-                                <!-- btn add client -->
-                                <span class="mx-2 text-secondary"> <?= __('forms.labels.or') ?> </span><button type="button" class="btn btn-sm btn-light text-primary" data-bs-toggle="modal" data-bs-target="#modal-add-client"><i class="fad fa-user-circle-plus"></i></button>
-                            </div>
-                        </div>
-                        <!-- select add facture id_produit -->
-                        <div class="mb-2">
-                            <label for="select-add-facture-id-produit" class="form-label"><?= __('forms.labels.product') ?></label>
-                            <div class="d-flex gap-2 flex-wrap">
-                                <div class="input-group">
-                                    <span class="input-group-text text-success"><i class="fad fa-bin-bottles"></i></span>
-                                    <select name="" id="select-add-facture-id-produit" class="form-select form-select-sm select2">
-                                        <option></option>
-                                        <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
-                                    </select>
-                                    <button type="button" class="input-group-text" id="btn-add-facture-refresh-id-produit"><i class="fad fa-arrow-rotate-left"></i></button>
-                                </div>
-                                <!-- input produit quantity and btn add produit-->
-                                <div class="input-group w-50">
-                                    <input type="number" min="1" class="form-control form-control-sm" id="input-add-facture-quantite-produit" value="1">
-                                    <button type="button" class="input-group-text text-primary"><i class="fad fa-plus" id="btn-add-facture-add-produit"></i></button>
-                                </div>
-                                <!-- message produit select  -->
-                                <span class="form-text text-danger" id="message-produit-select"></span>
-                            </div>
-                            <!-- card added produit  -->
-                            <div class="card mt-2 w-auto">
-                                <div class="card-body">
-                                    <div class="d-flex flex-wrap gap-2" id="card-produit"></div>
-                                </div>
-                                <div class="card-footer d-flex justify-content-center flex-column align-items-center">
-                                    <span class="text-secondary"><b><?= __('forms.labels.total') ?> : </b><span id="add-facture-total" data-value="0">0 <?= $currency_units ?></span></span>
-                                    <button type="button" class="btn btn-second btn-sm" id="btn-add-facture-empty-produit"><?= __('forms.labels.to_empty') ?></button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <!-- modal footer  -->
                     <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-add-facture"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-add-ae"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
                         <button class="btn btn-primary btn-sm fw-bold" type="submit"><i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
                     </div>
                 </form>
