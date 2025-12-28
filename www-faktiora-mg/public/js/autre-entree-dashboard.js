@@ -754,7 +754,179 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
 
     //===================== CORRECTION AE INFLOW =================
-    //const modal correction ae inflow
+    //modal correction ae inflow
+    const modalCorrectionAeInflow = container.querySelector(
+      "#modal-correction-ae-inflow"
+    );
+
+    //===== EVENT form correction ae inflow submit
+    modalCorrectionAeInflow
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        //suspend submit
+        e.preventDefault();
+        //check validity
+        if (!e.target.checkValidity()) {
+          e.target.reportValidity();
+          return;
+        }
+
+        try {
+          //FETH api correction ae inflow
+          const apiCorectionAeInflow = await apiRequest(
+            "/entree/correction_autre_entree",
+            {
+              method: "POST",
+              body: {
+                num_ae: modalCorrectionAeInflow
+                  .querySelector("#correction-ae-inflow-num-ae")
+                  .textContent.trim(),
+                libelle_ae: modalCorrectionAeInflow
+                  .querySelector("#input-correction-ae-inflow-libelle-ae")
+                  .value.trim(),
+                montant_ae: modalCorrectionAeInflow
+                  .querySelector("#input-correction-ae-inflow-montant-ae")
+                  .value.replace(/[\u202F\u00A0 ]/g, "")
+                  .replace(",", "."),
+                date_ae: !modalCorrectionAeInflow.querySelector(
+                  "#input-correction-ae-inflow-date-ae"
+                )
+                  ? ""
+                  : modalCorrectionAeInflow
+                      .querySelector("#input-correction-ae-inflow-date-ae")
+                      .value.trim(),
+                id_utilisateur: !modalCorrectionAeInflow.querySelector(
+                  "#select-correction-ae-inflow-id-utilisateur"
+                )
+                  ? ""
+                  : $(
+                      modalCorrectionAeInflow.querySelector(
+                        "#select-correction-ae-inflow-id-utilisateur"
+                      )
+                    )
+                      .val()
+                      .trim(),
+              },
+            }
+          );
+
+          //error
+          if (apiCorectionAeInflow.message_type === "error") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-danger");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiCorectionAeInflow.message;
+            //progress bar
+            progressBar.style.transition = "width 20s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalCorrectionAeInflow.querySelector(".modal-body").prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 20000);
+            return;
+          }
+          //invalid
+          else if (apiCorectionAeInflow.message_type === "invalid") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-warning");
+            //icon
+            alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiCorectionAeInflow.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalCorrectionAeInflow.querySelector(".modal-body").prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+            return;
+          }
+
+          //success
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-success");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-check-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            apiCorectionAeInflow.message;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          container.querySelector("#tbody-ae").closest("div").prepend(alert);
+
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+
+          //close modal
+          modalCorrectionAeInflow
+            .querySelector("#btn-close-modal-correction-ae-inflow")
+            .click();
+
+          //refresh filter ae
+          filterAE(
+            selectStatus.value.trim(),
+            selectArrangeBy.value.trim(),
+            selectOrder.value.trim(),
+            dateFrom.value.trim(),
+            dateTo.value.trim(),
+            selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
+            $(selectIdUtilisateur).val().trim(),
+            inputSearch.value.trim()
+          );
+          return;
+        } catch (e) {
+          console.error(e);
+        }
+      });
+
+    //=================== CORRECTION AE OUTFLOW ===============
     //     //========================== DELETE FACTURE =====================
     //     //btn delete facture
     //     const btnDeleteFacture = container.querySelector("#btn-delete-facture");
@@ -1599,6 +1771,129 @@ document.addEventListener("DOMContentLoaded", async () => {
           //show modal update ae
           new bootstrap.Modal(modalUpdateAe).show();
         });
+
+        //=================== CORRECTION AE INFLOW =================
+        //====== EVENT btn correction ae inflow
+        tr.querySelector(".btn-correct-ae-inflow").addEventListener(
+          "click",
+          async () => {
+            //modal correction ae inflow
+            const modalCorrectionAeInflow = container.querySelector(
+              "#modal-correction-ae-inflow"
+            );
+            //num_ae
+            modalCorrectionAeInflow.querySelector(
+              "#correction-ae-inflow-num-ae"
+            ).innerHTML = tr.dataset.numAe;
+            //montant_total
+            const montantTotal =
+              modalCorrectionAeInflow.querySelector(".montant-total");
+            montantTotal.innerHTML = formatterTotal.format(
+              Number(tr.dataset.montantAe) + 1
+            );
+            montantTotal.dataset.value = tr.dataset.montantAe;
+            //modal correction ae inflow - intialize select 2
+            $(modalCorrectionAeInflow.querySelectorAll(".select2")).select2({
+              theme: "bootstrap-5",
+              placeholder: lang.select.toLowerCase(),
+              dropdownParent: $(modalCorrectionAeInflow),
+            });
+            //input - correction ae inflow libelle_ae
+            const inputCorrectionAeInflowLibelleAe =
+              modalCorrectionAeInflow.querySelector(
+                "#input-correction-ae-inflow-libelle-ae"
+              );
+            //input - correction ae inflow montant_ae
+            const inputCorrectionAeInflowMontantAe =
+              modalCorrectionAeInflow.querySelector(
+                "#input-correction-ae-inflow-montant-ae"
+              );
+            inputCorrectionAeInflowMontantAe.value = 1;
+            inputCorrectionAeInflowMontantAe.dataset.val = 1;
+            //input - correction ae inflow date_ae
+            const inputCorrectionAeInflowDateAe =
+              modalCorrectionAeInflow.querySelector(
+                "#input-correction-ae-inflow-date-ae"
+              );
+            //select - correction ae inflow id_utilisateur
+            const selectCorrectionAeInflowIdUtilisateur =
+              modalCorrectionAeInflow.querySelector(
+                "#select-correction-ae-inflow-id-utilisateur"
+              );
+            if (selectCorrectionAeInflowIdUtilisateur) {
+              //list all user
+              await listUser(selectCorrectionAeInflowIdUtilisateur, true);
+
+              //===== EVENT btn correction ae inflow refresh id_utilisateur
+              modalCorrectionAeInflow
+                .querySelector(
+                  "#btn-correction-ae-inflow-refresh-id-utilisateur"
+                )
+                .addEventListener("click", () => {
+                  listUser(selectCorrectionAeInflowIdUtilisateur, true);
+                });
+            }
+
+            //===== EVENT input ucorrection ae inflow libelle_ae
+            inputCorrectionAeInflowLibelleAe.addEventListener("input", (e) => {
+              e.target.value = e.target.value.replace("  ", " ");
+            });
+            //===== EVENT input correction ae inflow montant_ae
+            inputCorrectionAeInflowMontantAe.addEventListener("input", (e) => {
+              if (cookieLangValue === "en") {
+                e.target.value = e.target.value.replace(/[^0-9.]/g, "");
+                if (!/^\d*\.?\d*$/.test(e.target.value)) {
+                  e.target.value = e.target.value.slice(0, -1);
+                }
+
+                // add 0 in the start if ,
+                if (e.target.value.startsWith(".")) {
+                  e.target.value = "0" + e.target.value;
+                }
+
+                //real value for calcul
+                e.target.dataset.val = e.target.value.replace(
+                  /[\u202F\u00A0 ]/g,
+                  ""
+                );
+              } else {
+                //number and , only
+                e.target.value = e.target.value.replace(/[^0-9,]/g, "");
+                if (!/^\d*\,?\d*$/.test(e.target.value)) {
+                  e.target.value = e.target.value.slice(0, -1);
+                }
+                // add 0 in the start if ,
+                if (e.target.value.startsWith(",")) {
+                  e.target.value = "0" + e.target.value;
+                }
+
+                //real value for calcul
+                e.target.dataset.val = e.target.value
+                  .replace(",", ".")
+                  .replace(/[\u202F\u00A0 ]/g, "");
+              }
+
+              //correction ae montant_total
+              montantTotal.innerHTML = formatterTotal.format(
+                Number(montantTotal.dataset.value) +
+                  Number(e.target.dataset.val)
+              );
+            });
+            inputCorrectionAeInflowMontantAe.addEventListener("blur", (e) => {
+              if (e.target.value.endsWith(",")) {
+                e.target.value += "0";
+              }
+              e.target.value = formatterNumber.format(
+                e.target.value.replace(/[\u202F\u00A0 ]/g, "").replace(",", ".")
+              );
+            });
+
+            //show modal correction ae inflow
+            new bootstrap.Modal(modalCorrectionAeInflow).show();
+          }
+        );
+
+        //=================== CORRECTION AE OUTFLOW ===============
       });
 
       // //===== EVENT check all

@@ -230,6 +230,8 @@ return [
         'entree_restoreAllFacture_plur' => ":field</b> factures ont été récupérées <b>avec succès",
         //entree - delete all facture plur
         'entree_deleteAllFacture_plur' => "<b>:field</b> factures ont été supprimées avec succès",
+        //entree - correction facture
+        'entree_correctionFacture' => "Cette facture n'est pas enregistrée sur votre caisse actuelle",
         //produit - create produit
         'produit_createProduit' => "Nouveau produit ajouté avec succès",
         //produit - update produit

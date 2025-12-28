@@ -1925,6 +1925,7 @@ class SortieController extends Controller
                     echo json_encode($response);
                     return;
                 }
+                $facture_num_caisse = $response['model']->getNumCaisse();
 
                 //num_caisse
                 $num_caisse = "";
@@ -1952,6 +1953,17 @@ class SortieController extends Controller
                         return;
                     }
                     $num_caisse = $response['model']->getNumCaisse();
+
+                    //facture_num_caisse != num_caisse
+                    if ($num_caisse != $facture_num_caisse) {
+                        $response = [
+                            'message_type' => 'invalid',
+                            'message' => __('messages.invalids.entree_correctionFacture')
+                        ];
+
+                        echo json_encode($response);
+                        return;
+                    }
                 }
 
                 //does lf valid ?

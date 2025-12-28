@@ -1263,34 +1263,7 @@ class EntreeController extends Controller
                 $num_caisse = "";
                 //role admin
                 if ($is_loged_in->getRole() === 'admin') {
-                    //does num_caisse exist ?
-                    $response = Caisse::findById($json['num_caisse']);
-                    //error
-                    if ($response['message_type'] === 'error') {
-                        echo json_encode($response);
-                        return;
-                    }
-                    //not found
-                    if (!$response['found']) {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                    //caisse - deleted
-                    if ($response['model']->getEtatCaisse() === 'supprimé') {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.invalids.caisse_deleted', ['field' => $json['num_caisse']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                    $num_caisse = $json['num_caisse'];
+                    $num_caisse = $response['model']->getNumCaisse();
                 }
                 //role caissier
                 else {
@@ -1312,6 +1285,7 @@ class EntreeController extends Controller
                         return;
                     }
                     $num_caisse = $response['model']->getNumCaisse();
+
                     //ae num_caisse != user num_caisse
                     if ($ae_num_caisse !== $num_caisse) {
                         $response = [

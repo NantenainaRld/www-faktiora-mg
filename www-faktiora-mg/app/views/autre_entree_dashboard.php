@@ -328,60 +328,66 @@
             </div>
         </div>
     </div>
-    <!-- modal correction facture -->
-    <div class="modal fade" id="modal-correction-facture" tabindex="-1" aria-labelledby="modalCorrectionFacture" aria-hidden="true">
+    <!-- modal correction ae inflow -->
+    <div class="modal fade" id="modal-correction-ae-inflow" tabindex="-1" aria-labelledby="modalCorrectionAeInflow" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content d-flex flex-column justify-content-between">
                 <!-- modal header  -->
                 <div class="modal-header bg-green-0 text-light flex-frow-0">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-minus me-2"></i><?= __('forms.titles.facture_correction') ?></h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-plus me-2"></i><?= __('forms.titles.ae_correction_inflow') ?></h6>
                 </div>
-                <!-- form correction facture facture -->
+                <!-- form correction ae inflow -->
                 <form class="flex-grow-1 overflow-auto">
                     <!-- modal body -->
                     <div class="modal-body">
-                        <!-- correction facture num_facture -->
-                        <div class="text-secondary fw-bold mb-2 text-center" id="correction-facture-num-facture"></div>
+                        <!-- num_ae -->
+                        <div class="mb-2 text-center text-secondary fw-bold" id="correction-ae-inflow-num-ae"></div>
                         <!-- message -->
-                        <div class="mb-2 text-secondary text-center"><?= __('forms.labels.facture_correction_message') ?></div>
+                        <div class="mb-2 text-center text-secondary"><?= __('forms.labels.message_correction_ae_inflow') ?></div>
+                        <!-- libelle_ae -->
+                        <div class="mb-2">
+                            <label for="input-correction-ae-inflow-libelle-ae" class="form-label"><?= __('forms.labels.motif') ?><span class="text-danger"> *</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-tag"></i></span>
+                                <input type="text" maxlength="100" id="input-correction-ae-inflow-libelle-ae" class="form-control form-control-sm" placeholder="<?= __('forms.placeholders.correction_inflow') ?>" required>
+                            </div>
+                        </div>
+                        <!-- montant_ae -->
+                        <div class="mb-2">
+                            <label for="input-correction-ae-inflow-montant-ae" class="form-label"><?= __('forms.labels.montant_inflow') ?><span class="text-danger"> *</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-coins"></i></span>
+                                <input type="text" class="form-control form-control-sm" id="input-correction-ae-inflow-montant-ae" required>
+                            </div>
+                        </div>
                         <?php if ($role === 'admin'): ?>
-                            <!--input correction facture date_ds -->
+                            <!-- date ae -->
                             <div class="mb-2">
-                                <label for="input-correction-facture-date-ds" class="form-label"><?= __('forms.labels.date') ?> <span class="text-danger">*</span></label>
+                                <label for="input-correction-ae-inflow-date-ae" class="form-label"><?= __('forms.labels.date') ?> <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
-                                    <input type="datetime-local" max="<?= date('Y-m-d\TH:i') ?>" class="form-control form-control-sm" id="input-correction-facture-date-ds" required>
+                                    <input type="datetime-local" max="<?= date('Y-m-d\TH:i') ?>" class="form-control form-control-sm" id="input-correction-ae-inflow-date-ae" required>
                                 </div>
                             </div>
-                            <!-- select correction facture id_utilisateur -->
+                            <!-- id_utilisateur -->
                             <div class="mb-2">
-                                <label for="select-correction-facture-id-utilisateur" class="form-label"><?= __('forms.labels.user') ?> <span class="text-danger">*</span></label>
+                                <label for="select-correction-ae-inflow-id-utilisateur" class="form-label"><?= __('forms.labels.user') ?> <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text text-success"><i class="fad fa-user"></i></span>
-                                    <select name="" id="select-correction-facture-id-utilisateur" class="form-select form-select-sm select2" required>
+                                    <select name="" id="select-correction-ae-inflow-id-utilisateur" class="form-select form-select-sm select2" required>
                                         <option></option>
                                         <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
                                     </select>
-                                    <button type="button" class="input-group-text" id="btn-correction-facture-refresh-id-utilisateur"><i class="fad fa-arrow-rotate-left"></i></button>
+                                    <button type="button" class="input-group-text" id="btn-correction-ae-inflow-refresh-id-utilisateur"><i class="fad fa-arrow-rotate-left"></i></button>
                                 </div>
                             </div>
                         <?php endif; ?>
-                        <!-- ligne_facture -->
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="card-title text-secondary"><?= __('forms.labels.ligne_facture') ?></div>
-                                <div class="d-flex flex-column gap-2" id="div-ligne-facture">
-                                </div>
-                            </div>
-                            <div class="card-footer d-flex justify-content-center flex-column align-items-center">
-                                <span class="text-secondary"><b><?= __('forms.labels.total') ?> : </b><span id="correction-facture-total" data-value="0">0 <?= $currency_units ?></span></span>
-                                <button type="button" class="btn btn-second btn-sm" id="btn-correction-facture-refresh-ligne-facture"><?= __('forms.labels.refresh') ?></button>
-                            </div>
-                        </div>
+                        <!-- montant_total -->
+                        <div class="mb-2 mt-3 text-center text-secondary"><?= __('forms.labels.total') ?> : <span class="montant-total"></span></div>
                     </div>
                     <!-- modal footer  -->
                     <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-correction-facture"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-correction-ae-inflow"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
                         <button class="btn btn-primary btn-sm fw-bold" type="submit"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
                     </div>
                 </form>
