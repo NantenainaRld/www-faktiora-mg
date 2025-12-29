@@ -2267,17 +2267,6 @@ class SortieController extends Controller
             $demande_sortie_model = new DemandeSortie();
             $demande_sortie_model->setNumDs($num_ds);
             $connection_sortie = $demande_sortie_model->listConnectionSortie();
-            //not ds
-            if (count($connection_sortie['lds']) <= 0) {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.invalids.sortie_not_ds', ['field' => $num_ds])
-                ];
-
-                echo json_encode($response);
-                return;
-            }
-
 
             //strings
             $strings = [

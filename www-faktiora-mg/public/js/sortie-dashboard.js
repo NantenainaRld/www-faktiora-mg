@@ -1387,16 +1387,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             .click();
 
           //refresh filter sortie
-           filterSortie(
-             selectStatus.value.trim(),
-             selectArrangeBy.value.trim(),
-             selectOrder.value.trim(),
-             dateFrom.value.trim(),
-             dateTo.value.trim(),
-             selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
-             $(selectIdUtilisateur).val().trim(),
-             inputSearch.value.trim()
-           );
+          filterSortie(
+            selectStatus.value.trim(),
+            selectArrangeBy.value.trim(),
+            selectOrder.value.trim(),
+            dateFrom.value.trim(),
+            dateTo.value.trim(),
+            selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
+            $(selectIdUtilisateur).val().trim(),
+            inputSearch.value.trim()
+          );
           return;
         } catch (e) {
           console.error(e);
@@ -2582,6 +2582,105 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             //show modal correction sortie outflow
             new bootstrap.Modal(modalCorrectionSortieOutflow).show();
+          }
+        );
+
+        //======================= PRINT SORTIE =======================
+        //===== EVENT btn print sortie
+        tr.querySelector(".btn-print-ds").addEventListener(
+          "click",
+          async () => {
+            try {
+              //FETCH api print sortie
+              const apiPrintSortie = await apiRequest(
+                `/sortie/print_demande_sortie?num_ds=${tr.dataset.numDs}`
+              );
+
+              //error
+              if (apiPrintSortie.message_type === "error") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-triangle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiPrintSortie.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                container
+                  .querySelector("#tbody-sortie")
+                  .closest("div")
+                  .prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+
+                return;
+              }
+              //invalid
+              else if (apiPrintSortie.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiPrintSortie.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                container
+                  .querySelector("#tbody-sortie")
+                  .closest("div")
+                  .prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+
+                return;
+              }
+
+              //download sortie
+              const a = document.createElement("a");
+              a.href = `data:application/pdf;base64,${apiPrintSortie.pdf}`;
+              a.download = apiPrintSortie.file_name;
+              a.click();
+
+              return;
+            } catch (e) {
+              console.error(e);
+            }
           }
         );
       });
