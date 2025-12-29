@@ -65,7 +65,8 @@ return [
         'sortie_add' => "Ajout d'une sortie",
         'article_add' => "Ajout d'un article",
         'sortie_update' => "Modification de sortie",
-        'sortie_correction_inflow' => "Correction de sortie (entrée)"
+        'sortie_correction_inflow' => "Correction de sortie (entrée)",
+        'sortie_correction_outflow' => "Correction de sortie (sortie)"
     ],
     'labels' => [
         'all' => 'tout',
@@ -265,7 +266,8 @@ return [
         'sortie_num' => "Numéro de sortie",
         'sortie_date' => "Date de sortie",
         'sortie_montant' => "Montant de sortie",
-        'message_correction_sortie_inflow' => "Cette correction affectera le solde de la caisse et créera une nouvelle entrée"
+        'message_correction_sortie_inflow' => "Cette correction affectera le solde de la caisse et créera une nouvelle entrée",
+        'message_correction_sortie_outflow' => "Cette correction affectera le solde de la caisse et créera une nouvelle sortie",
     ],
     'times' => [
         'minute' => "minute",

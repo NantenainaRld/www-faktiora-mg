@@ -1556,7 +1556,7 @@ class SortieController extends Controller
             }
 
             //montant - empty
-            if ($json['montant'] === '') {
+            if ($json['prix_article'] === '') {
                 $response = [
                     'message_type' => 'invalid',
                     'message' => __('messages.empty.montant')
@@ -1566,7 +1566,7 @@ class SortieController extends Controller
                 return;
             }
             //montant - invalid
-            $montant = filter_var($json['montant'], FILTER_VALIDATE_FLOAT);
+            $montant = filter_var($json['prix_article'], FILTER_VALIDATE_FLOAT);
             if (!$montant && $montant < 1) {
                 $response = [
                     'message_type' => 'invalid',
@@ -1634,34 +1634,7 @@ class SortieController extends Controller
                 $num_caisse = "";
                 //role admin
                 if ($is_loged_in->getRole() === 'admin') {
-                    //is num_caisse exist ?
-                    $response = Caisse::findById($json['num_caisse']);
-                    //error
-                    if ($response['message_type'] === 'error') {
-                        echo json_encode($response);
-                        return;
-                    }
-                    //not found
-                    if (!$response['found']) {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                    //caisse - deleted
-                    if ($response['model']->getEtatCaisse() === 'supprimé') {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.invalids.caisse_deleted', ['field' => $json['num_caisse']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                    $num_caisse = $json['num_caisse'];
+                    $num_caisse = $ds_num_caisse;
                 }
                 //role caissier
                 else {
@@ -1751,7 +1724,7 @@ class SortieController extends Controller
                     ->setDateDs($json['date_ds'])
                     ->setIdUtilsateur($id_utilisateur)
                     ->setNumCaisse($num_caisse);
-                $response = $demande_sortie_model->correction($solde_caisse, $seuil_caisse, 'correction/' . $json['num_ds'] . ' - ' . $json['libelle_article'], $json['montant']);
+                $response = $demande_sortie_model->correction($solde_caisse, $seuil_caisse, 'correction/' . $json['num_ds'] . ' - ' . $json['libelle_article'], $json['prix_article']);
 
                 echo json_encode($response);
                 return;

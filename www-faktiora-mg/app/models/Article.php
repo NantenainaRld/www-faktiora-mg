@@ -402,7 +402,7 @@ class Article extends Database
             'message' => 'success',
             'found' => false
         ];
-        $sql = "SELECT libelle_article FROM article WHERE libelle_article = :libelle ";
+        $sql = "SELECT libelle_article FROM article WHERE libelle_article = :libelle AND (libelle_article NOT LIKE '%correction/%' )";
         $paramsQuery = ['libelle' => $libelle_article];
         if ($exclude) {
             $sql .= "AND id_article != :exclude";

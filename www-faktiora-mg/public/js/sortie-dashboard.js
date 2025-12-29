@@ -1219,6 +1219,190 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       });
 
+    //===================== CORRECTION SORTIE OUTFLOW =================
+    //modal correction sortie outflow
+    const modalCorrectionSortieOutflow = container.querySelector(
+      "#modal-correction-sortie-outflow"
+    );
+
+    //===== EVENT form correction sortie outflow submit
+    modalCorrectionSortieOutflow
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        //suspend submit
+        e.preventDefault();
+        //check validity
+        if (!e.target.checkValidity()) {
+          e.target.reportValidity();
+          return;
+        }
+
+        try {
+          //FETH api correction sortie outflow
+          const apiCorrectionSortieOutflow = await apiRequest(
+            "/sortie/correction_demande_sortie",
+            {
+              method: "POST",
+              body: {
+                num_ds: modalCorrectionSortieOutflow
+                  .querySelector("#correction-sortie-outflow-num-ds")
+                  .textContent.trim(),
+                libelle_article: modalCorrectionSortieOutflow
+                  .querySelector(
+                    "#input-correction-sortie-outflow-libelle-article"
+                  )
+                  .value.trim(),
+                prix_article: modalCorrectionSortieOutflow
+                  .querySelector(
+                    "#input-correction-sortie-outflow-prix-article"
+                  )
+                  .value.replace(/[\u202F\u00A0 ]/g, "")
+                  .replace(",", "."),
+                date_ds: !modalCorrectionSortieOutflow.querySelector(
+                  "#input-correction-sortie-outflow-date-ds"
+                )
+                  ? ""
+                  : modalCorrectionSortieOutflow
+                      .querySelector("#input-correction-sortie-outflow-date-ds")
+                      .value.trim(),
+                id_utilisateur: !modalCorrectionSortieOutflow.querySelector(
+                  "#select-correction-sortie-outflow-id-utilisateur"
+                )
+                  ? ""
+                  : $(
+                      modalCorrectionSortieOutflow.querySelector(
+                        "#select-correction-sortie-outflow-id-utilisateur"
+                      )
+                    )
+                      .val()
+                      .trim(),
+              },
+            }
+          );
+
+          //error
+          if (apiCorrectionSortieOutflow.message_type === "error") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-danger");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiCorrectionSortieOutflow.message;
+            //progress bar
+            progressBar.style.transition = "width 20s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalCorrectionSortieOutflow
+              .querySelector(".modal-body")
+              .prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 20000);
+            return;
+          }
+          //invalid
+          else if (apiCorrectionSortieOutflow.message_type === "invalid") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-warning");
+            //icon
+            alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiCorrectionSortieOutflow.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalCorrectionSortieOutflow
+              .querySelector(".modal-body")
+              .prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+            return;
+          }
+
+          //success
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-success");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-check-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            apiCorrectionSortieOutflow.message;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          container
+            .querySelector("#tbody-sortie")
+            .closest("div")
+            .prepend(alert);
+
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+
+          //close modal
+          modalCorrectionSortieOutflow
+            .querySelector("#btn-close-modal-correction-sortie-outflow")
+            .click();
+
+          //refresh filter sortie
+           filterSortie(
+             selectStatus.value.trim(),
+             selectArrangeBy.value.trim(),
+             selectOrder.value.trim(),
+             dateFrom.value.trim(),
+             dateTo.value.trim(),
+             selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
+             $(selectIdUtilisateur).val().trim(),
+             inputSearch.value.trim()
+           );
+          return;
+        } catch (e) {
+          console.error(e);
+        }
+      });
+
     //     //========================== DELETE FACTURE =====================
     //     //btn delete facture
     //     const btnDeleteFacture = container.querySelector("#btn-delete-facture");
@@ -2264,6 +2448,140 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             //show modal correction sortie inflow
             new bootstrap.Modal(modalCorrectionSortieInflow).show();
+          }
+        );
+
+        //=================== CORRECTION SORTIE OUTFLOW =================
+        //====== EVENT btn correction sortie outflow
+        tr.querySelector(".btn-correction-ds-outflow").addEventListener(
+          "click",
+          async () => {
+            //modal correction sortie outflow
+            const modalCorrectionSortieOutflow = container.querySelector(
+              "#modal-correction-sortie-outflow"
+            );
+            //num_ds
+            modalCorrectionSortieOutflow.querySelector(
+              "#correction-sortie-outflow-num-ds"
+            ).innerHTML = tr.dataset.numDs;
+            //montant_total
+            const montantTotal =
+              modalCorrectionSortieOutflow.querySelector(".montant-total");
+            montantTotal.innerHTML = formatterTotal.format(
+              Number(tr.dataset.montantDs) + 1
+            );
+            montantTotal.dataset.value = tr.dataset.montantDs;
+            //modal correction sortie outflow - intialize select 2
+            $(
+              modalCorrectionSortieOutflow.querySelectorAll(".select2")
+            ).select2({
+              theme: "bootstrap-5",
+              placeholder: lang.select.toLowerCase(),
+              dropdownParent: $(modalCorrectionSortieOutflow),
+            });
+            //input - correction sortie outflow libelle_article
+            const inputCorrectionSortieOutflowLibelleArticle =
+              modalCorrectionSortieOutflow.querySelector(
+                "#input-correction-sortie-outflow-libelle-article"
+              );
+            //input - correction sortie outflow prix_article
+            const inputCorrectionSortieOutflowPrixArticle =
+              modalCorrectionSortieOutflow.querySelector(
+                "#input-correction-sortie-outflow-prix-article"
+              );
+            inputCorrectionSortieOutflowPrixArticle.value = 1;
+            inputCorrectionSortieOutflowPrixArticle.dataset.val = 1;
+            //input - correction sortie outflow date_ds
+            const inputCorrectionSortieOutflowDateDs =
+              modalCorrectionSortieOutflow.querySelector(
+                "#input-correction-sortie-outflow-date-ds"
+              );
+            //select - correction sortie outflow id_utilisateur
+            const selectCorrectionSortieOutflowIdUtilisateur =
+              modalCorrectionSortieOutflow.querySelector(
+                "#select-correction-sortie-outflow-id-utilisateur"
+              );
+            if (selectCorrectionSortieOutflowIdUtilisateur) {
+              //list all user
+              await listUser(selectCorrectionSortieOutflowIdUtilisateur, true);
+
+              //===== EVENT btn correction sortie outflow refresh id_utilisateur
+              modalCorrectionSortieOutflow
+                .querySelector(
+                  "#btn-correction-sortie-outflow-refresh-id-utilisateur"
+                )
+                .addEventListener("click", () => {
+                  listUser(selectCorrectionSortieOutflowIdUtilisateur, true);
+                });
+            }
+
+            //===== EVENT input correction sortie outflow libelle_article
+            inputCorrectionSortieOutflowLibelleArticle.addEventListener(
+              "input",
+              (e) => {
+                e.target.value = e.target.value.replace("  ", " ");
+              }
+            );
+            //===== EVENT input correction sortie outflow prix_article
+            inputCorrectionSortieOutflowPrixArticle.addEventListener(
+              "input",
+              (e) => {
+                if (cookieLangValue === "en") {
+                  e.target.value = e.target.value.replace(/[^0-9.]/g, "");
+                  if (!/^\d*\.?\d*$/.test(e.target.value)) {
+                    e.target.value = e.target.value.slice(0, -1);
+                  }
+
+                  // add 0 in the start if ,
+                  if (e.target.value.startsWith(".")) {
+                    e.target.value = "0" + e.target.value;
+                  }
+
+                  //real value for calcul
+                  e.target.dataset.val = e.target.value.replace(
+                    /[\u202F\u00A0 ]/g,
+                    ""
+                  );
+                } else {
+                  //number and , only
+                  e.target.value = e.target.value.replace(/[^0-9,]/g, "");
+                  if (!/^\d*\,?\d*$/.test(e.target.value)) {
+                    e.target.value = e.target.value.slice(0, -1);
+                  }
+                  // add 0 in the start if ,
+                  if (e.target.value.startsWith(",")) {
+                    e.target.value = "0" + e.target.value;
+                  }
+
+                  //real value for calcul
+                  e.target.dataset.val = e.target.value
+                    .replace(",", ".")
+                    .replace(/[\u202F\u00A0 ]/g, "");
+                }
+
+                //correction ae montant_total
+                montantTotal.innerHTML = formatterTotal.format(
+                  Number(montantTotal.dataset.value) +
+                    Number(e.target.dataset.val)
+                );
+              }
+            );
+            inputCorrectionSortieOutflowPrixArticle.addEventListener(
+              "blur",
+              (e) => {
+                if (e.target.value.endsWith(",")) {
+                  e.target.value += "0";
+                }
+                e.target.value = formatterNumber.format(
+                  e.target.value
+                    .replace(/[\u202F\u00A0 ]/g, "")
+                    .replace(",", ".")
+                );
+              }
+            );
+
+            //show modal correction sortie outflow
+            new bootstrap.Modal(modalCorrectionSortieOutflow).show();
           }
         );
       });
