@@ -16,7 +16,7 @@ class EntreeController extends Controller
     public function index()
     {
         //redirect to facture dashboard
-        header('Location: ' . SITE_URL . '/entre/page_facture');
+        header('Location: ' . SITE_URL . '/entree/page_facture');
         return;
     }
 
@@ -3165,6 +3165,82 @@ class EntreeController extends Controller
                     'message_type' => 'error',
                     'message' => __(
                         'errors.catch.entree_restoreAllFacture',
+                        ['field' => $e->getMessage() .
+                            ' - Line : ' . $e->getLine() .
+                            ' - File : ' . $e->getFile()]
+                    )
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            echo json_encode($response);
+            return;
+        }
+        //redirect to entree index
+        else {
+            header('Location: ' . SITE_URL . '/entree');
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
+
+    //action - restore all ae
+    public function restoreAllAutreEntree()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged?
+        $is_loged_in = Auth::isLogedIn();
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header("Location: " . SITE_URL . '/auth');
+            return;
+        }
+
+        //role - not admin
+        if ($is_loged_in->getRole() !== 'admin') {
+            //redirect to entree index
+            header("Location: " . SITE_URL . '/entree');
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            $json = json_decode(file_get_contents('php://input'), true);
+
+            $nums_ae = array_values(array_map(fn($x) => strtoupper(trim($x)), $json['nums_ae']));
+
+            //nums_ae - empty
+            if (count($nums_ae) <= 0) {
+                $response = [
+                    'message_type' => 'invalid',
+                    'message' => __('messages.invalids.entree_nums_ae_empty')
+                ];
+
+                echo json_encode($response);
+                return;
+            }
+
+            try {
+                //restore all ar
+                $response = AutreEntree::restoreAllAutreEntree($nums_ae);
+
+                echo json_encode($response);
+                return;
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => __(
+                        'errors.catch.entree_restoreAllAutreEntree',
                         ['field' => $e->getMessage() .
                             ' - Line : ' . $e->getLine() .
                             ' - File : ' . $e->getFile()]

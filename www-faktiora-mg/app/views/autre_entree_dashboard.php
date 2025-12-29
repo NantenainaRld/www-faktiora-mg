@@ -51,8 +51,8 @@
                                                     <!-- btn add ae -->
                                                     <button class="btn btn-sm btn-outline-primary fw-bold" id="btn-add-ae"><i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
                                                     <?php if ($role === 'admin'): ?>
-                                                        <!-- btn restore facture -->
-                                                        <button class="btn btn-sm btn-outline-warning" id="btn-restore-facture"><i class="fad fa-arrow-rotate-left me-2">
+                                                        <!-- btn restore ae -->
+                                                        <button class="btn btn-sm btn-outline-warning" id="btn-restore-ae"><i class="fad fa-arrow-rotate-left me-2">
                                                             </i><?= __('forms.labels.restore') ?>
                                                         </button>
                                                         <!-- btn delete ae -->
@@ -480,22 +480,22 @@
             </div>
         </div>
     </div>
-    <!-- modal restore facture -->
-    <div class="modal fade" id="modal-restore-facture" tabindex="-1" aria-labelledby="modalRestoreCaisse" aria-hidden="true">
+    <!-- modal restore ae -->
+    <div class="modal fade" id="modal-restore-ae" tabindex="-1" aria-labelledby="modalRestoreAe" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- modal header  -->
                 <div class="modal-header bg-warning text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-arrow-rotate-left me-2"></i><?= __('forms.titles.facture_restore') ?></h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-arrow-rotate-left me-2"></i><?= __('forms.titles.ae_restore') ?></h6>
                 </div>
                 <!-- modal body  -->
                 <div class="modal-body">
-                    <div class="message">Voulez-vous vraiment récupérer ces ... factures ?</div>
+                    <div class="message">Voulez-vous vraiment récupérer ces ... autres entrées ?</div>
                 </div>
                 <!-- modal footer  -->
                 <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-restore-facture"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
-                    <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-modal-restore-facture"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_restore') ?></button>
+                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-restore-ae"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
+                    <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-modal-restore-ae"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_restore') ?></button>
                 </div>
             </div>
         </div>

@@ -57,7 +57,8 @@ return [
         'ae_update' => "Modification d'autre entrée",
         'ae_correction_inflow' => "Correction d'autre entrée (entrée)",
         'ae_correction_outflow' => "Correction d'autre entrée (sortie)",
-        'ae_delete' => "Suppréssion des autres entrées"
+        'ae_delete' => "Suppréssion des autres entrées",
+        'ae_restore' => "Récupération des autres entrées"
     ],
     'labels' => [
         'all' => 'tout',
@@ -252,6 +253,9 @@ return [
         'question_delete_ae_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> autres entrées ?",
         'question_delete_permanent_ae_1' => "Voulez-vous vraiment supprimer l'autre entrée numéro <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>.",
         'question_delete_permanent_ae_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> autres entrées ?. <span class='text-danger'>Cette action est irréversible</span>.",
+        'question_restore_ae_1' => "Voulez-vous vraiment récupérer l'autre entrée numéro <b>:field</b> ?",
+        'question_restore_ae_plur' => "Voulez-vous vraiment récupérer ces <b>:field</b> autres entrées ?",
+
     ],
     'times' => [
         'minute' => "minute",

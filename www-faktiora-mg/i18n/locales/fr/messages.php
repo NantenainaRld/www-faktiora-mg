@@ -64,6 +64,8 @@ return [
         'entree_quantite_produit' => "La quantite est invalide pour le produit avec l'ID <b>:id_produit</b> : :quantite_produit",
         //entree - nums_facture empty
         'entree_nums_facture_empty' => "Veuiller séléctionner au moins une facture",
+        //entree - correction facture
+        'entree_correctionFacture' => "Cette facture n'est pas enregistrée sur votre caisse actuelle",
         //entree - produits empty
         'entree_produits_empty' => "Veuiller ajouter au moins un produit",
         //entree - facture id_lf
@@ -230,8 +232,12 @@ return [
         'entree_restoreAllFacture_plur' => ":field</b> factures ont été récupérées <b>avec succès",
         //entree - delete all facture plur
         'entree_deleteAllFacture_plur' => "<b>:field</b> factures ont été supprimées avec succès",
-        //entree - correction facture
-        'entree_correctionFacture' => "Cette facture n'est pas enregistrée sur votre caisse actuelle",
+        //entree - restore all entree 0
+        'entree_restoreAllAutreEntree_0' => "Aucune autre entrée n'est récupérée",
+        //entree - restore all entree 1
+        'entree_restoreAllAutreEntree_1' => "Une autre entrée a été récupérée avec succès",
+        //entree - restore all entree plur
+        'entree_restoreAllAutreEntree_plur' => "<b>:field</b> on été récupérées avec succès",
         //produit - create produit
         'produit_createProduit' => "Nouveau produit ajouté avec succès",
         //produit - update produit

@@ -1374,7 +1374,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 (selected) => selected.closest("tr").dataset.numAe
               );
 
-              //FETCH api delete ae
+              //FETCH api delete permanent ae
               const apiDeleteAe = await apiRequest(
                 "/entree/delete_permanent_all_autre_entree",
                 {
@@ -1505,204 +1505,214 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
       });
     }
-    //     //========================== RESTORE FACTURE =========================
-    //     //btn restore facture
-    //     const btnRestoreFacture = container.querySelector("#btn-restore-facture");
-    //     //===== EVENT btn restore facture
-    //     if (btnRestoreFacture) {
-    //       btnRestoreFacture.addEventListener("click", () => {
-    //         //modal restore facture
-    //         const modalRestoreFacture = container.querySelector(
-    //           "#modal-restore-facture"
-    //         );
-    //         //selected facture
-    //         const selectedFacture = container.querySelectorAll(
-    //           "#tbody-facture input[type='checkbox']:checked"
-    //         );
-    //         //no selection
-    //         if (selectedFacture.length <= 0) {
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-warning");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             lang.entree_nums_facture_empty;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
-    //           //add alert
-    //           container
-    //             .querySelector("#tbody-facture")
-    //             .closest("div")
-    //             .prepend(alert);
-    //           //progress launch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
-    //           return;
-    //         }
-    //         //modal message 1
-    //         if (selectedFacture.length === 1) {
-    //           modalRestoreFacture.querySelector(".message").innerHTML =
-    //             lang.question_restore_facture_1.replace(
-    //               ":field",
-    //               selectedFacture[0].closest("tr").dataset.numFacture
-    //             );
-    //         }
-    //         //modal message plur
-    //         else {
-    //           modalRestoreFacture.querySelector(".message").innerHTML =
-    //             lang.question_restore_facture_plur.replace(
-    //               ":field",
-    //               selectedFacture.length
-    //             );
-    //         }
-    //         //show modal restore facture
-    //         new bootstrap.Modal(modalRestoreFacture).show();
-    //         //==== EVENT btn confirm modal restore facture
-    //         modalRestoreFacture
-    //           .querySelector("#btn-confirm-modal-restore-facture")
-    //           .addEventListener("click", async () => {
-    //             try {
-    //               //nums_facture
-    //               let nums_facture = [...selectedFacture];
-    //               nums_facture = nums_facture.map(
-    //                 (selected) => selected.closest("tr").dataset.numFacture
-    //               );
-    //               //FETCH api restore facture
-    //               const apiRestoreFacture = await apiRequest(
-    //                 "/entree/restore_all_facture",
-    //                 {
-    //                   method: "PUT",
-    //                   body: {
-    //                     nums_facture: nums_facture,
-    //                   },
-    //                 }
-    //               );
-    //               //error
-    //               if (apiRestoreFacture.message_type === "error") {
-    //                 //alert
-    //                 const alertTemplate = document.querySelector(".alert-template");
-    //                 const clone = alertTemplate.content.cloneNode(true);
-    //                 const alert = clone.querySelector(".alert");
-    //                 const progressBar = alert.querySelector(".progress-bar");
-    //                 //alert type
-    //                 alert.classList.add("alert-danger");
-    //                 //icon
-    //                 alert
-    //                   .querySelector(".fad")
-    //                   .classList.add("fa-exclamation-circle");
-    //                 //message
-    //                 alert.querySelector(".alert-message").innerHTML =
-    //                   apiRestoreFacture.message;
-    //                 //progress bar
-    //                 progressBar.style.transition = "width 20s linear";
-    //                 progressBar.style.width = "100%";
-    //                 //add alert
-    //                 modalRestoreFacture.querySelector(".modal-body").prepend(alert);
-    //                 //progress launch animation
-    //                 setTimeout(() => {
-    //                   progressBar.style.width = "0%";
-    //                 }, 10);
-    //                 //auto close alert
-    //                 setTimeout(() => {
-    //                   alert.querySelector(".btn-close").click();
-    //                 }, 20000);
-    //                 return;
-    //               }
-    //               //invalid
-    //               else if (apiRestoreFacture.message_type === "invalid") {
-    //                 //alert
-    //                 const alertTemplate = document.querySelector(".alert-template");
-    //                 const clone = alertTemplate.content.cloneNode(true);
-    //                 const alert = clone.querySelector(".alert");
-    //                 const progressBar = alert.querySelector(".progress-bar");
-    //                 //alert type
-    //                 alert.classList.add("alert-warning");
-    //                 //icon
-    //                 alert
-    //                   .querySelector(".fad")
-    //                   .classList.add("fa-exclamation-circle");
-    //                 //message
-    //                 alert.querySelector(".alert-message").innerHTML =
-    //                   apiRestoreFacture.message;
-    //                 //progress bar
-    //                 progressBar.style.transition = "width 10s linear";
-    //                 progressBar.style.width = "100%";
-    //                 s;
-    //                 //add alert
-    //                 modalRestoreFacture.querySelector(".modal-body").prepend(alert);
-    //                 //progress launch animation
-    //                 setTimeout(() => {
-    //                   progressBar.style.width = "0%";
-    //                 }, 10);
-    //                 //auto close alert
-    //                 setTimeout(() => {
-    //                   alert.querySelector(".btn-close").click();
-    //                 }, 10000);
-    //                 return;
-    //               }
-    //               //success
-    //               //alert
-    //               const alertTemplate = document.querySelector(".alert-template");
-    //               const clone = alertTemplate.content.cloneNode(true);
-    //               const alert = clone.querySelector(".alert");
-    //               const progressBar = alert.querySelector(".progress-bar");
-    //               //alert type
-    //               alert.classList.add("alert-success");
-    //               //icon
-    //               alert.querySelector(".fad").classList.add("fa-check-circle");
-    //               //message
-    //               alert.querySelector(".alert-message").innerHTML =
-    //                 apiRestoreFacture.message;
-    //               //progress bar
-    //               progressBar.style.transition = "width 10s linear";
-    //               progressBar.style.width = "100%";
-    //               //add alert
-    //               container
-    //                 .querySelector("#tbody-facture")
-    //                 .closest("div")
-    //                 .prepend(alert);
-    //               //progress launch animation
-    //               setTimeout(() => {
-    //                 progressBar.style.width = "0%";
-    //               }, 10);
-    //               //auto close alert
-    //               setTimeout(() => {
-    //                 alert.querySelector(".btn-close").click();
-    //               }, 10000);
-    //               //auto hide modal
-    //               modalRestoreFacture
-    //                 .querySelector("#btn-close-modal-restore-facture")
-    //                 .click();
-    //               //refresh filter facture
-    //               filterFacture(
-    //                 selectStatus.value.trim(),
-    //                 selectArrangeBy.value.trim(),
-    //                 selectOrder.value.trim(),
-    //                 dateFrom.value.trim(),
-    //                 dateTo.value.trim(),
-    //                 selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
-    //                 $(selectIdUtilisateur).val().trim(),
-    //                 inputSearch.value.trim()
-    //               );
-    //               return;
-    //             } catch (e) {
-    //               console.error(e);
-    //             }
-    //           });
-    //       });
-    //     }
+
+    //========================== RESTORE AE =====================
+    //btn restore ae
+    const btnRestoreAe = container.querySelector("#btn-restore-ae");
+    //===== EVENT btn restore ae
+    if (btnRestoreAe) {
+      btnRestoreAe.addEventListener("click", () => {
+        //modal restore ae
+        const modalRestoreAe = container.querySelector("#modal-restore-ae");
+        //selected ae
+        const selectedAe = container.querySelectorAll(
+          "#tbody-ae input[type='checkbox']:checked"
+        );
+
+        //no selection
+        if (selectedAe.length <= 0) {
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-warning");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            lang.entree_nums_ae_empty;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          container.querySelector("#tbody-ae").closest("div").prepend(alert);
+
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+          return;
+        }
+
+        //modal message 1
+        if (selectedAe.length === 1) {
+          modalRestoreAe.querySelector(".message").innerHTML =
+            lang.question_restore_ae_1.replace(
+              ":field",
+              selectedAe[0].closest("tr").dataset.numAe
+            );
+        }
+        //modal message plur
+        else {
+          modalRestoreAe.querySelector(".message").innerHTML =
+            lang.question_restore_ae_plur.replace(":field", selectedAe.length);
+        }
+
+        //show modal delete ae
+        new bootstrap.Modal(modalRestoreAe).show();
+
+        //==== EVENT btn confirm modal restore ae
+        modalRestoreAe
+          .querySelector("#btn-confirm-modal-restore-ae")
+          .addEventListener("click", async () => {
+            try {
+              //nums_ae
+              let nums_ae = [...selectedAe];
+              nums_ae = nums_ae.map(
+                (selected) => selected.closest("tr").dataset.numAe
+              );
+
+              //FETCH api restore ae
+              const apiRestoreAe = await apiRequest(
+                "/entree/restore_all_autre_entree",
+                {
+                  method: "PUT",
+                  body: {
+                    nums_ae: nums_ae,
+                  },
+                }
+              );
+
+              //error
+              if (apiRestoreAe.message_type === "error") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiRestoreAe.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalRestoreAe.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+                return;
+              }
+              //invalid
+              else if (apiRestoreAe.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiRestoreAe.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalRestoreAe.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                return;
+              }
+
+              //success
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-success");
+              //icon
+              alert.querySelector(".fad").classList.add("fa-check-circle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                apiRestoreAe.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              container
+                .querySelector("#tbody-ae")
+                .closest("div")
+                .prepend(alert);
+
+              //progress launch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
+
+              //auto hide modal
+              modalRestoreAe
+                .querySelector("#btn-close-modal-restore-ae")
+                .click();
+
+              //refresh filter ae
+              filterAE(
+                selectStatus.value.trim(),
+                selectArrangeBy.value.trim(),
+                selectOrder.value.trim(),
+                dateFrom.value.trim(),
+                dateTo.value.trim(),
+                selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
+                $(selectIdUtilisateur).val().trim(),
+                inputSearch.value.trim()
+              );
+
+              return;
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      });
+    }
   }, 1050);
 
   //====================== FUNCTIONS ========================
@@ -2346,254 +2356,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error(e);
     }
   }
-  //   //function - list client
-  //   async function listClient(select) {
-  //     try {
-  //       //FETCH api list all client
-  //       const apiListAllClient = await apiRequest("/client/list_all_client");
-
-  //       //error
-  //       if (apiListAllClient.message_type === "error") {
-  //         //alert
-  //         const alertTemplate = document.querySelector(".alert-template");
-  //         const clone = alertTemplate.content.cloneNode(true);
-  //         const alert = clone.querySelector(".alert");
-  //         const progressBar = alert.querySelector(".progress-bar");
-  //         //alert type
-  //         alert.classList.add("alert-danger");
-  //         //icon
-  //         alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
-  //         //message
-  //         alert.querySelector(".alert-message").innerHTML =
-  //           apiListAllClient.message;
-  //         //progress bar
-  //         progressBar.style.transition = "width 20s linear";
-  //         progressBar.style.width = "100%";
-
-  //         //add alert
-  //         select.closest("div").prepend(alert);
-
-  //         //progress launch animation
-  //         setTimeout(() => {
-  //           progressBar.style.width = "0%";
-  //         }, 10);
-  //         //auto close alert
-  //         setTimeout(() => {
-  //           alert.querySelector(".btn-close").click();
-  //         }, 20000);
-  //         return;
-  //       }
-
-  //       //success api list client
-  //       select.innerHTML = `<option></option>`;
-
-  //       apiListAllClient.data.forEach((line) => {
-  //         const option = document.createElement("option");
-  //         option.value = line.id_client;
-  //         option.innerText = `${line.id_client} - ${line.fullname}`;
-
-  //         select.append(option);
-  //       });
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   }
-  //   //function - list produit
-  //   async function listProduit(select) {
-  //     try {
-  //       //FETCH api list all produit
-  //       const apiListAllProduit = await apiRequest("/produit/list_all_produit");
-
-  //       //error
-  //       if (apiListAllProduit.message_type === "error") {
-  //         //alert
-  //         const alertTemplate = document.querySelector(".alert-template");
-  //         const clone = alertTemplate.content.cloneNode(true);
-  //         const alert = clone.querySelector(".alert");
-  //         const progressBar = alert.querySelector(".progress-bar");
-  //         //alert type
-  //         alert.classList.add("alert-danger");
-  //         //icon
-  //         alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
-  //         //message
-  //         alert.querySelector(".alert-message").innerHTML =
-  //           apiListAllProduit.message;
-  //         //progress bar
-  //         progressBar.style.transition = "width 20s linear";
-  //         progressBar.style.width = "100%";
-
-  //         //add alert
-  //         select.closest("div").prepend(alert);
-
-  //         //progress launch animation
-  //         setTimeout(() => {
-  //           progressBar.style.width = "0%";
-  //         }, 10);
-  //         //auto close alert
-  //         setTimeout(() => {
-  //           alert.querySelector(".btn-close").click();
-  //         }, 20000);
-  //         return;
-  //       }
-
-  //       //success api list produit
-  //       select.innerHTML = `<option></option>`;
-
-  //       apiListAllProduit.data.forEach((line) => {
-  //         const option = document.createElement("option");
-  //         option.value = line.id_produit;
-  //         option.innerText = `${line.id_produit} - ${
-  //           line.libelle_produit
-  //         } (${formatterTotal.format(Number(line.prix_produit))})`;
-  //         option.dataset.prix = line.prix_produit;
-
-  //         select.append(option);
-  //       });
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   }
-  //   //function - list ligne_facture
-  //   async function listLigneFacture(numFacture, div) {
-  //     try {
-  //       //FETCH api list ligne_facture
-  //       const apiListLigneFacture = await apiRequest(
-  //         `/entree/list_ligne_facture?num_facture=${numFacture}`
-  //       );
-
-  //       //error
-  //       if (apiListLigneFacture.message_type === "error") {
-  //         //alert
-  //         const alertTemplate = document.querySelector(".alert-template");
-  //         const clone = alertTemplate.content.cloneNode(true);
-  //         const alert = clone.querySelector(".alert");
-  //         const progressBar = alert.querySelector(".progress-bar");
-  //         //alert type
-  //         alert.classList.add("alert-danger");
-  //         //icon
-  //         alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
-  //         //message
-  //         alert.querySelector(".alert-message").innerHTML =
-  //           apiListLigneFacture.message;
-  //         //progress bar
-  //         progressBar.style.transition = "width 20s linear";
-  //         progressBar.style.width = "100%";
-
-  //         //add alert
-  //         div.prepend(alert);
-
-  //         //progress launch animation
-  //         setTimeout(() => {
-  //           progressBar.style.width = "0%";
-  //         }, 10);
-  //         //auto close alert
-  //         setTimeout(() => {
-  //           alert.querySelector(".btn-close").click();
-  //         }, 20000);
-  //         return;
-  //       }
-  //       //invalid
-  //       else if (apiListLigneFacture.message_type === "invalid") {
-  //         //alert
-  //         const alertTemplate = document.querySelector(".alert-template");
-  //         const clone = alertTemplate.content.cloneNode(true);
-  //         const alert = clone.querySelector(".alert");
-  //         const progressBar = alert.querySelector(".progress-bar");
-  //         //alert type
-  //         alert.classList.add("alert-warning");
-  //         //icon
-  //         alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-  //         //message
-  //         alert.querySelector(".alert-message").innerHTML =
-  //           apiListLigneFacture.message;
-  //         //progress bar
-  //         progressBar.style.transition = "width 10s linear";
-  //         progressBar.style.width = "100%";
-
-  //         //add alert
-  //         div.prepend(alert);
-
-  //         //progress launch animation
-  //         setTimeout(() => {
-  //           progressBar.style.width = "0%";
-  //         }, 10);
-  //         //auto close alert
-  //         setTimeout(() => {
-  //           alert.querySelector(".btn-close").click();
-  //         }, 10000);
-  //         return;
-  //       }
-
-  //       //success api list ligne_facture
-  //       div.innerHTML = "";
-  //       apiListLigneFacture.data.forEach((line) => {
-  //         const divLF = document.createElement("div");
-  //         divLF.classList.add(
-  //           "p-2",
-  //           "d-flex",
-  //           "gap-2",
-  //           "bg-second",
-  //           "rounded-1",
-  //           "text-secondary",
-  //           "div-lf",
-  //           "flex-wrap"
-  //         );
-  //         divLF.dataset.prixTotal = line.prix_total;
-  //         divLF.dataset.idLf = line.id_lf;
-  //         divLF.dataset.prix = line.prix;
-  //         divLF.dataset.idProduit = line.id_produit;
-  //         divLF.innerHTML = `${line.id_lf} - ${
-  //           line.libelle_produit
-  //         } <span class='total-prix me-2'>(${formatterTotal.format(
-  //           Number(divLF.dataset.prixTotal)
-  //         )})</span><input class='form-control form-control-sm' type='number' min='0' max='${
-  //           line.quantite_produit
-  //         }' value='${line.quantite_produit}'>`;
-
-  //         //append div lf
-  //         div.append(divLF);
-  //       });
-
-  //       //correction facture total
-  //       const correctionFactureTotal = container.querySelector(
-  //         "#correction-facture-total"
-  //       );
-  //       let prixTotal = 0;
-  //       //foreach divLF
-  //       div.querySelectorAll(".div-lf").forEach((divLF) => {
-  //         //prix total
-  //         prixTotal += Number(divLF.dataset.prixTotal);
-
-  //         //===== EVENT input quantite_produit
-  //         divLF
-  //           .querySelector("input[type='number']")
-  //           .addEventListener("input", (e) => {
-  //             e.target.value = e.target.value.replace(/[^0-9]/g, "");
-
-  //             //div prix total
-  //             divLF.dataset.prixTotal =
-  //               Number(divLF.dataset.prix) * Number(e.target.value);
-  //             divLF.querySelector(
-  //               ".total-prix"
-  //             ).innerHTML = `(${formatterTotal.format(
-  //               Number(divLF.dataset.prixTotal)
-  //             )})`;
-
-  //             //prix total
-  //             let prixTotal0 = 0;
-  //             div.querySelectorAll(".div-lf").forEach((divLF0) => {
-  //               //prix total 0
-  //               prixTotal0 += Number(divLF0.dataset.prixTotal);
-  //             });
-  //             correctionFactureTotal.innerHTML =
-  //               formatterTotal.format(prixTotal0);
-  //           });
-  //       });
-  //       correctionFactureTotal.innerHTML = formatterTotal.format(prixTotal);
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   }
   //   //function - list connection facture
   //   async function listConnectionFacture(numFacture) {
   //     //tbody lf

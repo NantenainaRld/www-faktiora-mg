@@ -82,6 +82,7 @@
         question_delete_ae_plur: "<?= __('forms.labels.question_delete_ae_plur') ?>",
         question_delete_permanent_ae_1: "<?= __('forms.labels.question_delete_permanent_ae_1') ?>",
         question_delete_permanent_ae_plur: "<?= __('forms.labels.question_delete_permanent_ae_plur') ?>",
-
+        question_restore_ae_1: "<?= __('forms.labels.question_restore_ae_1') ?>",
+        question_restore_ae_plur: "<?= __('forms.labels.question_restore_ae_plur') ?>",
     }
 </script>

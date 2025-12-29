@@ -128,6 +128,8 @@ return [
         'entree_lf_findById' => DEBUG ? "Erreur dans entree_lf/findById : :field" : "Une erreur est survenue lors de la vérification d'ID de ligne facture",
         //entree - restore all facture
         'entree_restoreAllFacture' => DEBUG ? "Erreur dans entree/restoreAllFacture : :field" : "Une erreur est survenue lors de la récupération des factures",
+        //entree - restore all ae
+        'entree_restoreAllAutreEntree' => DEBUG ? "Erreur dans entree/restoreAllAutreEntree : :field" : "Une erreur est survenue lors de la récupération des autres entrées",
         //sortie - connection sortie
         'sortie_connectionSortie' => DEBUG ? "Erreur dans sortie/connectionSortie : :field" : "Une erreur est survenue lors de listage des connections pour les sorties",
         //sortie - create sortie 
