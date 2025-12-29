@@ -58,7 +58,8 @@ return [
         'ae_correction_inflow' => "Correction d'autre entrée (entrée)",
         'ae_correction_outflow' => "Correction d'autre entrée (sortie)",
         'ae_delete' => "Suppréssion des autres entrées",
-        'ae_restore' => "Récupération des autres entrées"
+        'ae_restore' => "Récupération des autres entrées",
+        'correction_list' => "Liste des corrections"
     ],
     'labels' => [
         'all' => 'tout',

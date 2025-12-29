@@ -1934,6 +1934,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       //foreach tr
       const allTr = tbodyAE.querySelectorAll("tr");
+      selectedRow = null;
       allTr.forEach((tr) => {
         //===================== UPDATE AE ==================
         //====== EVENT btn update ae
@@ -2086,8 +2087,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
 
         //=================== CORRECTION AE OUTFLOW ===============
-
-        //=================== CORRECTION AE INFLOW =================
         //====== EVENT btn correction ae outflow
         tr.querySelector(".btn-correct-ae-outflow").addEventListener(
           "click",
@@ -2229,6 +2228,50 @@ document.addEventListener("DOMContentLoaded", async () => {
             new bootstrap.Modal(modalCorrectionAeOutflow).show();
           }
         );
+
+        //===== EVENT tr selection
+        tr.addEventListener("click", async () => {
+          //tbody correction_ae
+          const tbodyCorrectionAe = container.querySelector(
+            "#tbody-correction-ae"
+          );
+          //table correction_ae num_ae
+          const tableCorrectionAeNumAe = container.querySelector(
+            "#table-correction-ae-num-ae"
+          );
+
+          //remove selection
+          if (selectedRow && selectedRow === tr) {
+            tr.classList.remove("active");
+            selectedRow = null;
+
+            //remove tbody correction_ae
+            tbodyCorrectionAe.innerHTML = `<tr>
+                                                        <td colspan="9">
+                                                                <span class="bg-second placeholder w-100 rounded-1" style="height: 2vh !important;"></span>
+                                                            </td>
+                                                        </tr>`;
+            //remove table correction_ae num_ae
+            tableCorrectionAeNumAe.innerHTML = "";
+          }
+          //add selection
+          else {
+            //deselect all
+            allTr.forEach((tr0) => {
+              tr0.classList.remove("active");
+            });
+
+            //add selection
+            tr.classList.add("active");
+            selectedRow = tr;
+
+            //add table correction_ae num_ae
+            tableCorrectionAeNumAe.innerHTML = tr.dataset.numAe;
+
+            //================== LIST CORRECTION AE =============
+            listCorrectionAe(tr.dataset.numAe, tbodyCorrectionAe);
+          }
+        });
       });
 
       //===== EVENT check all
@@ -2356,209 +2399,173 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error(e);
     }
   }
-  //   //function - list connection facture
-  //   async function listConnectionFacture(numFacture) {
-  //     //tbody lf
-  //     const tbodyLF = container.querySelector("#tbody-lf");
-  //     try {
-  //       //FETCH api list connection facture
-  //       const apiListConnectionFacture = await apiRequest(
-  //         `/entree/list_connection_facture?num_facture=${numFacture}`
-  //       );
+  //function - list correction ae
+  async function listCorrectionAe(numAe, tbodyCorrectionAe) {
+    try {
+      //FETCH api list correction ae
+      const apiListCorrectionAe = await apiRequest(
+        `/entree/list_connection_autre_entree?num_ae=${numAe}`
+      );
 
-  //       //error
-  //       if (apiListConnectionFacture.message_type === "error") {
-  //         //alert
-  //         const alertTemplate = document.querySelector(".alert-template");
-  //         const clone = alertTemplate.content.cloneNode(true);
-  //         const alert = clone.querySelector(".alert");
-  //         const progressBar = alert.querySelector(".progress-bar");
-  //         //alert type
-  //         alert.classList.add("alert-danger");
-  //         //icon
-  //         alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
-  //         //message
-  //         alert.querySelector(".alert-message").innerHTML =
-  //           apiListConnectionFacture.message;
-  //         //progress bar
-  //         progressBar.style.transition = "width 20s linear";
-  //         progressBar.style.width = "100%";
+      //error
+      if (apiListCorrectionAe.message_type === "error") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-danger");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          apiListCorrectionAe.message;
+        //progress bar
+        progressBar.style.transition = "width 20s linear";
+        progressBar.style.width = "100%";
 
-  //         //add alert
-  //         tbodyLF.closest("div").prepend(alert);
+        //add alert
+        tbodyCorrectionAe.closest("div").prepend(alert);
 
-  //         //progress launch animation
-  //         setTimeout(() => {
-  //           progressBar.style.width = "0%";
-  //         }, 10);
-  //         //auto close alert
-  //         setTimeout(() => {
-  //           alert.querySelector(".btn-close").click();
-  //         }, 20000);
-  //         return;
-  //       }
-  //       //invalid
-  //       else if (apiListConnectionFacture.message_type === "invalid") {
-  //         //alert
-  //         const alertTemplate = document.querySelector(".alert-template");
-  //         const clone = alertTemplate.content.cloneNode(true);
-  //         const alert = clone.querySelector(".alert");
-  //         const progressBar = alert.querySelector(".progress-bar");
-  //         //alert type
-  //         alert.classList.add("alert-warning");
-  //         //icon
-  //         alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-  //         //message
-  //         alert.querySelector(".alert-message").innerHTML =
-  //           apiListConnectionFacture.message;
-  //         //progress bar
-  //         progressBar.style.transition = "width 10s linear";
-  //         progressBar.style.width = "100%";
+        //progress launch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 20000);
+        return;
+      }
+      //invalid
+      else if (apiListCorrectionAe.message_type === "invalid") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-warning");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          apiListCorrectionAe.message;
+        //progress bar
+        progressBar.style.transition = "width 10s linear";
+        progressBar.style.width = "100%";
 
-  //         //add alert
-  //         tbodyLF.closest("div").prepend(alert);
+        //add alert
+        tbodyCorrectionAe.closest("div").prepend(alert);
 
-  //         //progress lanch animation
-  //         setTimeout(() => {
-  //           progressBar.style.width = "0%";
-  //         }, 10);
-  //         //auto close alert
-  //         setTimeout(() => {
-  //           alert.querySelector(".btn-close").click();
-  //         }, 10000);
-  //         return;
-  //       }
+        //progress lanch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 10000);
+        return;
+      }
 
-  //       //===== TABLE ligne_facture
+      //===== TABLE correction_ae
+      //set table list correction_ae
+      tbodyCorrectionAe.innerHTML = "";
 
-  //       //set table list connection facture
-  //       tbodyLF.innerHTML = "";
-  //       //lf
-  //       apiListConnectionFacture.lf.forEach((line) => {
-  //         const tr = document.createElement("tr");
+      //ae
+      if (apiListCorrectionAe.autre_entree.length > 0) {
+        const trCorrectionAe = document.createElement("tr");
+        trCorrectionAe.innerHTML = `<td colspan='5' class='text-center text-light p-2 bg-secondary'><b>${
+          lang.correction
+        }</b> (${lang.inflow.toLowerCase()})</td>`;
 
-  //         //td - id_lf
-  //         const tdIdLF = document.createElement("td");
-  //         tdIdLF.textContent = line.id_lf;
-  //         tdIdLF.classList.add("text-center");
+        tbodyCorrectionAe.append(trCorrectionAe);
 
-  //         //td - libelle_produit
-  //         const tdLibelle = document.createElement("td");
-  //         tdLibelle.textContent = line.libelle_produit;
-  //         tdLibelle.classList.add("text-center");
+        //list correction ae
+        apiListCorrectionAe.autre_entree.forEach((line) => {
+          const tr = document.createElement("tr");
 
-  //         //td - quantite_produit
-  //         const tdQuantite = document.createElement("td");
-  //         tdQuantite.textContent = formatterNumber.format(
-  //           Number(line.quantite_produit)
-  //         );
-  //         tdQuantite.classList.add("text-center");
+          //td - id_ae
+          const tdIdAe = document.createElement("td");
+          tdIdAe.textContent = line.num_ae;
+          tdIdAe.classList.add("text-center");
 
-  //         //td - prix
-  //         const tdPrix = document.createElement("td");
-  //         tdPrix.textContent = formatterNumber.format(Number(line.prix));
-  //         tdPrix.classList.add("text-center");
+          //td - libelle_ae
+          const tdLibelle = document.createElement("td");
+          tdLibelle.textContent = line.libelle_ae;
+          tdLibelle.classList.add("text-center");
 
-  //         //td - montant
-  //         const tdMontant = document.createElement("td");
-  //         tdMontant.textContent = formatterNumber.format(Number(line.prix_total));
-  //         tdMontant.classList.add("text-center");
+          //td - quantite_ae
+          const tdQuantite = document.createElement("td");
+          tdQuantite.textContent = 1;
+          tdQuantite.classList.add("text-center");
 
-  //         tr.append(tdIdLF, tdLibelle, tdQuantite, tdPrix, tdMontant);
-  //         tbodyLF.appendChild(tr);
-  //       });
-  //       //ae
-  //       if (apiListConnectionFacture.autre_entree.length > 0) {
-  //         const trCorrectionAe = document.createElement("tr");
-  //         trCorrectionAe.innerHTML = `<td colspan='5' class='text-center text-light p-2 bg-secondary'><b>${
-  //           lang.correction
-  //         }</b> (${lang.inflow.toLowerCase()})</td>`;
+          //td - prix
+          const tdPrix = document.createElement("td");
+          tdPrix.textContent = formatterNumber.format(Number(line.montant_ae));
+          tdPrix.classList.add("text-center");
 
-  //         tbodyLF.append(trCorrectionAe);
+          //td - montant
+          const tdMontant = document.createElement("td");
+          tdMontant.textContent = formatterNumber.format(
+            Number(line.montant_ae)
+          );
+          tdMontant.classList.add("text-center");
 
-  //         //list correction ae
-  //         apiListConnectionFacture.autre_entree.forEach((line) => {
-  //           const tr = document.createElement("tr");
+          tr.append(tdIdAe, tdLibelle, tdQuantite, tdPrix, tdMontant);
+          tbodyCorrectionAe.appendChild(tr);
+        });
+      }
+      //sortie
+      if (apiListCorrectionAe.sortie.length > 0) {
+        const trCorrectionDs = document.createElement("tr");
+        trCorrectionDs.innerHTML = `<td colspan='5' class='text-center text-light p-2 bg-secondary'><b>${
+          lang.correction
+        }</b> (${lang.outflow.toLowerCase()})</td>`;
 
-  //           //td - id_ae
-  //           const tdIdAe = document.createElement("td");
-  //           tdIdAe.textContent = line.id_ae;
-  //           tdIdAe.classList.add("text-center");
+        tbodyCorrectionAe.append(trCorrectionDs);
 
-  //           //td - libelle_ae
-  //           const tdLibelle = document.createElement("td");
-  //           tdLibelle.textContent = line.libelle_ae;
-  //           tdLibelle.classList.add("text-center");
+        //list correction ds
+        apiListCorrectionAe.sortie.forEach((line) => {
+          const tr = document.createElement("tr");
 
-  //           //td - quantite_ae
-  //           const tdQuantite = document.createElement("td");
-  //           tdQuantite.textContent = 1;
-  //           tdQuantite.classList.add("text-center");
+          //td - id_ds
+          const tdIdDs = document.createElement("td");
+          tdIdDs.textContent = line.num_ds;
+          tdIdDs.classList.add("text-center");
 
-  //           //td - prix
-  //           const tdPrix = document.createElement("td");
-  //           tdPrix.textContent = formatterNumber.format(Number(line.montant_ae));
-  //           tdPrix.classList.add("text-center");
+          //td - libelle_ds
+          const tdLibelle = document.createElement("td");
+          tdLibelle.textContent = line.libelle_article;
+          tdLibelle.classList.add("text-center");
 
-  //           //td - montant
-  //           const tdMontant = document.createElement("td");
-  //           tdMontant.textContent = formatterNumber.format(
-  //             Number(line.montant_ae)
-  //           );
-  //           tdMontant.classList.add("text-center");
+          //td - quantite_ds
+          const tdQuantite = document.createElement("td");
+          tdQuantite.textContent = 1;
+          tdQuantite.classList.add("text-center");
 
-  //           tr.append(tdIdAe, tdLibelle, tdQuantite, tdPrix, tdMontant);
-  //           tbodyLF.appendChild(tr);
-  //         });
-  //       }
-  //       //ae
-  //       if (apiListConnectionFacture.sortie.length > 0) {
-  //         const trCorrectionDs = document.createElement("tr");
-  //         trCorrectionDs.innerHTML = `<td colspan='5' class='text-center text-light p-2 bg-secondary'><b>${
-  //           lang.correction
-  //         }</b> (${lang.outflow.toLowerCase()})</td>`;
+          //td - prix
+          const tdPrix = document.createElement("td");
+          tdPrix.textContent = formatterNumber.format(
+            Number(line.prix_article)
+          );
+          tdPrix.classList.add("text-center");
 
-  //         tbodyLF.append(trCorrectionDs);
+          //td - montant
+          const tdMontant = document.createElement("td");
+          tdMontant.textContent = formatterNumber.format(
+            Number(line.prix_article)
+          );
+          tdMontant.classList.add("text-center");
 
-  //         //list correction ds
-  //         apiListConnectionFacture.sortie.forEach((line) => {
-  //           const tr = document.createElement("tr");
-
-  //           //td - id_ds
-  //           const tdIdDs = document.createElement("td");
-  //           tdIdDs.textContent = line.num_ds;
-  //           tdIdDs.classList.add("text-center");
-
-  //           //td - libelle_ds
-  //           const tdLibelle = document.createElement("td");
-  //           tdLibelle.textContent = line.libelle_article;
-  //           tdLibelle.classList.add("text-center");
-
-  //           //td - quantite_ds
-  //           const tdQuantite = document.createElement("td");
-  //           tdQuantite.textContent = 1;
-  //           tdQuantite.classList.add("text-center");
-
-  //           //td - prix
-  //           const tdPrix = document.createElement("td");
-  //           tdPrix.textContent = formatterNumber.format(
-  //             Number(line.prix_article)
-  //           );
-  //           tdPrix.classList.add("text-center");
-
-  //           //td - montant
-  //           const tdMontant = document.createElement("td");
-  //           tdMontant.textContent = formatterNumber.format(
-  //             Number(line.prix_article)
-  //           );
-  //           tdMontant.classList.add("text-center");
-
-  //           tr.append(tdIdDs, tdLibelle, tdQuantite, tdPrix, tdMontant);
-  //           tbodyLF.appendChild(tr);
-  //         });
-  //       }
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   }
+          tr.append(tdIdDs, tdLibelle, tdQuantite, tdPrix, tdMontant);
+          tbodyCorrectionAe.appendChild(tr);
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
 });

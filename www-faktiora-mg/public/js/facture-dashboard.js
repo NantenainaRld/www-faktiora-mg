@@ -2649,7 +2649,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
           //td - id_ae
           const tdIdAe = document.createElement("td");
-          tdIdAe.textContent = line.id_ae;
+          tdIdAe.textContent = line.num_ae;
           tdIdAe.classList.add("text-center");
 
           //td - libelle_ae
@@ -2678,7 +2678,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           tbodyLF.appendChild(tr);
         });
       }
-      //ae
+      //sortie
       if (apiListConnectionFacture.sortie.length > 0) {
         const trCorrectionDs = document.createElement("tr");
         trCorrectionDs.innerHTML = `<td colspan='5' class='text-center text-light p-2 bg-secondary'><b>${

@@ -37,7 +37,7 @@
                     <div class="col-12 w-100 h-100">
                         <div class="row overflow-x-auto w-100 flex-nowrap g-0 h-100">
                             <!-- table ae -->
-                            <div class="col-12 h-100">
+                            <div class="col-12 h-100 col-lg-7">
                                 <div class="card h-100 w-100">
                                     <div class="card-body h-100 overflow-auto d-flex flex-column justify-content-between">
                                         <!-- title ae -->
@@ -85,6 +85,40 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tbody-ae">
+                                                        <tr>
+                                                            <td colspan="9">
+                                                                <span class="bg-second placeholder w-100 rounded-1" style="height: 2vh !important;"></span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- table correction_ae -->
+                            <div class="col-12 h-100 ms-2 col-lg-5">
+                                <div class="card h-100">
+                                    <div class="card-body d-flex flex-column justify-content-between">
+                                        <!-- title table -->
+                                        <div class="card-title text-secondary flex-grow-0">
+                                            <i class="fad fa-list-dropdown me-2"></i><?= __('forms.titles.correction_list') . ' (' . strtolower(__('forms.labels.autre_entree')) ?>: <span id="table-correction-ae-num-ae"></span>)
+                                        </div>
+                                        <div class="row justify-content-center  overflow-auto align-items-top flex-grow-1">
+                                            <!-- table -->
+                                            <div class="col-12">
+                                                <table class="w-100 table-striped">
+                                                    <thead class="bg-success text-light align-items-center form-text">
+                                                        <tr>
+                                                            <th class="text-center"><i class="fad fa-hashtag me-2"></i>ID</th>
+                                                            <th class="text-center"><i class="fad fa-tag me-2"></i><?= __('forms.labels.label') ?></th>
+                                                            <th class="text-center"><i class="fad fa-calculator me-2"></i><?= __('forms.labels.quantity') ?></th>
+                                                            <th class="text-center"><i class="fad fa-coins me-2"></i><?= __('forms.labels.unit_price') . " ({$currency_units})" ?></th>
+                                                            <th class="text-center"><i class="fad fa-coins me-2"></i><?= __('forms.labels.amount') . " ({$currency_units})" ?></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbody-correction-ae">
                                                         <tr>
                                                             <td colspan="9">
                                                                 <span class="bg-second placeholder w-100 rounded-1" style="height: 2vh !important;"></span>
