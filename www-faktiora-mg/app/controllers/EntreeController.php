@@ -958,8 +958,8 @@ class EntreeController extends Controller
         return;
     }
 
-    //action - permanent delete all autre entree
-    public function permanentDeleteAllAutreEntree()
+    //action - delete permanent ae
+    public function deletePermanentAllAutreEntree()
     {
         header('Content-Type: application/json');
         $response = null;
@@ -998,7 +998,7 @@ class EntreeController extends Controller
 
             try {
                 //delete all autre entree
-                $response = AutreEntree::permanentDeleteAllAutreEntree($nums_ae);
+                $response = AutreEntree::deletePermanentAllAutreEntree($nums_ae);
 
                 echo json_encode($response);
                 return;

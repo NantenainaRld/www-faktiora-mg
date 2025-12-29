@@ -645,13 +645,13 @@ class AutreEntree extends Database
         return $response;
     }
 
-    //static - permanent delete all autre entree
-    public static function permanentDeleteAllAutreEntree($nums_ae)
+    //static - delete permanent ae
+    public static function deletePermanentAllAutreEntree($nums_ae)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 
         $placeholders = implode(', ', array_fill(0, count($nums_ae), '?'));
-        $sql = "DELETE FROM autre_entree WHERE num_ae IN ({$placeholders}) ";
+        $sql = "DELETE FROM autre_entree WHERE num_ae IN ({$placeholders}) AND etat_ae = 'supprimé' ";
 
         try {
 

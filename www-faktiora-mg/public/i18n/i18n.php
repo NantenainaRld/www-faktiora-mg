@@ -77,6 +77,11 @@
         question_restore_facture_1: "<?= __('forms.labels.question_restore_facture_1') ?>",
         question_restore_facture_plur: "<?= __('forms.labels.question_restore_facture_plur') ?>",
         correction: "<?= __('forms.labels.correction') ?>",
+        entree_nums_ae_empty: "<?= __('messages.invalids.entree_nums_ae_empty') ?>",
+        question_delete_ae_1: "<?= __('forms.labels.question_delete_ae_1') ?>",
+        question_delete_ae_plur: "<?= __('forms.labels.question_delete_ae_plur') ?>",
+        question_delete_permanent_ae_1: "<?= __('forms.labels.question_delete_permanent_ae_1') ?>",
+        question_delete_permanent_ae_plur: "<?= __('forms.labels.question_delete_permanent_ae_plur') ?>",
 
     }
 </script>

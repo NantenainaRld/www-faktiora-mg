@@ -56,7 +56,8 @@ return [
         'ae_add' => "Ajout d'une autre entrée",
         'ae_update' => "Modification d'autre entrée",
         'ae_correction_inflow' => "Correction d'autre entrée (entrée)",
-        'ae_correction_outflow' => "Correction d'autre entrée (sortie)"
+        'ae_correction_outflow' => "Correction d'autre entrée (sortie)",
+        'ae_delete' => "Suppréssion des autres entrées"
     ],
     'labels' => [
         'all' => 'tout',
@@ -247,7 +248,10 @@ return [
         'montant_inflow' => "Montant à ajouter",
         'message_correction_ae_outflow' => "Cette correction affectera le solde de la caisse et créera une nouvelle sortie et aussi un nouveau article.",
         'montant_outflow' => "Montant à réduire",
-
+        'question_delete_ae_1' => "Voulez-vous vraiment supprimer l'autre entrée numéro <b>:field</b> ?",
+        'question_delete_ae_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> autres entrées ?",
+        'question_delete_permanent_ae_1' => "Voulez-vous vraiment supprimer l'autre entrée numéro <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>.",
+        'question_delete_permanent_ae_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> autres entrées ?. <span class='text-danger'>Cette action est irréversible</span>.",
     ],
     'times' => [
         'minute' => "minute",

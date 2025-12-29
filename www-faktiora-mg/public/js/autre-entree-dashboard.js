@@ -1091,402 +1091,420 @@ document.addEventListener("DOMContentLoaded", async () => {
           console.error(e);
         }
       });
-    //     //========================== DELETE FACTURE =====================
-    //     //btn delete facture
-    //     const btnDeleteFacture = container.querySelector("#btn-delete-facture");
-    //     //===== EVENT btn delete facture
-    //     if (btnDeleteFacture) {
-    //       btnDeleteFacture.addEventListener("click", () => {
-    //         //modal delete facture
-    //         const modalDeleteFacture = container.querySelector(
-    //           "#modal-delete-facture"
-    //         );
-    //         //selected facture
-    //         const selectedFacture = container.querySelectorAll(
-    //           "#tbody-facture input[type='checkbox']:checked"
-    //         );
-    //         //no selection
-    //         if (selectedFacture.length <= 0) {
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-warning");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             lang.entree_nums_facture_empty;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
-    //           //add alert
-    //           container
-    //             .querySelector("#tbody-facture")
-    //             .closest("div")
-    //             .prepend(alert);
-    //           //progress launch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
-    //           return;
-    //         }
-    //         //modal message 1
-    //         if (selectedFacture.length === 1) {
-    //           modalDeleteFacture.querySelector(".message").innerHTML =
-    //             lang.question_delete_facture_1.replace(
-    //               ":field",
-    //               selectedFacture[0].closest("tr").dataset.numFacture
-    //             );
-    //         }
-    //         //modal message plur
-    //         else {
-    //           modalDeleteFacture.querySelector(".message").innerHTML =
-    //             lang.question_delete_facture_plur.replace(
-    //               ":field",
-    //               selectedFacture.length
-    //             );
-    //         }
-    //         //show modal delete facture
-    //         new bootstrap.Modal(modalDeleteFacture).show();
-    //         //==== EVENT btn confirm modal delete facture
-    //         modalDeleteFacture
-    //           .querySelector("#btn-confirm-modal-delete-facture")
-    //           .addEventListener("click", async () => {
-    //             try {
-    //               //nums_facture
-    //               let nums_facture = [...selectedFacture];
-    //               nums_facture = nums_facture.map(
-    //                 (selected) => selected.closest("tr").dataset.numFacture
-    //               );
-    //               //FETCH api delete facture
-    //               const apiDeleteFacture = await apiRequest(
-    //                 "/entree/delete_all_facture",
-    //                 {
-    //                   method: "PUT",
-    //                   body: {
-    //                     nums_facture: nums_facture,
-    //                   },
-    //                 }
-    //               );
-    //               //error
-    //               if (apiDeleteFacture.message_type === "error") {
-    //                 //alert
-    //                 const alertTemplate = document.querySelector(".alert-template");
-    //                 const clone = alertTemplate.content.cloneNode(true);
-    //                 const alert = clone.querySelector(".alert");
-    //                 const progressBar = alert.querySelector(".progress-bar");
-    //                 //alert type
-    //                 alert.classList.add("alert-danger");
-    //                 //icon
-    //                 alert
-    //                   .querySelector(".fad")
-    //                   .classList.add("fa-exclamation-circle");
-    //                 //message
-    //                 alert.querySelector(".alert-message").innerHTML =
-    //                   apiDeleteFacture.message;
-    //                 //progress bar
-    //                 progressBar.style.transition = "width 20s linear";
-    //                 progressBar.style.width = "100%";
-    //                 //add alert
-    //                 modalDeleteFacture.querySelector(".modal-body").prepend(alert);
-    //                 //progress launch animation
-    //                 setTimeout(() => {
-    //                   progressBar.style.width = "0%";
-    //                 }, 10);
-    //                 //auto close alert
-    //                 setTimeout(() => {
-    //                   alert.querySelector(".btn-close").click();
-    //                 }, 20000);
-    //                 return;
-    //               }
-    //               //invalid
-    //               else if (apiDeleteFacture.message_type === "invalid") {
-    //                 //alert
-    //                 const alertTemplate = document.querySelector(".alert-template");
-    //                 const clone = alertTemplate.content.cloneNode(true);
-    //                 const alert = clone.querySelector(".alert");
-    //                 const progressBar = alert.querySelector(".progress-bar");
-    //                 //alert type
-    //                 alert.classList.add("alert-warning");
-    //                 //icon
-    //                 alert
-    //                   .querySelector(".fad")
-    //                   .classList.add("fa-exclamation-circle");
-    //                 //message
-    //                 alert.querySelector(".alert-message").innerHTML =
-    //                   apiDeleteFacture.message;
-    //                 //progress bar
-    //                 progressBar.style.transition = "width 10s linear";
-    //                 progressBar.style.width = "100%";
-    //                 //add alert
-    //                 modalDeleteFacture.querySelector(".modal-body").prepend(alert);
-    //                 //progress launch animation
-    //                 setTimeout(() => {
-    //                   progressBar.style.width = "0%";
-    //                 }, 10);
-    //                 //auto close alert
-    //                 setTimeout(() => {
-    //                   alert.querySelector(".btn-close").click();
-    //                 }, 10000);
-    //                 return;
-    //               }
-    //               //success
-    //               //alert
-    //               const alertTemplate = document.querySelector(".alert-template");
-    //               const clone = alertTemplate.content.cloneNode(true);
-    //               const alert = clone.querySelector(".alert");
-    //               const progressBar = alert.querySelector(".progress-bar");
-    //               //alert type
-    //               alert.classList.add("alert-success");
-    //               //icon
-    //               alert.querySelector(".fad").classList.add("fa-check-circle");
-    //               //message
-    //               alert.querySelector(".alert-message").innerHTML =
-    //                 apiDeleteFacture.message;
-    //               //progress bar
-    //               progressBar.style.transition = "width 10s linear";
-    //               progressBar.style.width = "100%";
-    //               //add alert
-    //               container
-    //                 .querySelector("#tbody-facture")
-    //                 .closest("div")
-    //                 .prepend(alert);
-    //               //progress launch animation
-    //               setTimeout(() => {
-    //                 progressBar.style.width = "0%";
-    //               }, 10);
-    //               //auto close alert
-    //               setTimeout(() => {
-    //                 alert.querySelector(".btn-close").click();
-    //               }, 10000);
-    //               //auto hide modal
-    //               modalDeleteFacture
-    //                 .querySelector("#btn-close-modal-delete-facture")
-    //                 .click();
-    //               //refresh filter facture
-    //               filterFacture(
-    //                 selectStatus.value.trim(),
-    //                 selectArrangeBy.value.trim(),
-    //                 selectOrder.value.trim(),
-    //                 dateFrom.value.trim(),
-    //                 dateTo.value.trim(),
-    //                 selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
-    //                 $(selectIdUtilisateur).val().trim(),
-    //                 inputSearch.value.trim()
-    //               );
-    //               return;
-    //             } catch (e) {
-    //               console.error(e);
-    //             }
-    //           });
-    //       });
-    //     }
-    //     //========================== DELETE PERMANENT FACTURE =====================
-    //     //btn delete permanent facture
-    //     const btnDeletePermanentFacture = container.querySelector(
-    //       "#btn-delete-permanent-facture"
-    //     );
-    //     //===== EVENT btn delete permanent facture
-    //     if (btnDeletePermanentFacture) {
-    //       btnDeletePermanentFacture.addEventListener("click", () => {
-    //         //modal delete facture
-    //         const modalDeleteFacture = container.querySelector(
-    //           "#modal-delete-facture"
-    //         );
-    //         //selected facture
-    //         const selectedFacture = container.querySelectorAll(
-    //           "#tbody-facture input[type='checkbox']:checked"
-    //         );
-    //         //no selection
-    //         if (selectedFacture.length <= 0) {
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-warning");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             lang.entree_nums_facture_empty;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
-    //           //add alert
-    //           container
-    //             .querySelector("#tbody-facture")
-    //             .closest("div")
-    //             .prepend(alert);
-    //           //progress launch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
-    //           return;
-    //         }
-    //         //modal message 1
-    //         if (selectedFacture.length === 1) {
-    //           modalDeleteFacture.querySelector(".message").innerHTML =
-    //             lang.question_delete_permanent_facture_1.replace(
-    //               ":field",
-    //               selectedFacture[0].closest("tr").dataset.numFacture
-    //             );
-    //         }
-    //         //modal message plur
-    //         else {
-    //           modalDeleteFacture.querySelector(".message").innerHTML =
-    //             lang.question_delete_permanent_facture_plur.replace(
-    //               ":field",
-    //               selectedFacture.length
-    //             );
-    //         }
-    //         //show modal delete facture
-    //         new bootstrap.Modal(modalDeleteFacture).show();
-    //         //==== EVENT btn confirm modal delete facture
-    //         modalDeleteFacture
-    //           .querySelector("#btn-confirm-modal-delete-facture")
-    //           .addEventListener("click", async () => {
-    //             try {
-    //               //nums_facture
-    //               let nums_facture = [...selectedFacture];
-    //               nums_facture = nums_facture.map(
-    //                 (selected) => selected.closest("tr").dataset.numFacture
-    //               );
-    //               //FETCH api delete facture
-    //               const apiDeleteFacture = await apiRequest(
-    //                 "/entree/delete_permanent_all_facture",
-    //                 {
-    //                   method: "DELETE",
-    //                   body: {
-    //                     nums_facture: nums_facture,
-    //                   },
-    //                 }
-    //               );
-    //               //error
-    //               if (apiDeleteFacture.message_type === "error") {
-    //                 //alert
-    //                 const alertTemplate = document.querySelector(".alert-template");
-    //                 const clone = alertTemplate.content.cloneNode(true);
-    //                 const alert = clone.querySelector(".alert");
-    //                 const progressBar = alert.querySelector(".progress-bar");
-    //                 //alert type
-    //                 alert.classList.add("alert-danger");
-    //                 //icon
-    //                 alert
-    //                   .querySelector(".fad")
-    //                   .classList.add("fa-exclamation-circle");
-    //                 //message
-    //                 alert.querySelector(".alert-message").innerHTML =
-    //                   apiDeleteFacture.message;
-    //                 //progress bar
-    //                 progressBar.style.transition = "width 20s linear";
-    //                 progressBar.style.width = "100%";
-    //                 //add alert
-    //                 modalDeleteFacture.querySelector(".modal-body").prepend(alert);
-    //                 //progress launch animation
-    //                 setTimeout(() => {
-    //                   progressBar.style.width = "0%";
-    //                 }, 10);
-    //                 //auto close alert
-    //                 setTimeout(() => {
-    //                   alert.querySelector(".btn-close").click();
-    //                 }, 20000);
-    //                 return;
-    //               }
-    //               //invalid
-    //               else if (apiDeleteFacture.message_type === "invalid") {
-    //                 //alert
-    //                 const alertTemplate = document.querySelector(".alert-template");
-    //                 const clone = alertTemplate.content.cloneNode(true);
-    //                 const alert = clone.querySelector(".alert");
-    //                 const progressBar = alert.querySelector(".progress-bar");
-    //                 //alert type
-    //                 alert.classList.add("alert-warning");
-    //                 //icon
-    //                 alert
-    //                   .querySelector(".fad")
-    //                   .classList.add("fa-exclamation-circle");
-    //                 //message
-    //                 alert.querySelector(".alert-message").innerHTML =
-    //                   apiDeleteFacture.message;
-    //                 //progress bar
-    //                 progressBar.style.transition = "width 10s linear";
-    //                 progressBar.style.width = "100%";
-    //                 //add alert
-    //                 modalDeleteFacture.querySelector(".modal-body").prepend(alert);
-    //                 //progress launch animation
-    //                 setTimeout(() => {
-    //                   progressBar.style.width = "0%";
-    //                 }, 10);
-    //                 //auto close alert
-    //                 setTimeout(() => {
-    //                   alert.querySelector(".btn-close").click();
-    //                 }, 10000);
-    //                 return;
-    //               }
-    //               //success
-    //               //alert
-    //               const alertTemplate = document.querySelector(".alert-template");
-    //               const clone = alertTemplate.content.cloneNode(true);
-    //               const alert = clone.querySelector(".alert");
-    //               const progressBar = alert.querySelector(".progress-bar");
-    //               //alert type
-    //               alert.classList.add("alert-success");
-    //               //icon
-    //               alert.querySelector(".fad").classList.add("fa-check-circle");
-    //               //message
-    //               alert.querySelector(".alert-message").innerHTML =
-    //                 apiDeleteFacture.message;
-    //               //progress bar
-    //               progressBar.style.transition = "width 10s linear";
-    //               progressBar.style.width = "100%";
-    //               //add alert
-    //               container
-    //                 .querySelector("#tbody-facture")
-    //                 .closest("div")
-    //                 .prepend(alert);
-    //               //progress launch animation
-    //               setTimeout(() => {
-    //                 progressBar.style.width = "0%";
-    //               }, 10);
-    //               //auto close alert
-    //               setTimeout(() => {
-    //                 alert.querySelector(".btn-close").click();
-    //               }, 10000);
-    //               //auto hide modal
-    //               modalDeleteFacture
-    //                 .querySelector("#btn-close-modal-delete-facture")
-    //                 .click();
-    //               //refresh filter facture
-    //               filterFacture(
-    //                 selectStatus.value.trim(),
-    //                 selectArrangeBy.value.trim(),
-    //                 selectOrder.value.trim(),
-    //                 dateFrom.value.trim(),
-    //                 dateTo.value.trim(),
-    //                 selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
-    //                 $(selectIdUtilisateur).val().trim(),
-    //                 inputSearch.value.trim()
-    //               );
-    //               return;
-    //             } catch (e) {
-    //               console.error(e);
-    //             }
-    //           });
-    //       });
-    //     }
+
+    //========================== DELETE AE =====================
+    //btn delete ae
+    const btnDeleteAe = container.querySelector("#btn-delete-ae");
+    //===== EVENT btn delete ae
+    if (btnDeleteAe) {
+      btnDeleteAe.addEventListener("click", () => {
+        //modal delete ae
+        const modalDeleteAe = container.querySelector("#modal-delete-ae");
+        //selected ae
+        const selectedAe = container.querySelectorAll(
+          "#tbody-ae input[type='checkbox']:checked"
+        );
+
+        //no selection
+        if (selectedAe.length <= 0) {
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-warning");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            lang.entree_nums_ae_empty;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          container.querySelector("#tbody-ae").closest("div").prepend(alert);
+
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+          return;
+        }
+        //modal message 1
+        if (selectedAe.length === 1) {
+          modalDeleteAe.querySelector(".message").innerHTML =
+            lang.question_delete_ae_1.replace(
+              ":field",
+              selectedAe[0].closest("tr").dataset.numAe
+            );
+        }
+        //modal message plur
+        else {
+          modalDeleteAe.querySelector(".message").innerHTML =
+            lang.question_delete_ae_plur.replace(":field", selectedAe.length);
+        }
+
+        //show modal delete ae
+        new bootstrap.Modal(modalDeleteAe).show();
+
+        //==== EVENT btn confirm modal delete ae
+        modalDeleteAe
+          .querySelector("#btn-confirm-modal-delete-ae")
+          .addEventListener("click", async () => {
+            try {
+              //nums_ae
+              let nums_ae = [...selectedAe];
+              nums_ae = nums_ae.map(
+                (selected) => selected.closest("tr").dataset.numAe
+              );
+
+              //FETCH api delete ae
+              const apiDeleteAe = await apiRequest(
+                "/entree/delete_all_autre_entree",
+                {
+                  method: "PUT",
+                  body: {
+                    nums_ae: nums_ae,
+                  },
+                }
+              );
+              //error
+              if (apiDeleteAe.message_type === "error") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiDeleteAe.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalDeleteAe.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+                return;
+              }
+              //invalid
+              else if (apiDeleteAe.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiDeleteAe.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalDeleteAe.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                return;
+              }
+
+              //success
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-success");
+              //icon
+              alert.querySelector(".fad").classList.add("fa-check-circle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                apiDeleteAe.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              container
+                .querySelector("#tbody-ae")
+                .closest("div")
+                .prepend(alert);
+
+              //progress launch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
+
+              //auto hide modal
+              modalDeleteAe.querySelector("#btn-close-modal-delete-ae").click();
+
+              //refresh filter ae
+              filterAE(
+                selectStatus.value.trim(),
+                selectArrangeBy.value.trim(),
+                selectOrder.value.trim(),
+                dateFrom.value.trim(),
+                dateTo.value.trim(),
+                selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
+                $(selectIdUtilisateur).val().trim(),
+                inputSearch.value.trim()
+              );
+
+              return;
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      });
+    }
+
+    //====================== DELETE PERMANENT AE =====================
+    //btn delete permanent ae
+    const btnDeletePermanentAe = container.querySelector(
+      "#btn-delete-permanent-ae"
+    );
+    //===== EVENT btn delete permanent ae
+    if (btnDeletePermanentAe) {
+      btnDeletePermanentAe.addEventListener("click", () => {
+        //modal delete ae
+        const modalDeleteAe = container.querySelector("#modal-delete-ae");
+        //selected ae
+        const selectedAe = container.querySelectorAll(
+          "#tbody-ae input[type='checkbox']:checked"
+        );
+
+        //no selection
+        if (selectedAe.length <= 0) {
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-warning");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            lang.entree_nums_ae_empty;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          container.querySelector("#tbody-ae").closest("div").prepend(alert);
+
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+          return;
+        }
+
+        //modal message 1
+        if (selectedAe.length === 1) {
+          modalDeleteAe.querySelector(".message").innerHTML =
+            lang.question_delete_permanent_ae_1.replace(
+              ":field",
+              selectedAe[0].closest("tr").dataset.numAe
+            );
+        }
+        //modal message plur
+        else {
+          modalDeleteAe.querySelector(".message").innerHTML =
+            lang.question_delete_permanent_ae_plur.replace(
+              ":field",
+              selectedAe.length
+            );
+        }
+
+        //show modal delete ae
+        new bootstrap.Modal(modalDeleteAe).show();
+
+        //==== EVENT btn confirm modal delete permanent ae
+        modalDeleteAe
+          .querySelector("#btn-confirm-modal-delete-ae")
+          .addEventListener("click", async () => {
+            try {
+              //nums_ae
+              let nums_ae = [...selectedAe];
+              nums_ae = nums_ae.map(
+                (selected) => selected.closest("tr").dataset.numAe
+              );
+
+              //FETCH api delete ae
+              const apiDeleteAe = await apiRequest(
+                "/entree/delete_permanent_all_autre_entree",
+                {
+                  method: "DELETE",
+                  body: {
+                    nums_ae: nums_ae,
+                  },
+                }
+              );
+              //error
+              if (apiDeleteAe.message_type === "error") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiDeleteAe.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalDeleteAe.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+                return;
+              }
+              //invalid
+              else if (apiDeleteAe.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiDeleteAe.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalDeleteAe.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                return;
+              }
+
+              //success
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-success");
+              //icon
+              alert.querySelector(".fad").classList.add("fa-check-circle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                apiDeleteAe.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              container
+                .querySelector("#tbody-ae")
+                .closest("div")
+                .prepend(alert);
+
+              //progress launch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
+
+              //auto hide modal
+              modalDeleteAe.querySelector("#btn-close-modal-delete-ae").click();
+
+              //refresh filter ae
+              filterAE(
+                selectStatus.value.trim(),
+                selectArrangeBy.value.trim(),
+                selectOrder.value.trim(),
+                dateFrom.value.trim(),
+                dateTo.value.trim(),
+                selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
+                $(selectIdUtilisateur).val().trim(),
+                inputSearch.value.trim()
+              );
+
+              return;
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      });
+    }
     //     //========================== RESTORE FACTURE =========================
     //     //btn restore facture
     //     const btnRestoreFacture = container.querySelector("#btn-restore-facture");
@@ -2203,17 +2221,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
       });
 
-      // //===== EVENT check all
-      // const inputCheckAll = container.querySelector("#check-all-facture");
-      // if (inputCheckAll) {
-      //   inputCheckAll.addEventListener("change", (e) => {
-      //     tbodyFacture
-      //       .querySelectorAll("input[type='checkbox']")
-      //       .forEach((checkbox) => {
-      //         checkbox.checked = e.target.checked;
-      //       });
-      //   });
-      // }
+      //===== EVENT check all
+      const inputCheckAll = container.querySelector("#check-all-ae");
+      if (inputCheckAll) {
+        inputCheckAll.addEventListener("change", (e) => {
+          tbodyAE
+            .querySelectorAll("input[type='checkbox']")
+            .forEach((checkbox) => {
+              checkbox.checked = e.target.checked;
+            });
+        });
+      }
     } catch (e) {
       console.error(e);
     }
