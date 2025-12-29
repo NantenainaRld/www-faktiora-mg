@@ -751,85 +751,27 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
 
     //======================== ADD ARTICLE ======================
-    //modal add client
-    const modalAddClient = container.querySelector("#modal-add-client");
-    //input - add nom_client
-    const inputAddNomClient = modalAddClient.querySelector(
-      "#input-add-nom-client"
+    //modal add article
+    const modalAddArticle = container.querySelector("#modal-add-article");
+    //input - add article libelle_article
+    const inputAddArticleLibelleArticle = modalAddArticle.querySelector(
+      "#input-add-article-libelle-article"
     );
-    const savedInputAddNomClient = localStorage.getItem(inputAddNomClient.id);
-    inputAddNomClient.value = !savedInputAddNomClient
+    const savedInputAddArticleLibelleArticle = localStorage.getItem(
+      inputAddArticleLibelleArticle.id
+    );
+    inputAddArticleLibelleArticle.value = !savedInputAddArticleLibelleArticle
       ? ""
-      : savedInputAddNomClient;
-    //input - add prenoms_client
-    const inputAddPrenomsClient = modalAddClient.querySelector(
-      "#input-add-prenoms-client"
-    );
-    const savedInputAddPrenomsClient = localStorage.getItem(
-      inputAddPrenomsClient.id
-    );
-    inputAddPrenomsClient.value = !savedInputAddPrenomsClient
-      ? ""
-      : savedInputAddPrenomsClient;
-    //select - add sexe_client
-    const selectAddSexeClient = modalAddClient.querySelector(
-      "#select-add-sexe-client"
-    );
-    const savedSelectAddSexeClient = localStorage.getItem(
-      selectAddSexeClient.id
-    );
-    selectAddSexeClient.value = !savedSelectAddSexeClient
-      ? "masculin"
-      : savedSelectAddSexeClient;
-    //input - add telephone
-    const inputAddTelephone = modalAddClient.querySelector(
-      "#input-add-telephone"
-    );
-    const savedInputAddTelephone = localStorage.getItem(inputAddTelephone.id);
-    inputAddTelephone.value = !savedInputAddTelephone
-      ? ""
-      : savedInputAddTelephone;
-    //input - add adresse
-    const inputAddAdresse = modalAddClient.querySelector("#input-add-adresse");
-    const savedInputAddAdresse = localStorage.getItem(inputAddAdresse.id);
-    inputAddAdresse.value = !savedInputAddAdresse ? "" : savedInputAddAdresse;
-    //===== EVENT input add nom_client
-    inputAddNomClient.addEventListener("input", (e) => {
-      //remove double space && change into uppercase
-      e.target.value = e.target.value.replace("  ", " ").toUpperCase();
-      //save value into localstorage
-      localStorage.setItem(e.target.id, e.target.value);
-    });
-    //===== EVENT input add prenoms_client
-    inputAddPrenomsClient.addEventListener("input", (e) => {
-      //remove double space && change into uppercase
+      : savedInputAddArticleLibelleArticle;
+    //===== EVENT input add article libelle_article
+    inputAddArticleLibelleArticle.addEventListener("input", (e) => {
       e.target.value = e.target.value.replace("  ", " ");
+
       //save value into localstorage
       localStorage.setItem(e.target.id, e.target.value);
     });
-    //===== EVENT select add sexe_client
-    selectAddSexeClient.addEventListener("change", (e) => {
-      //save value into localstorage
-      localStorage.setItem(e.target.id, e.target.value);
-    });
-    //===== EVENT input add telephone
-    inputAddTelephone.addEventListener("input", (e) => {
-      //remove invalid
-      e.target.value = e.target.value.replace(/[^\d+\s]/g, "");
-      //remove double space
-      e.target.value = e.target.value.replace("  ", " ");
-      //save value into localstorage
-      localStorage.setItem(e.target.id, e.target.value);
-    });
-    //===== EVENT input add adresse
-    inputAddAdresse.addEventListener("input", (e) => {
-      //remove double space
-      e.target.value = e.target.value.replace("  ", " ");
-      //save value into localstorage
-      localStorage.setItem(e.target.id, e.target.value);
-    });
-    //===== EVENT form add client submit
-    modalAddClient
+    //===== EVENT form add article submit
+    modalAddArticle
       .querySelector("form")
       .addEventListener("submit", async (e) => {
         //suspend submit
@@ -839,19 +781,16 @@ document.addEventListener("DOMContentLoaded", async () => {
           e.target.reportValidity();
         }
         try {
-          //FETCH api add client
-          const apiAddClient = await apiRequest("/client/create_client", {
+          //FETCH api add article
+          const apiAddArticle = await apiRequest("/article/create_article", {
             method: "POST",
             body: {
-              nom_client: inputAddNomClient.value.trim(),
-              prenoms_client: inputAddPrenomsClient.value.trim(),
-              sexe_client: selectAddSexeClient.value.trim(),
-              telephone: inputAddTelephone.value.trim(),
-              adresse: inputAddAdresse.value.trim(),
+              libelle_article: inputAddArticleLibelleArticle.value.trim(),
             },
           });
+
           //error
-          if (apiAddClient.message_type === "error") {
+          if (apiAddArticle.message_type === "error") {
             //alert
             const alertTemplate = document.querySelector(".alert-template");
             const clone = alertTemplate.content.cloneNode(true);
@@ -865,12 +804,14 @@ document.addEventListener("DOMContentLoaded", async () => {
               .classList.add("fa-exclamation-triangle");
             //message
             alert.querySelector(".alert-message").innerHTML =
-              apiAddClient.message;
+              apiAddArticle.message;
             //progress bar
             progressBar.style.transition = "width 20s linear";
             progressBar.style.width = "100%";
+
             //add alert
-            modalAddClient.querySelector(".modal-body").prepend(alert);
+            modalAddArticle.querySelector(".modal-body").prepend(alert);
+
             //progress launch animation
             setTimeout(() => {
               progressBar.style.width = "0%";
@@ -882,7 +823,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
           }
           //invalid
-          else if (apiAddClient.message_type === "invalid") {
+          else if (apiAddArticle.message_type === "invalid") {
             //alert
             const alertTemplate = document.querySelector(".alert-template");
             const clone = alertTemplate.content.cloneNode(true);
@@ -894,12 +835,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             alert.querySelector(".fad").classList.add("fa-exclamation-circle");
             //message
             alert.querySelector(".alert-message").innerHTML =
-              apiAddClient.message;
+              apiAddArticle.message;
             //progress bar
             progressBar.style.transition = "width 10s linear";
             progressBar.style.width = "100%";
+
             //add alert
-            modalAddClient.querySelector(".modal-body").prepend(alert);
+            modalAddArticle.querySelector(".modal-body").prepend(alert);
+
             //progress lanch animation
             setTimeout(() => {
               progressBar.style.width = "0%";
@@ -910,7 +853,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             }, 10000);
             return;
           }
-          //success add client
+
+          //success add article
           //alert
           const alertTemplate = document.querySelector(".alert-template");
           const clone = alertTemplate.content.cloneNode(true);
@@ -922,13 +866,13 @@ document.addEventListener("DOMContentLoaded", async () => {
           alert.querySelector(".fad").classList.add("fa-check-circle");
           //message
           alert.querySelector(".alert-message").innerHTML =
-            apiAddClient.message;
+            apiAddArticle.message;
           //progress bar
           progressBar.style.transition = "width 10s linear";
           progressBar.style.width = "100%";
 
           //add alert
-          modalAddFacture.querySelector(".modal-body").prepend(alert);
+          modalAddSortie.querySelector(".modal-body").prepend(alert);
 
           //progress lanch animation
           setTimeout(() => {
@@ -939,12 +883,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             alert.querySelector(".btn-close").click();
           }, 10000);
           //auto close modal
-          modalAddClient.querySelector("#btn-close-modal-add-client").click();
+          modalAddArticle.querySelector("#btn-close-modal-add-article").click();
 
-          //refresh list client
-          await listClient(selectAddFactureIdClient);
-          $(selectAddFactureIdClient)
-            .val(apiAddClient.last_inserted)
+          //refresh list article
+          await listArticle(selectAddSortieIdArticle);
+          $(selectAddSortieIdArticle)
+            .val(apiAddArticle.last_inserted)
             .trigger("change");
 
           return;
@@ -1998,200 +1942,190 @@ document.addEventListener("DOMContentLoaded", async () => {
         tbodySortie.appendChild(tr);
       });
 
-      // //foreach tr
-      // let selectedRow = null;
-      // const allTr = tbodyFacture.querySelectorAll("tr");
-      // allTr.forEach((tr) => {
-      //   //===================== CORRECTION FACTURE ==================
-      //   //modal correction facture
-      //   const modalCorrectionFacture = container.querySelector(
-      //     "#modal-correction-facture"
-      //   );
-
-      //   //===== EVENT btn correct facture
-      //   tr.querySelector(".btn-correct-facture").addEventListener(
-      //     "click",
-      //     async () => {
-      //       //num_facture
-      //       modalCorrectionFacture.querySelector(
-      //         "#correction-facture-num-facture"
-      //       ).innerHTML = tr.dataset.numFacture;
-      //       //select - correction facture id_utilisateur
-      //       const selectCorrectionFactureIdUtilisateur =
-      //         modalCorrectionFacture.querySelector(
-      //           "#select-correction-facture-id-utilisateur"
-      //         );
-      //       if (selectCorrectionFactureIdUtilisateur) {
-      //         $(selectCorrectionFactureIdUtilisateur).select2({
-      //           theme: "bootstrap-5",
-      //           placeholder: lang.select.toLowerCase(),
-      //           dropdownParent: $(modalCorrectionFacture),
-      //         });
-      //         listUser(selectCorrectionFactureIdUtilisateur, true);
-
-      //         //===== EVENT refresh list user
-      //         modalCorrectionFacture
-      //           .querySelector("#btn-correction-facture-refresh-id-utilisateur")
-      //           .addEventListener("click", () => {
-      //             listUser(selectCorrectionFactureIdUtilisateur, true);
-      //           });
-      //       }
-
-      //       //list ligne_facture
-      //       await listLigneFacture(
-      //         tr.dataset.numFacture,
-      //         modalCorrectionFacture.querySelector("#div-ligne-facture")
-      //       );
-      //       //===== EVENT btn refresh list ligne_caisse
-      //       modalCorrectionFacture
-      //         .querySelector("#btn-correction-facture-refresh-ligne-facture")
-      //         .addEventListener("click", () => {
-      //           listLigneFacture(
-      //             tr.dataset.numFacture,
-      //             modalCorrectionFacture.querySelector("#div-ligne-facture")
-      //           );
-      //         });
-
-      //       //show modal correction facture
-      //       new bootstrap.Modal(modalCorrectionFacture).show();
-      //     }
-      //   );
-
-      //   //===== EVENT btn print facture
-      //   tr.querySelector(".btn-print-facture").addEventListener(
-      //     "click",
-      //     async () => {
-      //       try {
-      //         //FETCH api print facture
-      //         const apiPrintFacture = await apiRequest(
-      //           `/entree/print_facture?num_facture=${tr.dataset.numFacture}`
-      //         );
-
-      //         //error
-      //         if (apiPrintFacture.message_type === "error") {
-      //           //alert
-      //           const alertTemplate = document.querySelector(".alert-template");
-      //           const clone = alertTemplate.content.cloneNode(true);
-      //           const alert = clone.querySelector(".alert");
-      //           const progressBar = alert.querySelector(".progress-bar");
-      //           //alert type
-      //           alert.classList.add("alert-danger");
-      //           //icon
-      //           alert
-      //             .querySelector(".fad")
-      //             .classList.add("fa-exclamation-triangle");
-      //           //message
-      //           alert.querySelector(".alert-message").innerHTML =
-      //             cashReport.message;
-      //           //progress bar
-      //           progressBar.style.transition = "width 20s linear";
-      //           progressBar.style.width = "100%";
-
-      //           //add alert
-      //           container
-      //             .querySelector("#tbody-facture")
-      //             .closest("div")
-      //             .prepend(alert);
-
-      //           //progress launch animation
-      //           setTimeout(() => {
-      //             progressBar.style.width = "0%";
-      //           }, 10);
-      //           //auto close alert
-      //           setTimeout(() => {
-      //             alert.querySelector(".btn-close").click();
-      //           }, 20000);
-
-      //           return;
-      //         }
-      //         //invalid
-      //         else if (apiPrintFacture.message_type === "invalid") {
-      //           //alert
-      //           const alertTemplate = document.querySelector(".alert-template");
-      //           const clone = alertTemplate.content.cloneNode(true);
-      //           const alert = clone.querySelector(".alert");
-      //           const progressBar = alert.querySelector(".progress-bar");
-      //           //alert type
-      //           alert.classList.add("alert-warning");
-      //           //icon
-      //           alert
-      //             .querySelector(".fad")
-      //             .classList.add("fa-exclamation-circle");
-      //           //message
-      //           alert.querySelector(".alert-message").innerHTML =
-      //             apiPrintFacture.message;
-      //           //progress bar
-      //           progressBar.style.transition = "width 10s linear";
-      //           progressBar.style.width = "100%";
-
-      //           //add alert
-      //           container
-      //             .querySelector("#tbody-facture")
-      //             .closest("div")
-      //             .prepend(alert);
-
-      //           //progress launch animation
-      //           setTimeout(() => {
-      //             progressBar.style.width = "0%";
-      //           }, 10);
-      //           //auto close alert
-      //           setTimeout(() => {
-      //             alert.querySelector(".btn-close").click();
-      //           }, 10000);
-
-      //           return;
-      //         }
-
-      //         //download facture
-      //         const a = document.createElement("a");
-      //         a.href = `data:application/pdf;base64,${apiPrintFacture.pdf}`;
-      //         a.download = apiPrintFacture.file_name;
-      //         a.click();
-
-      //         return;
-      //       } catch (e) {
-      //         console.error(e);
-      //       }
-      //     }
-      //   );
-
-      //   //===== EVENT tr selection
-      //   tr.addEventListener("click", () => {
-      //     //remove selection
-      //     if (selectedRow && selectedRow === tr) {
-      //       tr.classList.remove("active");
-      //       selectedRow = null;
-
-      //       //remove table lf facture num
-      //       container.querySelector("#table-lf-facture-num").innerHTML = "";
-
-      //       //remove tbody lf
-      //       container.querySelector("#tbody-lf").innerHTML = `  <tr>
-      //                                                         <td colspan="9">
-      //                                                             <span class="bg-second placeholder w-100 rounded-1" style="height: 2vh !important;"></span>
-      //                                                         </td>
-      //                                                     </tr>`;
-      //     }
-      //     //add selection
-      //     else {
-      //       //deselect all
-      //       allTr.forEach((tr0) => {
-      //         tr0.classList.remove("active");
-      //       });
-
-      //       //add selection
-      //       tr.classList.add("active");
-      //       selectedRow = tr;
-
-      //       //add table lf facture num
-      //       container.querySelector("#table-lf-facture-num").innerHTML =
-      //         tr.dataset.numFacture;
-
-      //       //list facture connection
-      //       listConnectionFacture(tr.dataset.numFacture.trim());
-      //     }
-      //   });
-      // });
+      //foreach tr
+      let selectedRow = null;
+      const allTr = tbodySortie.querySelectorAll("tr");
+      allTr.forEach((tr) => {
+        //==================== UPDATE SORTIE =====================
+        //===== EVENT btn update sortie
+        // tr.querySelector(".btn-update-sortie").addEventListener("click", () => {
+        //   //modal update sortie
+        //   const modalUpdateSortie = container.querySelector(
+        //     "#modal-update-sortie"
+        //   );
+        //   //show modal update sortie
+        //   new bootstrap.Modal(modalUpdateSortie).show();
+        // });
+        // //===================== CORRECTION FACTURE ==================
+        // //modal correction facture
+        // const modalCorrectionFacture = container.querySelector(
+        //   "#modal-correction-facture"
+        // );
+        // //===== EVENT btn correct facture
+        // tr.querySelector(".btn-correct-facture").addEventListener(
+        //   "click",
+        //   async () => {
+        //     //num_facture
+        //     modalCorrectionFacture.querySelector(
+        //       "#correction-facture-num-facture"
+        //     ).innerHTML = tr.dataset.numFacture;
+        //     //select - correction facture id_utilisateur
+        //     const selectCorrectionFactureIdUtilisateur =
+        //       modalCorrectionFacture.querySelector(
+        //         "#select-correction-facture-id-utilisateur"
+        //       );
+        //     if (selectCorrectionFactureIdUtilisateur) {
+        //       $(selectCorrectionFactureIdUtilisateur).select2({
+        //         theme: "bootstrap-5",
+        //         placeholder: lang.select.toLowerCase(),
+        //         dropdownParent: $(modalCorrectionFacture),
+        //       });
+        //       listUser(selectCorrectionFactureIdUtilisateur, true);
+        //       //===== EVENT refresh list user
+        //       modalCorrectionFacture
+        //         .querySelector("#btn-correction-facture-refresh-id-utilisateur")
+        //         .addEventListener("click", () => {
+        //           listUser(selectCorrectionFactureIdUtilisateur, true);
+        //         });
+        //     }
+        //     //list ligne_facture
+        //     await listLigneFacture(
+        //       tr.dataset.numFacture,
+        //       modalCorrectionFacture.querySelector("#div-ligne-facture")
+        //     );
+        //     //===== EVENT btn refresh list ligne_caisse
+        //     modalCorrectionFacture
+        //       .querySelector("#btn-correction-facture-refresh-ligne-facture")
+        //       .addEventListener("click", () => {
+        //         listLigneFacture(
+        //           tr.dataset.numFacture,
+        //           modalCorrectionFacture.querySelector("#div-ligne-facture")
+        //         );
+        //       });
+        //     //show modal correction facture
+        //     new bootstrap.Modal(modalCorrectionFacture).show();
+        //   }
+        // );
+        // //===== EVENT btn print facture
+        // tr.querySelector(".btn-print-facture").addEventListener(
+        //   "click",
+        //   async () => {
+        //     try {
+        //       //FETCH api print facture
+        //       const apiPrintFacture = await apiRequest(
+        //         `/entree/print_facture?num_facture=${tr.dataset.numFacture}`
+        //       );
+        //       //error
+        //       if (apiPrintFacture.message_type === "error") {
+        //         //alert
+        //         const alertTemplate = document.querySelector(".alert-template");
+        //         const clone = alertTemplate.content.cloneNode(true);
+        //         const alert = clone.querySelector(".alert");
+        //         const progressBar = alert.querySelector(".progress-bar");
+        //         //alert type
+        //         alert.classList.add("alert-danger");
+        //         //icon
+        //         alert
+        //           .querySelector(".fad")
+        //           .classList.add("fa-exclamation-triangle");
+        //         //message
+        //         alert.querySelector(".alert-message").innerHTML =
+        //           cashReport.message;
+        //         //progress bar
+        //         progressBar.style.transition = "width 20s linear";
+        //         progressBar.style.width = "100%";
+        //         //add alert
+        //         container
+        //           .querySelector("#tbody-facture")
+        //           .closest("div")
+        //           .prepend(alert);
+        //         //progress launch animation
+        //         setTimeout(() => {
+        //           progressBar.style.width = "0%";
+        //         }, 10);
+        //         //auto close alert
+        //         setTimeout(() => {
+        //           alert.querySelector(".btn-close").click();
+        //         }, 20000);
+        //         return;
+        //       }
+        //       //invalid
+        //       else if (apiPrintFacture.message_type === "invalid") {
+        //         //alert
+        //         const alertTemplate = document.querySelector(".alert-template");
+        //         const clone = alertTemplate.content.cloneNode(true);
+        //         const alert = clone.querySelector(".alert");
+        //         const progressBar = alert.querySelector(".progress-bar");
+        //         //alert type
+        //         alert.classList.add("alert-warning");
+        //         //icon
+        //         alert
+        //           .querySelector(".fad")
+        //           .classList.add("fa-exclamation-circle");
+        //         //message
+        //         alert.querySelector(".alert-message").innerHTML =
+        //           apiPrintFacture.message;
+        //         //progress bar
+        //         progressBar.style.transition = "width 10s linear";
+        //         progressBar.style.width = "100%";
+        //         //add alert
+        //         container
+        //           .querySelector("#tbody-facture")
+        //           .closest("div")
+        //           .prepend(alert);
+        //         //progress launch animation
+        //         setTimeout(() => {
+        //           progressBar.style.width = "0%";
+        //         }, 10);
+        //         //auto close alert
+        //         setTimeout(() => {
+        //           alert.querySelector(".btn-close").click();
+        //         }, 10000);
+        //         return;
+        //       }
+        //       //download facture
+        //       const a = document.createElement("a");
+        //       a.href = `data:application/pdf;base64,${apiPrintFacture.pdf}`;
+        //       a.download = apiPrintFacture.file_name;
+        //       a.click();
+        //       return;
+        //     } catch (e) {
+        //       console.error(e);
+        //     }
+        //   }
+        // );
+        // //===== EVENT tr selection
+        // tr.addEventListener("click", () => {
+        //   //remove selection
+        //   if (selectedRow && selectedRow === tr) {
+        //     tr.classList.remove("active");
+        //     selectedRow = null;
+        //     //remove table lf facture num
+        //     container.querySelector("#table-lf-facture-num").innerHTML = "";
+        //     //remove tbody lf
+        //     container.querySelector("#tbody-lf").innerHTML = `  <tr>
+        //                                                       <td colspan="9">
+        //                                                           <span class="bg-second placeholder w-100 rounded-1" style="height: 2vh !important;"></span>
+        //                                                       </td>
+        //                                                   </tr>`;
+        //   }
+        //   //add selection
+        //   else {
+        //     //deselect all
+        //     allTr.forEach((tr0) => {
+        //       tr0.classList.remove("active");
+        //     });
+        //     //add selection
+        //     tr.classList.add("active");
+        //     selectedRow = tr;
+        //     //add table lf facture num
+        //     container.querySelector("#table-lf-facture-num").innerHTML =
+        //       tr.dataset.numFacture;
+        //     //list facture connection
+        //     listConnectionFacture(tr.dataset.numFacture.trim());
+        //   }
+        // });
+      });
 
       // //===== EVENT check all
       // const inputCheckAll = container.querySelector("#check-all-facture");

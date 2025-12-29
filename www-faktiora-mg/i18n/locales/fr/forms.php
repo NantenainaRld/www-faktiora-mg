@@ -62,7 +62,8 @@ return [
         'correction_list' => "Liste des corrections",
         'sortie_dashboard' => "Tableau de bord sortie",
         'sortie_list' => "Liste des sorties",
-        'sortie_add' => "Ajout d'une sortie"
+        'sortie_add' => "Ajout d'une sortie",
+        'article_add' => "Ajout d'un article"
     ],
     'labels' => [
         'all' => 'tout',
@@ -285,7 +286,8 @@ return [
         'search_ae' => "numéro autre entrée, libéllé",
         'libelle_ae' => "ex: apport de caisse",
         'correction_inflow' => "ajout d'un autre montant",
-        'correction_outflow' => "réduction de montant"
+        'correction_outflow' => "réduction de montant",
+        'libelle_article' => "achat de carburant"
     ]
 
 ];

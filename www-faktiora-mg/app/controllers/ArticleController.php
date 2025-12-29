@@ -50,7 +50,7 @@ class ArticleController extends Controller
                 echo json_encode($response);
                 return;
             }
-            //ibelle_produit - invalid
+            //ibelle_article - invalid
             if (strlen($json['libelle_article']) > 100) {
                 $response = [
                     'message_type' => 'success',

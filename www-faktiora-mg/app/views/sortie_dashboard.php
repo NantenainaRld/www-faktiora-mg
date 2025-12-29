@@ -309,6 +309,8 @@
                                         <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
                                     </select>
                                     <button type="button" class="input-group-text" id="btn-add-sortie-refresh-id-article"><i class="fad fa-arrow-rotate-left"></i></button>
+                                    <span class="text-secondary mx-2"><?= __('forms.labels.or') ?></span>
+                                    <button type="button" class="btn btn-sm btn-light text-primary" data-bs-target="#modal-add-article" data-bs-toggle="modal"><i class="fad fa-plus"></i></button>
                                 </div>
                                 <!-- input article quantity and prix_article and btn add article -->
                                 <div class="card w-100">
@@ -357,65 +359,30 @@
             </div>
         </div>
     </div>
-    <!-- modal add client -->
-    <div class="modal fade" id="modal-add-client" tabindex="-1" aria-labelledby="modalAddClient" aria-hidden="true">
+    <!-- modal add article -->
+    <div class="modal fade" id="modal-add-article" tabindex="-1" aria-labelledby="modalArticle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- modal header  -->
                 <div class="modal-header bg-green-0 text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-user-circle-plus me-2"></i><?= __('forms.titles.client_add') ?></h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-user-circle-plus me-2"></i><?= __('forms.titles.article_add') ?></h6>
                 </div>
                 <form>
                     <!-- modal body  -->
                     <div class="modal-body">
-                        <!-- input - nom_client  -->
+                        <!-- input - libelle_article -->
                         <div class="mb-2">
-                            <label for="input-add-nom-client" class="form-label"><?= __('forms.labels.name') ?> <span class="text-danger">*</span></label>
+                            <label for="input-add-article-libelle-article" class="form-label"><?= __('forms.labels.label') ?> <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-address-card"></i></span>
-                                <input type="text" maxlength="100" class="form-control form-control-sm" id="input-add-nom-client" placeholder="RALANDISON" required>
-                            </div>
-                        </div>
-                        <!-- input - prenoms_client  -->
-                        <div class="mb-2">
-                            <label for="input-add-prenoms-client" class="form-label"><?= __('forms.labels.firstname') ?></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-address-card"></i></span>
-                                <input type="text" maxlength="100" class="form-control form-control-sm" id="input-add-prenoms-client" placeholder="Nantenaina">
-                            </div>
-                        </div>
-                        <!-- select - sexe_client  -->
-                        <div class="mb-2">
-                            <label for="select-add-sexe-client" class="form-label"><?= __('forms.labels.sex') ?></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-venus"></i></span>
-                                <select name="" id="select-add-sexe-client" class="form-select form-select-sm">
-                                    <option value="masculin"><?= __('forms.labels.male') ?></option>
-                                    <option value="féminin"><?= __('forms.labels.female') ?></option>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- input - telephone -->
-                        <div class="mb-2">
-                            <label for="input-add-telephone" class="form-label"><?= __('forms.labels.phone') ?> </label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-phone"></i></span>
-                                <input type="text" maxlength="20" minlength="10" class="form-control form-control-sm" id="input-add-telephone" placeholder="032 00 000 00">
-                            </div>
-                        </div>
-                        <!-- input - adresse -->
-                        <div class="mb-2">
-                            <label for="input-add-adresse" class="form-label"><?= __('forms.labels.address') ?> </label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-location-dot"></i></span>
-                                <input type="text" maxlength="20" class="form-control form-control-sm" id="input-add-adresse" placeholder="Andrainjato Fianarantsoa">
+                                <span class="input-group-text text-success"><i class="fad fa-tag"></i></span>
+                                <input type="text" maxlength="100" class="form-control form-control-sm" id="input-add-article-libelle-article" placeholder="<?= __('forms.placeholders.libelle_article') ?>" required>
                             </div>
                         </div>
                     </div>
                     <!-- modal footer  -->
                     <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modal-add-facture" type="button" id="btn-close-modal-add-client"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
-                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-add-client"><i class="fad fa-user-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modal-add-sortie" type="button" id="btn-close-modal-add-article"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-add-article"><i class="fad fa-user-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
                     </div>
                 </form>
             </div>
