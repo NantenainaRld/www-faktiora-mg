@@ -66,7 +66,8 @@ return [
         'article_add' => "Ajout d'un article",
         'sortie_update' => "Modification de sortie",
         'sortie_correction_inflow' => "Correction de sortie (entrée)",
-        'sortie_correction_outflow' => "Correction de sortie (sortie)"
+        'sortie_correction_outflow' => "Correction de sortie (sortie)",
+        'sortie_delete' => "Suppréssion des sorties"
     ],
     'labels' => [
         'all' => 'tout',
@@ -268,6 +269,8 @@ return [
         'sortie_montant' => "Montant de sortie",
         'message_correction_sortie_inflow' => "Cette correction affectera le solde de la caisse et créera une nouvelle entrée",
         'message_correction_sortie_outflow' => "Cette correction affectera le solde de la caisse et créera une nouvelle sortie",
+        'question_delete_sortie_1' => "Voulez-vous vraiment supprimer la sortie numéro <b>:field</b> ?",
+        'question_delete_sortie_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> sorties ?",
     ],
     'times' => [
         'minute' => "minute",

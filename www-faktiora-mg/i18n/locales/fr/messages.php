@@ -271,7 +271,7 @@ return [
         //sortie - delete all demande sortie 0
         'sortie_deleteAllDemandeSortie_0' => "Aucune sortie n'est supprimée",
         //sortie - delete all demande sortie 1
-        'sortie_deleteAllDemandeSortie_1' => "AUne sortie a été supprimée avec succès",
+        'sortie_deleteAllDemandeSortie_1' => "Une sortie a été supprimée avec succès",
         //sortie - delete all demande sortie plur
         'sortie_deleteAllDemandeSortie_plur' => "<b>:field</b> sorties ont été supprimées avec succès",
         //sortie - correction facture not mofidifed

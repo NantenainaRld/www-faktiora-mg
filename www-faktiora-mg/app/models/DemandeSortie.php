@@ -544,7 +544,7 @@ class DemandeSortie extends Database
         $response = ['message_type' => 'success', 'message' => 'success'];
 
         $placeholders = implode(', ', array_fill(0, count($nums_ds), '?'));
-        $sql = "UPDATE demande_sortie SET etat_ds = 'supprimé' WHERE num_ds IN ({$placeholders}) ";
+        $sql = "UPDATE demande_sortie SET etat_ds = 'supprimé' WHERE num_ds IN ({$placeholders}) AND etat_ds = 'actif' ";
 
         try {
 
