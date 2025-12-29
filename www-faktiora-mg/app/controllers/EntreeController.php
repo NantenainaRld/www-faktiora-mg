@@ -1514,34 +1514,7 @@ class EntreeController extends Controller
                 $num_caisse = "";
                 //role admin
                 if ($is_loged_in->getRole() === 'admin') {
-                    //is num_caisse exist ?
-                    $response = Caisse::findById($json['num_caisse']);
-                    //error
-                    if ($response['message_type'] === 'error') {
-                        echo json_encode($response);
-                        return;
-                    }
-                    //not found
-                    if (!$response['found']) {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                    //caisse - deleted
-                    if ($response['model']->getEtatCaisse() === 'supprimé') {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.invalids.caisse_deleted', ['field' => $json['num_caisse']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                    $num_caisse = $json['num_caisse'];
+                    $num_caisse = $ds_num_caisse;
                 }
                 //role caissier
                 else {
@@ -1575,71 +1548,6 @@ class EntreeController extends Controller
                     }
                 }
 
-                //num_caisse
-                $num_caisse = "";
-                //role admin
-                if ($is_loged_in->getRole() === 'admin') {
-                    //does num_caisse exist ?
-                    $response = Caisse::findById($json['num_caisse']);
-                    //error
-                    if ($response['message_type'] === 'error') {
-                        echo json_encode($response);
-                        return;
-                    }
-                    //not found
-                    if (!$response['found']) {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                    //caisse - deleted
-                    if ($response['model']->getEtatCaisse() === 'supprimé') {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.invalids.caisse_deleted', ['field' => $json['num_caisse']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                    $num_caisse = $json['num_caisse'];
-                }
-                //role caissier
-                else {
-                    //does user hash caisse ?
-                    $response = LigneCaisse::findCaisse($id_utilisateur);
-                    //error
-                    if ($response['message_type'] === 'error') {
-                        echo json_encode($response);
-                        return;
-                    }
-                    //not found
-                    if (!$response['found']) {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.not_found.user_caisse')
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                    $num_caisse = $response['model']->getNumCaisse();
-                    //ae num_caisse != user num_caisse
-                    if ($ds_num_caisse !== $num_caisse) {
-                        $response = [
-                            'message_type' => 'success',
-                            'message' => __('messages.invalids.sortie_correctionDemandeSortie', ['field' => $json['num_ds']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                }
-
                 //role admin - is user exist ?
                 if ($is_loged_in->getRole() === 'admin') {
                     $response = User::findById($id_utilisateur);
@@ -1660,17 +1568,35 @@ class EntreeController extends Controller
                     }
                 }
 
-                //montant_ae > montant_ds
+                //get montant_ds
                 $response = SortieRepositorie::getMontantDs($json['num_ds']);
                 //error
                 if ($response['message_type'] === 'error') {
                     echo json_encode($response);
                     return;
                 }
-                if ($montant_ae > $response['montant_ds']) {
+                $montant_ds = $response['montant_ds'];
+                // get connection ds
+                $ds = new DemandeSortie();
+                $ds->setNumDs($json['num_ds']);
+                $response = $ds->listConnectionSortie();
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                $montant_out = 0;
+                if (count($response['autre_entree']) > 0) {
+                    $montant_out = array_sum(array_column(
+                        $response['autre_entree'],
+                        'montant_ae'
+                    ));
+                }
+                //montant_ae - montant_out - prix_article < 0
+                if ($montant_ds - $montant_out - $json['montant_ae'] < 0) {
                     $response = [
                         'message_type' => 'invalid',
-                        'message' => __('messages.invalids.entree_montant_ds')
+                        'message' => __('messages.invalids.entree_correctionDemandeSortie_montant_ae')
                     ];
 
                     echo json_encode($response);

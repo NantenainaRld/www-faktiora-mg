@@ -150,8 +150,8 @@ return [
         'sortie_updateDemandeSortie' => DEBUG ? "Erreur dans sortie/updateDemandeSortie : :field" : "Une erreur est survenue lors de la modification de sortie",
         //sortie - delete all demande sortie
         'sortie_deleteAllDemandeSortie' => DEBUG ? "Erreur dans sortie/deleteAllDemandeSortie : :field" : "Une erreur est survenue lors de la suppréssion des sorties",
-        //sortie - get montant_ae
-        'sortie_getMontantAe' => DEBUG ? "Erreur dans sortie/getMontantAe : :field" : "Une erreur est survenue lors de calcule de montant de sortie",
+        //sortie - get montant_ds
+        'sortie_getMontantDs' => DEBUG ? "Erreur dans sortie/getMontantAe : :field" : "Une erreur est survenue lors de calcule de montant de sortie",
         //sortie - correction facture
         'sortie_correctionFacture' => DEBUG ? "Erreur dans sortie/correctionFacture : :field" : "Une erreur est survenue lors de la correction de la facture",
         //sortie - print demande sortie

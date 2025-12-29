@@ -64,7 +64,8 @@ return [
         'sortie_list' => "Liste des sorties",
         'sortie_add' => "Ajout d'une sortie",
         'article_add' => "Ajout d'un article",
-        'sortie_update' => "Modification de sortie"
+        'sortie_update' => "Modification de sortie",
+        'sortie_correction_inflow' => "Correction de sortie (entrée)"
     ],
     'labels' => [
         'all' => 'tout',
@@ -263,7 +264,8 @@ return [
         'question_restore_ae_plur' => "Voulez-vous vraiment récupérer ces <b>:field</b> autres entrées ?",
         'sortie_num' => "Numéro de sortie",
         'sortie_date' => "Date de sortie",
-        'sortie_montant' => "Montant de sortie"
+        'sortie_montant' => "Montant de sortie",
+        'message_correction_sortie_inflow' => "Cette correction affectera le solde de la caisse et créera une nouvelle entrée"
     ],
     'times' => [
         'minute' => "minute",

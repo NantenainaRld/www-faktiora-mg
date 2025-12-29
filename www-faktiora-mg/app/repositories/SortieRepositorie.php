@@ -244,7 +244,7 @@ class SortieRepositorie extends Database
             $response = [
                 'message_type' => 'error',
                 'message' => __(
-                    'errors.catch.sortie_getMontantAe',
+                    'errors.catch.sortie_getMontantDs',
                     ['field' => $e->getMessage() .
                         ' - Line : ' . $e->getLine() .
                         ' - File : ' . $e->getFile()]

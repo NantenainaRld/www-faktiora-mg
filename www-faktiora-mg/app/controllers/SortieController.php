@@ -1335,7 +1335,7 @@ class SortieController extends Controller
                     ));
                 }
                 //montant_ae - montant_out - prix_article < 0
-                if ($montant_ae - $montant_out - $json['montant']) {
+                if ($montant_ae - $montant_out - $json['montant'] < 0) {
                     $response = [
                         'message_type' => 'invalid',
                         'message' => __('messages.invalids.sortie_correctionAutreEntree_montant_ds')

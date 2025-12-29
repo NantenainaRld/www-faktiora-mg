@@ -76,6 +76,8 @@ return [
         'entree_facture_deleted' => "La facture numéro <b>:field</b> est déjà supprimée",
         //entree - facture not selected 
         'entree_facture_not_selected' => "Veuiller séléctionner une facture",
+        //entree - correction demande_sortie montant_ae
+        'entree_correctionDemandeSortie_montant_ae' => "Le total des montants de réduction pour cette sortie dépasse le montant original. Veuiller vérifier les lignes de correction pour cette sortie",
         //produit - ids_produit empty
         'produit_ids_produit_empty' => "Veuiller séléctionner au moins un produit",
         //produit - libelle prix
