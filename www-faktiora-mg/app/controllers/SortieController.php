@@ -949,17 +949,6 @@ class SortieController extends Controller
             }
             $date_ds = $date_ds->format('Y-m-d H:i:s');
 
-            //id_utilisateur - empty
-            if ($json['id_utilisateur'] === '') {
-                $response = [
-                    'message_type' => 'invalid',
-                    'message' => __('messages.empty.user_id')
-                ];
-
-                echo json_encode($response);
-                return;
-            }
-
             try {
 
                 //is num_ds exist ?
@@ -981,49 +970,11 @@ class SortieController extends Controller
                     return;
                 }
 
-                //is num_caisse exist ?
-                $response = Caisse::findById($json['num_caisse']);
-                //error
-                if ($response['message_type'] === 'error') {
-                    echo json_encode($response);
-                    return;
-                }
-                //not found
-                if (!$response['found']) {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
-                    ];
-
-                    echo json_encode($response);
-                    return;
-                }
-
-                //is user exist ?
-                $response = User::findById($json['id_utilisateur']);
-                //error
-                if ($response['message_type'] === 'error') {
-                    echo json_encode($response);
-                    return;
-                }
-                //not found
-                if (!$response['found']) {
-                    $response = [
-                        'message_type' => 'invalid',
-                        'message' => __('messages.not_found.user_id', ['field' => $json['id_utilisateur']])
-                    ];
-
-                    echo json_encode($response);
-                    return;
-                }
-
                 //update demande sortie
                 $demande_sortie_model = new DemandeSortie();
                 $demande_sortie_model
                     ->setNumDs($json['num_ds'])
-                    ->setDateDs($json['date_ds'])
-                    ->setIdUtilsateur($json['id_utilisateur'])
-                    ->setNumCaisse($json['num_caisse']);
+                    ->setDateDs($json['date_ds']);
                 $response = $demande_sortie_model->updateDemandeSortie();
 
                 echo json_encode($response);

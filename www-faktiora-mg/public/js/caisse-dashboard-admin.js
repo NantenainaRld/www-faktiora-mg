@@ -3205,12 +3205,16 @@ document.addEventListener("DOMContentLoaded", async () => {
           const inputUpdateDateDebut = modalUpdateLigneCaisse.querySelector(
             "#input-update-date-debut"
           );
-          inputUpdateDateDebut.value = tr.dataset.dateDebut.replace(" ", "T");
+          inputUpdateDateDebut.value = tr.dataset.dateDebut
+            .replace(" ", "T")
+            .slice(0, 16);
           //input - update date_fin
           const inputUpdateDateFin = modalUpdateLigneCaisse.querySelector(
             "#input-update-date-fin"
           );
-          inputUpdateDateFin.value = tr.dataset.dateFin.replace(" ", "T");
+          inputUpdateDateFin.value = tr.dataset.dateFin
+            .replace(" ", "T")
+            .slice(0, 16);
 
           //select - add id_utilisateur
           const selectUpdateIdUtilisateur =

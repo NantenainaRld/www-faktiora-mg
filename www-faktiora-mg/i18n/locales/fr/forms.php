@@ -63,7 +63,8 @@ return [
         'sortie_dashboard' => "Tableau de bord sortie",
         'sortie_list' => "Liste des sorties",
         'sortie_add' => "Ajout d'une sortie",
-        'article_add' => "Ajout d'un article"
+        'article_add' => "Ajout d'un article",
+        'sortie_update' => "Modification de sortie"
     ],
     'labels' => [
         'all' => 'tout',

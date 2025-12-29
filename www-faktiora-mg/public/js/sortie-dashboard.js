@@ -897,6 +897,158 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       });
 
+    //======================= UPDATE SORTIE ===================
+    //modal update sortie
+    const modalUpdateSortie = container.querySelector("#modal-update-sortie");
+
+    //===== EVENT modal update sortie form submit
+    modalUpdateSortie
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        //suspend submit
+        e.preventDefault();
+        //check validity
+        if (!e.target.checkValidity()) {
+          e.target.reportValidity();
+          return;
+        }
+
+        try {
+          //FECH api update sortie
+          const apiUpdateSortie = await apiRequest(
+            "/sortie/update_demande_sortie",
+            {
+              method: "PUT",
+              body: {
+                num_ds: modalUpdateSortie
+                  .querySelector("#update-sortie-num-ds")
+                  .textContent.trim(),
+                date_ds: modalUpdateSortie
+                  .querySelector("#input-update-sortie-date-ds")
+                  .value.trim(),
+              },
+            }
+          );
+
+          //error
+          if (apiUpdateSortie.message_type === "error") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-danger");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiUpdateSortie.message;
+            //progress bar
+            progressBar.style.transition = "width 20s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalUpdateSortie.querySelector(".modal-body").prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 20000);
+            return;
+          }
+          //invalid
+          else if (apiUpdateSortie.message_type === "invalid") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-warning");
+            //icon
+            alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiUpdateSortie.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalUpdateSortie.querySelector(".modal-body").prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+            return;
+          }
+
+          //success
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-success");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-check-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            apiUpdateSortie.message;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          container
+            .querySelector("#tbody-sortie")
+            .closest("div")
+            .prepend(alert);
+
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+
+          //close modal
+          modalUpdateSortie
+            .querySelector("#btn-close-modal-update-sortie")
+            .click();
+
+          //refresh filter sortie
+          filterSortie(
+            selectStatus.value.trim(),
+            selectArrangeBy.value.trim(),
+            selectOrder.value.trim(),
+            dateFrom.value.trim(),
+            dateTo.value.trim(),
+            selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
+            $(selectIdUtilisateur).val().trim(),
+            inputSearch.value.trim()
+          );
+
+          return;
+        } catch (e) {
+          console.error(e);
+        }
+      });
     //     //======================= CORRECION FACTURE ===================
     //     //modal correction facture
     //     const modalCorrectionFacture = container.querySelector(
@@ -1881,15 +2033,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
         //btn update ds
         const btnUpdateDs = document.createElement("button");
-        btnUpdateDs.type = "button";
-        btnUpdateDs.classList.add(
-          "btn-light",
-          "btn",
-          "btn-sm",
-          "text-primary",
-          "btn-update-ds"
-        );
-        btnUpdateDs.innerHTML = "<i class='fad fa-pen-to-square'></i>";
+        if (container.querySelector("#check-all-sortie")) {
+          btnUpdateDs.type = "button";
+          btnUpdateDs.classList.add(
+            "btn-light",
+            "btn",
+            "btn-sm",
+            "text-primary",
+            "btn-update-ds"
+          );
+          btnUpdateDs.innerHTML = "<i class='fad fa-pen-to-square'></i>";
+          divActions.append(btnUpdateDs);
+        }
         //btn correction ds inflow
         const btnCorrectionDsInflow = document.createElement("button");
         btnCorrectionDsInflow.type = "button";
@@ -1919,7 +2074,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         btnPrintDs.innerHTML = "<i class='fad fa-print'></i>";
         //append btn actions
         divActions.append(
-          btnUpdateDs,
           btnCorrectionDsInflow,
           btnCorrectionDsOutflow,
           btnPrintDs
@@ -1947,15 +2101,29 @@ document.addEventListener("DOMContentLoaded", async () => {
       const allTr = tbodySortie.querySelectorAll("tr");
       allTr.forEach((tr) => {
         //==================== UPDATE SORTIE =====================
-        //===== EVENT btn update sortie
-        // tr.querySelector(".btn-update-sortie").addEventListener("click", () => {
-        //   //modal update sortie
-        //   const modalUpdateSortie = container.querySelector(
-        //     "#modal-update-sortie"
-        //   );
-        //   //show modal update sortie
-        //   new bootstrap.Modal(modalUpdateSortie).show();
-        // });
+        //===== EVENT btn update ds
+        const btnUpdateSortie = tr.querySelector(".btn-update-ds");
+        if (btnUpdateSortie) {
+          btnUpdateSortie.addEventListener("click", () => {
+            //modal update sortie
+            const modalUpdateSortie = container.querySelector(
+              "#modal-update-sortie"
+            );
+            //update sortie num_ds
+            modalUpdateSortie.querySelector("#update-sortie-num-ds").innerHTML =
+              tr.dataset.numDs;
+            //input - update sortie date_ds
+            const inputUpdateSortieDateDs = modalUpdateSortie.querySelector(
+              "#input-update-sortie-date-ds"
+            );
+            inputUpdateSortieDateDs.value = tr.dataset.dateDs
+              .replace(" ", "T")
+              .slice(0, 16);
+
+            //show modal update sortie
+            new bootstrap.Modal(modalUpdateSortie).show();
+          });
+        }
         // //===================== CORRECTION FACTURE ==================
         // //modal correction facture
         // const modalCorrectionFacture = container.querySelector(

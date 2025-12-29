@@ -488,7 +488,7 @@
                                 </nav>
                             </li>
                             <!-- sortie -->
-                            <li class="nav-item action bg-success rounded-1 mb-2 text-light <?= ($_SESSION['menu'] === 'sortie' || $_SESSION['menu'] === 'client') ? 'active' : '' ?>">
+                            <li class="nav-item action bg-success rounded-1 mb-2 text-light <?= ($_SESSION['menu'] === 'sortie') ? 'active' : '' ?>">
                                 <a href="<?= SITE_URL ?>/sortie/page_sortie" class="nav-link fw-bold p-2 text-start" style="font-size: 0.85rem;">
                                     <i class="fad fa-chart-line-down me-2"></i><?= ucfirst(__('forms.labels.outflow')) ?>
                                 </a>

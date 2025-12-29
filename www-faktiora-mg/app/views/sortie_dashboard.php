@@ -360,12 +360,12 @@
         </div>
     </div>
     <!-- modal add article -->
-    <div class="modal fade" id="modal-add-article" tabindex="-1" aria-labelledby="modalArticle" aria-hidden="true">
+    <div class="modal fade" id="modal-add-article" tabindex="-1" aria-labelledby="modalAddArticle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- modal header  -->
                 <div class="modal-header bg-green-0 text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-user-circle-plus me-2"></i><?= __('forms.titles.article_add') ?></h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-plus me-2"></i><?= __('forms.titles.article_add') ?></h6>
                 </div>
                 <form>
                     <!-- modal body  -->
@@ -382,7 +382,38 @@
                     <!-- modal footer  -->
                     <div class="modal-footer d-flex flex-nowrap justify-content-end">
                         <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modal-add-sortie" type="button" id="btn-close-modal-add-article"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
-                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-add-article"><i class="fad fa-user-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
+                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-add-article"><i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- modal update sortie-->
+    <div class="modal fade" id="modal-update-sortie" tabindex="-1" aria-labelledby="modalUpdateSortie" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <!-- modal header  -->
+                <div class="modal-header bg-green-0 text-light">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-pen-to-square me-2"></i><?= __('forms.titles.sortie_update') ?></h6>
+                </div>
+                <form>
+                    <!-- modal body  -->
+                    <div class="modal-body">
+                        <!-- num_ds -->
+                        <div class="mb-2 text-center fw-bold text-secondary" id="update-sortie-num-ds"></div>
+                        <!-- input - update sortie date_ds -->
+                        <div class="mb-2">
+                            <label for="input-update-sortie-date-ds" class="form-label"><?= __('forms.labels.date') ?> <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
+                                <input type="datetime-local" maxlength="100" class="form-control form-control-sm" id="input-update-sortie-date-ds" required>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- modal footer  -->
+                    <div class="modal-footer d-flex flex-nowrap justify-content-end">
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-update-sortie"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-update-sortie"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
                     </div>
                 </form>
             </div>

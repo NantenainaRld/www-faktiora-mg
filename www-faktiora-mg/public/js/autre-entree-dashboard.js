@@ -1954,7 +1954,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             "#input-update-ae-date-ae"
           );
           if (inputUpdateAeDateAe)
-            inputUpdateAeDateAe.value = tr.dataset.dateAe.replace(" ", "T");
+            inputUpdateAeDateAe.value = tr.dataset.dateAe
+              .replace(" ", "T")
+              .slice(0, 16);
 
           //====== EVENT input update ae libelle_ae
           inputUpdateAeLibelleAe.addEventListener("input", (e) => {

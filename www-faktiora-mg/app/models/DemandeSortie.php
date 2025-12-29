@@ -498,10 +498,8 @@ class DemandeSortie extends Database
 
         try {
 
-            $response = parent::executeQuery("UPDATE demande_sortie SET date_ds = :date, id_utilisateur = :id_user, num_caisse = :num_caisse WHERE num_ds = :num_ds ", [
+            $response = parent::executeQuery("UPDATE demande_sortie SET date_ds = :date WHERE num_ds = :num_ds ", [
                 'date' => $this->date_ds,
-                'id_user' => $this->id_utilisateur,
-                'num_caisse' => $this->num_caisse,
                 'num_ds' => $this->num_ds
             ]);
 
