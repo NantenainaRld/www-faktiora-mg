@@ -1290,50 +1290,41 @@ class SortieController extends Controller
                     echo json_encode($response);
                     return;
                 }
-                //montant > montant_ae
-                if ($json['montant'] > $response['model']->getMontantAe()) {
+                $ae_num_caisse = $response['model']->getNumCaisse();
+                $montant_ae = $response['model']->getMontantAe();
+
+                //get connection ae
+                $ae = new AutreEntree();
+                $ae->setNumAe($json['num_ae']);
+                $response = $ae->listConnectionAutreEntree();
+                //error
+                if ($response['message_type'] === 'error') {
+                    echo json_encode($response);
+                    return;
+                }
+                $montant_out = 0;
+                if (count($response['sortie']) > 0) {
+                    $montant_out = array_sum(array_column(
+                        $response['sortie'],
+                        'prix_article'
+                    ));
+                }
+                //montant_ae - montant_out - prix_article < 0
+                if ($montant_ae - $montant_out - $json['montant']) {
                     $response = [
-                        'message_type' => 'success',
-                        'message' => __('messages.invalids.sortie_montant_ae')
+                        'message_type' => 'invalid',
+                        'message' => __('messages.invalids.sortie_correctionAutreEntree_montant_ds')
                     ];
 
                     echo json_encode($response);
                     return;
                 }
-                $ae_num_caisse = $response['model']->getNumCaisse();
 
                 //num_caisse
                 $num_caisse = "";
                 //role admin
                 if ($is_loged_in->getRole() === 'admin') {
-                    //is num_caisse exist ?
-                    $response = Caisse::findById($json['num_caisse']);
-                    //error
-                    if ($response['message_type'] === 'error') {
-                        echo json_encode($response);
-                        return;
-                    }
-                    //not found
-                    if (!$response['found']) {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.not_found.caisse_num_caisse', ['field' => $json['num_caisse']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                    //caisse - deleted
-                    if ($response['model']->getEtatCaisse() === 'supprimé') {
-                        $response = [
-                            'message_type' => 'invalid',
-                            'message' => __('messages.invalids.caisse_deleted', ['field' => $json['num_caisse']])
-                        ];
-
-                        echo json_encode($response);
-                        return;
-                    }
-                    $num_caisse = $json['num_caisse'];
+                    $num_caisse = $ae_num_caisse;
                 }
                 //role caissier
                 else {

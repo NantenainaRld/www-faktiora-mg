@@ -394,6 +394,72 @@
             </div>
         </div>
     </div>
+    <!-- modal correction ae outflow -->
+    <div class="modal fade" id="modal-correction-ae-outflow" tabindex="-1" aria-labelledby="modalCorrectionAeOutflow" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content d-flex flex-column justify-content-between">
+                <!-- modal header  -->
+                <div class="modal-header bg-green-0 text-light flex-frow-0">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-minus me-2"></i><?= __('forms.titles.ae_correction_outflow') ?></h6>
+                </div>
+                <!-- form correction ae outflow -->
+                <form class="flex-grow-1 overflow-auto">
+                    <!-- modal body -->
+                    <div class="modal-body">
+                        <!-- num_ae -->
+                        <div class="mb-2 text-center text-secondary fw-bold" id="correction-ae-outflow-num-ae"></div>
+                        <!-- message -->
+                        <div class="mb-2 text-center text-secondary"><?= __('forms.labels.message_correction_ae_outflow') ?></div>
+                        <!-- libelle_article -->
+                        <div class="mb-2">
+                            <label for="input-correction-ae-outflow-libelle-article" class="form-label"><?= __('forms.labels.motif') ?><span class="text-danger"> *</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-tag"></i></span>
+                                <input type="text" maxlength="100" id="input-correction-ae-outflow-libelle-article" class="form-control form-control-sm" placeholder="<?= __('forms.placeholders.correction_outflow') ?>" required>
+                            </div>
+                        </div>
+                        <!-- prix_article -->
+                        <div class="mb-2">
+                            <label for="input-correction-ae-outflow-prix-article" class="form-label"><?= __('forms.labels.montant_outflow') ?><span class="text-danger"> *</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-coins"></i></span>
+                                <input type="text" class="form-control form-control-sm" id="input-correction-ae-outflow-prix-article" required>
+                            </div>
+                        </div>
+                        <?php if ($role === 'admin'): ?>
+                            <!-- date ds -->
+                            <div class="mb-2">
+                                <label for="input-correction-ae-outflow-date-ds" class="form-label"><?= __('forms.labels.date') ?> <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
+                                    <input type="datetime-local" max="<?= date('Y-m-d\TH:i') ?>" class="form-control form-control-sm" id="input-correction-ae-outflow-date-ds" required>
+                                </div>
+                            </div>
+                            <!-- id_utilisateur -->
+                            <div class="mb-2">
+                                <label for="select-correction-ae-outflow-id-utilisateur" class="form-label"><?= __('forms.labels.user') ?> <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text text-success"><i class="fad fa-user"></i></span>
+                                    <select name="" id="select-correction-ae-outflow-id-utilisateur" class="form-select form-select-sm select2" required>
+                                        <option></option>
+                                        <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
+                                    </select>
+                                    <button type="button" class="input-group-text" id="btn-correction-ae-outflow-refresh-id-utilisateur"><i class="fad fa-arrow-rotate-left"></i></button>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                        <!-- montant_total -->
+                        <div class="mb-2 mt-3 text-center text-secondary"><?= __('forms.labels.total') ?> : <span class="montant-total"></span></div>
+                    </div>
+                    <!-- modal footer  -->
+                    <div class="modal-footer d-flex flex-nowrap justify-content-end">
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-correction-ae-outflow"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-primary btn-sm fw-bold" type="submit"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <!-- modal delete facture -->
     <div class="modal fade" id="modal-delete-facture" tabindex="-1" aria-labelledby="modalDeleteFacture" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">

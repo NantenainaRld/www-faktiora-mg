@@ -55,7 +55,8 @@ return [
         'ae_list' => "Liste des autres entrées",
         'ae_add' => "Ajout d'une autre entrée",
         'ae_update' => "Modification d'autre entrée",
-        'ae_correction_inflow' => "Correction d'autre entrée (entrée)"
+        'ae_correction_inflow' => "Correction d'autre entrée (entrée)",
+        'ae_correction_outflow' => "Correction d'autre entrée (sortie)"
     ],
     'labels' => [
         'all' => 'tout',
@@ -243,7 +244,10 @@ return [
         'ae_montant' => "Montant d'autre entrée",
         'message_correction_ae_inflow' => "Cette correction affectera le solde de la caisse et créera une nouvelle entrée.",
         'motif' => "Motif",
-        'montant_inflow' => "Montant à ajouter"
+        'montant_inflow' => "Montant à ajouter",
+        'message_correction_ae_outflow' => "Cette correction affectera le solde de la caisse et créera une nouvelle sortie et aussi un nouveau article.",
+        'montant_outflow' => "Montant à réduire",
+
     ],
     'times' => [
         'minute' => "minute",
@@ -266,7 +270,8 @@ return [
         'search_facture' => "numéro facture, ID client",
         'search_ae' => "numéro autre entrée, libéllé",
         'libelle_ae' => "ex: apport de caisse",
-        'correction_inflow' => "ajout d'un autre montant"
+        'correction_inflow' => "ajout d'un autre montant",
+        'correction_outflow' => "réduction de montant"
     ]
 
 ];

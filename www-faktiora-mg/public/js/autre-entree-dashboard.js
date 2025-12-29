@@ -926,7 +926,171 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       });
 
-    //=================== CORRECTION AE OUTFLOW ===============
+    //=================== CORRECTION AE OUTFLOW =================
+    //modal correction ae outflow
+    const modalCorrectionAeOutflow = container.querySelector(
+      "#modal-correction-ae-outflow"
+    );
+
+    //===== EVENT form correction ae outflow submit
+    modalCorrectionAeOutflow
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        //suspend submit
+        e.preventDefault();
+        //check validity
+        if (!e.target.checkValidity()) {
+          e.target.reportValidity();
+          return;
+        }
+
+        try {
+          //FETH api correction ae outflow
+          const apiCorectionAeOutflow = await apiRequest(
+            "/sortie/correction_autre_entree",
+            {
+              method: "POST",
+              body: {
+                num_ae: modalCorrectionAeOutflow
+                  .querySelector("#correction-ae-outflow-num-ae")
+                  .textContent.trim(),
+                libelle_article: modalCorrectionAeOutflow
+                  .querySelector("#input-correction-ae-outflow-libelle-article")
+                  .value.trim(),
+                montant: modalCorrectionAeOutflow
+                  .querySelector("#input-correction-ae-outflow-prix-article")
+                  .value.replace(/[\u202F\u00A0 ]/g, "")
+                  .replace(",", "."),
+                date_ds: !modalCorrectionAeOutflow.querySelector(
+                  "#input-correction-ae-outflow-date-ds"
+                )
+                  ? ""
+                  : modalCorrectionAeOutflow
+                      .querySelector("#input-correction-ae-outflow-date-ds")
+                      .value.trim(),
+                id_utilisateur: !modalCorrectionAeOutflow.querySelector(
+                  "#select-correction-ae-outflow-id-utilisateur"
+                )
+                  ? ""
+                  : $(
+                      modalCorrectionAeOutflow.querySelector(
+                        "#select-correction-ae-outflow-id-utilisateur"
+                      )
+                    )
+                      .val()
+                      .trim(),
+              },
+            }
+          );
+
+          //error
+          if (apiCorectionAeOutflow.message_type === "error") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-danger");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiCorectionAeOutflow.message;
+            //progress bar
+            progressBar.style.transition = "width 20s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalCorrectionAeOutflow
+              .querySelector(".modal-body")
+              .prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 20000);
+            return;
+          }
+          //invalid
+          else if (apiCorectionAeOutflow.message_type === "invalid") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-warning");
+            //icon
+            alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiCorectionAeOutflow.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalCorrectionAeOutflow
+              .querySelector(".modal-body")
+              .prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+            return;
+          }
+
+          //success
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-success");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-check-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            apiCorectionAeOutflow.message;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          container.querySelector("#tbody-ae").closest("div").prepend(alert);
+
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+
+          //close modal
+          modalCorrectionAeOutflow
+            .querySelector("#btn-close-modal-correction-ae-outflow")
+            .click();
+
+          return;
+        } catch (e) {
+          console.error(e);
+        }
+      });
     //     //========================== DELETE FACTURE =====================
     //     //btn delete facture
     //     const btnDeleteFacture = container.querySelector("#btn-delete-facture");
@@ -1894,6 +2058,149 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
 
         //=================== CORRECTION AE OUTFLOW ===============
+
+        //=================== CORRECTION AE INFLOW =================
+        //====== EVENT btn correction ae outflow
+        tr.querySelector(".btn-correct-ae-outflow").addEventListener(
+          "click",
+          async () => {
+            //modal correction ae outflow
+            const modalCorrectionAeOutflow = container.querySelector(
+              "#modal-correction-ae-outflow"
+            );
+            //num_ae
+            modalCorrectionAeOutflow.querySelector(
+              "#correction-ae-outflow-num-ae"
+            ).innerHTML = tr.dataset.numAe;
+            //montant_total
+            const montantTotal =
+              modalCorrectionAeOutflow.querySelector(".montant-total");
+            montantTotal.innerHTML = formatterTotal.format(
+              Number(tr.dataset.montantAe) - 1
+            );
+            montantTotal.dataset.value = tr.dataset.montantAe;
+            montantTotal.dataset.prixArticle = tr.dataset.montantAe;
+            //modal correction ae outflow - intialize select 2
+            $(modalCorrectionAeOutflow.querySelectorAll(".select2")).select2({
+              theme: "bootstrap-5",
+              placeholder: lang.select.toLowerCase(),
+              dropdownParent: $(modalCorrectionAeOutflow),
+            });
+            //input - correction ae outflow libelle_article
+            const inputCorrectionAeOutflowLibelleArticle =
+              modalCorrectionAeOutflow.querySelector(
+                "#input-correction-ae-inflow-libelle-aarticle"
+              );
+            //input - correction ae outflow prix_article
+            const inputCorrectionAeOutflowPrixArticle =
+              modalCorrectionAeOutflow.querySelector(
+                "#input-correction-ae-outflow-prix-article"
+              );
+            inputCorrectionAeOutflowPrixArticle.value = 1;
+            inputCorrectionAeOutflowPrixArticle.dataset.val = 1;
+            //input - correction ae outflow date_ds
+            const inputCorrectionAeOutflowDateDs =
+              modalCorrectionAeOutflow.querySelector(
+                "#input-correction-ae-outflow-date-ds"
+              );
+            //select - correction ae outflow id_utilisateur
+            const selectCorrectionAeOutflowIdUtilisateur =
+              modalCorrectionAeOutflow.querySelector(
+                "#select-correction-ae-outflow-id-utilisateur"
+              );
+            if (selectCorrectionAeOutflowIdUtilisateur) {
+              //list all user
+              await listUser(selectCorrectionAeOutflowIdUtilisateur, true);
+
+              //===== EVENT btn correction ae outflow refresh id_utilisateur
+              modalCorrectionAeOutflow
+                .querySelector(
+                  "#btn-correction-ae-outflow-refresh-id-utilisateur"
+                )
+                .addEventListener("click", () => {
+                  listUser(selectCorrectionAeOutflowIdUtilisateur, true);
+                });
+            }
+
+            //===== EVENT input ucorrection ae outflow libelle_article
+            inputCorrectionAeOutflowPrixArticle.addEventListener(
+              "input",
+              (e) => {
+                e.target.value = e.target.value.replace("  ", " ");
+              }
+            );
+            //===== EVENT input correction ae outflow prix_article
+            inputCorrectionAeOutflowPrixArticle.addEventListener(
+              "input",
+              (e) => {
+                if (cookieLangValue === "en") {
+                  e.target.value = e.target.value.replace(/[^0-9.]/g, "");
+                  if (!/^\d*\.?\d*$/.test(e.target.value)) {
+                    e.target.value = e.target.value.slice(0, -1);
+                  }
+
+                  // add 0 in the start if ,
+                  if (e.target.value.startsWith(".")) {
+                    e.target.value = "0" + e.target.value;
+                  }
+
+                  //real value for calcul
+                  e.target.dataset.val = e.target.value.replace(
+                    /[\u202F\u00A0 ]/g,
+                    ""
+                  );
+                } else {
+                  //number and , only
+                  e.target.value = e.target.value.replace(/[^0-9,]/g, "");
+                  if (!/^\d*\,?\d*$/.test(e.target.value)) {
+                    e.target.value = e.target.value.slice(0, -1);
+                  }
+                  // add 0 in the start if ,
+                  if (e.target.value.startsWith(",")) {
+                    e.target.value = "0" + e.target.value;
+                  }
+
+                  //real value for calcul
+                  e.target.dataset.val = e.target.value
+                    .replace(",", ".")
+                    .replace(/[\u202F\u00A0 ]/g, "");
+                }
+
+                //correction ae montant_total
+                if (
+                  Number(montantTotal.dataset.prixArticle) -
+                    Number(e.target.dataset.val) <
+                  0
+                ) {
+                  e.target.value = Number(montantTotal.dataset.prixArticle);
+                  montantTotal.innerHTML = formatterTotal.format(0);
+                  montantTotal.dataset.value = 0;
+                } else {
+                  montantTotal.innerHTML = formatterTotal.format(
+                    Number(montantTotal.dataset.prixArticle) -
+                      Number(e.target.dataset.val)
+                  );
+                }
+              }
+            );
+            inputCorrectionAeOutflowPrixArticle.addEventListener(
+              "blur",
+              (e) => {
+                if (e.target.value.endsWith(",")) {
+                  e.target.value += "0";
+                }
+                e.target.value = formatterNumber.format(
+                  e.target.value
+                    .replace(/[\u202F\u00A0 ]/g, "")
+                    .replace(",", ".")
+                );
+              }
+            );
+
+            //show modal correction ae outflow
+            new bootstrap.Modal(modalCorrectionAeOutflow).show();
+          }
+        );
       });
 
       // //===== EVENT check all

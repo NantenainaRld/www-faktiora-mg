@@ -60,8 +60,6 @@ return [
         'entree_correctionAutreEntree' => "Cette autre entrée n'est pas enregistrée sur votre caisse actuelle",
         //entree - ae deleted
         'entree_ae_deleted' => "L'autre entrée numéro <b>:field</b> est déjà supprimée ",
-        //entree - montant_ds
-        'entree_montant_ds' => "Montant invalide : le montant saisi dépasse le montant total de ce sortie",
         //entree - quantite produit
         'entree_quantite_produit' => "La quantite est invalide pour le produit avec l'ID <b>:id_produit</b> : :quantite_produit",
         //entree - nums_facture empty
@@ -114,6 +112,8 @@ return [
         'sortie_not_selected' => "Veuiller séléctionner une sortie",
         //sortie - not ds
         'sortie_not_ds' => "La sortie numéro <b>:field</b> n'est pas une demande d'engagement de dépense",
+        //sortie - correction autre_entree montant_ds
+        'sortie_correctionAutreEntree_montant_ds' => "Le total des montants de réduction pour cette autre entrée dépasse le montant original. Veuiller vérifier les lignes de correction pour cette autre entrée",
         //client - ids client empty
         'client_ids_client_empty' => "Veuiller séléctionner au moins un client",
         //client  - deleted
