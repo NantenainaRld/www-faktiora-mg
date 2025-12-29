@@ -271,6 +271,9 @@ return [
         'message_correction_sortie_outflow' => "Cette correction affectera le solde de la caisse et créera une nouvelle sortie",
         'question_delete_sortie_1' => "Voulez-vous vraiment supprimer la sortie numéro <b>:field</b> ?",
         'question_delete_sortie_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> sorties ?",
+        'question_delete_permanent_sortie_1' => "Voulez-vous vraiment supprimer la sortie numéro <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>.",
+        'question_delete_permanent_sortie_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> sorties ?. <span class='text-danger'>Cette action est irréversible</span>.",
+
     ],
     'times' => [
         'minute' => "minute",

@@ -1084,8 +1084,8 @@ class SortieController extends Controller
         return;
     }
 
-    //action - permanent delete all demande sortie
-    public function permanentDeleteAllDemandeSortie()
+    //action - delete permanent all demande sortie
+    public function deletePermanentAllDemandeSortie()
     {
         header('Content-Type: application/json');
         $response = null;
@@ -1123,8 +1123,8 @@ class SortieController extends Controller
             }
 
             try {
-                //permanent delete all demande sortie
-                $response = DemandeSortie::permanentDeleteAllDemandeSortie($nums_ds);
+                //delete permanent all demande sortie
+                $response = DemandeSortie::deletePermanentAllDemandeSortie($nums_ds);
 
                 echo json_encode($response);
                 return;

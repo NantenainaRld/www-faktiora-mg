@@ -59,8 +59,8 @@
                                                         <button class="btn btn-sm btn-outline-danger" id="btn-delete-sortie"><i class="fad fa-trash me-2">
                                                             </i><?= __('forms.labels.delete') ?>
                                                         </button>
-                                                        <!-- btn delete permanent facture -->
-                                                        <button class="btn btn-sm btn-danger" id="btn-delete-permanent-facture"><i class="fad fa-trash me-2">
+                                                        <!-- btn delete permanent sortie-->
+                                                        <button class="btn btn-sm btn-danger" id="btn-delete-permanent-sortie"><i class="fad fa-trash me-2">
                                                             </i><?= __('forms.labels.delete_permanent') ?>
                                                         </button>
                                                     <?php endif; ?>

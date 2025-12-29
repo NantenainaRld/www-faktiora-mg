@@ -596,8 +596,8 @@ class DemandeSortie extends Database
         return $response;
     }
 
-    //static - permanent delete all demande sortie
-    public static function permanentDeleteAllDemandeSortie($nums_ds)
+    //static - delete permanent all demande sortie
+    public static function deletePermanentAllDemandeSortie($nums_ds)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 

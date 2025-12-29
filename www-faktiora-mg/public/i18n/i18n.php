@@ -87,6 +87,8 @@
         article_not_selected: "<?= __('messages.invalids.article_not_selected') ?>",
         question_delete_sortie_1: "<?= __('forms.labels.question_delete_sortie_1') ?>",
         question_delete_sortie_plur: "<?= __('forms.labels.question_delete_sortie_plur') ?>",
+        question_delete_permanent_sortie_1: "<?= __('forms.labels.question_delete_permanent_sortie_1') ?>",
+        question_delete_permanent_sortie_plur: "<?= __('forms.labels.question_delete_permanent_sortie_plur') ?>",
         sortie_nums_ds_empty: "<?= __('messages.invalids.sortie_nums_ds_empty') ?>",
     }
 </script>
