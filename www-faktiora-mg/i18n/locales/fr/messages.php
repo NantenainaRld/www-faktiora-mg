@@ -92,6 +92,8 @@ return [
         'article_ids_article_empty' => "Veuiller séléctionner au moins un article",
         //article - deleted
         'article_deleted' => "L'article avec l'ID <b>:field</b> est déjà supprimé",
+        //article - not selected
+        'article_not_selected' => "Veuiller séléctionner un article",
         //sortie - prix article
         'sortie_prix_article' => "Le prix est invalide pour l'article avec l'ID <b>:id_article</b> : :prix_article",
         //sortie - quantite article

@@ -84,5 +84,6 @@
         question_delete_permanent_ae_plur: "<?= __('forms.labels.question_delete_permanent_ae_plur') ?>",
         question_restore_ae_1: "<?= __('forms.labels.question_restore_ae_1') ?>",
         question_restore_ae_plur: "<?= __('forms.labels.question_restore_ae_plur') ?>",
+        article_not_selected: "<?= __('messages.invalids.article_not_selected') ?>",
     }
 </script>

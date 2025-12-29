@@ -49,12 +49,9 @@ class SortieController extends Controller
 
                 $response = [
                     'message_type' => 'error',
-                    'message' => __(
-                        'errors.catch.caisse_createCaisse',
-                        ['field' => $e->getMessage() .
-                            ' - Line : ' . $e->getLine() .
-                            ' - File : ' . $e->getFile()]
-                    )
+                    'message' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()
                 ];
 
                 //redirect to error page
@@ -125,10 +122,10 @@ class SortieController extends Controller
             }
 
             //articles valides ?
-            foreach ($json['articles'] as $index => $article) {
+            foreach ($json['articles'] as $article) {
                 //prix - invalid
                 $prix = filter_var($article['prix_article'], FILTER_VALIDATE_FLOAT);
-                if ($prix === false || $prix <= 0) {
+                if (!$prix || $prix <= 0) {
                     $response = [
                         'message_type' => 'invalid',
                         'message' => __(
@@ -145,7 +142,7 @@ class SortieController extends Controller
                 }
                 //quantite - invalid
                 $quantite = filter_var($article['quantite_article'], FILTER_VALIDATE_INT);
-                if ($quantite === false || $quantite <= 0) {
+                if (!$quantite || $quantite <= 0) {
                     $response = [
                         'message_type' => 'invalid',
                         'message' => __(

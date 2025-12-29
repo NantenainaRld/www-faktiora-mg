@@ -294,7 +294,7 @@
                                 </div>
                             </div>
                         <?php endif; ?>
-                        <!-- select add facture id_client  -->
+                        <!-- select add facture id_client -->
                         <div class="mb-2">
                             <label for="select-add-facture-id-client" class="form-label"><?= __('forms.labels.client') ?> <span class="text-danger">*</span></label>
                             <div class="input-group">
@@ -321,9 +321,9 @@
                                     <button type="button" class="input-group-text" id="btn-add-facture-refresh-id-produit"><i class="fad fa-arrow-rotate-left"></i></button>
                                 </div>
                                 <!-- input produit quantity and btn add produit-->
-                                <div class="input-group w-50">
+                                <div class="input-group">
                                     <input type="number" min="1" class="form-control form-control-sm" id="input-add-facture-quantite-produit" value="1">
-                                    <button type="button" class="input-group-text text-primary"><i class="fad fa-plus" id="btn-add-facture-add-produit"></i></button>
+                                    <button type="button" class="input-group-text text-primary" id="btn-add-facture-add-produit"><i class="fad fa-plus"></i></button>
                                 </div>
                                 <!-- message produit select  -->
                                 <span class="form-text text-danger" id="message-produit-select"></span>

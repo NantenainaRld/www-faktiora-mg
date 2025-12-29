@@ -118,7 +118,7 @@ class Article extends Database
 
         try {
 
-            $response = parent::selectQuery("SELECT a.id_article, a.libelle_article, MAX(lds.prix_article) AS prix, MAX(lds.quantite_article) AS quanttie FROM article a LEFT JOIN ligne_ds lds ON lds.id_article = a.id_article WHERE a.etat_article != 'supprimé' GROUP BY a.id_article");
+            $response = parent::selectQuery("SELECT a.id_article, a.libelle_article, COALESCE(MAX(lds.prix_article),1) AS prix_article, COALESCE(MAX(lds.quantite_article),1) AS quantite_article FROM article a LEFT JOIN ligne_ds lds ON lds.id_article = a.id_article WHERE a.etat_article != 'supprimé' GROUP BY a.id_article ORDER BY a.id_article ASC");
 
             //error
             if ($response['message_type'] == 'error') {

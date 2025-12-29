@@ -97,16 +97,45 @@ class DemandeSortie extends Database
 
         try {
 
-            //(prix_article * quantite) - solde < seuil ?
+            //solde - (prix_article * quantite) < seuil ?
+            //lang
+            $lang = '';
+            switch ($_COOKIE['lang']) {
+                case 'en':
+                    $lang = 'en_US';
+                    break;
+                case 'fr':
+                    $lang = 'fr_FR';
+                    break;
+                case 'mg':
+                    $lang = 'mg_MG';
+                    break;
+            }
+            //get currency_units
+            $currency_units = '';
+            $config = json_decode(file_get_contents(PUBLIC_PATH . '/config/config.json'), true);
+
+            //currency_units not found
+            if (!isset($config['currency_units'])) {
+                //redirect to error page 
+                header('Location:' . SITE_URL . '/errors?messages=' . __('errors.not_found.json', ['field' => 'currency_units']));
+
+                return;
+            }
+            $currency_units = $config['currency_units'];
+            //formatter
+            //total
+            $formatterTotal = new NumberFormatter($lang, NumberFormatter::CURRENCY);
+            $formatterTotal->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 2);
             $total_prix = 0;
-            foreach ($articles as $index => $article) {
+            foreach ($articles as $article) {
                 $total_prix += (float)$article['prix_article'] * (int)$article['quantite_article'];
             }
             $reste = $solde_caisse - $total_prix;
             if ($reste < $seuil_caisse) {
                 $response = [
                     'message_type' => 'invalid',
-                    'message' => __('messages.invalids.sortie_reste_solde', ['field' => $seuil_caisse])
+                    'message' => __('messages.invalids.sortie_reste_solde', ['field' => $formatterTotal->formatCurrency($seuil_caisse, $currency_units)])
                 ];
 
                 return $response;

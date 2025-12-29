@@ -61,7 +61,8 @@ return [
         'ae_restore' => "Récupération des autres entrées",
         'correction_list' => "Liste des corrections",
         'sortie_dashboard' => "Tableau de bord sortie",
-        'sortie_list' => "Liste des sorties"
+        'sortie_list' => "Liste des sorties",
+        'sortie_add' => "Ajout d'une sortie"
     ],
     'labels' => [
         'all' => 'tout',

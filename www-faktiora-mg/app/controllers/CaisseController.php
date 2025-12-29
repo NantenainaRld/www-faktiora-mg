@@ -51,12 +51,9 @@ class CaisseController extends Controller
 
                 $response = [
                     'message_type' => 'error',
-                    'message' => __(
-                        'errors.catch.caisse_createCaisse',
-                        ['field' => $e->getMessage() .
-                            ' - Line : ' . $e->getLine() .
-                            ' - File : ' . $e->getFile()]
-                    )
+                    'message' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()
                 ];
 
                 //redirect to error page

@@ -325,602 +325,633 @@ document.addEventListener("DOMContentLoaded", async () => {
       inputSearch.value.trim()
     );
 
-    //     //========================= ADD FACTURE =========================
-    //     //modal add facture
-    //     const modalAddFacture = container.querySelector("#modal-add-facture");
-    //     //modal add facture - intialize select 2
-    //     $(modalAddFacture.querySelectorAll(".select2")).select2({
-    //       theme: "bootstrap-5",
-    //       placeholder: lang.select.toLowerCase(),
-    //       dropdownParent: $(modalAddFacture),
-    //     });
-    //     //input - add facture date facture
-    //     const inputAddFactureDateFacture = modalAddFacture.querySelector(
-    //       "#input-add-facture-date-facture"
-    //     );
-    //     if (inputAddFactureDateFacture) {
-    //       const savedInputAddFactureDateFacture = localStorage.getItem(
-    //         inputAddFactureDateFacture.id
-    //       );
-    //       inputAddFactureDateFacture.value = !savedInputAddFactureDateFacture
-    //         ? ""
-    //         : savedInputAddFactureDateFacture;
+    //========================= ADD SORTIE =========================
+    //modal add sortie
+    const modalAddSortie = container.querySelector("#modal-add-sortie");
+    //modal add sortie - intialize select 2
+    $(modalAddSortie.querySelectorAll(".select2")).select2({
+      theme: "bootstrap-5",
+      placeholder: lang.select.toLowerCase(),
+      dropdownParent: $(modalAddSortie),
+    });
 
-    //       //===== EVENT input add facture date facture
-    //       inputAddFactureDateFacture.addEventListener("input", (e) => {
-    //         localStorage.setItem(e.target.id, e.target.value);
-    //       });
-    //     }
-    //     //select - add facture id_utilisateur
-    //     const selectAddFactureIdUtilisateur = modalAddFacture.querySelector(
-    //       "#select-add-facture-id-utilisateur"
-    //     );
-    //     if (selectAddFactureIdUtilisateur) {
-    //       //list all user
-    //       await listUser(selectAddFactureIdUtilisateur, true);
-    //       //load value from localstorage
-    //       const savedSelectAddFactureIdUtilisateur = localStorage.getItem(
-    //         selectAddFactureIdUtilisateur.id
-    //       );
-    //       $(selectAddFactureIdUtilisateur)
-    //         .val(
-    //           !savedSelectAddFactureIdUtilisateur
-    //             ? ""
-    //             : savedSelectAddFactureIdUtilisateur
-    //         )
-    //         .trigger("change");
+    //input - add sortie date_sortie
+    const inputAddSortieDateSortie = modalAddSortie.querySelector(
+      "#input-add-sortie-date-sortie"
+    );
+    if (inputAddSortieDateSortie) {
+      const savedInputAddSortieDateSortie = localStorage.getItem(
+        inputAddSortieDateSortie.id
+      );
+      inputAddSortieDateSortie.value = !savedInputAddSortieDateSortie
+        ? ""
+        : savedInputAddSortieDateSortie;
 
-    //       //===== EVENT btn add facture refresh id_utilisateur
-    //       modalAddFacture
-    //         .querySelector("#btn-add-facture-refresh-id-utilisateur")
-    //         .addEventListener("click", () => {
-    //           listUser(selectAddFactureIdUtilisateur, true);
-    //         });
+      //===== EVENT input add sortie date_sortie
+      inputAddSortieDateSortie.addEventListener("input", (e) => {
+        localStorage.setItem(e.target.id, e.target.value);
+      });
+    }
+    //select - add sortie id_utilisateur
+    const selectAddSortieIdUtilisateur = modalAddSortie.querySelector(
+      "#select-add-sortie-id-utilisateur"
+    );
+    if (selectAddSortieIdUtilisateur) {
+      //list all user
+      await listUser(selectAddSortieIdUtilisateur, true);
+      //load value from localstorage
+      const savedSelectAddSortieIdUtilisateur = localStorage.getItem(
+        selectAddSortieIdUtilisateur.id
+      );
+      $(selectAddSortieIdUtilisateur)
+        .val(
+          !savedSelectAddSortieIdUtilisateur
+            ? ""
+            : savedSelectAddSortieIdUtilisateur
+        )
+        .trigger("change");
 
-    //       //===== EVENT select add facture id_utilisateur
-    //       $(selectAddFactureIdUtilisateur).on("change", function (e) {
-    //         localStorage.setItem(e.target.id, $(this).val());
-    //       });
-    //     }
-    //     //select - add facture num_caisse
-    //     const selectAddFactureNumCaisse = modalAddFacture.querySelector(
-    //       "#select-add-facture-num-caisse"
-    //     );
-    //     if (selectAddFactureNumCaisse) {
-    //       //list num_caisse
-    //       await listNumCaisse(selectAddFactureNumCaisse, true);
-    //       //load value from localstorage
-    //       const savedSelectAddFactureNumCaisse = localStorage.getItem(
-    //         selectAddFactureNumCaisse.id
-    //       );
-    //       $(selectAddFactureNumCaisse)
-    //         .val(
-    //           !savedSelectAddFactureNumCaisse ? "" : savedSelectAddFactureNumCaisse
-    //         )
-    //         .trigger("change");
+      //===== EVENT btn add sortie refresh id_utilisateur
+      modalAddSortie
+        .querySelector("#btn-add-sortie-refresh-id-utilisateur")
+        .addEventListener("click", () => {
+          listUser(selectAddSortieIdUtilisateur, true);
+        });
 
-    //       //===== EVENT btn add facture refresh num_caisse
-    //       modalAddFacture
-    //         .querySelector("#btn-add-facture-refresh-num-caisse")
-    //         .addEventListener("click", () => {
-    //           listNumCaisse(selectAddFactureNumCaisse, true);
-    //         });
+      //===== EVENT select add sortie id_utilisateur
+      $(selectAddSortieIdUtilisateur).on("change", function (e) {
+        localStorage.setItem(e.target.id, $(this).val());
+      });
+    }
+    //select - add sortie num_caisse
+    const selectAddSortieNumCaisse = modalAddSortie.querySelector(
+      "#select-add-sortie-num-caisse"
+    );
+    if (selectAddSortieNumCaisse) {
+      //list num_caisse
+      await listNumCaisse(selectAddSortieNumCaisse, true);
+      //load value from localstorage
+      const savedSelectAddSortieNumCaisse = localStorage.getItem(
+        selectAddSortieNumCaisse.id
+      );
+      $(selectAddSortieNumCaisse)
+        .val(
+          !savedSelectAddSortieNumCaisse ? "" : savedSelectAddSortieNumCaisse
+        )
+        .trigger("change");
 
-    //       //===== EVENT select add facture num_caisse
-    //       $(selectAddFactureNumCaisse).on("change", function (e) {
-    //         localStorage.setItem(e.target.id, $(this).val());
-    //       });
-    //     }
-    //     //select - add facture id_client
-    //     const selectAddFactureIdClient = modalAddFacture.querySelector(
-    //       "#select-add-facture-id-client"
-    //     );
-    //     if (selectAddFactureIdClient) {
-    //       //list all client
-    //       await listClient(selectAddFactureIdClient);
-    //       //load value from localstorage
-    //       const savedSelectAddFactureIdClient = localStorage.getItem(
-    //         selectAddFactureIdClient.id
-    //       );
-    //       $(selectAddFactureIdClient)
-    //         .val(
-    //           !savedSelectAddFactureIdClient ? "" : savedSelectAddFactureIdClient
-    //         )
-    //         .trigger("change");
+      //===== EVENT btn add sortie refresh num_caisse
+      modalAddSortie
+        .querySelector("#btn-add-sortie-refresh-num-caisse")
+        .addEventListener("click", () => {
+          listNumCaisse(selectAddSortieNumCaisse, true);
+        });
 
-    //       //===== EVENT btn add facture refresh id_client
-    //       modalAddFacture
-    //         .querySelector("#btn-add-facture-refresh-id-client")
-    //         .addEventListener("click", () => {
-    //           listClient(selectAddFactureIdClient);
-    //         });
+      //===== EVENT select add sortie num_caisse
+      $(selectAddSortieNumCaisse).on("change", function (e) {
+        localStorage.setItem(e.target.id, $(this).val());
+      });
+    }
+    //select - add sortie id_article
+    const selectAddSortieIdArticle = modalAddSortie.querySelector(
+      "#select-add-sortie-id-article"
+    );
+    if (selectAddSortieIdArticle) {
+      //list all article
+      listArticle(selectAddSortieIdArticle);
+      //===== EVENT btn add sortie refresh id_article
+      modalAddSortie
+        .querySelector("#btn-add-sortie-refresh-id-article")
+        .addEventListener("click", () => {
+          listArticle(selectAddSortieIdArticle);
+        });
 
-    //       //===== EVENT select add facture id_client
-    //       $(selectAddFactureIdClient).on("change", function (e) {
-    //         localStorage.setItem(e.target.id, $(this).val());
-    //       });
-    //     }
-    //     //select - add facture id_produit
-    //     const selectAddFactureIdProduit = modalAddFacture.querySelector(
-    //       "#select-add-facture-id-produit"
-    //     );
-    //     if (selectAddFactureIdProduit) {
-    //       //list all produit
-    //       listProduit(selectAddFactureIdProduit);
-    //       //===== EVENT btn add facture refresh id_produit
-    //       modalAddFacture
-    //         .querySelector("#btn-add-facture-refresh-id-produit")
-    //         .addEventListener("click", () => {
-    //           listProduit(selectAddFactureIdProduit);
-    //         });
-    //     }
-    //     //input - add facture quantite_produit
-    //     const inputAddFactureQauntiteProduit = modalAddFacture.querySelector(
-    //       "#input-add-facture-quantite-produit"
-    //     );
+      //===== EVENT select add sortie id_article
+      $(selectAddSortieIdArticle).on("change", function () {
+        inputAddSortiePrixArticle.value = formatterNumber.format(
+          Number($(this).select2("data")[0].element.dataset.prixArticle)
+        );
+        inputAddSortiePrixArticle.dataset.val = Number(
+          $(this).select2("data")[0].element.dataset.prixArticle
+        );
+        inputAddSortieQuantiteArticle.value =
+          $(this).select2("data")[0].element.dataset.quantiteArticle;
+      });
+    }
+    //input - add sortie prix_article
+    const inputAddSortiePrixArticle = modalAddSortie.querySelector(
+      "#input-add-sortie-prix-article"
+    );
+    const savedInputAddSortiePrixArticle = localStorage.getItem(
+      inputAddSortiePrixArticle.id
+    );
+    inputAddSortiePrixArticle.value = !savedInputAddSortiePrixArticle
+      ? "1"
+      : savedInputAddSortiePrixArticle;
+    inputAddSortiePrixArticle.dataset.val = inputAddSortiePrixArticle.value;
+    // input - add sortie quantite_article
+    const inputAddSortieQuantiteArticle = modalAddSortie.querySelector(
+      "#input-add-sortie-quantite-article"
+    );
 
-    //     //===== EVENT input add facture quantite_produit
-    //     inputAddFactureQauntiteProduit.addEventListener("input", (e) => {
-    //       e.target.value = e.target.value.replace(/[^0-9]/g, "");
-    //     });
-    //     //===== EVENT btn add facture add produit
-    //     modalAddFacture
-    //       .querySelector("#btn-add-facture-add-produit")
-    //       .addEventListener("click", () => {
-    //         //no produit selected
-    //         if (!$(selectAddFactureIdProduit).val()) {
-    //           modalAddFacture.querySelector("#message-produit-select").innerHTML =
-    //             lang.produit_not_selected;
-    //           setTimeout(() => {
-    //             modalAddFacture.querySelector("#message-produit-select").innerHTML =
-    //               "";
-    //           }, 3000);
-    //           return;
-    //         }
-    //         //quantite invalid
-    //         else if (!inputAddFactureQauntiteProduit.value) {
-    //           modalAddFacture.querySelector("#message-produit-select").innerHTML =
-    //             lang.invalids_quantite;
-    //           setTimeout(() => {
-    //             modalAddFacture.querySelector("#message-produit-select").innerHTML =
-    //               "";
-    //           }, 3000);
-    //           return;
-    //         }
+    //===== EVENT input add sortie prix_article
+    inputAddSortiePrixArticle.addEventListener("input", (e) => {
+      if (cookieLangValue === "en") {
+        e.target.value = e.target.value.replace(/[^0-9.]/g, "");
+        if (!/^\d*\.?\d*$/.test(e.target.value)) {
+          e.target.value = e.target.value.slice(0, -1);
+        }
 
-    //         //add produit into the card
-    //         const spanProduit = document.createElement("span");
-    //         spanProduit.dataset.idProduit = $(selectAddFactureIdProduit).val();
-    //         spanProduit.dataset.quantiteProduit =
-    //           inputAddFactureQauntiteProduit.value.trim();
-    //         spanProduit.classList.add(
-    //           "rounded-1",
-    //           "bg-second",
-    //           "p-1",
-    //           "text-secondary",
-    //           "form-text",
-    //           "produit"
-    //         );
-    //         //span prix total
-    //         spanProduit.dataset.prixTotal =
-    //           Number(inputAddFactureQauntiteProduit.value) *
-    //           Number(
-    //             $(selectAddFactureIdProduit).select2("data")[0].element.dataset.prix
-    //           );
-    //         //span html
-    //         spanProduit.innerHTML = `${
-    //           $(selectAddFactureIdProduit).select2("data")[0].text
-    //         }<span class="badge bg-light text-success">${inputAddFactureQauntiteProduit.value.trim()}</span><button type="button" class="btn btn-light btn-sm ms-1 btn-close-produit"><i class="fad fa-x"></i></button>`;
-    //         //append to card
-    //         modalAddFacture.querySelector("#card-produit").append(spanProduit);
+        // add 0 in the start if ,
+        if (e.target.value.startsWith(".")) {
+          e.target.value = "0" + e.target.value;
+        }
 
-    //         //add facture total
-    //         const addFactureTotal =
-    //           modalAddFacture.querySelector("#add-facture-total");
-    //         addFactureTotal.dataset.value =
-    //           Number(addFactureTotal.dataset.value) +
-    //           Number(
-    //             $(selectAddFactureIdProduit).select2("data")[0].element.dataset.prix
-    //           ) *
-    //             Number(inputAddFactureQauntiteProduit.value);
-    //         addFactureTotal.innerHTML = formatterTotal.format(
-    //           Number(addFactureTotal.dataset.value)
-    //         );
-    //         //===== EVENT btn close produit
-    //         const btn = spanProduit.querySelector(".btn-close-produit");
-    //         btn.addEventListener("click", () => {
-    //           addFactureTotal.dataset.value =
-    //             Number(addFactureTotal.dataset.value) -
-    //             Number(btn.closest("span").dataset.prixTotal);
-    //           addFactureTotal.innerHTML = formatterTotal.format(
-    //             Number(addFactureTotal.dataset.value)
-    //           );
-    //           //remove span produit
-    //           btn.closest("span").remove();
-    //         });
-    //       });
-    //     //===== EVENT btn empty produit
-    //     modalAddFacture
-    //       .querySelector("#btn-add-facture-empty-produit")
-    //       .addEventListener("click", () => {
-    //         modalAddFacture.querySelector("#card-produit").innerHTML = "";
-    //         modalAddFacture.querySelector("#add-facture-total").dataset.value = 0;
-    //         modalAddFacture.querySelector("#add-facture-total").innerHTML =
-    //           formatterNumber.format(0);
-    //       });
+        //real value for calcul
+        e.target.dataset.val = e.target.value.replace(/[\u202F\u00A0 ]/g, "");
+      } else {
+        //number and , only
+        e.target.value = e.target.value.replace(/[^0-9,]/g, "");
+        if (!/^\d*\,?\d*$/.test(e.target.value)) {
+          e.target.value = e.target.value.slice(0, -1);
+        }
+        // add 0 in the start if ,
+        if (e.target.value.startsWith(",")) {
+          e.target.value = "0" + e.target.value;
+        }
 
-    //     //===== EVENT btn add facture
-    //     container
-    //       .querySelector("#btn-add-facture")
-    //       .addEventListener("click", () => {
-    //         //show modal add facture
-    //         new bootstrap.Modal(modalAddFacture).show();
-    //       });
+        //real value for calcul
+        e.target.dataset.val = e.target.value
+          .replace(",", ".")
+          .replace(/[\u202F\u00A0 ]/g, "");
+      }
+    });
+    inputAddSortiePrixArticle.addEventListener("blur", (e) => {
+      if (e.target.value.endsWith(",")) {
+        e.target.value += "0";
+      }
+      e.target.value = formatterNumber.format(
+        e.target.value.replace(/[\u202F\u00A0 ]/g, "").replace(",", ".")
+      );
+      //save to local storage
+      localStorage.setItem(e.target.id, e.target.value);
+    });
+    //===== EVENT input add sortie quantite_article
+    inputAddSortieQuantiteArticle.addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, "");
+    });
+    inputAddSortieQuantiteArticle.addEventListener("blur", (e) => {
+      if (!e.target.value || e.target.value == "0") {
+        e.target.value = 1;
+      }
+    });
+    //===== EVENT btn add sortie add article
+    modalAddSortie
+      .querySelector("#btn-add-sortie-add-article")
+      .addEventListener("click", () => {
+        //no article selected
+        if (!$(selectAddSortieIdArticle).val()) {
+          modalAddSortie.querySelector("#message-article-select").innerHTML =
+            lang.article_not_selected;
+          setTimeout(() => {
+            modalAddSortie.querySelector("#message-article-select").innerHTML =
+              "";
+          }, 3000);
+          return;
+        }
 
-    //     //===== EVENT form add facture submit
-    //     modalAddFacture
-    //       .querySelector("form")
-    //       .addEventListener("submit", async (e) => {
-    //         //suspend submit
-    //         e.preventDefault();
-    //         //check validity
-    //         if (!e.target.checkValidity()) {
-    //           e.target.reportValidity();
-    //           return;
-    //         }
+        //add article to the card
+        const spanArticle = document.createElement("span");
+        spanArticle.dataset.idArticle = $(selectAddSortieIdArticle).val();
+        spanArticle.dataset.quantiteArticle =
+          inputAddSortieQuantiteArticle.value.trim();
+        spanArticle.dataset.prixArticle =
+          inputAddSortiePrixArticle.dataset.val.trim();
+        spanArticle.classList.add(
+          "rounded-1",
+          "bg-second",
+          "p-1",
+          "text-secondary",
+          "form-text",
+          "article"
+        );
+        //span prix total
+        spanArticle.dataset.prixTotal =
+          Number(inputAddSortiePrixArticle.dataset.val.trim()) *
+          Number(inputAddSortieQuantiteArticle.value.trim());
+        //span html
+        spanArticle.innerHTML = `${
+          $(selectAddSortieIdArticle).select2("data")[0].text
+        } (${formatterTotal.format(
+          Number(spanArticle.dataset.prixTotal)
+        )})<span class="badge bg-light text-success">${inputAddSortieQuantiteArticle.value.trim()}</span><button type="button" class="btn btn-light btn-sm ms-1 btn-close-article"><i class="fad fa-x"></i></button>`;
+        //append to card
+        modalAddSortie.querySelector("#card-article").append(spanArticle);
 
-    //         //produits
-    //         let produits = [];
-    //         modalAddFacture
-    //           .querySelectorAll("#card-produit .produit")
-    //           .forEach((span) => {
-    //             const produit = {
-    //               id_produit: span.dataset.idProduit.trim(),
-    //               quantite_produit: span.dataset.quantiteProduit.trim(),
-    //             };
+        //add sortie total
+        const addSortieTotal =
+          modalAddSortie.querySelector("#add-sortie-total");
+        addSortieTotal.dataset.value =
+          Number(addSortieTotal.dataset.value) +
+          Number(inputAddSortiePrixArticle.dataset.val.trim()) *
+            Number(inputAddSortieQuantiteArticle.value);
+        addSortieTotal.innerHTML = formatterTotal.format(
+          Number(addSortieTotal.dataset.value)
+        );
+        //===== EVENT btn close article
+        const btn = spanArticle.querySelector(".btn-close-article");
+        btn.addEventListener("click", () => {
+          addSortieTotal.dataset.value =
+            Number(addSortieTotal.dataset.value) -
+            Number(btn.closest("span").dataset.prixTotal);
+          addSortieTotal.innerHTML = formatterTotal.format(
+            Number(addSortieTotal.dataset.value)
+          );
+          //remove span article
+          btn.closest("span").remove();
+        });
+      });
+    //===== EVENT btn empty article
+    modalAddSortie
+      .querySelector("#btn-add-sortie-empty-article")
+      .addEventListener("click", () => {
+        modalAddSortie.querySelector("#card-article").innerHTML = "";
+        modalAddSortie.querySelector("#add-sortie-total").dataset.value = 0;
+        modalAddSortie.querySelector("#add-sortie-total").innerHTML =
+          formatterNumber.format(0);
+      });
 
-    //             produits.push(produit);
-    //           });
+    //===== EVENT btn add sortie
+    container
+      .querySelector("#btn-add-facture")
+      .addEventListener("click", () => {
+        //show modal add sortie
+        new bootstrap.Modal(modalAddSortie).show();
+      });
 
-    //         try {
-    //           //FETH api add facture
-    //           const apiAddFacture = await apiRequest("/entree/create_facture", {
-    //             method: "POST",
-    //             body: {
-    //               date_facture: !inputAddFactureDateFacture
-    //                 ? ""
-    //                 : inputAddFactureDateFacture.value.trim(),
-    //               id_utilisateur: !selectAddFactureIdUtilisateur
-    //                 ? ""
-    //                 : $(selectAddFactureIdUtilisateur).val().trim(),
-    //               num_caisse: !selectAddFactureNumCaisse
-    //                 ? ""
-    //                 : $(selectAddFactureNumCaisse).val().trim(),
-    //               id_client: $(selectAddFactureIdClient).val().trim(),
-    //               produits: produits,
-    //             },
-    //           });
+    //===== EVENT form add sortie submit
+    modalAddSortie
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        //suspend submit
+        e.preventDefault();
+        //check validity
+        if (!e.target.checkValidity()) {
+          e.target.reportValidity();
+          return;
+        }
 
-    //           //error
-    //           if (apiAddFacture.message_type === "error") {
-    //             //alert
-    //             const alertTemplate = document.querySelector(".alert-template");
-    //             const clone = alertTemplate.content.cloneNode(true);
-    //             const alert = clone.querySelector(".alert");
-    //             const progressBar = alert.querySelector(".progress-bar");
-    //             //alert type
-    //             alert.classList.add("alert-danger");
-    //             //icon
-    //             alert
-    //               .querySelector(".fad")
-    //               .classList.add("fa-exclamation-triangle");
-    //             //message
-    //             alert.querySelector(".alert-message").innerHTML =
-    //               apiAddFacture.message;
-    //             //progress bar
-    //             progressBar.style.transition = "width 20s linear";
-    //             progressBar.style.width = "100%";
+        //articles
+        let articles = [];
+        modalAddSortie
+          .querySelectorAll("#card-article .article")
+          .forEach((span) => {
+            const article = {
+              id_article: span.dataset.idArticle.trim(),
+              quantite_article: span.dataset.quantiteArticle.trim(),
+              prix_article: span.dataset.prixArticle.trim(),
+            };
 
-    //             //add alert
-    //             modalAddFacture.querySelector(".modal-body").prepend(alert);
+            articles.push(article);
+          });
+        try {
+          //FETH api add sortie
+          const apiAddSortie = await apiRequest("/sortie/create_sortie", {
+            method: "POST",
+            body: {
+              date_ds: !inputAddSortieDateSortie
+                ? ""
+                : inputAddSortieDateSortie.value.trim(),
+              id_utilisateur: !selectAddSortieIdUtilisateur
+                ? ""
+                : $(selectAddSortieIdUtilisateur).val().trim(),
+              num_caisse: !selectAddSortieNumCaisse
+                ? ""
+                : $(selectAddSortieNumCaisse).val().trim(),
+              articles: articles,
+            },
+          });
 
-    //             //progress launch animation
-    //             setTimeout(() => {
-    //               progressBar.style.width = "0%";
-    //             }, 10);
-    //             //auto close alert
-    //             setTimeout(() => {
-    //               alert.querySelector(".btn-close").click();
-    //             }, 20000);
-    //             return;
-    //           }
-    //           //invalid
-    //           else if (apiAddFacture.message_type === "invalid") {
-    //             //alert
-    //             const alertTemplate = document.querySelector(".alert-template");
-    //             const clone = alertTemplate.content.cloneNode(true);
-    //             const alert = clone.querySelector(".alert");
-    //             const progressBar = alert.querySelector(".progress-bar");
-    //             //alert type
-    //             alert.classList.add("alert-warning");
-    //             //icon
-    //             alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //             //message
-    //             alert.querySelector(".alert-message").innerHTML =
-    //               apiAddFacture.message;
-    //             //progress bar
-    //             progressBar.style.transition = "width 10s linear";
-    //             progressBar.style.width = "100%";
+          //error
+          if (apiAddSortie.message_type === "error") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-danger");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiAddSortie.message;
+            //progress bar
+            progressBar.style.transition = "width 20s linear";
+            progressBar.style.width = "100%";
 
-    //             //add alert
-    //             modalAddFacture.querySelector(".modal-body").prepend(alert);
+            //add alert
+            modalAddSortie.querySelector(".modal-body").prepend(alert);
 
-    //             //progress launch animation
-    //             setTimeout(() => {
-    //               progressBar.style.width = "0%";
-    //             }, 10);
-    //             //auto close alert
-    //             setTimeout(() => {
-    //               alert.querySelector(".btn-close").click();
-    //             }, 10000);
-    //             return;
-    //           }
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 20000);
+            return;
+          }
+          //invalid
+          else if (apiAddSortie.message_type === "invalid") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-warning");
+            //icon
+            alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiAddSortie.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
 
-    //           //success
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-success");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-check-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             apiAddFacture.message;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
+            //add alert
+            modalAddSortie.querySelector(".modal-body").prepend(alert);
 
-    //           //add alert
-    //           container
-    //             .querySelector("#tbody-facture")
-    //             .closest("div")
-    //             .prepend(alert);
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+            return;
+          }
+          console.log("ee");
+          //success
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-success");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-check-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            apiAddSortie.message;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
 
-    //           //progress launch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
+          //add alert
+          container
+            .querySelector("#tbody-sortie")
+            .closest("div")
+            .prepend(alert);
 
-    //           //close modal
-    //           modalAddFacture.querySelector("#btn-close-modal-add-facture").click();
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
 
-    //           //refresh filter facture
-    //           filterFacture(
-    //             selectStatus.value.trim(),
-    //             selectArrangeBy.value.trim(),
-    //             selectOrder.value.trim(),
-    //             dateFrom.value.trim(),
-    //             dateTo.value.trim(),
-    //             selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
-    //             $(selectIdUtilisateur).val().trim(),
-    //             inputSearch.value.trim()
-    //           );
+          //close modal
+          modalAddSortie.querySelector("#btn-close-modal-add-sortie").click();
 
-    //           return;
-    //         } catch (e) {
-    //           console.error(e);
-    //         }
-    //       });
+          //refresh filter sortie
+          filterSortie(
+            selectStatus.value.trim(),
+            selectArrangeBy.value.trim(),
+            selectOrder.value.trim(),
+            dateFrom.value.trim(),
+            dateTo.value.trim(),
+            selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
+            $(selectIdUtilisateur).val().trim(),
+            inputSearch.value.trim()
+          );
 
-    //     //======================== ADD CLIENT ======================
-    //     //modal add client
-    //     const modalAddClient = container.querySelector("#modal-add-client");
-    //     //input - add nom_client
-    //     const inputAddNomClient = modalAddClient.querySelector(
-    //       "#input-add-nom-client"
-    //     );
-    //     const savedInputAddNomClient = localStorage.getItem(inputAddNomClient.id);
-    //     inputAddNomClient.value = !savedInputAddNomClient
-    //       ? ""
-    //       : savedInputAddNomClient;
-    //     //input - add prenoms_client
-    //     const inputAddPrenomsClient = modalAddClient.querySelector(
-    //       "#input-add-prenoms-client"
-    //     );
-    //     const savedInputAddPrenomsClient = localStorage.getItem(
-    //       inputAddPrenomsClient.id
-    //     );
-    //     inputAddPrenomsClient.value = !savedInputAddPrenomsClient
-    //       ? ""
-    //       : savedInputAddPrenomsClient;
-    //     //select - add sexe_client
-    //     const selectAddSexeClient = modalAddClient.querySelector(
-    //       "#select-add-sexe-client"
-    //     );
-    //     const savedSelectAddSexeClient = localStorage.getItem(
-    //       selectAddSexeClient.id
-    //     );
-    //     selectAddSexeClient.value = !savedSelectAddSexeClient
-    //       ? "masculin"
-    //       : savedSelectAddSexeClient;
-    //     //input - add telephone
-    //     const inputAddTelephone = modalAddClient.querySelector(
-    //       "#input-add-telephone"
-    //     );
-    //     const savedInputAddTelephone = localStorage.getItem(inputAddTelephone.id);
-    //     inputAddTelephone.value = !savedInputAddTelephone
-    //       ? ""
-    //       : savedInputAddTelephone;
-    //     //input - add adresse
-    //     const inputAddAdresse = modalAddClient.querySelector("#input-add-adresse");
-    //     const savedInputAddAdresse = localStorage.getItem(inputAddAdresse.id);
-    //     inputAddAdresse.value = !savedInputAddAdresse ? "" : savedInputAddAdresse;
-    //     //===== EVENT input add nom_client
-    //     inputAddNomClient.addEventListener("input", (e) => {
-    //       //remove double space && change into uppercase
-    //       e.target.value = e.target.value.replace("  ", " ").toUpperCase();
-    //       //save value into localstorage
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
-    //     //===== EVENT input add prenoms_client
-    //     inputAddPrenomsClient.addEventListener("input", (e) => {
-    //       //remove double space && change into uppercase
-    //       e.target.value = e.target.value.replace("  ", " ");
-    //       //save value into localstorage
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
-    //     //===== EVENT select add sexe_client
-    //     selectAddSexeClient.addEventListener("change", (e) => {
-    //       //save value into localstorage
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
-    //     //===== EVENT input add telephone
-    //     inputAddTelephone.addEventListener("input", (e) => {
-    //       //remove invalid
-    //       e.target.value = e.target.value.replace(/[^\d+\s]/g, "");
-    //       //remove double space
-    //       e.target.value = e.target.value.replace("  ", " ");
-    //       //save value into localstorage
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
-    //     //===== EVENT input add adresse
-    //     inputAddAdresse.addEventListener("input", (e) => {
-    //       //remove double space
-    //       e.target.value = e.target.value.replace("  ", " ");
-    //       //save value into localstorage
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
-    //     //===== EVENT form add client submit
-    //     modalAddClient
-    //       .querySelector("form")
-    //       .addEventListener("submit", async (e) => {
-    //         //suspend submit
-    //         e.preventDefault();
-    //         //check validity
-    //         if (!e.target.checkValidity()) {
-    //           e.target.reportValidity();
-    //         }
-    //         try {
-    //           //FETCH api add client
-    //           const apiAddClient = await apiRequest("/client/create_client", {
-    //             method: "POST",
-    //             body: {
-    //               nom_client: inputAddNomClient.value.trim(),
-    //               prenoms_client: inputAddPrenomsClient.value.trim(),
-    //               sexe_client: selectAddSexeClient.value.trim(),
-    //               telephone: inputAddTelephone.value.trim(),
-    //               adresse: inputAddAdresse.value.trim(),
-    //             },
-    //           });
-    //           //error
-    //           if (apiAddClient.message_type === "error") {
-    //             //alert
-    //             const alertTemplate = document.querySelector(".alert-template");
-    //             const clone = alertTemplate.content.cloneNode(true);
-    //             const alert = clone.querySelector(".alert");
-    //             const progressBar = alert.querySelector(".progress-bar");
-    //             //alert type
-    //             alert.classList.add("alert-danger");
-    //             //icon
-    //             alert
-    //               .querySelector(".fad")
-    //               .classList.add("fa-exclamation-triangle");
-    //             //message
-    //             alert.querySelector(".alert-message").innerHTML =
-    //               apiAddClient.message;
-    //             //progress bar
-    //             progressBar.style.transition = "width 20s linear";
-    //             progressBar.style.width = "100%";
-    //             //add alert
-    //             modalAddClient.querySelector(".modal-body").prepend(alert);
-    //             //progress launch animation
-    //             setTimeout(() => {
-    //               progressBar.style.width = "0%";
-    //             }, 10);
-    //             //auto close alert
-    //             setTimeout(() => {
-    //               alert.querySelector(".btn-close").click();
-    //             }, 20000);
-    //             return;
-    //           }
-    //           //invalid
-    //           else if (apiAddClient.message_type === "invalid") {
-    //             //alert
-    //             const alertTemplate = document.querySelector(".alert-template");
-    //             const clone = alertTemplate.content.cloneNode(true);
-    //             const alert = clone.querySelector(".alert");
-    //             const progressBar = alert.querySelector(".progress-bar");
-    //             //alert type
-    //             alert.classList.add("alert-warning");
-    //             //icon
-    //             alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //             //message
-    //             alert.querySelector(".alert-message").innerHTML =
-    //               apiAddClient.message;
-    //             //progress bar
-    //             progressBar.style.transition = "width 10s linear";
-    //             progressBar.style.width = "100%";
-    //             //add alert
-    //             modalAddClient.querySelector(".modal-body").prepend(alert);
-    //             //progress lanch animation
-    //             setTimeout(() => {
-    //               progressBar.style.width = "0%";
-    //             }, 10);
-    //             //auto close alert
-    //             setTimeout(() => {
-    //               alert.querySelector(".btn-close").click();
-    //             }, 10000);
-    //             return;
-    //           }
-    //           //success add client
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-success");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-check-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             apiAddClient.message;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
+          return;
+        } catch (e) {
+          console.error(e);
+        }
+      });
 
-    //           //add alert
-    //           modalAddFacture.querySelector(".modal-body").prepend(alert);
+    //======================== ADD ARTICLE ======================
+    //modal add client
+    const modalAddClient = container.querySelector("#modal-add-client");
+    //input - add nom_client
+    const inputAddNomClient = modalAddClient.querySelector(
+      "#input-add-nom-client"
+    );
+    const savedInputAddNomClient = localStorage.getItem(inputAddNomClient.id);
+    inputAddNomClient.value = !savedInputAddNomClient
+      ? ""
+      : savedInputAddNomClient;
+    //input - add prenoms_client
+    const inputAddPrenomsClient = modalAddClient.querySelector(
+      "#input-add-prenoms-client"
+    );
+    const savedInputAddPrenomsClient = localStorage.getItem(
+      inputAddPrenomsClient.id
+    );
+    inputAddPrenomsClient.value = !savedInputAddPrenomsClient
+      ? ""
+      : savedInputAddPrenomsClient;
+    //select - add sexe_client
+    const selectAddSexeClient = modalAddClient.querySelector(
+      "#select-add-sexe-client"
+    );
+    const savedSelectAddSexeClient = localStorage.getItem(
+      selectAddSexeClient.id
+    );
+    selectAddSexeClient.value = !savedSelectAddSexeClient
+      ? "masculin"
+      : savedSelectAddSexeClient;
+    //input - add telephone
+    const inputAddTelephone = modalAddClient.querySelector(
+      "#input-add-telephone"
+    );
+    const savedInputAddTelephone = localStorage.getItem(inputAddTelephone.id);
+    inputAddTelephone.value = !savedInputAddTelephone
+      ? ""
+      : savedInputAddTelephone;
+    //input - add adresse
+    const inputAddAdresse = modalAddClient.querySelector("#input-add-adresse");
+    const savedInputAddAdresse = localStorage.getItem(inputAddAdresse.id);
+    inputAddAdresse.value = !savedInputAddAdresse ? "" : savedInputAddAdresse;
+    //===== EVENT input add nom_client
+    inputAddNomClient.addEventListener("input", (e) => {
+      //remove double space && change into uppercase
+      e.target.value = e.target.value.replace("  ", " ").toUpperCase();
+      //save value into localstorage
+      localStorage.setItem(e.target.id, e.target.value);
+    });
+    //===== EVENT input add prenoms_client
+    inputAddPrenomsClient.addEventListener("input", (e) => {
+      //remove double space && change into uppercase
+      e.target.value = e.target.value.replace("  ", " ");
+      //save value into localstorage
+      localStorage.setItem(e.target.id, e.target.value);
+    });
+    //===== EVENT select add sexe_client
+    selectAddSexeClient.addEventListener("change", (e) => {
+      //save value into localstorage
+      localStorage.setItem(e.target.id, e.target.value);
+    });
+    //===== EVENT input add telephone
+    inputAddTelephone.addEventListener("input", (e) => {
+      //remove invalid
+      e.target.value = e.target.value.replace(/[^\d+\s]/g, "");
+      //remove double space
+      e.target.value = e.target.value.replace("  ", " ");
+      //save value into localstorage
+      localStorage.setItem(e.target.id, e.target.value);
+    });
+    //===== EVENT input add adresse
+    inputAddAdresse.addEventListener("input", (e) => {
+      //remove double space
+      e.target.value = e.target.value.replace("  ", " ");
+      //save value into localstorage
+      localStorage.setItem(e.target.id, e.target.value);
+    });
+    //===== EVENT form add client submit
+    modalAddClient
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        //suspend submit
+        e.preventDefault();
+        //check validity
+        if (!e.target.checkValidity()) {
+          e.target.reportValidity();
+        }
+        try {
+          //FETCH api add client
+          const apiAddClient = await apiRequest("/client/create_client", {
+            method: "POST",
+            body: {
+              nom_client: inputAddNomClient.value.trim(),
+              prenoms_client: inputAddPrenomsClient.value.trim(),
+              sexe_client: selectAddSexeClient.value.trim(),
+              telephone: inputAddTelephone.value.trim(),
+              adresse: inputAddAdresse.value.trim(),
+            },
+          });
+          //error
+          if (apiAddClient.message_type === "error") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-danger");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiAddClient.message;
+            //progress bar
+            progressBar.style.transition = "width 20s linear";
+            progressBar.style.width = "100%";
+            //add alert
+            modalAddClient.querySelector(".modal-body").prepend(alert);
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 20000);
+            return;
+          }
+          //invalid
+          else if (apiAddClient.message_type === "invalid") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-warning");
+            //icon
+            alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiAddClient.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
+            //add alert
+            modalAddClient.querySelector(".modal-body").prepend(alert);
+            //progress lanch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+            return;
+          }
+          //success add client
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-success");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-check-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            apiAddClient.message;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
 
-    //           //progress lanch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
-    //           //auto close modal
-    //           modalAddClient.querySelector("#btn-close-modal-add-client").click();
+          //add alert
+          modalAddFacture.querySelector(".modal-body").prepend(alert);
 
-    //           //refresh list client
-    //           await listClient(selectAddFactureIdClient);
-    //           $(selectAddFactureIdClient)
-    //             .val(apiAddClient.last_inserted)
-    //             .trigger("change");
+          //progress lanch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+          //auto close modal
+          modalAddClient.querySelector("#btn-close-modal-add-client").click();
 
-    //           return;
-    //         } catch (e) {
-    //           console.error(e);
-    //         }
-    //       });
+          //refresh list client
+          await listClient(selectAddFactureIdClient);
+          $(selectAddFactureIdClient)
+            .val(apiAddClient.last_inserted)
+            .trigger("change");
+
+          return;
+        } catch (e) {
+          console.error(e);
+        }
+      });
 
     //     //======================= CORRECION FACTURE ===================
     //     //modal correction facture
@@ -2287,61 +2318,60 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error(e);
     }
   }
-  //   //function - list produit
-  //   async function listProduit(select) {
-  //     try {
-  //       //FETCH api list all produit
-  //       const apiListAllProduit = await apiRequest("/produit/list_all_produit");
+  //function - list article
+  async function listArticle(select) {
+    try {
+      //FETCH api list all article
+      const apiListAllArticle = await apiRequest("/article/list_all_article");
 
-  //       //error
-  //       if (apiListAllProduit.message_type === "error") {
-  //         //alert
-  //         const alertTemplate = document.querySelector(".alert-template");
-  //         const clone = alertTemplate.content.cloneNode(true);
-  //         const alert = clone.querySelector(".alert");
-  //         const progressBar = alert.querySelector(".progress-bar");
-  //         //alert type
-  //         alert.classList.add("alert-danger");
-  //         //icon
-  //         alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
-  //         //message
-  //         alert.querySelector(".alert-message").innerHTML =
-  //           apiListAllProduit.message;
-  //         //progress bar
-  //         progressBar.style.transition = "width 20s linear";
-  //         progressBar.style.width = "100%";
+      //error
+      if (apiListAllArticle.message_type === "error") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-danger");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          apiListAllArticle.message;
+        //progress bar
+        progressBar.style.transition = "width 20s linear";
+        progressBar.style.width = "100%";
 
-  //         //add alert
-  //         select.closest("div").prepend(alert);
+        //add alert
+        select.closest("div").prepend(alert);
 
-  //         //progress launch animation
-  //         setTimeout(() => {
-  //           progressBar.style.width = "0%";
-  //         }, 10);
-  //         //auto close alert
-  //         setTimeout(() => {
-  //           alert.querySelector(".btn-close").click();
-  //         }, 20000);
-  //         return;
-  //       }
+        //progress launch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 20000);
+        return;
+      }
 
-  //       //success api list produit
-  //       select.innerHTML = `<option></option>`;
+      //success api list article
+      select.innerHTML = `<option></option>`;
 
-  //       apiListAllProduit.data.forEach((line) => {
-  //         const option = document.createElement("option");
-  //         option.value = line.id_produit;
-  //         option.innerText = `${line.id_produit} - ${
-  //           line.libelle_produit
-  //         } (${formatterTotal.format(Number(line.prix_produit))})`;
-  //         option.dataset.prix = line.prix_produit;
+      apiListAllArticle.data.forEach((line) => {
+        const option = document.createElement("option");
+        option.value = line.id_article;
+        option.innerText = `${line.id_article} - ${line.libelle_article}`;
+        option.dataset.prixArticle = line.prix_article;
+        option.dataset.quantiteArticle = line.quantite_article;
 
-  //         select.append(option);
-  //       });
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   }
+        select.append(option);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
   //   //function - list ligne_facture
   //   async function listLigneFacture(numFacture, div) {
   //     try {

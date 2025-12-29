@@ -251,101 +251,106 @@
     </div>
     <!-- overlay searchbar  -->
     <div class="overlay-searchbar d-none min-vh-100 bg-dark bg-opacity-50 top-0 col-12 position-fixed "></div>
-    <!-- modal add facture -->
-    <div class="modal fade" id="modal-add-facture" tabindex="-1" aria-labelledby="modalAddFacture" aria-hidden="true">
+    <!-- modal add sortie -->
+    <div class="modal fade" id="modal-add-sortie" tabindex="-1" aria-labelledby="modalAddSortie" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content d-flex flex-column justify-content-between">
                 <!-- modal header  -->
                 <div class="modal-header bg-green-0 text-light flex-frow-0">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-plus me-2"></i><?= __('forms.titles.facture_add') ?></h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-plus me-2"></i><?= __('forms.titles.sortie_add') ?></h6>
                 </div>
-                <!-- form add facture -->
+                <!-- form add sortie -->
                 <form class="flex-grow-1 overflow-auto">
                     <!-- modal body  -->
                     <div class="modal-body">
                         <?php if ($role === 'admin'): ?>
-                            <!--input add facture date facture -->
+                            <!--input add sortie date sortie-->
                             <div class="mb-2">
-                                <label for="input-add-facture-date-facture" class="form-label"><?= __('forms.labels.date') ?> <span class="text-danger">*</span></label>
+                                <label for="input-add-sortie-date-sortie" class="form-label"><?= __('forms.labels.date') ?> <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
-                                    <input type="datetime-local" max="<?= date('Y-m-d\TH:i') ?>" class="form-control form-control-sm" id="input-add-facture-date-facture" required>
+                                    <input type="datetime-local" max="<?= date('Y-m-d\TH:i') ?>" class="form-control form-control-sm" id="input-add-sortie-date-sortie" required>
                                 </div>
                             </div>
-                            <!-- select add facture id_utilisateur -->
+                            <!-- select add sortie id_utilisateur -->
                             <div class="mb-2">
-                                <label for="select-add-facture-id-utilisateur" class="form-label"><?= __('forms.labels.user') ?> <span class="text-danger">*</span></label>
+                                <label for="select-add-sortie-id-utilisateur" class="form-label"><?= __('forms.labels.user') ?> <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text text-success"><i class="fad fa-user"></i></span>
-                                    <select name="" id="select-add-facture-id-utilisateur" class="form-select form-select-sm select2" required>
+                                    <select name="" id="select-add-sortie-id-utilisateur" class="form-select form-select-sm select2" required>
                                         <option></option>
                                         <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
                                     </select>
-                                    <button type="button" class="input-group-text" id="btn-add-facture-refresh-id-utilisateur"><i class="fad fa-arrow-rotate-left"></i></button>
+                                    <button type="button" class="input-group-text" id="btn-add-sortie-refresh-id-utilisateur"><i class="fad fa-arrow-rotate-left"></i></button>
                                 </div>
                             </div>
-                            <!-- select add facture num_caisse -->
+                            <!-- select add sortie num_caisse -->
                             <div class="mb-2">
-                                <label for="select-add-facture-num-caisse" class="form-label"><?= ucfirst(__('forms.labels.cash')) ?> <span class="text-danger">*</span></label>
+                                <label for="select-add-sortie-num-caisse" class="form-label"><?= ucfirst(__('forms.labels.cash')) ?> <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text text-success"><i class="fad fa-cash-register"></i></span>
-                                    <select name="" id="select-add-facture-num-caisse" class="form-select form-select-sm select2" required>
+                                    <select name="" id="select-add-sortie-num-caisse" class="form-select form-select-sm select2" required>
                                         <option></option>
                                         <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
                                     </select>
-                                    <button type="button" class="input-group-text" id="btn-add-facture-refresh-num-caisse"><i class="fad fa-arrow-rotate-left"></i></button>
+                                    <button type="button" class="input-group-text" id="btn-add-sortie-refresh-num-caisse"><i class="fad fa-arrow-rotate-left"></i></button>
                                 </div>
                             </div>
                         <?php endif; ?>
-                        <!-- select add facture id_client  -->
+                        <!-- select add sortie id_article-->
                         <div class="mb-2">
-                            <label for="select-add-facture-id-client" class="form-label"><?= __('forms.labels.client') ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-user-check"></i></span>
-                                <select name="" id="select-add-facture-id-client" class="form-select form-select-sm select2" required>
-                                    <option></option>
-                                    <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
-                                </select>
-                                <button type="button" class="input-group-text" id="btn-add-facture-refresh-id-client"><i class="fad fa-arrow-rotate-left"></i></button>
-                                <!-- btn add client -->
-                                <span class="mx-2 text-secondary"> <?= __('forms.labels.or') ?> </span><button type="button" class="btn btn-sm btn-light text-primary" data-bs-toggle="modal" data-bs-target="#modal-add-client"><i class="fad fa-user-circle-plus"></i></button>
-                            </div>
-                        </div>
-                        <!-- select add facture id_produit -->
-                        <div class="mb-2">
-                            <label for="select-add-facture-id-produit" class="form-label"><?= __('forms.labels.product') ?></label>
+                            <label for="select-add-sortie-id-article" class="form-label"><?= __('forms.labels.article') ?></label>
                             <div class="d-flex gap-2 flex-wrap">
+                                <!-- select  -->
                                 <div class="input-group">
                                     <span class="input-group-text text-success"><i class="fad fa-bin-bottles"></i></span>
-                                    <select name="" id="select-add-facture-id-produit" class="form-select form-select-sm select2">
+                                    <select name="" id="select-add-sortie-id-article" class="form-select form-select-sm select2">
                                         <option></option>
                                         <option value="loading" disabled><?= __('forms.labels.loading') ?>...</option>
                                     </select>
-                                    <button type="button" class="input-group-text" id="btn-add-facture-refresh-id-produit"><i class="fad fa-arrow-rotate-left"></i></button>
+                                    <button type="button" class="input-group-text" id="btn-add-sortie-refresh-id-article"><i class="fad fa-arrow-rotate-left"></i></button>
                                 </div>
-                                <!-- input produit quantity and btn add produit-->
-                                <div class="input-group w-50">
-                                    <input type="number" min="1" class="form-control form-control-sm" id="input-add-facture-quantite-produit" value="1">
-                                    <button type="button" class="input-group-text text-primary"><i class="fad fa-plus" id="btn-add-facture-add-produit"></i></button>
+                                <!-- input article quantity and prix_article and btn add article -->
+                                <div class="card w-100">
+                                    <!-- input prix_article  -->
+                                    <div class="card-body">
+                                        <div class="mb-2 bg">
+                                            <label for="input-add-sortie-prix-article" class="form-label"><?= __('forms.labels.unit_price') ?></label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-control-sm" id="input-add-sortie-prix-article" value="1">
+                                            </div>
+                                        </div>
+                                        <!-- input quantite_article  -->
+                                        <div class="mb-2">
+                                            <label for="input-add-sortie-quantite-article" class="form-label"><?= __('forms.labels.quantity') ?></label>
+                                            <div class="input-group">
+                                                <input type="number" min="1" class="form-control form-control-sm" id="input-add-sortie-quantite-article" value="1">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer d-flex justify-content-center">
+                                        <button type="button" class="btn btn-sm btn-second text-primary" id="btn-add-sortie-add-article"><i class="fad fa-plus"></i></button>
+                                    </div>
                                 </div>
-                                <!-- message produit select  -->
-                                <span class="form-text text-danger" id="message-produit-select"></span>
+                                <!-- message article select -->
+                                <span class="form-text text-danger" id="message-article-select"></span>
                             </div>
-                            <!-- card added produit  -->
+                            <!-- card added article -->
                             <div class="card mt-2 w-auto">
                                 <div class="card-body">
-                                    <div class="d-flex flex-wrap gap-2" id="card-produit"></div>
+                                    <div class="d-flex flex-wrap gap-2" id="card-article"></div>
                                 </div>
                                 <div class="card-footer d-flex justify-content-center flex-column align-items-center">
-                                    <span class="text-secondary"><b><?= __('forms.labels.total') ?> : </b><span id="add-facture-total" data-value="0">0 <?= $currency_units ?></span></span>
-                                    <button type="button" class="btn btn-second btn-sm" id="btn-add-facture-empty-produit"><?= __('forms.labels.to_empty') ?></button>
+                                    <span class="text-secondary"><b><?= __('forms.labels.total') ?> : </b><span id="add-sortie-total" data-value="0">0 <?= $currency_units ?></span></span>
+                                    <button type="button" class="btn btn-second btn-sm" id="btn-add-sortie-empty-article"><?= __('forms.labels.to_empty') ?></button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- modal footer  -->
                     <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-add-facture"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-add-sortie"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
                         <button class="btn btn-primary btn-sm fw-bold" type="submit"><i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
                     </div>
                 </form>
