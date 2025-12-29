@@ -98,6 +98,10 @@
    <?php if ($_SESSION['menu'] === 'autre_entree'): ?>
       <script src="<?= SITE_URL ?>/js/autre-entree-dashboard.js"></script>
    <?php endif; ?>
+   <!-- script sortie -->
+   <?php if ($_SESSION['menu'] === 'sortie'): ?>
+      <script src="<?= SITE_URL ?>/js/sortie-dashboard.js"></script>
+   <?php endif; ?>
    </body>
 
    </html>

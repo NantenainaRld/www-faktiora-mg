@@ -181,6 +181,10 @@
     <?php if ($_SESSION['menu'] === 'autre_entree'): ?>
         <link rel="stylesheet" href="<?= SITE_URL ?>/css/autre-entree-dashboard.css">
     <?php endif; ?>
+    <!-- style sortie dashboard  -->
+    <?php if ($_SESSION['menu'] === 'sortie'): ?>
+        <link rel="stylesheet" href="<?= SITE_URL ?>/css/sortie-dashboard.css">
+    <?php endif; ?>
     <!-- style select2  -->
     <link rel="stylesheet" href="<?= SITE_URL ?>/select2/css/select2.min.css">
     <link rel="stylesheet" href="<?= SITE_URL ?>/select2/css/select2-bootstrap-5-theme.min.css">
@@ -484,8 +488,8 @@
                                 </nav>
                             </li>
                             <!-- sortie -->
-                            <li class="nav-item action bg-success rounded-1 mb-2 text-light">
-                                <a href="#" class="nav-link fw-bold p-2 text-start" style="font-size: 0.85rem;">
+                            <li class="nav-item action bg-success rounded-1 mb-2 text-light <?= ($_SESSION['menu'] === 'sortie' || $_SESSION['menu'] === 'client') ? 'active' : '' ?>">
+                                <a href="<?= SITE_URL ?>/sortie/page_sortie" class="nav-link fw-bold p-2 text-start" style="font-size: 0.85rem;">
                                     <i class="fad fa-chart-line-down me-2"></i><?= ucfirst(__('forms.labels.outflow')) ?>
                                 </a>
                             </li>

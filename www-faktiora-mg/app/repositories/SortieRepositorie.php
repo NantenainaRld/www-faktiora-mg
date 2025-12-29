@@ -64,15 +64,20 @@ class SortieRepositorie extends Database
             'message_type' => 'success',
             'message' => 'success'
         ];
-        $sql = "SELECT ds.num_ds, ds.date_ds, ds.id_utilisateur, ds.num_caisse , COALESCE(SUM(lds.prix_article * lds.quantite_article), 0) AS montant_ds FROM demande_sortie ds LEFT JOIN ligne_ds lds ON lds.id_ds = ds.id_ds ";
+        $sql = "SELECT ds.num_ds, ds.date_ds, ds.id_utilisateur, ds.num_caisse , COALESCE(SUM(lds.prix_article * lds.quantite_article), 0) AS montant_ds, ds.etat_ds FROM demande_sortie ds LEFT JOIN ligne_ds lds ON lds.id_ds = ds.id_ds ";
         $paramsQuery = [];
 
         //where 1=1
         $sql .= "WHERE 1=1 ";
 
-        //status
-        $sql .= "AND ds.etat_ds = :status ";
-        $paramsQuery['status'] = $params['status'];
+        //status - active
+        if ($params['status'] === 'active') {
+            $sql .= "AND ds.etat_ds = 'actif' ";
+        }
+        //status - deleted
+        elseif ($params['status'] === 'deleted') {
+            $sql .= "AND ds.etat_ds ='supprimé' ";
+        }
 
         //num_caisse - !all
         if ($params['num_caisse'] !== 'all') {
@@ -116,7 +121,7 @@ class SortieRepositorie extends Database
         }
 
         //group by and order by
-        $sql .= "GROUP BY ds.id_ds ORDER BY {$params['order_by']} {$params['arrange']} ";
+        $sql .= "GROUP BY ds.id_ds ORDER BY {$params['arrange_by']} {$params['order']} ";
 
         try {
 

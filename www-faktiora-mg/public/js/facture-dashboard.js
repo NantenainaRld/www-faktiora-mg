@@ -1948,10 +1948,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
 
         tr.dataset.numFacture = line.num_facture;
-        tr.dataset.idUtilisateur = line.id_utilisateur;
-        tr.dataset.idClient = line.id_client;
         tr.dataset.dateFacture = line.date_facture;
-        tr.dataset.numCaisse = line.telephone;
         tbodyFacture.appendChild(tr);
       });
 

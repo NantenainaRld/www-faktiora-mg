@@ -59,7 +59,9 @@ return [
         'ae_correction_outflow' => "Correction d'autre entrée (sortie)",
         'ae_delete' => "Suppréssion des autres entrées",
         'ae_restore' => "Récupération des autres entrées",
-        'correction_list' => "Liste des corrections"
+        'correction_list' => "Liste des corrections",
+        'sortie_dashboard' => "Tableau de bord sortie",
+        'sortie_list' => "Liste des sorties"
     ],
     'labels' => [
         'all' => 'tout',
@@ -256,7 +258,9 @@ return [
         'question_delete_permanent_ae_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> autres entrées ?. <span class='text-danger'>Cette action est irréversible</span>.",
         'question_restore_ae_1' => "Voulez-vous vraiment récupérer l'autre entrée numéro <b>:field</b> ?",
         'question_restore_ae_plur' => "Voulez-vous vraiment récupérer ces <b>:field</b> autres entrées ?",
-
+        'sortie_num' => "Numéro de sortie",
+        'sortie_date' => "Date de sortie",
+        'sortie_montant' => "Montant de sortie"
     ],
     'times' => [
         'minute' => "minute",

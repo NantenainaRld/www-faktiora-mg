@@ -100,7 +100,7 @@
                             <!-- table correction_ae -->
                             <div class="col-12 h-100 ms-2 col-lg-5">
                                 <div class="card h-100">
-                                    <div class="card-body d-flex flex-column justify-content-between">
+                                    <div class="card-body h-100 oveflow-auto d-flex flex-column justify-content-between">
                                         <!-- title table -->
                                         <div class="card-title text-secondary flex-grow-0">
                                             <i class="fad fa-list-dropdown me-2"></i><?= __('forms.titles.correction_list') . ' (' . strtolower(__('forms.labels.autre_entree')) ?>: <span id="table-correction-ae-num-ae"></span>)
