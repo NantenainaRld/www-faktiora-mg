@@ -13,22 +13,29 @@ class ArticleRepositorie extends Database
     public static function filterArticle($params)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
-        $sql = "SELECT a.id_article, a.libelle_article, COUNT(lds.id_article) AS quantite_article, COALESCE(SUM(lds.prix_article * lds.quantite_article), 0) AS total_article FROM article a LEFT JOIN ligne_ds lds ON lds.id_article = a.id_article ";
+        $sql = "SELECT a.id_article, a.libelle_article, COUNT(lds.id_article) AS quantite_article, COALESCE(SUM(lds.prix_article * lds.quantite_article), 0) AS total_article, a.etat_article FROM article a LEFT JOIN ligne_ds lds ON lds.id_article = a.id_article ";
         $paramsQuery = [];
 
         //where 1=1
         $sql .= "WHERE 1=1 ";
 
-        //status
-        $sql .= "AND a.etat_article = :status ";
-        $paramsQuery['status'] = $params['status'];
+        //status - active
+        if ($params['status'] === 'active') {
+            $sql .= "AND a.etat_article = 'actif' ";
+        }
+        //status - deleted
+        elseif ($params['status'] === 'deleted') {
+            $sql .= "AND a.etat_article = 'suppriémé' ";
+        }
 
         //search_article
-        $sql .= "AND (a.id_article LIKE :search OR a.libelle_article LIKE :search) ";
-        $paramsQuery['search'] = $params['search_article'];
+        if ($params['search_article'] !== '') {
+            $sql .= "AND (a.id_article LIKE :search OR a.libelle_article LIKE :search) ";
+            $paramsQuery['search'] = "%" . $params['search_article'] . "%";
+        }
 
-        //group by and order by
-        $sql .= "GROUP BY a.id_article ORDER BY {$params['order_by']} {$params['arrange']} ";
+        // group by and order by
+        $sql .= "GROUP BY a.id_article ORDER BY {$params['arrange_by']} {$params['order']} ";
 
         try {
 

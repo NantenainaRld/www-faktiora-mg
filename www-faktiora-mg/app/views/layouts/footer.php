@@ -106,6 +106,10 @@
    <?php if ($_SESSION['menu'] === 'produit'): ?>
       <script src="<?= SITE_URL ?>/js/produit-dashboard.js"></script>
    <?php endif; ?>
+   <!-- script article -->
+   <?php if ($_SESSION['menu'] === 'article'): ?>
+      <script src="<?= SITE_URL ?>/js/article-dashboard.js"></script>
+   <?php endif; ?>
    </body>
 
    </html>

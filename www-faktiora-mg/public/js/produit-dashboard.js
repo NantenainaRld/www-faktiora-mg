@@ -1329,20 +1329,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
         tdStatus.classList.add("text-center");
 
-        //td - nb_facture
-        const tdNbFacture = document.createElement("td");
-        tdNbFacture.textContent = formatterNumber.format(
-          Number(line.nb_facture)
-        );
-        tdNbFacture.classList.add("text-center");
-
-        //td - total_facture
-        const tdTotalFacture = document.createElement("td");
-        tdTotalFacture.textContent = formatterNumber.format(
-          Number(line.total_facture)
-        );
-        tdTotalFacture.classList.add("text-center");
-
         //append
         tr.append(
           tdIdProduit,

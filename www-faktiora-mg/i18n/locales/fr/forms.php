@@ -75,7 +75,8 @@ return [
         'produit_add' => "Ajout d'un produit",
         'produit_update' => "Modification de produit",
         'produit_delete' => "Suppréssion des produits",
-        'produit_restore' => "Récupération des produits"
+        'produit_restore' => "Récupération des produits",
+        'article_dashboard' => "Tableau de bord article"
     ],
     'labels' => [
         'all' => 'tout',
@@ -293,6 +294,8 @@ return [
         'question_delete_permanent_produit_plur' => "Voulez-vous vraiment supprimé ces <b>:field</b> produits ?. <span class='text-danger'>Cette action est irréversible</span>.",
         'question_restore_produit_1' => "Voulez-vous vraiment récupérer le produit avec l'ID <b>:field</b> ?",
         'question_restore_produit_plur' => "Voulez-vous vraiment récupérer ces <b>:field</b> produits ?",
+        'quantite_utilise' => "Quantité utilisée",
+        'total_utilise' => "Total utilisé",
     ],
     'times' => [
         'minute' => "minute",
@@ -319,7 +322,8 @@ return [
         'correction_outflow' => "réduction de montant",
         'libelle_article' => "ex: achat de carburant",
         'search_produit' => "ID produit, libellé produit",
-        'libelle_produit' => "ex: vin"
+        'libelle_produit' => "ex: vin",
+        'search_article' => "ID article, libellé article"
     ]
 
 ];

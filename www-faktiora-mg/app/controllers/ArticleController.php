@@ -9,13 +9,65 @@ class ArticleController extends Controller
     //page - index
     public function index()
     {
-        echo "page index article";
+        //redirect to page article
+        header('Location: ' . SITE_URL . '/article/page_article');
+        return;
     }
 
     //page - article dashboard
     public function pageArticle()
     {
-        $this->render('article_dashboard', ['title' => "Gestion des articles"]);
+        //is loged in ?
+        $is_loged_in = Auth::isLogedIn();
+        //loged
+        if ($is_loged_in->getLoged()) {
+
+            //get currency_units
+            $currency_units = '';
+            try {
+                $config = json_decode(file_get_contents(PUBLIC_PATH . '/config/config.json'), true);
+
+                //currency_units not found
+                if (!isset($config['currency_units'])) {
+                    //redirect to error page 
+                    header('Location:' . SITE_URL . '/errors?messages=' . __('errors.not_found.json', ['field' => 'currency_units']));
+
+                    return;
+                }
+
+                $currency_units = $config['currency_units'];
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()
+                ];
+
+                //redirect to error page
+                header('Location: ' . SITE_URL . '/errors?messages=' . $response['message']);
+
+                return;
+            }
+
+            $_SESSION['menu'] = 'article';
+            $this->render('article_dashboard', [
+                'title' => 'Faktiora - ' . __('forms.titles.article_dashboard'),
+                'role' => $is_loged_in->getRole(),
+                'currency_units' => $currency_units
+            ]);
+            return;
+        }
+        //not loged
+        else {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
     }
 
     //=========================== ACTIONS =============================
@@ -117,52 +169,42 @@ class ArticleController extends Controller
         }
 
         //defaults
-        $order_by_default = ['libelle', 'id', 'total', 'quantite'];
-        $arrange_default = ['ASC', 'DESC'];
+        $arrange_by_default = ['libelle', 'id', 'total', 'quantite'];
+        $order_default = ['ASC', 'DESC'];
+        $status_default = ['active', 'deleted'];
 
         //status
         $status = strtolower(trim($_GET['status'] ?? 'active'));
-        $status = ($status === 'deleted') ? 'deleted' : 'active';
-        if ($is_loged_in->getRole() === 'caissier') {
-            $status = 'active';
-        }
-        switch ($status) {
-            case 'active':
-                $status = 'actif';
-                break;
-            case 'deleted':
-                $status = 'supprimé';
-                break;
-        }
+        $status = !in_array($status, $status_default, true) ? 'all' : 'deleted';
 
-        //order_by
-        $order_by = strtolower(trim($_GET['order_by'] ?? 'id'));
-        $order_by = in_array($order_by, $order_by_default, true) ? $order_by : 'id';
-        switch ($order_by) {
+        //arrange_by
+        $arrange_by = strtolower(trim($_GET['arrange_by'] ?? 'id'));
+        $arrange_by = in_array($arrange_by, $arrange_by_default, true) ? $arrange_by : 'id';
+        switch ($arrange_by) {
             case 'libelle':
-                $order_by = 'a.libelle_article';
+                $arrange_by = 'a.libelle_article';
                 break;
             case 'id':
-                $order_by = 'a.id_article';
+                $arrange_by = 'a.id_article';
                 break;
             case 'total':
-                $order_by = 'total_article';
+                $arrange_by = 'total_article';
                 break;
             case 'quantite':
-                $order_by = 'quantite_article';
+                $arrange_by = 'quantite_article';
                 break;
         }
-        //arrange
-        $arrange = strtoupper(trim($_GET['arrange'] ?? 'ASC'));
-        $arrange = in_array($arrange, $arrange_default, true) ? $arrange : 'ASC';
+        //order
+        $order = strtoupper(trim($_GET['order'] ?? 'ASC'));
+        $order = in_array($order, $order_default, true) ? $order : 'ASC';
 
         //search_article
-        $search_article = "%" . trim($_GET['search_article'] ?? '') . "%";
+        $search_article =  trim($_GET['search_article'] ?? '');
 
         $params = [
             'status' => $status,
-            'order_by' => $order_by,
-            'arrange' => $arrange,
+            'arrange_by' => $arrange_by,
+            'order' => $order,
             'search_article' => $search_article
         ];
 

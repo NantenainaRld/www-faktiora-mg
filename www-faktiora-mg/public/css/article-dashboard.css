@@ -1,0 +1,80 @@
+/* animation date by  */
+.date-by.active {
+  display: block !important;
+  animation: animV 0.3s ease-out;
+}
+
+@keyframes animV {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 1;
+  }
+}
+
+/* =====================table==================  */
+
+table {
+  border-collapse: collapse;
+}
+/* th */
+table th {
+  border-bottom: 2px solid white !important;
+  border-radius: 12px;
+}
+
+/* td  */
+table td,
+table th {
+  padding: 5px !important;
+}
+
+/* color of even tr  */
+table tbody tr:nth-of-type(even) {
+  background-color: var(--color-second);
+  border-bottom: 2px solid white;
+}
+
+/* color of the bottom last line  */
+table tbody tr:last-of-type {
+  border-bottom: 3px solid var(--bs-success);
+}
+
+/* tr hover */
+table tbody tr:hover {
+  cursor: pointer;
+  background-color: #178b47;
+  color: var(--bs-light) !important;
+}
+
+/* tr actie  */
+table tbody tr:active {
+  background-color: #032612;
+  color: var(--bs-light) !important;
+}
+
+/* tr click  */
+table tbody tr.active {
+  background-color: #094120;
+  color: var(--bs-light) !important;
+}
+
+/*============================== alert ====================== */
+.alert-slide {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
