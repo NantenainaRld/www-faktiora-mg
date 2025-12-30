@@ -97,6 +97,8 @@
         question_delete_produit_plur: "<?= __('forms.labels.question_delete_produit_plur') ?>",
         question_delete_permanent_produit_1: "<?= __('forms.labels.question_delete_permanent_produit_1') ?>",
         question_delete_permanent_produit_plur: "<?= __('forms.labels.question_delete_permanent_produit_plur') ?>",
+        question_restore_produit_1: "<?= __('forms.labels.question_restore_produit_1') ?>",
+        question_restore_produit_plur: "<?= __('forms.labels.question_restore_produit_plur') ?>",
 
     }
 </script>

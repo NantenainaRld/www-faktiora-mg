@@ -172,6 +172,8 @@ return [
         'produit_deleteAllProduit' => DEBUG ? "Erreur dans produit/deleteAllProduit : :field" : "Une erreur est survenue lors de la suppréssion des produits",
         //produit - update nb stock
         'produit_updateNbStocke' => DEBUG ? "Erreur dans produit/updateNbStock  : :field" : "Une errreur est survenue lors de mis à jour de nombre de stock",
+        //produit - restore all produit
+        'produit_restoreAllProduit' => DEBUG ? "Erreur dans produit/restoreAllProduit : :field" : "Une erreur est survenue lors de la récupération des produits",
         //article - create article
         'article_createArticle' => DEBUG ? "Erreur dans article/createArticle : :field" : "Une erreur est survenue lors d'ajout de nouveau article",
         //article - is libelle article exist

@@ -991,6 +991,218 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
       });
     }
+
+    //========================= RESTORE PRODUIT =================
+    //btn restore produit
+    const btnRestoreProduit = container.querySelector("#btn-restore-produit");
+    //===== EVENT btn restore produit
+    if (btnRestoreProduit) {
+      btnRestoreProduit.addEventListener("click", () => {
+        //modal Restore produit
+        const modalRestoreProduit = container.querySelector(
+          "#modal-restore-produit"
+        );
+        //selected produit
+        const selectedProduit = container.querySelectorAll(
+          "#tbody-produit input[type='checkbox']:checked"
+        );
+
+        //no selection
+        if (selectedProduit.length <= 0) {
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-warning");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            lang.produit_ids_produit_empty;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          container
+            .querySelector("#tbody-produit")
+            .closest("div")
+            .prepend(alert);
+
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+          return;
+        }
+
+        //modal message 1
+        if (selectedProduit.length === 1) {
+          modalRestoreProduit.querySelector(".message").innerHTML =
+            lang.question_restore_produit_1.replace(
+              ":field",
+              selectedProduit[0].closest("tr").dataset.idProduit
+            );
+        }
+        //modal message plur
+        else {
+          modalRestoreProduit.querySelector(".message").innerHTML =
+            lang.question_restore_produit_plur.replace(
+              ":field",
+              selectedProduit.length
+            );
+        }
+
+        //show modal restore produit
+        new bootstrap.Modal(modalRestoreProduit).show();
+
+        //==== EVENT btn confirm modal restore produit
+        modalRestoreProduit
+          .querySelector("#btn-confirm-modal-restore-produit")
+          .addEventListener("click", async () => {
+            try {
+              //ids_produit
+              let ids_produit = [...selectedProduit];
+              ids_produit = ids_produit.map(
+                (selected) => selected.closest("tr").dataset.idProduit
+              );
+
+              //FETCH api restore produit
+              const apiRestoreProduit = await apiRequest(
+                "/produit/restore_all_produit",
+                {
+                  method: "PUT",
+                  body: {
+                    ids_produit: ids_produit,
+                  },
+                }
+              );
+
+              //error
+              if (apiRestoreProduit.message_type === "error") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiRestoreProduit.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalRestoreProduit.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+                return;
+              }
+              //invalid
+              else if (apiRestoreProduit.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiRestoreProduit.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalRestoreProduit.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                return;
+              }
+
+              //success
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-success");
+              //icon
+              alert.querySelector(".fad").classList.add("fa-check-circle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                apiRestoreProduit.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              container
+                .querySelector("#tbody-produit")
+                .closest("div")
+                .prepend(alert);
+
+              //progress launch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
+
+              //auto hide modal
+              modalRestoreProduit
+                .querySelector("#btn-close-modal-restore-produit")
+                .click();
+
+              //refresh filter produit
+              filterProduit(
+                selectStatus.value.trim(),
+                selectArrangeBy.value.trim(),
+                selectOrder.value.trim(),
+                inputSearch.value.trim()
+              );
+
+              return;
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      });
+    }
   }, 1050);
 
   //====================== FUNCTIONS ========================

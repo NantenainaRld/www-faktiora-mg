@@ -74,7 +74,8 @@ return [
         'produit_list' => "Liste des produits",
         'produit_add' => "Ajout d'un produit",
         'produit_update' => "Modification de produit",
-        'produit_delete' => "Suppréssion des produits"
+        'produit_delete' => "Suppréssion des produits",
+        'produit_restore' => "Récupération des produits"
     ],
     'labels' => [
         'all' => 'tout',
@@ -290,8 +291,8 @@ return [
         'question_delete_produit_plur' => "Voulez-vous vraiment supprimé ces <b>:field</b> produits ?",
         'question_delete_permanent_produit_1' => "Voulez-vous vraiment supprimé le produit avec l'ID <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>.",
         'question_delete_permanent_produit_plur' => "Voulez-vous vraiment supprimé ces <b>:field</b> produits ?. <span class='text-danger'>Cette action est irréversible</span>.",
-
-
+        'question_restore_produit_1' => "Voulez-vous vraiment récupérer le produit avec l'ID <b>:field</b> ?",
+        'question_restore_produit_plur' => "Voulez-vous vraiment récupérer ces <b>:field</b> produits ?",
     ],
     'times' => [
         'minute' => "minute",

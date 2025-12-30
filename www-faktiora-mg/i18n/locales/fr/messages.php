@@ -252,6 +252,12 @@ return [
         'produit_deleteAllProduit_1' => "Un produit a été supprimé avec succès",
         //produit - delete all produit plur
         'produit_deleteAllProduit_plur' => "<b>:field</b> produits ont été supprimés avec succès",
+        //produit - restore all produit 0
+        'produit_restoreAllProduit_0' => "Aucun produit n'est récupéré",
+        //produit - restore all produit 1
+        'produit_restoreAllProduit_1' => "Un produit a été récupéré avec succès",
+        //produit - restore all produit plur
+        'produit_restoreAllProduit_plur' => "<b>:field</b> produits ont été récupérés avec succès",
         //article - create article
         'article_createArticle' => "Nouveau article ajouté avec succès",
         //article - update article

@@ -55,8 +55,8 @@
                                                             data-bs-target="#modal-add-produit" id="btn-add-produit"><i class="fad fa-user-circle-plus me-2">
                                                             </i><?= __('forms.labels.add') ?>
                                                         </button>
-                                                        <!-- btn restore client  -->
-                                                        <button class="btn btn-sm btn-outline-warning" id="btn-restore-client"><i class="fad fa-arrow-rotate-left me-2">
+                                                        <!-- btn restore produit -->
+                                                        <button class="btn btn-sm btn-outline-warning" id="btn-restore-produit"><i class="fad fa-arrow-rotate-left me-2">
                                                             </i><?= __('forms.labels.restore') ?>
                                                         </button>
                                                         <!-- btn delete produit -->
@@ -288,22 +288,22 @@
             </div>
         </div>
     </div>
-    <!-- modal restore client -->
-    <div class="modal fade" id="modal-restore-client" tabindex="-1" aria-labelledby="modalRestoreClient" aria-hidden="true">
+    <!-- modal restore produit -->
+    <div class="modal fade" id="modal-restore-produit" tabindex="-1" aria-labelledby="modalRestoreProduit" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- modal header  -->
                 <div class="modal-header bg-warning text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-arrow-rotate-left me-2"></i><?= __('forms.titles.restore_client') ?></h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-arrow-rotate-left me-2"></i><?= __('forms.titles.produit_restore') ?></h6>
                 </div>
                 <!-- modal body  -->
                 <div class="modal-body">
-                    <div class="message">Voulez-vous vraiment récupérer ces ... clients ?</div>
+                    <div class="message">Voulez-vous vraiment récupérer ces ... produits ?</div>
                 </div>
                 <!-- modal footer  -->
                 <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-restore-client"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
-                    <button class="btn btn-primary btn-sm fw-bold" id="btn-confirm-modal-restore-client"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_restore') ?></button>
+                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-restore-produit"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
+                    <button class="btn btn-primary btn-sm fw-bold" id="btn-confirm-modal-restore-produit"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_restore') ?></button>
                 </div>
             </div>
         </div>
