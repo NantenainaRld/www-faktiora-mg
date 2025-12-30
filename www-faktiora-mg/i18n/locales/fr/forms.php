@@ -300,6 +300,8 @@ return [
         'total_utilise' => "Total utilisé",
         'question_delete_article_1' => "Voulez-vous vraiment supprimé l'article avec l'ID <b>:field</b> ?",
         'question_delete_article_plur' => "Voulez-vous vraiment supprimé ces <b>:field</b> articles ?",
+        'question_delete_permanent_article_1' => "Voulez-vous vraiment supprimé l'article avec l'ID <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>",
+        'question_delete_permanent_article_plur' => "Voulez-vous vraiment supprimé ces <b>:field</b> articles ?. <span class='text-danger'>Cette action est irréversible</span>",
 
     ],
     'times' => [

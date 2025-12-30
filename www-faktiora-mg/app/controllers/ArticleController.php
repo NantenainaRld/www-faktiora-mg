@@ -416,8 +416,8 @@ class ArticleController extends Controller
         return;
     }
 
-    //action - permanent delete all article
-    public function permanentDeleteAllArticle()
+    //action - delete permaent all article
+    public function deletePermanentAllArticle()
     {
         header('Content-Type: application/json');
         $response = null;
@@ -457,7 +457,7 @@ class ArticleController extends Controller
             try {
 
                 //permanent delete all article
-                $response = Article::permanentDeleteAllArticle($ids_article);
+                $response = Article::deletePermanentAllArticle($ids_article);
 
                 echo json_encode($response);
                 return;

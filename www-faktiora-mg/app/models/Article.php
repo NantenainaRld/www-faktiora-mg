@@ -282,7 +282,7 @@ class Article extends Database
         $response = ['message_type' => 'success', 'message' => 'success'];
 
         $placeholders = implode(', ', array_fill(0, count($ids_article), '?'));
-        $sql = "UPDATE article SET etat_article = 'supprimé' WHERE id_article IN ({$placeholders}) ";
+        $sql = "UPDATE article SET etat_article = 'supprimé' WHERE id_article IN ({$placeholders}) AND etat_article = 'actif' ";
 
         try {
 
@@ -334,8 +334,8 @@ class Article extends Database
         return $response;
     }
 
-    //static - permanent delete all article
-    public static function permanentDeleteAllArticle($ids_article)
+    //static - delete permanent all article
+    public static function deletePermanentAllArticle($ids_article)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 

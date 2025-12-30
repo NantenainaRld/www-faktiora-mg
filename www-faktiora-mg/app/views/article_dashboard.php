@@ -63,8 +63,8 @@
                                                         <button class="btn btn-sm btn-outline-danger" id="btn-delete-article"><i class="fad fa-circle-minus me-2">
                                                             </i><?= __('forms.labels.delete') ?>
                                                         </button>
-                                                        <!-- btn delete permanent produit  -->
-                                                        <button class="btn btn-sm btn-danger" id="btn-delete-permanent-produit"><i class="fad fa-circle-minus me-2">
+                                                        <!-- btn delete permanent article -->
+                                                        <button class="btn btn-sm btn-danger" id="btn-delete-permanent-article"><i class="fad fa-circle-minus me-2">
                                                             </i><?= __('forms.labels.delete_permanent') ?>
                                                         </button>
                                                     <?php endif; ?>
