@@ -77,7 +77,8 @@ return [
         'produit_delete' => "Suppréssion des produits",
         'produit_restore' => "Récupération des produits",
         'article_dashboard' => "Tableau de bord article",
-        'article_update' => "Modification d'un article"
+        'article_update' => "Modification d'un article",
+        'article_delete' => "Suppréssion des articles"
     ],
     'labels' => [
         'all' => 'tout',
@@ -297,6 +298,9 @@ return [
         'question_restore_produit_plur' => "Voulez-vous vraiment récupérer ces <b>:field</b> produits ?",
         'quantite_utilise' => "Quantité utilisée",
         'total_utilise' => "Total utilisé",
+        'question_delete_article_1' => "Voulez-vous vraiment supprimé l'article avec l'ID <b>:field</b> ?",
+        'question_delete_article_plur' => "Voulez-vous vraiment supprimé ces <b>:field</b> articles ?",
+
     ],
     'times' => [
         'minute' => "minute",

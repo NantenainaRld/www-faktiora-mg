@@ -49,18 +49,18 @@
                                             <div class="col-12">
                                                 <!-- btns  -->
                                                 <div class="d-flex gap-2 justify-content-start w-100 my-2">
+                                                    <!-- btn add article -->
+                                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                                        data-bs-target="#modal-add-article" id="btn-add-article"><i class="fad fa-circle-plus me-2">
+                                                        </i><?= __('forms.labels.add') ?>
+                                                    </button>
                                                     <?php if ($role === 'admin'): ?>
-                                                        <!-- btn add article -->
-                                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                                            data-bs-target="#modal-add-article" id="btn-add-article"><i class="fad fa-circle-plus me-2">
-                                                            </i><?= __('forms.labels.add') ?>
-                                                        </button>
                                                         <!-- btn restore produit -->
                                                         <button class="btn btn-sm btn-outline-warning" id="btn-restore-produit"><i class="fad fa-arrow-rotate-left me-2">
                                                             </i><?= __('forms.labels.restore') ?>
                                                         </button>
-                                                        <!-- btn delete produit -->
-                                                        <button class="btn btn-sm btn-outline-danger" id="btn-delete-produit"><i class="fad fa-circle-minus me-2">
+                                                        <!-- btn delete article -->
+                                                        <button class="btn btn-sm btn-outline-danger" id="btn-delete-article"><i class="fad fa-circle-minus me-2">
                                                             </i><?= __('forms.labels.delete') ?>
                                                         </button>
                                                         <!-- btn delete permanent produit  -->
@@ -223,22 +223,22 @@
             </div>
         </div>
     </div>
-    <!-- modal delete produit-->
-    <div class="modal fade" id="modal-delete-produit" tabindex="-1" aria-labelledby="modalDeleteProduit" aria-hidden="true">
+    <!-- modal delete article -->
+    <div class="modal fade" id="modal-delete-article" tabindex="-1" aria-labelledby="modalDeleteArticle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- modal header  -->
                 <div class="modal-header bg-danger text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-minus me-2"></i><?= __('forms.titles.produit_delete') ?></h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-minus me-2"></i><?= __('forms.titles.article_delete') ?></h6>
                 </div>
                 <!-- modal body  -->
                 <div class="modal-body">
-                    <div class="message">Voulez-vous vraiment supprimer ces ... produits ?</div>
+                    <div class="message">Voulez-vous vraiment supprimer ces ... articles ?</div>
                 </div>
                 <!-- modal footer  -->
                 <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-delete-produit"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
-                    <button class="btn btn-primary btn-sm fw-bold" id="btn-confirm-modal-delete-produit"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_delete') ?></button>
+                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-delete-article"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
+                    <button class="btn btn-primary btn-sm fw-bold" id="btn-confirm-modal-delete-article"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_delete') ?></button>
                 </div>
             </div>
         </div>

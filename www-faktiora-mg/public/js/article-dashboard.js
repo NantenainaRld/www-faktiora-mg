@@ -482,217 +482,217 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       });
 
-    //     //========================= DELETE PRODUIT =================
-    //     //btn delete produit
-    //     const btnDeleteProduit = container.querySelector("#btn-delete-produit");
-    //     //===== EVENT btn delete produit
-    //     if (btnDeleteProduit) {
-    //       btnDeleteProduit.addEventListener("click", () => {
-    //         //modal delete produit
-    //         const modalDeleteProduit = container.querySelector(
-    //           "#modal-delete-produit"
-    //         );
-    //         //selected produit
-    //         const selectedProduit = container.querySelectorAll(
-    //           "#tbody-produit input[type='checkbox']:checked"
-    //         );
+    //========================= DELETE ARTICLE =================
+    //btn delete article
+    const btnDeleteArticle = container.querySelector("#btn-delete-article");
+    //===== EVENT btn delete article
+    if (btnDeleteArticle) {
+      btnDeleteArticle.addEventListener("click", () => {
+        //modal delete article
+        const modalDeleteArticle = container.querySelector(
+          "#modal-delete-article"
+        );
+        //selected article
+        const selectedArticle = container.querySelectorAll(
+          "#tbody-article input[type='checkbox']:checked"
+        );
 
-    //         //no selection
-    //         if (selectedProduit.length <= 0) {
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-warning");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             lang.produit_ids_produit_empty;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
+        //no selection
+        if (selectedArticle.length <= 0) {
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-warning");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            lang.article_ids_article_empty;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
 
-    //           //add alert
-    //           container
-    //             .querySelector("#tbody-produit")
-    //             .closest("div")
-    //             .prepend(alert);
+          //add alert
+          container
+            .querySelector("#tbody-article")
+            .closest("div")
+            .prepend(alert);
 
-    //           //progress launch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
-    //           return;
-    //         }
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+          return;
+        }
 
-    //         //modal message 1
-    //         if (selectedProduit.length === 1) {
-    //           modalDeleteProduit.querySelector(".message").innerHTML =
-    //             lang.question_delete_produit_1.replace(
-    //               ":field",
-    //               selectedProduit[0].closest("tr").dataset.idProduit
-    //             );
-    //         }
-    //         //modal message plur
-    //         else {
-    //           modalDeleteProduit.querySelector(".message").innerHTML =
-    //             lang.question_delete_produit_plur.replace(
-    //               ":field",
-    //               selectedProduit.length
-    //             );
-    //         }
+        //modal message 1
+        if (selectedArticle.length === 1) {
+          modalDeleteArticle.querySelector(".message").innerHTML =
+            lang.question_delete_article_1.replace(
+              ":field",
+              selectedArticle[0].closest("tr").dataset.idArticle
+            );
+        }
+        //modal message plur
+        else {
+          modalDeleteArticle.querySelector(".message").innerHTML =
+            lang.question_delete_article_plur.replace(
+              ":field",
+              selectedArticle.length
+            );
+        }
 
-    //         //show modal delete produit
-    //         new bootstrap.Modal(modalDeleteProduit).show();
+        //show modal delete artilce
+        new bootstrap.Modal(modalDeleteArticle).show();
 
-    //         //==== EVENT btn confirm modal delete produit
-    //         modalDeleteProduit
-    //           .querySelector("#btn-confirm-modal-delete-produit")
-    //           .addEventListener("click", async () => {
-    //             try {
-    //               //ids_produit
-    //               let ids_produit = [...selectedProduit];
-    //               ids_produit = ids_produit.map(
-    //                 (selected) => selected.closest("tr").dataset.idProduit
-    //               );
+        //==== EVENT btn confirm modal delete article
+        modalDeleteArticle
+          .querySelector("#btn-confirm-modal-delete-article")
+          .addEventListener("click", async () => {
+            try {
+              //ids_article
+              let ids_article = [...selectedArticle];
+              ids_article = ids_article.map(
+                (selected) => selected.closest("tr").dataset.idArticle
+              );
 
-    //               //FETCH api delete produit
-    //               const apiDeleteProduit = await apiRequest(
-    //                 "/produit/delete_all_produit",
-    //                 {
-    //                   method: "PUT",
-    //                   body: {
-    //                     ids_produit: ids_produit,
-    //                   },
-    //                 }
-    //               );
+              //FETCH api delete article
+              const apiDeleteArticle = await apiRequest(
+                "/article/delete_all_article",
+                {
+                  method: "PUT",
+                  body: {
+                    ids_article: ids_article,
+                  },
+                }
+              );
 
-    //               //error
-    //               if (apiDeleteProduit.message_type === "error") {
-    //                 //alert
-    //                 const alertTemplate = document.querySelector(".alert-template");
-    //                 const clone = alertTemplate.content.cloneNode(true);
-    //                 const alert = clone.querySelector(".alert");
-    //                 const progressBar = alert.querySelector(".progress-bar");
-    //                 //alert type
-    //                 alert.classList.add("alert-danger");
-    //                 //icon
-    //                 alert
-    //                   .querySelector(".fad")
-    //                   .classList.add("fa-exclamation-circle");
-    //                 //message
-    //                 alert.querySelector(".alert-message").innerHTML =
-    //                   apiDeleteProduit.message;
-    //                 //progress bar
-    //                 progressBar.style.transition = "width 20s linear";
-    //                 progressBar.style.width = "100%";
+              //error
+              if (apiDeleteArticle.message_type === "error") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiDeleteArticle.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
 
-    //                 //add alert
-    //                 modalDeleteProduit.querySelector(".modal-body").prepend(alert);
+                //add alert
+                modalDeleteArticle.querySelector(".modal-body").prepend(alert);
 
-    //                 //progress launch animation
-    //                 setTimeout(() => {
-    //                   progressBar.style.width = "0%";
-    //                 }, 10);
-    //                 //auto close alert
-    //                 setTimeout(() => {
-    //                   alert.querySelector(".btn-close").click();
-    //                 }, 20000);
-    //                 return;
-    //               }
-    //               //invalid
-    //               else if (apiDeleteProduit.message_type === "invalid") {
-    //                 //alert
-    //                 const alertTemplate = document.querySelector(".alert-template");
-    //                 const clone = alertTemplate.content.cloneNode(true);
-    //                 const alert = clone.querySelector(".alert");
-    //                 const progressBar = alert.querySelector(".progress-bar");
-    //                 //alert type
-    //                 alert.classList.add("alert-warning");
-    //                 //icon
-    //                 alert
-    //                   .querySelector(".fad")
-    //                   .classList.add("fa-exclamation-circle");
-    //                 //message
-    //                 alert.querySelector(".alert-message").innerHTML =
-    //                   apiDeleteProduit.message;
-    //                 //progress bar
-    //                 progressBar.style.transition = "width 10s linear";
-    //                 progressBar.style.width = "100%";
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+                return;
+              }
+              //invalid
+              else if (apiDeleteArticle.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiDeleteArticle.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
 
-    //                 //add alert
-    //                 modalDeleteProduit.querySelector(".modal-body").prepend(alert);
+                //add alert
+                modalDeleteArticle.querySelector(".modal-body").prepend(alert);
 
-    //                 //progress launch animation
-    //                 setTimeout(() => {
-    //                   progressBar.style.width = "0%";
-    //                 }, 10);
-    //                 //auto close alert
-    //                 setTimeout(() => {
-    //                   alert.querySelector(".btn-close").click();
-    //                 }, 10000);
-    //                 return;
-    //               }
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                return;
+              }
 
-    //               //success
-    //               //alert
-    //               const alertTemplate = document.querySelector(".alert-template");
-    //               const clone = alertTemplate.content.cloneNode(true);
-    //               const alert = clone.querySelector(".alert");
-    //               const progressBar = alert.querySelector(".progress-bar");
-    //               //alert type
-    //               alert.classList.add("alert-success");
-    //               //icon
-    //               alert.querySelector(".fad").classList.add("fa-check-circle");
-    //               //message
-    //               alert.querySelector(".alert-message").innerHTML =
-    //                 apiDeleteProduit.message;
-    //               //progress bar
-    //               progressBar.style.transition = "width 10s linear";
-    //               progressBar.style.width = "100%";
+              //success
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-success");
+              //icon
+              alert.querySelector(".fad").classList.add("fa-check-circle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                apiDeleteArticle.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
 
-    //               //add alert
-    //               container
-    //                 .querySelector("#tbody-produit")
-    //                 .closest("div")
-    //                 .prepend(alert);
+              //add alert
+              container
+                .querySelector("#tbody-article")
+                .closest("div")
+                .prepend(alert);
 
-    //               //progress launch animation
-    //               setTimeout(() => {
-    //                 progressBar.style.width = "0%";
-    //               }, 10);
-    //               //auto close alert
-    //               setTimeout(() => {
-    //                 alert.querySelector(".btn-close").click();
-    //               }, 10000);
+              //progress launch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
 
-    //               //auto hide modal
-    //               modalDeleteProduit
-    //                 .querySelector("#btn-close-modal-delete-produit")
-    //                 .click();
+              //auto hide modal
+              modalDeleteArticle
+                .querySelector("#btn-close-modal-delete-article")
+                .click();
 
-    //               //refresh filter produit
-    //               filterProduit(
-    //                 selectStatus.value.trim(),
-    //                 selectArrangeBy.value.trim(),
-    //                 selectOrder.value.trim(),
-    //                 inputSearch.value.trim()
-    //               );
+              //refresh filter article
+              filterArticle(
+                selectStatus.value.trim(),
+                selectArrangeBy.value.trim(),
+                selectOrder.value.trim(),
+                inputSearch.value.trim()
+              );
 
-    //               return;
-    //             } catch (e) {
-    //               console.error(e);
-    //             }
-    //           });
-    //       });
-    //     }
+              return;
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      });
+    }
 
     //     //========================= DELETE PERMANENT PRODUIT =================
     //     //btn delete permanent produit
