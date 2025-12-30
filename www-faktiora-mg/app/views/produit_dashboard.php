@@ -52,7 +52,7 @@
                                                     <?php if ($role === 'admin'): ?>
                                                         <!-- btn add produit -->
                                                         <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                                            data-bs-target="#modal-add-produit" id="btn-add-produit"><i class="fad fa-user-circle-plus me-2">
+                                                            data-bs-target="#modal-add-produit" id="btn-add-produit"><i class="fad fa-circle-plus me-2">
                                                             </i><?= __('forms.labels.add') ?>
                                                         </button>
                                                         <!-- btn restore produit -->
@@ -60,11 +60,11 @@
                                                             </i><?= __('forms.labels.restore') ?>
                                                         </button>
                                                         <!-- btn delete produit -->
-                                                        <button class="btn btn-sm btn-outline-danger" id="btn-delete-produit"><i class="fad fa-user-circle-minus me-2">
+                                                        <button class="btn btn-sm btn-outline-danger" id="btn-delete-produit"><i class="fad fa-circle-minus me-2">
                                                             </i><?= __('forms.labels.delete') ?>
                                                         </button>
                                                         <!-- btn delete permanent produit  -->
-                                                        <button class="btn btn-sm btn-danger" id="btn-delete-permanent-produit"><i class="fad fa-user-circle-minus me-2">
+                                                        <button class="btn btn-sm btn-danger" id="btn-delete-permanent-produit"><i class="fad fa-circle-minus me-2">
                                                             </i><?= __('forms.labels.delete_permanent') ?>
                                                         </button>
                                                     <?php endif; ?>

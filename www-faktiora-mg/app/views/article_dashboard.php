@@ -50,9 +50,9 @@
                                                 <!-- btns  -->
                                                 <div class="d-flex gap-2 justify-content-start w-100 my-2">
                                                     <?php if ($role === 'admin'): ?>
-                                                        <!-- btn add produit -->
+                                                        <!-- btn add article -->
                                                         <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                                            data-bs-target="#modal-add-produit" id="btn-add-produit"><i class="fad fa-user-circle-plus me-2">
+                                                            data-bs-target="#modal-add-article" id="btn-add-article"><i class="fad fa-circle-plus me-2">
                                                             </i><?= __('forms.labels.add') ?>
                                                         </button>
                                                         <!-- btn restore produit -->
@@ -60,11 +60,11 @@
                                                             </i><?= __('forms.labels.restore') ?>
                                                         </button>
                                                         <!-- btn delete produit -->
-                                                        <button class="btn btn-sm btn-outline-danger" id="btn-delete-produit"><i class="fad fa-user-circle-minus me-2">
+                                                        <button class="btn btn-sm btn-outline-danger" id="btn-delete-produit"><i class="fad fa-circle-minus me-2">
                                                             </i><?= __('forms.labels.delete') ?>
                                                         </button>
                                                         <!-- btn delete permanent produit  -->
-                                                        <button class="btn btn-sm btn-danger" id="btn-delete-permanent-produit"><i class="fad fa-user-circle-minus me-2">
+                                                        <button class="btn btn-sm btn-danger" id="btn-delete-permanent-produit"><i class="fad fa-circle-minus me-2">
                                                             </i><?= __('forms.labels.delete_permanent') ?>
                                                         </button>
                                                     <?php endif; ?>
@@ -163,50 +163,30 @@
     </div>
     <!-- overlay searchbar  -->
     <div class="overlay-searchbar d-none min-vh-100 bg-dark bg-opacity-50 top-0 col-12 position-fixed "></div>
-    <!-- modal add produit -->
-    <div class="modal fade" id="modal-add-produit" tabindex="-1" aria-labelledby="modalAddProduit" aria-hidden="true">
+    <!-- modal add article -->
+    <div class="modal fade" id="modal-add-article" tabindex="-1" aria-labelledby="modalAddArticle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- modal header  -->
                 <div class="modal-header bg-green-0 text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-plus me-2"></i><?= __('forms.titles.produit_add') ?></h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-plus me-2"></i><?= __('forms.titles.article_add') ?></h6>
                 </div>
                 <form>
                     <!-- modal body  -->
                     <div class="modal-body">
-                        <!-- libelle_produit -->
+                        <!-- libelle_article-->
                         <div class="mb-2">
-                            <label for="input-add-produit-libelle-produit" class="form-label"><?= __('forms.labels.label') ?><span class="text-danger"> *</span></label>
+                            <label for="input-add-article-libelle-article" class="form-label"><?= __('forms.labels.label') ?><span class="text-danger"> *</span></label>
                             <div class="input-group">
                                 <span class="input-group-text text-success"><i class="fad fa-tag"></i></span>
-                                <input type="text" class="form-control form-control-sm" maxlength="100" placeholder="<?= __('forms.placeholders.libelle_produit') ?>" id="input-add-produit-libelle-produit" required>
-                            </div>
-                        </div>
-                        <!--  input add produit prix_produit -->
-                        <div class="mb-2">
-                            <label for="input-add-produit-prix-produit" class="form-label"><?= __('forms.labels.unit_price') ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success">
-                                    <i class="fad fa-coins"></i>
-                                </span>
-                                <input type="text" class="form-control form-control-sm " id="input-add-produit-prix-produit" required>
-                            </div>
-                        </div>
-                        <!--  input add produit nb_stock -->
-                        <div class="mb-2">
-                            <label for="input-add-produit-nb-stock" class="form-label"><?= __('forms.labels.nb_stock') ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success">
-                                    <i class="fad fa-circle-bookmark"></i>
-                                </span>
-                                <input type="number" min="0" value="0" class="form-control form-control-sm " id="input-add-produit-nb-stock" required>
+                                <input type="text" class="form-control form-control-sm" maxlength="100" placeholder="<?= __('forms.placeholders.libelle_article') ?>" id="input-add-article-libelle-article" required>
                             </div>
                         </div>
                     </div>
                     <!-- modal footer  -->
                     <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-add-produit"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
-                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-add-produit"><i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-add-article"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-add-article"><i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
                     </div>
                 </form>
             </div>

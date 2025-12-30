@@ -190,234 +190,156 @@ document.addEventListener("DOMContentLoaded", async () => {
       inputSearch.value.trim()
     );
 
-    //     //======================== ADD PRODUIT ======================
-    //     //modal add produit
-    //     const modalAddProduit = container.querySelector("#modal-add-produit");
-    //     //input - add produit libelle_produit
-    //     const inputAddProduitLibelleProduit = modalAddProduit.querySelector(
-    //       "#input-add-produit-libelle-produit"
-    //     );
-    //     const savedInputAddProduiLibelleProduit = localStorage.getItem(
-    //       inputAddProduitLibelleProduit.id
-    //     );
-    //     inputAddProduitLibelleProduit.value = !savedInputAddProduiLibelleProduit
-    //       ? ""
-    //       : savedInputAddProduiLibelleProduit;
-    //     //input - add produit prix_produit
-    //     const inputAddPorduitPrixProduit = modalAddProduit.querySelector(
-    //       "#input-add-produit-prix-produit"
-    //     );
-    //     const savedInputAddProduitPrixProduit = localStorage.getItem(
-    //       inputAddPorduitPrixProduit.id
-    //     );
-    //     inputAddPorduitPrixProduit.value = !savedInputAddProduitPrixProduit
-    //       ? "1"
-    //       : savedInputAddProduitPrixProduit;
-    //     inputAddPorduitPrixProduit.dataset.val = inputAddPorduitPrixProduit.value;
-    //     //input - add produit nb_stock
-    //     const inputAddProduitNbStock = modalAddProduit.querySelector(
-    //       "#input-add-produit-nb-stock"
-    //     );
-    //     const savedInputAddProduitNbStock = localStorage.getItem(
-    //       inputAddProduitNbStock.id
-    //     );
-    //     inputAddProduitNbStock.value = !savedInputAddProduitNbStock
-    //       ? 0
-    //       : savedInputAddProduitNbStock;
+    //======================== ADD ARTICLE ======================
+    //modal add article
+    const modalAddArticle = container.querySelector("#modal-add-article");
+    //input - add article libelle_article
+    const inputAddArticleLibelleArticle = modalAddArticle.querySelector(
+      "#input-add-article-libelle-article"
+    );
+    const savedInputAddArticleLibelleArticle = localStorage.getItem(
+      inputAddArticleLibelleArticle.id
+    );
+    inputAddArticleLibelleArticle.value = !savedInputAddArticleLibelleArticle
+      ? ""
+      : savedInputAddArticleLibelleArticle;
 
-    //     //===== EVENT input add produit libelle_produit
-    //     inputAddProduitLibelleProduit.addEventListener("input", (e) => {
-    //       e.target.value = e.target.value.replace("  ", " ");
+    //===== EVENT input add article libelle_article
+    inputAddArticleLibelleArticle.addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace("  ", " ");
 
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
-    //     //===== EVENT input add produit prix_produit
-    //     inputAddPorduitPrixProduit.addEventListener("input", (e) => {
-    //       if (cookieLangValue === "en") {
-    //         e.target.value = e.target.value.replace(/[^0-9.]/g, "");
-    //         if (!/^\d*\.?\d*$/.test(e.target.value)) {
-    //           e.target.value = e.target.value.slice(0, -1);
-    //         }
+      localStorage.setItem(e.target.id, e.target.value);
+    });
 
-    //         // add 0 in the start if ,
-    //         if (e.target.value.startsWith(".")) {
-    //           e.target.value = "0" + e.target.value;
-    //         }
+    //===== EVENT modal add article form submit
+    modalAddArticle
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        //suspend submit
+        e.preventDefault();
+        //check validity
+        if (!e.target.checkValidity()) {
+          e.target.reportValidity();
+          return;
+        }
 
-    //         //real value for calcul
-    //         e.target.dataset.val = e.target.value.replace(/[\u202F\u00A0 ]/g, "");
-    //       } else {
-    //         //number and , only
-    //         e.target.value = e.target.value.replace(/[^0-9,]/g, "");
-    //         if (!/^\d*\,?\d*$/.test(e.target.value)) {
-    //           e.target.value = e.target.value.slice(0, -1);
-    //         }
-    //         // add 0 in the start if ,
-    //         if (e.target.value.startsWith(",")) {
-    //           e.target.value = "0" + e.target.value;
-    //         }
+        try {
+          //FETCH api add article
+          const apiAddArticle = await apiRequest("/article/create_article", {
+            method: "POST",
+            body: {
+              libelle_article: inputAddArticleLibelleArticle.value.trim(),
+            },
+          });
 
-    //         //real value for calcul
-    //         e.target.dataset.val = e.target.value
-    //           .replace(",", ".")
-    //           .replace(/[\u202F\u00A0 ]/g, "");
-    //       }
-    //     });
-    //     inputAddPorduitPrixProduit.addEventListener("blur", (e) => {
-    //       if (e.target.value.endsWith(",")) {
-    //         e.target.value += "0";
-    //       }
+          //invalid
+          if (apiAddArticle.message_type === "invalid") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-warning");
+            //icon
+            alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiAddArticle.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
 
-    //       if (e.target.value) {
-    //         e.target.value = formatterNumber.format(
-    //           e.target.value.replace(/[\u202F\u00A0 ]/g, "").replace(",", ".")
-    //         );
-    //       } else {
-    //         e.target.value = "1";
-    //         e.target.dataset.val = 1;
-    //       }
-    //       //save to local storage
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
-    //     //===== EVENT input add produit nb_stock
-    //     inputAddProduitNbStock.addEventListener("input", (e) => {
-    //       e.target.value = e.target.value.replace(/[^0-9]/g, "");
+            //add alert
+            modalAddArticle.querySelector(".modal-body").prepend(alert);
 
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+          }
+          //error
+          else if (apiAddArticle.message_type === "error") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-danger");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiAddArticle.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
 
-    //     //===== EVENT modal add produit form submit
-    //     modalAddProduit
-    //       .querySelector("form")
-    //       .addEventListener("submit", async (e) => {
-    //         //suspend submit
-    //         e.preventDefault();
-    //         //check validity
-    //         if (!e.target.checkValidity()) {
-    //           e.target.reportValidity();
-    //           return;
-    //         }
+            //add alert
+            modalAddArticle.querySelector(".modal-body").prepend(alert);
 
-    //         try {
-    //           //FETCH api add produit
-    //           const apiAddProduit = await apiRequest("/produit/create_produit", {
-    //             method: "POST",
-    //             body: {
-    //               libelle_produit: inputAddProduitLibelleProduit.value.trim(),
-    //               prix_produit: inputAddPorduitPrixProduit.value
-    //                 .replace(/[\u202F\u00A0 ]/g, "")
-    //                 .replace(",", "."),
-    //               nb_stock: inputAddProduitNbStock.value.trim(),
-    //             },
-    //           });
-    //           //invalid
-    //           if (apiAddProduit.message_type === "invalid") {
-    //             //alert
-    //             const alertTemplate = document.querySelector(".alert-template");
-    //             const clone = alertTemplate.content.cloneNode(true);
-    //             const alert = clone.querySelector(".alert");
-    //             const progressBar = alert.querySelector(".progress-bar");
-    //             //alert type
-    //             alert.classList.add("alert-warning");
-    //             //icon
-    //             alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //             //message
-    //             alert.querySelector(".alert-message").innerHTML =
-    //               apiAddProduit.message;
-    //             //progress bar
-    //             progressBar.style.transition = "width 10s linear";
-    //             progressBar.style.width = "100%";
+            //progress lanch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+          }
 
-    //             //add alert
-    //             modalAddProduit.querySelector(".modal-body").prepend(alert);
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-success");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-check-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            apiAddArticle.message;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
 
-    //             //progress launch animation
-    //             setTimeout(() => {
-    //               progressBar.style.width = "0%";
-    //             }, 10);
-    //             //auto close alert
-    //             setTimeout(() => {
-    //               alert.querySelector(".btn-close").click();
-    //             }, 10000);
-    //           }
-    //           //error
-    //           else if (apiAddProduit.message_type === "error") {
-    //             //alert
-    //             const alertTemplate = document.querySelector(".alert-template");
-    //             const clone = alertTemplate.content.cloneNode(true);
-    //             const alert = clone.querySelector(".alert");
-    //             const progressBar = alert.querySelector(".progress-bar");
-    //             //alert type
-    //             alert.classList.add("alert-danger");
-    //             //icon
-    //             alert
-    //               .querySelector(".fad")
-    //               .classList.add("fa-exclamation-triangle");
-    //             //message
-    //             alert.querySelector(".alert-message").innerHTML =
-    //               apiAddProduit.message;
-    //             //progress bar
-    //             progressBar.style.transition = "width 10s linear";
-    //             progressBar.style.width = "100%";
+          //add alert
+          container
+            .querySelector("#tbody-article")
+            .closest("div")
+            .prepend(alert);
 
-    //             //add alert
-    //             modalAddProduit.querySelector(".modal-body").prepend(alert);
+          //progress lanch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
 
-    //             //progress lanch animation
-    //             setTimeout(() => {
-    //               progressBar.style.width = "0%";
-    //             }, 10);
-    //             //auto close alert
-    //             setTimeout(() => {
-    //               alert.querySelector(".btn-close").click();
-    //             }, 10000);
-    //           }
+          //hide modal
+          modalAddArticle.querySelector("#btn-close-modal-add-article").click();
 
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-success");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-check-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             apiAddProduit.message;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
-
-    //           //add alert
-    //           container
-    //             .querySelector("#tbody-produit")
-    //             .closest("div")
-    //             .prepend(alert);
-
-    //           //progress lanch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
-
-    //           //hide modal
-    //           modalAddProduit.querySelector("#btn-close-modal-add-produit").click();
-
-    //           //refresh filter produit
-    //           filterProduit(
-    //             selectStatus.value.trim(),
-    //             selectArrangeBy.value.trim(),
-    //             selectOrder.value.trim(),
-    //             inputSearch.value.trim()
-    //           );
-    //         } catch (e) {
-    //           console.error(e);
-    //         }
-    //       });
+          //refresh filter article
+          filterArticle(
+            selectStatus.value.trim(),
+            selectArrangeBy.value.trim(),
+            selectOrder.value.trim(),
+            inputSearch.value.trim()
+          );
+        } catch (e) {
+          console.error(e);
+        }
+      });
 
     //     //========================== UPDATE PRODUIT =======================
     //     //modal update produit

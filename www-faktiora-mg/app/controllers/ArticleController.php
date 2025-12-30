@@ -92,7 +92,7 @@ class ArticleController extends Controller
             //trim
             $json = array_map(fn($x) => trim($x), $json);
 
-            //libelle_produit - empty
+            //libelle_article - empty
             if ($json['libelle_article'] === '') {
                 $response = [
                     'message_type' => 'success',
@@ -298,7 +298,7 @@ class ArticleController extends Controller
                     return;
                 }
 
-                //update produit 
+                //update article
                 $article_model = new Article();
                 $article_model
                     ->setIdArticle($json['id_article'])
