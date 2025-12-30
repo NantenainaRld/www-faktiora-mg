@@ -132,7 +132,7 @@ class ProduitController extends Controller
             }
             //prix_produit - invalid
             $prix_produit = filter_var($json['prix_produit'], FILTER_VALIDATE_FLOAT);
-            if ($prix_produit === false || $prix_produit <= 0) {
+            if (!$prix_produit  || $prix_produit <= 0) {
                 $response = [
                     'message_type' => 'success',
                     'message' => __('messages.invalids.prix')

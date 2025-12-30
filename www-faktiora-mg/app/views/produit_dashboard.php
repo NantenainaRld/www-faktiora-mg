@@ -49,12 +49,12 @@
                                             <div class="col-12">
                                                 <!-- btns  -->
                                                 <div class="d-flex gap-2 justify-content-start w-100 my-2">
-                                                    <!-- btn add client  -->
-                                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                                        data-bs-target="#modal-add-client" id="btn-add-client"><i class="fad fa-user-circle-plus me-2">
-                                                        </i><?= __('forms.labels.add') ?>
-                                                    </button>
                                                     <?php if ($role === 'admin'): ?>
+                                                        <!-- btn add produit -->
+                                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                                            data-bs-target="#modal-add-produit" id="btn-add-produit"><i class="fad fa-user-circle-plus me-2">
+                                                            </i><?= __('forms.labels.add') ?>
+                                                        </button>
                                                         <!-- btn restore client  -->
                                                         <button class="btn btn-sm btn-outline-warning" id="btn-restore-client"><i class="fad fa-arrow-rotate-left me-2">
                                                             </i><?= __('forms.labels.restore') ?>
@@ -172,65 +172,50 @@
     </div>
     <!-- overlay searchbar  -->
     <div class="overlay-searchbar d-none min-vh-100 bg-dark bg-opacity-50 top-0 col-12 position-fixed "></div>
-    <!-- modal add client -->
-    <div class="modal fade" id="modal-add-client" tabindex="-1" aria-labelledby="modalAddClient" aria-hidden="true">
+    <!-- modal add produit -->
+    <div class="modal fade" id="modal-add-produit" tabindex="-1" aria-labelledby="modalAddProduit" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- modal header  -->
                 <div class="modal-header bg-green-0 text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-user-circle-plus me-2"></i><?= __('forms.titles.client_add') ?></h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-plus me-2"></i><?= __('forms.titles.produit_add') ?></h6>
                 </div>
                 <form>
                     <!-- modal body  -->
                     <div class="modal-body">
-                        <!-- input - nom_client  -->
+                        <!-- libelle_produit -->
                         <div class="mb-2">
-                            <label for="input-add-nom-client" class="form-label"><?= __('forms.labels.name') ?> <span class="text-danger">*</span></label>
+                            <label for="input-add-produit-libelle-produit" class="form-label"><?= __('forms.labels.label') ?><span class="text-danger"> *</span></label>
                             <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-address-card"></i></span>
-                                <input type="text" maxlength="100" class="form-control form-control-sm" id="input-add-nom-client" placeholder="RALANDISON" required>
+                                <span class="input-group-text text-success"><i class="fad fa-tag"></i></span>
+                                <input type="text" class="form-control form-control-sm" maxlength="100" placeholder="<?= __('forms.placeholders.libelle_produit') ?>" id="input-add-produit-libelle-produit" required>
                             </div>
                         </div>
-                        <!-- input - prenoms_client  -->
+                        <!--  input add produit prix_produit -->
                         <div class="mb-2">
-                            <label for="input-add-prenoms-client" class="form-label"><?= __('forms.labels.firstname') ?></label>
+                            <label for="input-add-produit-prix-produit" class="form-label"><?= __('forms.labels.unit_price') ?> <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-address-card"></i></span>
-                                <input type="text" maxlength="100" class="form-control form-control-sm" id="input-add-prenoms-client" placeholder="Nantenaina">
+                                <span class="input-group-text text-success">
+                                    <i class="fad fa-coins"></i>
+                                </span>
+                                <input type="text" class="form-control form-control-sm text-secondary" id="input-add-produit-prix-produit" required>
                             </div>
                         </div>
-                        <!-- select - sexe_client  -->
+                        <!--  input add produit nb_stock -->
                         <div class="mb-2">
-                            <label for="select-add-sexe-client" class="form-label"><?= __('forms.labels.sex') ?></label>
+                            <label for="input-add-produit-nb-stock" class="form-label"><?= __('forms.labels.nb_stock') ?> <span class="text-danger">*</span></label>
                             <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-venus"></i></span>
-                                <select name="" id="select-add-sexe-client" class="form-select form-select-sm">
-                                    <option value="masculin"><?= __('forms.labels.male') ?></option>
-                                    <option value="féminin"><?= __('forms.labels.female') ?></option>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- input - telephone -->
-                        <div class="mb-2">
-                            <label for="input-add-telephone" class="form-label"><?= __('forms.labels.phone') ?> </label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-phone"></i></span>
-                                <input type="text" maxlength="20" minlength="10" class="form-control form-control-sm" id="input-add-telephone" placeholder="032 00 000 00">
-                            </div>
-                        </div>
-                        <!-- input - adresse -->
-                        <div class="mb-2">
-                            <label for="input-add-adresse" class="form-label"><?= __('forms.labels.address') ?> </label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success"><i class="fad fa-location-dot"></i></span>
-                                <input type="text" maxlength="20" class="form-control form-control-sm" id="input-add-adresse" placeholder="Andrainjato Fianarantsoa">
+                                <span class="input-group-text text-success">
+                                    <i class="fad fa-circle-bookmark"></i>
+                                </span>
+                                <input type="number" min="0" value="0" class="form-control form-control-sm text-secondary" id="input-add-produit-nb-stock" required>
                             </div>
                         </div>
                     </div>
                     <!-- modal footer  -->
                     <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-add-client"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
-                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-add-client"><i class="fad fa-user-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-add-produit"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-add-produit"><i class="fad fa-circle-plus me-2"></i><?= __('forms.labels.add') ?></button>
                     </div>
                 </form>
             </div>

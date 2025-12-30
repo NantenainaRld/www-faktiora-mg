@@ -71,7 +71,8 @@ return [
         'sortie_restore' => "Récupération des sorties",
         'ligne_sortie' => "Lignes de sortie",
         'produit_dashboard' => "Tableau de bord produit",
-        'produit_list' => "Liste des produits"
+        'produit_list' => "Liste des produits",
+        'produit_add' => "Ajout d'un produit"
     ],
     'labels' => [
         'all' => 'tout',
@@ -307,8 +308,9 @@ return [
         'libelle_ae' => "ex: apport de caisse",
         'correction_inflow' => "ajout d'un autre montant",
         'correction_outflow' => "réduction de montant",
-        'libelle_article' => "achat de carburant",
-        'search_produit' => "ID produit, libellé produit"
+        'libelle_article' => "ex: achat de carburant",
+        'search_produit' => "ID produit, libellé produit",
+        'libelle_produit' => "ex: vin"
     ]
 
 ];

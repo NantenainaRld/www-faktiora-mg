@@ -190,619 +190,234 @@ document.addEventListener("DOMContentLoaded", async () => {
       inputSearch.value.trim()
     );
 
-    //     //======================== ADD CLIENT ======================
-    //     //modal add client
-    //     const modalAddClient = container.querySelector("#modal-add-client");
-    //     //input - add nom_client
-    //     const inputAddNomClient = modalAddClient.querySelector(
-    //       "#input-add-nom-client"
-    //     );
-    //     const savedInputAddNomClient = localStorage.getItem(inputAddNomClient.id);
-    //     inputAddNomClient.value = !savedInputAddNomClient
-    //       ? ""
-    //       : savedInputAddNomClient;
-    //     //input - add prenoms_client
-    //     const inputAddPrenomsClient = modalAddClient.querySelector(
-    //       "#input-add-prenoms-client"
-    //     );
-    //     const savedInputAddPrenomsClient = localStorage.getItem(
-    //       inputAddPrenomsClient.id
-    //     );
-    //     inputAddPrenomsClient.value = !savedInputAddPrenomsClient
-    //       ? ""
-    //       : savedInputAddPrenomsClient;
-    //     //select - add sexe_client
-    //     const selectAddSexeClient = modalAddClient.querySelector(
-    //       "#select-add-sexe-client"
-    //     );
-    //     const savedSelectAddSexeClient = localStorage.getItem(
-    //       selectAddSexeClient.id
-    //     );
-    //     selectAddSexeClient.value = !savedSelectAddSexeClient
-    //       ? "masculin"
-    //       : savedSelectAddSexeClient;
-    //     //input - add telephone
-    //     const inputAddTelephone = modalAddClient.querySelector(
-    //       "#input-add-telephone"
-    //     );
-    //     const savedInputAddTelephone = localStorage.getItem(inputAddTelephone.id);
-    //     inputAddTelephone.value = !savedInputAddTelephone
-    //       ? ""
-    //       : savedInputAddTelephone;
-    //     //input - add adresse
-    //     const inputAddAdresse = modalAddClient.querySelector("#input-add-adresse");
-    //     const savedInputAddAdresse = localStorage.getItem(inputAddAdresse.id);
-    //     inputAddAdresse.value = !savedInputAddAdresse ? "" : savedInputAddAdresse;
+    //======================== ADD PRODUIT ======================
+    //modal add produit
+    const modalAddProduit = container.querySelector("#modal-add-produit");
+    //input - add produit libelle_produit
+    const inputAddProduitLibelleProduit = modalAddProduit.querySelector(
+      "#input-add-produit-libelle-produit"
+    );
+    const savedInputAddProduiLibelleProduit = localStorage.getItem(
+      inputAddProduitLibelleProduit.id
+    );
+    inputAddProduitLibelleProduit.value = !savedInputAddProduiLibelleProduit
+      ? ""
+      : savedInputAddProduiLibelleProduit;
+    //input - add produit prix_produit
+    const inputAddPorduitPrixProduit = modalAddProduit.querySelector(
+      "#input-add-produit-prix-produit"
+    );
+    const savedInputAddProduitPrixProduit = localStorage.getItem(
+      inputAddPorduitPrixProduit.id
+    );
+    inputAddPorduitPrixProduit.value = !savedInputAddProduitPrixProduit
+      ? "1"
+      : savedInputAddProduitPrixProduit;
+    inputAddPorduitPrixProduit.dataset.val = inputAddPorduitPrixProduit.value;
+    //input - add produit nb_stock
+    const inputAddProduitNbStock = modalAddProduit.querySelector(
+      "#input-add-produit-nb-stock"
+    );
+    const savedInputAddProduitNbStock = localStorage.getItem(
+      inputAddProduitNbStock.id
+    );
+    inputAddProduitNbStock.value = !savedInputAddProduitNbStock
+      ? 0
+      : savedInputAddProduitNbStock;
 
-    //     //===== EVENT input add nom_client
-    //     inputAddNomClient.addEventListener("input", (e) => {
-    //       //remove double space && change into uppercase
-    //       e.target.value = e.target.value.replace("  ", " ").toUpperCase();
+    //===== EVENT input add produit libelle_produit
+    inputAddProduitLibelleProduit.addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace("  ", " ");
 
-    //       //save value into localstorage
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
-    //     //===== EVENT input add prenoms_client
-    //     inputAddPrenomsClient.addEventListener("input", (e) => {
-    //       //remove double space && change into uppercase
-    //       e.target.value = e.target.value.replace("  ", " ");
+      localStorage.setItem(e.target.id, e.target.value);
+    });
+    //===== EVENT input add produit prix_produit
+    inputAddPorduitPrixProduit.addEventListener("input", (e) => {
+      if (cookieLangValue === "en") {
+        e.target.value = e.target.value.replace(/[^0-9.]/g, "");
+        if (!/^\d*\.?\d*$/.test(e.target.value)) {
+          e.target.value = e.target.value.slice(0, -1);
+        }
 
-    //       //save value into localstorage
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
-    //     //===== EVENT select add sexe_client
-    //     selectAddSexeClient.addEventListener("change", (e) => {
-    //       //save value into localstorage
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
-    //     //===== EVENT input add telephone
-    //     inputAddTelephone.addEventListener("input", (e) => {
-    //       //remove invalid
-    //       e.target.value = e.target.value.replace(/[^\d+\s]/g, "");
-    //       //remove double space
-    //       e.target.value = e.target.value.replace("  ", " ");
+        // add 0 in the start if ,
+        if (e.target.value.startsWith(".")) {
+          e.target.value = "0" + e.target.value;
+        }
 
-    //       //save value into localstorage
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
-    //     //===== EVENT input add adresse
-    //     inputAddAdresse.addEventListener("input", (e) => {
-    //       //remove double space
-    //       e.target.value = e.target.value.replace("  ", " ");
+        //real value for calcul
+        e.target.dataset.val = e.target.value.replace(/[\u202F\u00A0 ]/g, "");
+      } else {
+        //number and , only
+        e.target.value = e.target.value.replace(/[^0-9,]/g, "");
+        if (!/^\d*\,?\d*$/.test(e.target.value)) {
+          e.target.value = e.target.value.slice(0, -1);
+        }
+        // add 0 in the start if ,
+        if (e.target.value.startsWith(",")) {
+          e.target.value = "0" + e.target.value;
+        }
 
-    //       //save value into localstorage
-    //       localStorage.setItem(e.target.id, e.target.value);
-    //     });
+        //real value for calcul
+        e.target.dataset.val = e.target.value
+          .replace(",", ".")
+          .replace(/[\u202F\u00A0 ]/g, "");
+      }
+    });
+    inputAddPorduitPrixProduit.addEventListener("blur", (e) => {
+      if (e.target.value.endsWith(",")) {
+        e.target.value += "0";
+      }
 
-    //     //===== EVENT form add client submit
-    //     modalAddClient
-    //       .querySelector("form")
-    //       .addEventListener("submit", async (e) => {
-    //         //suspend submit
-    //         e.preventDefault();
-    //         //check validity
-    //         if (!e.target.checkValidity()) {
-    //           e.target.reportValidity();
-    //         }
+      if (e.target.value) {
+        e.target.value = formatterNumber.format(
+          e.target.value.replace(/[\u202F\u00A0 ]/g, "").replace(",", ".")
+        );
+      } else {
+        e.target.value = "1";
+        e.target.dataset.val = 1;
+      }
+      //save to local storage
+      localStorage.setItem(e.target.id, e.target.value);
+    });
+    //===== EVENT input add produit nb_stock
+    inputAddProduitNbStock.addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace(/[^0-9]/g, "");
 
-    //         try {
-    //           //FETCH api add client
-    //           const apiAddClient = await apiRequest("/client/create_client", {
-    //             method: "POST",
-    //             body: {
-    //               nom_client: inputAddNomClient.value.trim(),
-    //               prenoms_client: inputAddPrenomsClient.value.trim(),
-    //               sexe_client: selectAddSexeClient.value.trim(),
-    //               telephone: inputAddTelephone.value.trim(),
-    //               adresse: inputAddAdresse.value.trim(),
-    //             },
-    //           });
+      localStorage.setItem(e.target.id, e.target.value);
+    });
 
-    //           //error
-    //           if (apiAddClient.message_type === "error") {
-    //             //alert
-    //             const alertTemplate = document.querySelector(".alert-template");
-    //             const clone = alertTemplate.content.cloneNode(true);
-    //             const alert = clone.querySelector(".alert");
-    //             const progressBar = alert.querySelector(".progress-bar");
-    //             //alert type
-    //             alert.classList.add("alert-danger");
-    //             //icon
-    //             alert
-    //               .querySelector(".fad")
-    //               .classList.add("fa-exclamation-triangle");
-    //             //message
-    //             alert.querySelector(".alert-message").innerHTML =
-    //               apiAddClient.message;
-    //             //progress bar
-    //             progressBar.style.transition = "width 20s linear";
-    //             progressBar.style.width = "100%";
+    //===== EVENT modal add produit form submit
+    modalAddProduit
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        //suspend submit
+        e.preventDefault();
+        //check validity
+        if (!e.target.checkValidity()) {
+          e.target.reportValidity();
+          return;
+        }
 
-    //             //add alert
-    //             modalAddClient.querySelector(".modal-body").prepend(alert);
+        try {
+          //FETCH api add produit
+          const apiAddProduit = await apiRequest("/produit/create_produit", {
+            method: "POST",
+            body: {
+              libelle_produit: inputAddProduitLibelleProduit.value.trim(),
+              prix_produit: inputAddPorduitPrixProduit.value
+                .replace(/[\u202F\u00A0 ]/g, "")
+                .replace(",", "."),
+              nb_stock: inputAddProduitNbStock.value.trim(),
+            },
+          });
+          //invalid
+          if (apiAddProduit.message_type === "invalid") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-warning");
+            //icon
+            alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiAddProduit.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
 
-    //             //progress launch animation
-    //             setTimeout(() => {
-    //               progressBar.style.width = "0%";
-    //             }, 10);
-    //             //auto close alert
-    //             setTimeout(() => {
-    //               alert.querySelector(".btn-close").click();
-    //             }, 20000);
+            //add alert
+            modalAddProduit.querySelector(".modal-body").prepend(alert);
 
-    //             return;
-    //           }
-    //           //invalid
-    //           else if (apiAddClient.message_type === "invalid") {
-    //             //alert
-    //             const alertTemplate = document.querySelector(".alert-template");
-    //             const clone = alertTemplate.content.cloneNode(true);
-    //             const alert = clone.querySelector(".alert");
-    //             const progressBar = alert.querySelector(".progress-bar");
-    //             //alert type
-    //             alert.classList.add("alert-warning");
-    //             //icon
-    //             alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //             //message
-    //             alert.querySelector(".alert-message").innerHTML =
-    //               apiAddClient.message;
-    //             //progress bar
-    //             progressBar.style.transition = "width 10s linear";
-    //             progressBar.style.width = "100%";
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+          }
+          //error
+          else if (apiAddProduit.message_type === "error") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-danger");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiAddProduit.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
 
-    //             //add alert
-    //             modalAddClient.querySelector(".modal-body").prepend(alert);
+            //add alert
+            modalAddProduit.querySelector(".modal-body").prepend(alert);
 
-    //             //progress lanch animation
-    //             setTimeout(() => {
-    //               progressBar.style.width = "0%";
-    //             }, 10);
-    //             //auto close alert
-    //             setTimeout(() => {
-    //               alert.querySelector(".btn-close").click();
-    //             }, 10000);
+            //progress lanch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+          }
 
-    //             return;
-    //           }
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-success");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-check-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            apiAddProduit.message;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
 
-    //           //success add client
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-success");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-check-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             apiAddClient.message;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
+          //add alert
+          container
+            .querySelector("#tbody-produit")
+            .closest("div")
+            .prepend(alert);
 
-    //           //add alert
-    //           container
-    //             .querySelector("#tbody-client")
-    //             .closest("div")
-    //             .prepend(alert);
+          //progress lanch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
 
-    //           //progress lanch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
+          //hide modal
+          modalAddProduit.querySelector("#btn-close-modal-add-produit").click();
 
-    //           //auto close modal
-    //           modalAddClient.querySelector("#btn-close-modal-add-client").click();
-
-    //           //refresh filter client
-    //           filterClient(
-    //             selectStatus.value.trim(),
-    //             selectSex.value.trim(),
-    //             selectArrangeBy.value.trim(),
-    //             selectOrder.value.trim(),
-    //             selectDateBy.value.trim(),
-    //             selectPer.value.trim(),
-    //             dateFrom.value.trim(),
-    //             dateTo.value.trim(),
-    //             selectMonth.value.trim(),
-    //             selectYear.value.trim(),
-    //             inputSearch.value.trim()
-    //           );
-
-    //           return;
-    //         } catch (e) {
-    //           console.error(e);
-    //         }
-    //       });
-
-    //     //========================= UPDATE CLIENT ======================
-    //     //modal update client
-    //     const modalUpdateClient = container.querySelector("#modal-update-client");
-    //     //===== EVENT form update client submit
-    //     modalUpdateClient
-    //       .querySelector("form")
-    //       .addEventListener("submit", async (e) => {
-    //         //suspend submit
-    //         e.preventDefault();
-    //         //check validity
-    //         if (!e.target.checkValidity()) {
-    //           e.target.reportValidity();
-    //         }
-
-    //         try {
-    //           //FETCH api update client
-    //           const apiUpdateClient = await apiRequest("/client/update_client", {
-    //             method: "PUT",
-    //             body: {
-    //               id_client: modalUpdateClient
-    //                 .querySelector("#update-id-client")
-    //                 .textContent.trim(),
-    //               nom_client: modalUpdateClient
-    //                 .querySelector("#input-update-nom-client")
-    //                 .value.trim(),
-    //               prenoms_client: modalUpdateClient
-    //                 .querySelector("#input-update-prenoms-client")
-    //                 .value.trim(),
-    //               sexe_client: modalUpdateClient
-    //                 .querySelector("#select-update-sexe-client")
-    //                 .value.trim(),
-    //               telephone: modalUpdateClient
-    //                 .querySelector("#input-update-telephone")
-    //                 .value.trim(),
-    //               adresse: modalUpdateClient
-    //                 .querySelector("#input-update-adresse")
-    //                 .value.trim(),
-    //             },
-    //           });
-
-    //           //error
-    //           if (apiUpdateClient.message_type === "error") {
-    //             //alert
-    //             const alertTemplate = document.querySelector(".alert-template");
-    //             const clone = alertTemplate.content.cloneNode(true);
-    //             const alert = clone.querySelector(".alert");
-    //             const progressBar = alert.querySelector(".progress-bar");
-    //             //alert type
-    //             alert.classList.add("alert-danger");
-    //             //icon
-    //             alert
-    //               .querySelector(".fad")
-    //               .classList.add("fa-exclamation-triangle");
-    //             //message
-    //             alert.querySelector(".alert-message").innerHTML =
-    //               apiUpdateClient.message;
-    //             //progress bar
-    //             progressBar.style.transition = "width 20s linear";
-    //             progressBar.style.width = "100%";
-
-    //             //add alert
-    //             modalUpdateClient.querySelector(".modal-body").prepend(alert);
-
-    //             //progress launch animation
-    //             setTimeout(() => {
-    //               progressBar.style.width = "0%";
-    //             }, 10);
-    //             //auto close alert
-    //             setTimeout(() => {
-    //               alert.querySelector(".btn-close").click();
-    //             }, 20000);
-
-    //             return;
-    //           }
-    //           //invalid
-    //           else if (apiUpdateClient.message_type === "invalid") {
-    //             //alert
-    //             const alertTemplate = document.querySelector(".alert-template");
-    //             const clone = alertTemplate.content.cloneNode(true);
-    //             const alert = clone.querySelector(".alert");
-    //             const progressBar = alert.querySelector(".progress-bar");
-    //             //alert type
-    //             alert.classList.add("alert-warning");
-    //             //icon
-    //             alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //             //message
-    //             alert.querySelector(".alert-message").innerHTML =
-    //               apiUpdateClient.message;
-    //             //progress bar
-    //             progressBar.style.transition = "width 10s linear";
-    //             progressBar.style.width = "100%";
-
-    //             //add alert
-    //             modalUpdateClient.querySelector(".modal-body").prepend(alert);
-
-    //             //progress lanch animation
-    //             setTimeout(() => {
-    //               progressBar.style.width = "0%";
-    //             }, 10);
-    //             //auto close alert
-    //             setTimeout(() => {
-    //               alert.querySelector(".btn-close").click();
-    //             }, 10000);
-
-    //             return;
-    //           }
-
-    //           //success update client
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-success");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-check-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             apiUpdateClient.message;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
-
-    //           //add alert
-    //           container
-    //             .querySelector("#tbody-client")
-    //             .closest("div")
-    //             .prepend(alert);
-
-    //           //progress lanch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
-
-    //           //auto close modal
-    //           modalUpdateClient
-    //             .querySelector("#btn-close-modal-update-client")
-    //             .click();
-
-    //           //refresh filter client
-    //           filterClient(
-    //             selectStatus.value.trim(),
-    //             selectSex.value.trim(),
-    //             selectArrangeBy.value.trim(),
-    //             selectOrder.value.trim(),
-    //             selectDateBy.value.trim(),
-    //             selectPer.value.trim(),
-    //             dateFrom.value.trim(),
-    //             dateTo.value.trim(),
-    //             selectMonth.value.trim(),
-    //             selectYear.value.trim(),
-    //             inputSearch.value.trim()
-    //           );
-    //         } catch (e) {
-    //           console.error(e);
-    //         }
-    //       });
-
-    //     //========================== DELETE CLIENT =====================
-    //     //btn delete client
-    //     const btnDeleteClient = container.querySelector("#btn-delete-client");
-    //     //===== EVENT btn delete client
-    //     if (btnDeleteClient) {
-    //       btnDeleteClient.addEventListener("click", () => {
-    //         //modal delete client
-    //         const modalDeleteClient = container.querySelector(
-    //           "#modal-delete-client"
-    //         );
-    //         //selected client
-    //         const selectedClient = container.querySelectorAll(
-    //           "#tbody-client input[type='checkbox']:checked"
-    //         );
-
-    //         //no selection
-    //         if (selectedClient.length <= 0) {
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-warning");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             lang.client_ids_client_empty;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
-
-    //           //add alert
-    //           container
-    //             .querySelector("#tbody-client")
-    //             .closest("div")
-    //             .prepend(alert);
-
-    //           //progress launch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
-    //           return;
-    //         }
-
-    //         //modal message 1
-    //         if (selectedClient.length === 1) {
-    //           modalDeleteClient.querySelector(".message").innerHTML =
-    //             lang.question_delete_client_1.replace(
-    //               ":field",
-    //               selectedClient[0].closest("tr").dataset.idClient
-    //             );
-    //         }
-    //         //modal message plur
-    //         else {
-    //           modalDeleteClient.querySelector(".message").innerHTML =
-    //             lang.question_delete_client_plur.replace(
-    //               ":field",
-    //               selectedClient.length
-    //             );
-    //         }
-
-    //         //show modal delete client
-    //         new bootstrap.Modal(modalDeleteClient).show();
-
-    //         //==== EVENT btn confirm modal delete client
-    //         modalDeleteClient
-    //           .querySelector("#btn-confirm-modal-delete-client")
-    //           .addEventListener("click", async () => {
-    //             try {
-    //               //ids_client
-    //               let ids_client = [...selectedClient];
-    //               ids_client = ids_client.map(
-    //                 (selected) => selected.closest("tr").dataset.idClient
-    //               );
-
-    //               //FETCH api delete client
-    //               const apiDeleteClient = await apiRequest(
-    //                 "/client/delete_all_client",
-    //                 {
-    //                   method: "PUT",
-    //                   body: {
-    //                     ids_client: ids_client,
-    //                   },
-    //                 }
-    //               );
-
-    //               //error
-    //               if (apiDeleteClient.message_type === "error") {
-    //                 //alert
-    //                 const alertTemplate = document.querySelector(".alert-template");
-    //                 const clone = alertTemplate.content.cloneNode(true);
-    //                 const alert = clone.querySelector(".alert");
-    //                 const progressBar = alert.querySelector(".progress-bar");
-    //                 //alert type
-    //                 alert.classList.add("alert-danger");
-    //                 //icon
-    //                 alert
-    //                   .querySelector(".fad")
-    //                   .classList.add("fa-exclamation-circle");
-    //                 //message
-    //                 alert.querySelector(".alert-message").innerHTML =
-    //                   apiDeleteClient.message;
-    //                 //progress bar
-    //                 progressBar.style.transition = "width 20s linear";
-    //                 progressBar.style.width = "100%";
-
-    //                 //add alert
-    //                 modalDeleteClient.querySelector(".modal-body").prepend(alert);
-
-    //                 //progress launch animation
-    //                 setTimeout(() => {
-    //                   progressBar.style.width = "0%";
-    //                 }, 10);
-    //                 //auto close alert
-    //                 setTimeout(() => {
-    //                   alert.querySelector(".btn-close").click();
-    //                 }, 20000);
-    //                 return;
-    //               }
-    //               //invalid
-    //               else if (apiDeleteClient.message_type === "invalid") {
-    //                 //alert
-    //                 const alertTemplate = document.querySelector(".alert-template");
-    //                 const clone = alertTemplate.content.cloneNode(true);
-    //                 const alert = clone.querySelector(".alert");
-    //                 const progressBar = alert.querySelector(".progress-bar");
-    //                 //alert type
-    //                 alert.classList.add("alert-warning");
-    //                 //icon
-    //                 alert
-    //                   .querySelector(".fad")
-    //                   .classList.add("fa-exclamation-circle");
-    //                 //message
-    //                 alert.querySelector(".alert-message").innerHTML =
-    //                   apiDeleteClient.message;
-    //                 //progress bar
-    //                 progressBar.style.transition = "width 10s linear";
-    //                 progressBar.style.width = "100%";
-
-    //                 //add alert
-    //                 modalDeleteClient.querySelector(".modal-body").prepend(alert);
-
-    //                 //progress launch animation
-    //                 setTimeout(() => {
-    //                   progressBar.style.width = "0%";
-    //                 }, 10);
-    //                 //auto close alert
-    //                 setTimeout(() => {
-    //                   alert.querySelector(".btn-close").click();
-    //                 }, 10000);
-    //                 return;
-    //               }
-
-    //               //success
-    //               //alert
-    //               const alertTemplate = document.querySelector(".alert-template");
-    //               const clone = alertTemplate.content.cloneNode(true);
-    //               const alert = clone.querySelector(".alert");
-    //               const progressBar = alert.querySelector(".progress-bar");
-    //               //alert type
-    //               alert.classList.add("alert-success");
-    //               //icon
-    //               alert.querySelector(".fad").classList.add("fa-check-circle");
-    //               //message
-    //               alert.querySelector(".alert-message").innerHTML =
-    //                 apiDeleteClient.message;
-    //               //progress bar
-    //               progressBar.style.transition = "width 10s linear";
-    //               progressBar.style.width = "100%";
-
-    //               //add alert
-    //               container
-    //                 .querySelector("#tbody-client")
-    //                 .closest("div")
-    //                 .prepend(alert);
-
-    //               //progress launch animation
-    //               setTimeout(() => {
-    //                 progressBar.style.width = "0%";
-    //               }, 10);
-    //               //auto close alert
-    //               setTimeout(() => {
-    //                 alert.querySelector(".btn-close").click();
-    //               }, 10000);
-
-    //               //auto hide modal
-    //               modalDeleteClient
-    //                 .querySelector("#btn-close-modal-delete-client")
-    //                 .click();
-
-    //               //refresh filter client
-    //               filterClient(
-    //                 selectStatus.value.trim(),
-    //                 selectSex.value.trim(),
-    //                 selectArrangeBy.value.trim(),
-    //                 selectOrder.value.trim(),
-    //                 selectDateBy.value.trim(),
-    //                 selectPer.value.trim(),
-    //                 dateFrom.value.trim(),
-    //                 dateTo.value.trim(),
-    //                 selectMonth.value.trim(),
-    //                 selectYear.value.trim(),
-    //                 inputSearch.value.trim()
-    //               );
-
-    //               return;
-    //             } catch (e) {
-    //               console.error(e);
-    //             }
-    //           });
-    //       });
-    //     }
-
+          //refresh filter produit
+          filterProduit(
+            selectStatus.value.trim(),
+            selectArrangeBy.value.trim(),
+            selectOrder.value.trim(),
+            inputSearch.value.trim()
+          );
+        } catch (e) {
+          console.error(e);
+        }
+      });
     //     //========================= DELETE PERMANENT CLIENT =================
     //     //btn restore client
     //     const btnDeletePermanentClient = container.querySelector(
