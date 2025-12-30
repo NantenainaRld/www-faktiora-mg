@@ -192,52 +192,32 @@
             </div>
         </div>
     </div>
-    <!-- modal update produit -->
-    <div class="modal fade" id="modal-update-produit" tabindex="-1" aria-labelledby="modalUpdateProduit" aria-hidden="true">
+    <!-- modal update article -->
+    <div class="modal fade" id="modal-update-article" tabindex="-1" aria-labelledby="modalUpdateArticle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- modal header  -->
                 <div class="modal-header bg-green-0 text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-pen-to-square me-2"></i><?= __('forms.titles.produit_update') ?></h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-plus me-2"></i><?= __('forms.titles.article_update') ?></h6>
                 </div>
                 <form>
                     <!-- modal body  -->
                     <div class="modal-body">
-                        <!-- update produit id_produit -->
-                        <div class="mb-2 text-center text-secondary fw-bold" id="update-produit-id-produit"></div>
-                        <!-- libelle_produit -->
+                        <!-- update article id_article  -->
+                        <div class="mb-2 text-center text-secondary fw-bold" id="update-article-id-article"></div>
+                        <!-- libelle_article-->
                         <div class="mb-2">
-                            <label for="input-update-produit-libelle-produit" class="form-label"><?= __('forms.labels.label') ?><span class="text-danger"> *</span></label>
+                            <label for="input-update-article-libelle-article" class="form-label"><?= __('forms.labels.label') ?><span class="text-danger"> *</span></label>
                             <div class="input-group">
                                 <span class="input-group-text text-success"><i class="fad fa-tag"></i></span>
-                                <input type="text" class="form-control form-control-sm" maxlength="100" placeholder="<?= __('forms.placeholders.libelle_produit') ?>" id="input-update-produit-libelle-produit" required>
-                            </div>
-                        </div>
-                        <!--  input update produit prix_produit -->
-                        <div class="mb-2">
-                            <label for="input-update-produit-prix-produit" class="form-label"><?= __('forms.labels.unit_price') ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success">
-                                    <i class="fad fa-coins"></i>
-                                </span>
-                                <input type="text" class="form-control form-control-sm " id="input-update-produit-prix-produit" required>
-                            </div>
-                        </div>
-                        <!--  input update produit nb_stock -->
-                        <div class="mb-2">
-                            <label for="input-update-produit-nb-stock" class="form-label"><?= __('forms.labels.nb_stock') ?> <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text text-success">
-                                    <i class="fad fa-circle-bookmark"></i>
-                                </span>
-                                <input type="number" min="0" value="0" class="form-control form-control-sm " id="input-update-produit-nb-stock" required>
+                                <input type="text" class="form-control form-control-sm" maxlength="100" placeholder="<?= __('forms.placeholders.libelle_article') ?>" id="input-update-article-libelle-article" required>
                             </div>
                         </div>
                     </div>
                     <!-- modal footer  -->
                     <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-update-produit"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
-                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-upate-produit"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-update-article"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-update-article"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
                     </div>
                 </form>
             </div>

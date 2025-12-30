@@ -341,152 +341,146 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       });
 
-    //     //========================== UPDATE PRODUIT =======================
-    //     //modal update produit
-    //     const modalUpdateProduit = container.querySelector("#modal-update-produit");
-    //     //===== EVENT modal update produit form submit
-    //     modalUpdateProduit
-    //       .querySelector("form")
-    //       .addEventListener("submit", async (e) => {
-    //         //suspend submit
-    //         e.preventDefault();
-    //         //check validity
-    //         if (!e.target.checkValidity()) {
-    //           e.target.reportValidity();
-    //           return;
-    //         }
+    //======================== UPDATE ARTICLE ======================
+    //modal update article
+    const modalUpdateArticle = container.querySelector("#modal-update-article");
 
-    //         try {
-    //           //FETCH api update produit
-    //           const apiUpdateProduit = await apiRequest("/produit/update_produit", {
-    //             method: "PUT",
-    //             body: {
-    //               id_produit: modalUpdateProduit
-    //                 .querySelector("#update-produit-id-produit")
-    //                 .textContent.trim(),
-    //               libelle_produit: modalUpdateProduit
-    //                 .querySelector("#input-update-produit-libelle-produit")
-    //                 .value.trim(),
-    //               prix_produit: modalUpdateProduit
-    //                 .querySelector("#input-update-produit-prix-produit")
-    //                 .value.replace(/[\u202F\u00A0 ]/g, "")
-    //                 .replace(",", "."),
-    //               nb_stock: modalUpdateProduit
-    //                 .querySelector("#input-update-produit-nb-stock")
-    //                 .value.trim(),
-    //             },
-    //           });
+    //===== EVENT modal update  article form submit
+    modalUpdateArticle
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        //suspend submit
+        e.preventDefault();
+        //check validity
+        if (!e.target.checkValidity()) {
+          e.target.reportValidity();
+          return;
+        }
 
-    //           //invalid
-    //           if (apiUpdateProduit.message_type === "invalid") {
-    //             //alert
-    //             const alertTemplate = document.querySelector(".alert-template");
-    //             const clone = alertTemplate.content.cloneNode(true);
-    //             const alert = clone.querySelector(".alert");
-    //             const progressBar = alert.querySelector(".progress-bar");
-    //             //alert type
-    //             alert.classList.add("alert-warning");
-    //             //icon
-    //             alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //             //message
-    //             alert.querySelector(".alert-message").innerHTML =
-    //               apiUpdateProduit.message;
-    //             //progress bar
-    //             progressBar.style.transition = "width 10s linear";
-    //             progressBar.style.width = "100%";
+        try {
+          //FETCH api update article
+          const apiUpdateArticle = await apiRequest("/article/update_article", {
+            method: "PUT",
+            body: {
+              id_article: modalUpdateArticle
+                .querySelector("#update-article-id-article")
+                .textContent.trim(),
+              libelle_article: modalUpdateArticle
+                .querySelector("#input-update-article-libelle-article")
+                .value.trim(),
+            },
+          });
 
-    //             //add alert
-    //             modalUpdateProduit.querySelector(".modal-body").prepend(alert);
+          //invalid
+          if (apiUpdateArticle.message_type === "invalid") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-warning");
+            //icon
+            alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiUpdateArticle.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
 
-    //             //progress launch animation
-    //             setTimeout(() => {
-    //               progressBar.style.width = "0%";
-    //             }, 10);
-    //             //auto close alert
-    //             setTimeout(() => {
-    //               alert.querySelector(".btn-close").click();
-    //             }, 10000);
-    //           }
-    //           //error
-    //           else if (apiUpdateProduit.message_type === "error") {
-    //             //alert
-    //             const alertTemplate = document.querySelector(".alert-template");
-    //             const clone = alertTemplate.content.cloneNode(true);
-    //             const alert = clone.querySelector(".alert");
-    //             const progressBar = alert.querySelector(".progress-bar");
-    //             //alert type
-    //             alert.classList.add("alert-danger");
-    //             //icon
-    //             alert
-    //               .querySelector(".fad")
-    //               .classList.add("fa-exclamation-triangle");
-    //             //message
-    //             alert.querySelector(".alert-message").innerHTML =
-    //               apiUpdateProduit.message;
-    //             //progress bar
-    //             progressBar.style.transition = "width 10s linear";
-    //             progressBar.style.width = "100%";
+            //add alert
+            modalUpdateArticle.querySelector(".modal-body").prepend(alert);
 
-    //             //add alert
-    //             modalUpdateProduit.querySelector(".modal-body").prepend(alert);
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+          }
+          //error
+          else if (apiUpdateArticle.message_type === "error") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-danger");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiUpdateArticle.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
 
-    //             //progress lanch animation
-    //             setTimeout(() => {
-    //               progressBar.style.width = "0%";
-    //             }, 10);
-    //             //auto close alert
-    //             setTimeout(() => {
-    //               alert.querySelector(".btn-close").click();
-    //             }, 10000);
-    //           }
+            //add alert
+            modalUpdateArticle.querySelector(".modal-body").prepend(alert);
 
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-success");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-check-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             apiUpdateProduit.message;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
+            //progress lanch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+          }
 
-    //           //add alert
-    //           container
-    //             .querySelector("#tbody-produit")
-    //             .closest("div")
-    //             .prepend(alert);
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-success");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-check-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            apiUpdateArticle.message;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
 
-    //           //progress lanch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
+          //add alert
+          container
+            .querySelector("#tbody-article")
+            .closest("div")
+            .prepend(alert);
 
-    //           //hide modal
-    //           modalUpdateProduit
-    //             .querySelector("#btn-close-modal-update-produit")
-    //             .click();
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
 
-    //           //refresh filter produit
-    //           filterProduit(
-    //             selectStatus.value.trim(),
-    //             selectArrangeBy.value.trim(),
-    //             selectOrder.value.trim(),
-    //             inputSearch.value.trim()
-    //           );
-    //         } catch (e) {
-    //           console.error(e);
-    //         }
-    //       });
+          //hide modal
+          modalUpdateArticle
+            .querySelector("#btn-close-modal-update-article")
+            .click();
+
+          //refresh filter article
+          filterArticle(
+            selectStatus.value.trim(),
+            selectArrangeBy.value.trim(),
+            selectOrder.value.trim(),
+            inputSearch.value.trim()
+          );
+        } catch (e) {
+          console.error(e);
+        }
+      });
 
     //     //========================= DELETE PRODUIT =================
     //     //btn delete produit
@@ -1267,112 +1261,51 @@ document.addEventListener("DOMContentLoaded", async () => {
         tr.dataset.libelleArticle = line.libelle_article;
         tbodyArticle.appendChild(tr);
       });
-      // //foreach all tr
-      // tbodyProduit.querySelectorAll("tr").forEach((tr) => {
-      //   //========================== UPDATE PRODUIT ===========================
-      //   //==== EVENT btn update produit
-      //   const btnUpdateProduit = tr.querySelector(".btn-update-produit");
-      //   if (btnUpdateProduit) {
-      //     btnUpdateProduit.addEventListener("click", () => {
-      //       //modal update produit
-      //       const modalUpdateProduit = container.querySelector(
-      //         "#modal-update-produit"
-      //       );
-      //       //modal update produit id_produit
-      //       modalUpdateProduit.querySelector(
-      //         "#update-produit-id-produit"
-      //       ).innerHTML = tr.dataset.idProduit;
-      //       //input - update produit libelle_produit
-      //       const inputUpdateProduitLibelleProduit =
-      //         modalUpdateProduit.querySelector(
-      //           "#input-update-produit-libelle-produit"
-      //         );
-      //       inputUpdateProduitLibelleProduit.value = tr.dataset.libelleProduit;
-      //       //input - update produit prix_produit
-      //       const inputUpdatePorduitPrixProduit =
-      //         modalUpdateProduit.querySelector(
-      //           "#input-update-produit-prix-produit"
-      //         );
-      //       inputUpdatePorduitPrixProduit.value = formatterNumber.format(
-      //         Number(tr.dataset.prixProduit)
-      //       );
-      //       inputUpdatePorduitPrixProduit.dataset.val = tr.dataset.prixProduit;
-      //       //input - update produit nb_stock
-      //       const inputUpdateProduitNbStock = modalUpdateProduit.querySelector(
-      //         "#input-update-produit-nb-stock"
-      //       );
-      //       inputUpdateProduitNbStock.value = tr.dataset.nbStock;
-      //       //===== EVENT input update produit libelle_produit
-      //       inputUpdateProduitLibelleProduit.addEventListener("input", (e) => {
-      //         e.target.value = e.target.value.replace("  ", " ");
-      //       });
-      //       //===== EVENT input update produit prix_produit
-      //       inputUpdatePorduitPrixProduit.addEventListener("input", (e) => {
-      //         if (cookieLangValue === "en") {
-      //           e.target.value = e.target.value.replace(/[^0-9.]/g, "");
-      //           if (!/^\d*\.?\d*$/.test(e.target.value)) {
-      //             e.target.value = e.target.value.slice(0, -1);
-      //           }
-      //           // add 0 in the start if ,
-      //           if (e.target.value.startsWith(".")) {
-      //             e.target.value = "0" + e.target.value;
-      //           }
-      //           //real value for calcul
-      //           e.target.dataset.val = e.target.value.replace(
-      //             /[\u202F\u00A0 ]/g,
-      //             ""
-      //           );
-      //         } else {
-      //           //number and , only
-      //           e.target.value = e.target.value.replace(/[^0-9,]/g, "");
-      //           if (!/^\d*\,?\d*$/.test(e.target.value)) {
-      //             e.target.value = e.target.value.slice(0, -1);
-      //           }
-      //           // add 0 in the start if ,
-      //           if (e.target.value.startsWith(",")) {
-      //             e.target.value = "0" + e.target.value;
-      //           }
-      //           //real value for calcul
-      //           e.target.dataset.val = e.target.value
-      //             .replace(",", ".")
-      //             .replace(/[\u202F\u00A0 ]/g, "");
-      //         }
-      //       });
-      //       inputUpdatePorduitPrixProduit.addEventListener("blur", (e) => {
-      //         if (e.target.value.endsWith(",")) {
-      //           e.target.value += "0";
-      //         }
-      //         if (e.target.value) {
-      //           e.target.value = formatterNumber.format(
-      //             e.target.value
-      //               .replace(/[\u202F\u00A0 ]/g, "")
-      //               .replace(",", ".")
-      //           );
-      //         } else {
-      //           e.target.value = "1";
-      //           e.target.dataset.val = 1;
-      //         }
-      //       });
-      //       //===== EVENT input update produit nb_stock
-      //       inputUpdateProduitNbStock.addEventListener("input", (e) => {
-      //         e.target.value = e.target.value.replace(/[^0-9]/g, "");
-      //       });
-      //       //show modal update produit
-      //       new bootstrap.Modal(modalUpdateProduit).show();
-      //     });
-      //   }
-      // });
-      // //===== EVENT check all
-      // const inputCheckAll = container.querySelector("#check-all-produit");
-      // if (inputCheckAll) {
-      //   inputCheckAll.addEventListener("change", (e) => {
-      //     tbodyProduit
-      //       .querySelectorAll("input[type='checkbox']")
-      //       .forEach((checkbox) => {
-      //         checkbox.checked = e.target.checked;
-      //       });
-      //   });
-      // }
+
+      //foreach all tr
+      tbodyArticle.querySelectorAll("tr").forEach((tr) => {
+        //===================== UPDATE ARTICLE =================
+        //==== EVENT btn update article
+        tr.querySelector(".btn-update-article").addEventListener(
+          "click",
+          () => {
+            //modal update article
+            const modalUpdateArticle = container.querySelector(
+              "#modal-update-article"
+            );
+            //modal update article id_article
+            modalUpdateArticle.querySelector(
+              "#update-article-id-article"
+            ).innerHTML = tr.dataset.idArticle;
+            //input - update article libelle_article
+            const inputUpdateArticleLibelleArticle =
+              modalUpdateArticle.querySelector(
+                "#input-update-article-libelle-article"
+              );
+            inputUpdateArticleLibelleArticle.value = tr.dataset.libelleArticle;
+
+            //===== EVENT input update article libelle_article
+            inputUpdateArticleLibelleArticle.addEventListener("input", (e) => {
+              e.target.value = e.target.value.replace("  ", " ");
+            });
+
+            //show modal update article
+            new bootstrap.Modal(modalUpdateArticle).show();
+          }
+        );
+      });
+
+      //===== EVENT check all
+      const inputCheckAll = container.querySelector("#check-all-article");
+      if (inputCheckAll) {
+        inputCheckAll.addEventListener("change", (e) => {
+          tbodyArticle
+            .querySelectorAll("input[type='checkbox']")
+            .forEach((checkbox) => {
+              checkbox.checked = e.target.checked;
+            });
+        });
+      }
     } catch (e) {
       console.error(e);
     }

@@ -76,7 +76,8 @@ return [
         'produit_update' => "Modification de produit",
         'produit_delete' => "Suppréssion des produits",
         'produit_restore' => "Récupération des produits",
-        'article_dashboard' => "Tableau de bord article"
+        'article_dashboard' => "Tableau de bord article",
+        'article_update' => "Modification d'un article"
     ],
     'labels' => [
         'all' => 'tout',
