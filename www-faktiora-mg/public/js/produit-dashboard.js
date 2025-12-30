@@ -418,6 +418,153 @@ document.addEventListener("DOMContentLoaded", async () => {
           console.error(e);
         }
       });
+
+    //========================== UPDATE PRODUIT =======================
+    //modal update produit
+    const modalUpdateProduit = container.querySelector("#modal-update-produit");
+    //===== EVENT modal update produit form submit
+    modalUpdateProduit
+      .querySelector("form")
+      .addEventListener("submit", async (e) => {
+        //suspend submit
+        e.preventDefault();
+        //check validity
+        if (!e.target.checkValidity()) {
+          e.target.reportValidity();
+          return;
+        }
+
+        try {
+          //FETCH api update produit
+          const apiUpdateProduit = await apiRequest("/produit/update_produit", {
+            method: "PUT",
+            body: {
+              id_produit: modalUpdateProduit
+                .querySelector("#update-produit-id-produit")
+                .textContent.trim(),
+              libelle_produit: modalUpdateProduit
+                .querySelector("#input-update-produit-libelle-produit")
+                .value.trim(),
+              prix_produit: modalUpdateProduit
+                .querySelector("#input-update-produit-prix-produit")
+                .value.replace(/[\u202F\u00A0 ]/g, "")
+                .replace(",", "."),
+              nb_stock: modalUpdateProduit
+                .querySelector("#input-update-produit-nb-stock")
+                .value.trim(),
+            },
+          });
+
+          //invalid
+          if (apiUpdateProduit.message_type === "invalid") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-warning");
+            //icon
+            alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiUpdateProduit.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalUpdateProduit.querySelector(".modal-body").prepend(alert);
+
+            //progress launch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+          }
+          //error
+          else if (apiUpdateProduit.message_type === "error") {
+            //alert
+            const alertTemplate = document.querySelector(".alert-template");
+            const clone = alertTemplate.content.cloneNode(true);
+            const alert = clone.querySelector(".alert");
+            const progressBar = alert.querySelector(".progress-bar");
+            //alert type
+            alert.classList.add("alert-danger");
+            //icon
+            alert
+              .querySelector(".fad")
+              .classList.add("fa-exclamation-triangle");
+            //message
+            alert.querySelector(".alert-message").innerHTML =
+              apiUpdateProduit.message;
+            //progress bar
+            progressBar.style.transition = "width 10s linear";
+            progressBar.style.width = "100%";
+
+            //add alert
+            modalUpdateProduit.querySelector(".modal-body").prepend(alert);
+
+            //progress lanch animation
+            setTimeout(() => {
+              progressBar.style.width = "0%";
+            }, 10);
+            //auto close alert
+            setTimeout(() => {
+              alert.querySelector(".btn-close").click();
+            }, 10000);
+          }
+
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-success");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-check-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            apiUpdateProduit.message;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          container
+            .querySelector("#tbody-produit")
+            .closest("div")
+            .prepend(alert);
+
+          //progress lanch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+
+          //hide modal
+          modalUpdateProduit
+            .querySelector("#btn-close-modal-update-produit")
+            .click();
+
+          //refresh filter produit
+          filterProduit(
+            selectStatus.value.trim(),
+            selectArrangeBy.value.trim(),
+            selectOrder.value.trim(),
+            inputSearch.value.trim()
+          );
+        } catch (e) {
+          console.error(e);
+        }
+      });
     //     //========================= DELETE PERMANENT CLIENT =================
     //     //btn restore client
     //     const btnDeletePermanentClient = container.querySelector(
@@ -1038,120 +1185,107 @@ document.addEventListener("DOMContentLoaded", async () => {
         tbodyProduit.appendChild(tr);
       });
 
-      // //foreach all tr
-      // tbodyClient.querySelectorAll("tr").forEach((tr) => {
-      //   //========================== UPDATE CLIENT ===========================
-      //   //modal update client
-      //   const modalUpdateClient = container.querySelector(
-      //     "#modal-update-client"
-      //   );
-      //   //===== EVENT btn update client
-      //   tr.querySelector(".btn-update-client").addEventListener("click", () => {
-      //     //modal id_client
-      //     modalUpdateClient.querySelector("#update-id-client").innerHTML =
-      //       tr.dataset.idClient;
-      //     //input -  update nom_client
-      //     const inputUpdateNomClient = modalUpdateClient.querySelector(
-      //       "#input-update-nom-client"
-      //     );
-      //     inputUpdateNomClient.value = tr.dataset.nomClient;
-      //     //input - update prenoms_client
-      //     const inputUpdatePrenomsClient = modalUpdateClient.querySelector(
-      //       "#input-update-prenoms-client"
-      //     );
-      //     inputUpdatePrenomsClient.value = tr.dataset.prenomsClient;
-      //     //select - update sexe_client
-      //     const selectUpdateSexeClient = modalUpdateClient.querySelector(
-      //       "#select-update-sexe-client"
-      //     );
-      //     selectUpdateSexeClient.value = tr.dataset.sexeClient;
-      //     //input - update telephone
-      //     const inputUpdateTelephone = modalUpdateClient.querySelector(
-      //       "#input-update-telephone"
-      //     );
-      //     inputUpdateTelephone.value = tr.dataset.telephone;
-      //     //input - update adresse
-      //     const inputUpdateAdresse = modalUpdateClient.querySelector(
-      //       "#input-update-adresse"
-      //     );
-      //     inputUpdateAdresse.value = tr.dataset.adresse;
+      //foreach all tr
+      tbodyProduit.querySelectorAll("tr").forEach((tr) => {
+        //========================== UPDATE PRODUIT ===========================
+        //==== EVENT btn update produit
+        const btnUpdateProduit = tr.querySelector(".btn-update-produit");
+        if (btnUpdateProduit) {
+          btnUpdateProduit.addEventListener("click", () => {
+            //modal update produit
+            const modalUpdateProduit = container.querySelector(
+              "#modal-update-produit"
+            );
+            //modal update produit id_produit
+            modalUpdateProduit.querySelector(
+              "#update-produit-id-produit"
+            ).innerHTML = tr.dataset.idProduit;
+            //input - update produit libelle_produit
+            const inputUpdateProduitLibelleProduit =
+              modalUpdateProduit.querySelector(
+                "#input-update-produit-libelle-produit"
+              );
+            inputUpdateProduitLibelleProduit.value = tr.dataset.libelleProduit;
+            //input - update produit prix_produit
+            const inputUpdatePorduitPrixProduit =
+              modalUpdateProduit.querySelector(
+                "#input-update-produit-prix-produit"
+              );
+            inputUpdatePorduitPrixProduit.value = formatterNumber.format(
+              Number(tr.dataset.prixProduit)
+            );
+            inputUpdatePorduitPrixProduit.dataset.val = tr.dataset.prixProduit;
+            //input - update produit nb_stock
+            const inputUpdateProduitNbStock = modalUpdateProduit.querySelector(
+              "#input-update-produit-nb-stock"
+            );
+            inputUpdateProduitNbStock.value = tr.dataset.nbStock;
 
-      //     //show modal update client
-      //     new bootstrap.Modal(modalUpdateClient).show();
+            //===== EVENT input update produit libelle_produit
+            inputUpdateProduitLibelleProduit.addEventListener("input", (e) => {
+              e.target.value = e.target.value.replace("  ", " ");
+            });
+            //===== EVENT input update produit prix_produit
+            inputUpdatePorduitPrixProduit.addEventListener("input", (e) => {
+              if (cookieLangValue === "en") {
+                e.target.value = e.target.value.replace(/[^0-9.]/g, "");
+                if (!/^\d*\.?\d*$/.test(e.target.value)) {
+                  e.target.value = e.target.value.slice(0, -1);
+                }
 
-      //     //===== EVENT input update nom_client
-      //     inputUpdateNomClient.addEventListener("input", (e) => {
-      //       //remove double space && change into uppercase
-      //       e.target.value = e.target.value.replace("  ", " ").toUpperCase();
-      //     });
-      //     //===== EVENT input update prenoms_client
-      //     inputUpdatePrenomsClient.addEventListener("input", (e) => {
-      //       //remove double space && change into uppercase
-      //       e.target.value = e.target.value.replace("  ", " ");
-      //     });
-      //     //===== EVENT input update telephone
-      //     inputUpdateTelephone.addEventListener("input", (e) => {
-      //       //remove invalid
-      //       e.target.value = e.target.value.replace(/[^\d+\s]/g, "");
-      //       //remove double space
-      //       e.target.value = e.target.value.replace("  ", " ");
-      //     });
-      //     //===== EVENT input update adresse
-      //     inputUpdateAdresse.addEventListener("input", (e) => {
-      //       //remove double space
-      //       e.target.value = e.target.value.replace("  ", " ");
-      //       localStorage.setItem(e.target.id, e.target.value);
-      //     });
-      //   });
+                // add 0 in the start if ,
+                if (e.target.value.startsWith(".")) {
+                  e.target.value = "0" + e.target.value;
+                }
 
-      //   //======================== HISTO FACTURE ===========================
-      //   //modal histo facture
-      //   const modalHistoFacture = container.querySelector(
-      //     "#modal-histo-facture"
-      //   );
+                //real value for calcul
+                e.target.dataset.val = e.target.value.replace(
+                  /[\u202F\u00A0 ]/g,
+                  ""
+                );
+              } else {
+                //number and , only
+                e.target.value = e.target.value.replace(/[^0-9,]/g, "");
+                if (!/^\d*\,?\d*$/.test(e.target.value)) {
+                  e.target.value = e.target.value.slice(0, -1);
+                }
+                // add 0 in the start if ,
+                if (e.target.value.startsWith(",")) {
+                  e.target.value = "0" + e.target.value;
+                }
 
-      //   //===== EVENT btn histo facture
-      //   tr.querySelector(".btn-histo-facture").addEventListener("click", () => {
-      //     //modal id_client
-      //     modalHistoFacture.querySelector(
-      //       "#histo-facture-id-client"
-      //     ).innerHTML = tr.dataset.idClient;
-      //     //div chart nb_facture
-      //     const divChartNbFacture = modalHistoFacture.querySelector(
-      //       "#div-histo-facture-nb"
-      //     );
-      //     //div chart total_facture
-      //     const divChartTotalFacture = modalHistoFacture.querySelector(
-      //       "#div-histo-facture-total"
-      //     );
+                //real value for calcul
+                e.target.dataset.val = e.target.value
+                  .replace(",", ".")
+                  .replace(/[\u202F\u00A0 ]/g, "");
+              }
+            });
+            inputUpdatePorduitPrixProduit.addEventListener("blur", (e) => {
+              if (e.target.value.endsWith(",")) {
+                e.target.value += "0";
+              }
 
-      //     //chart nb_facture
-      //     chartNbFacture(
-      //       divChartNbFacture,
-      //       tr.dataset.idClient,
-      //       date_by,
-      //       per,
-      //       from,
-      //       to,
-      //       month,
-      //       year
-      //     );
-      //     //chart total_facture
-      //     chartTotalFacture(
-      //       divChartTotalFacture,
-      //       tr.dataset.idClient,
-      //       date_by,
-      //       per,
-      //       from,
-      //       to,
-      //       month,
-      //       year
-      //     );
+              if (e.target.value) {
+                e.target.value = formatterNumber.format(
+                  e.target.value
+                    .replace(/[\u202F\u00A0 ]/g, "")
+                    .replace(",", ".")
+                );
+              } else {
+                e.target.value = "1";
+                e.target.dataset.val = 1;
+              }
+            });
+            //===== EVENT input update produit nb_stock
+            inputUpdateProduitNbStock.addEventListener("input", (e) => {
+              e.target.value = e.target.value.replace(/[^0-9]/g, "");
+            });
 
-      //     //show modal histo facture
-      //     new bootstrap.Modal(modalHistoFacture).show();
-      //   });
-      // });
+            //show modal update produit
+            new bootstrap.Modal(modalUpdateProduit).show();
+          });
+        }
+      });
 
       // //===== EVENT check all
       // const inputCheckAll = container.querySelector("#check-all-client");

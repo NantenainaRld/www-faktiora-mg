@@ -72,7 +72,8 @@ return [
         'ligne_sortie' => "Lignes de sortie",
         'produit_dashboard' => "Tableau de bord produit",
         'produit_list' => "Liste des produits",
-        'produit_add' => "Ajout d'un produit"
+        'produit_add' => "Ajout d'un produit",
+        'produit_update' => "Modification de produit"
     ],
     'labels' => [
         'all' => 'tout',
