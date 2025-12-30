@@ -494,7 +494,7 @@
         </div>
     </div>
     <!-- modal restore facture -->
-    <div class="modal fade" id="modal-restore-facture" tabindex="-1" aria-labelledby="modalRestoreCaisse" aria-hidden="true">
+    <div class="modal fade" id="modal-restore-facture" tabindex="-1" aria-labelledby="modalRestoreFacture" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- modal header  -->

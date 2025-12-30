@@ -67,7 +67,8 @@ return [
         'sortie_update' => "Modification de sortie",
         'sortie_correction_inflow' => "Correction de sortie (entrée)",
         'sortie_correction_outflow' => "Correction de sortie (sortie)",
-        'sortie_delete' => "Suppréssion des sorties"
+        'sortie_delete' => "Suppréssion des sorties",
+        'sortie_restore' => "Récupération des sorties"
     ],
     'labels' => [
         'all' => 'tout',
@@ -273,7 +274,8 @@ return [
         'question_delete_sortie_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> sorties ?",
         'question_delete_permanent_sortie_1' => "Voulez-vous vraiment supprimer la sortie numéro <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>.",
         'question_delete_permanent_sortie_plur' => "Voulez-vous vraiment supprimer ces <b>:field</b> sorties ?. <span class='text-danger'>Cette action est irréversible</span>.",
-
+        'question_restore_sortie_1' => "Voulez-vous vraiment récupérer la sortie numéro <b>:field</b> ?",
+        'question_restore_sortie_plur' => "Voulez-vous vraiment récupérer ces <b>:field</b> sorties ?",
     ],
     'times' => [
         'minute' => "minute",

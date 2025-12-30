@@ -1837,223 +1837,222 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
-    //     //========================== RESTORE FACTURE =========================
-    //     //btn restore facture
-    //     const btnRestoreFacture = container.querySelector("#btn-restore-facture");
-    //     //===== EVENT btn restore facture
-    //     if (btnRestoreFacture) {
-    //       btnRestoreFacture.addEventListener("click", () => {
-    //         //modal restore facture
-    //         const modalRestoreFacture = container.querySelector(
-    //           "#modal-restore-facture"
-    //         );
+    //========================== RESTORE SORTIE =====================
+    //btn restore sortie
+    const btnRestoreSortie = container.querySelector("#btn-restore-sortie");
+    //===== EVENT btn restore sortie
+    if (btnRestoreSortie) {
+      btnRestoreSortie.addEventListener("click", () => {
+        //modal restore sortie
+        const modalRestoreSortie = container.querySelector(
+          "#modal-restore-sortie"
+        );
 
-    //         //selected facture
-    //         const selectedFacture = container.querySelectorAll(
-    //           "#tbody-facture input[type='checkbox']:checked"
-    //         );
+        //selected sortie
+        const selectedSortie = container.querySelectorAll(
+          "#tbody-sortie input[type='checkbox']:checked"
+        );
 
-    //         //no selection
-    //         if (selectedFacture.length <= 0) {
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-warning");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             lang.entree_nums_facture_empty;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
+        //no selection
+        if (selectedSortie.length <= 0) {
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-warning");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            lang.sortie_nums_ds_empty;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
 
-    //           //add alert
-    //           container
-    //             .querySelector("#tbody-facture")
-    //             .closest("div")
-    //             .prepend(alert);
+          //add alert
+          container
+            .querySelector("#tbody-sortie")
+            .closest("div")
+            .prepend(alert);
 
-    //           //progress launch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
-    //           return;
-    //         }
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+          return;
+        }
 
-    //         //modal message 1
-    //         if (selectedFacture.length === 1) {
-    //           modalRestoreFacture.querySelector(".message").innerHTML =
-    //             lang.question_restore_facture_1.replace(
-    //               ":field",
-    //               selectedFacture[0].closest("tr").dataset.numFacture
-    //             );
-    //         }
-    //         //modal message plur
-    //         else {
-    //           modalRestoreFacture.querySelector(".message").innerHTML =
-    //             lang.question_restore_facture_plur.replace(
-    //               ":field",
-    //               selectedFacture.length
-    //             );
-    //         }
+        //modal message 1
+        if (selectedSortie.length === 1) {
+          modalRestoreSortie.querySelector(".message").innerHTML =
+            lang.question_restore_sortie_1.replace(
+              ":field",
+              selectedSortie[0].closest("tr").dataset.numDs
+            );
+        }
+        //modal message plur
+        else {
+          modalRestoreSortie.querySelector(".message").innerHTML =
+            lang.question_restore_sortie_plur.replace(
+              ":field",
+              selectedSortie.length
+            );
+        }
 
-    //         //show modal restore facture
-    //         new bootstrap.Modal(modalRestoreFacture).show();
+        //show modal restore sortie
+        new bootstrap.Modal(modalRestoreSortie).show();
 
-    //         //==== EVENT btn confirm modal restore facture
-    //         modalRestoreFacture
-    //           .querySelector("#btn-confirm-modal-restore-facture")
-    //           .addEventListener("click", async () => {
-    //             try {
-    //               //nums_facture
-    //               let nums_facture = [...selectedFacture];
-    //               nums_facture = nums_facture.map(
-    //                 (selected) => selected.closest("tr").dataset.numFacture
-    //               );
+        //==== EVENT btn confirm modal restore sortie
+        modalRestoreSortie
+          .querySelector("#btn-confirm-modal-restore-sortie")
+          .addEventListener("click", async () => {
+            try {
+              //nums_ds
+              let nums_ds = [...selectedSortie];
+              nums_ds = nums_ds.map(
+                (selected) => selected.closest("tr").dataset.numDs
+              );
 
-    //               //FETCH api restore facture
-    //               const apiRestoreFacture = await apiRequest(
-    //                 "/entree/restore_all_facture",
-    //                 {
-    //                   method: "PUT",
-    //                   body: {
-    //                     nums_facture: nums_facture,
-    //                   },
-    //                 }
-    //               );
+              //FETCH api restore sortie
+              const apiRestoreSortie = await apiRequest(
+                "/sortie/restore_all_demande_sortie",
+                {
+                  method: "PUT",
+                  body: {
+                    nums_ds: nums_ds,
+                  },
+                }
+              );
 
-    //               //error
-    //               if (apiRestoreFacture.message_type === "error") {
-    //                 //alert
-    //                 const alertTemplate = document.querySelector(".alert-template");
-    //                 const clone = alertTemplate.content.cloneNode(true);
-    //                 const alert = clone.querySelector(".alert");
-    //                 const progressBar = alert.querySelector(".progress-bar");
-    //                 //alert type
-    //                 alert.classList.add("alert-danger");
-    //                 //icon
-    //                 alert
-    //                   .querySelector(".fad")
-    //                   .classList.add("fa-exclamation-circle");
-    //                 //message
-    //                 alert.querySelector(".alert-message").innerHTML =
-    //                   apiRestoreFacture.message;
-    //                 //progress bar
-    //                 progressBar.style.transition = "width 20s linear";
-    //                 progressBar.style.width = "100%";
+              //error
+              if (apiRestoreSortie.message_type === "error") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiRestoreSortie.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
 
-    //                 //add alert
-    //                 modalRestoreFacture.querySelector(".modal-body").prepend(alert);
+                //add alert
+                modalRestoreSortie.querySelector(".modal-body").prepend(alert);
 
-    //                 //progress launch animation
-    //                 setTimeout(() => {
-    //                   progressBar.style.width = "0%";
-    //                 }, 10);
-    //                 //auto close alert
-    //                 setTimeout(() => {
-    //                   alert.querySelector(".btn-close").click();
-    //                 }, 20000);
-    //                 return;
-    //               }
-    //               //invalid
-    //               else if (apiRestoreFacture.message_type === "invalid") {
-    //                 //alert
-    //                 const alertTemplate = document.querySelector(".alert-template");
-    //                 const clone = alertTemplate.content.cloneNode(true);
-    //                 const alert = clone.querySelector(".alert");
-    //                 const progressBar = alert.querySelector(".progress-bar");
-    //                 //alert type
-    //                 alert.classList.add("alert-warning");
-    //                 //icon
-    //                 alert
-    //                   .querySelector(".fad")
-    //                   .classList.add("fa-exclamation-circle");
-    //                 //message
-    //                 alert.querySelector(".alert-message").innerHTML =
-    //                   apiRestoreFacture.message;
-    //                 //progress bar
-    //                 progressBar.style.transition = "width 10s linear";
-    //                 progressBar.style.width = "100%";
-    //                 s;
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+                return;
+              }
+              //invalid
+              else if (apiRestoreSortie.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiRestoreSortie.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
 
-    //                 //add alert
-    //                 modalRestoreFacture.querySelector(".modal-body").prepend(alert);
+                //add alert
+                modalRestoreSortie.querySelector(".modal-body").prepend(alert);
 
-    //                 //progress launch animation
-    //                 setTimeout(() => {
-    //                   progressBar.style.width = "0%";
-    //                 }, 10);
-    //                 //auto close alert
-    //                 setTimeout(() => {
-    //                   alert.querySelector(".btn-close").click();
-    //                 }, 10000);
-    //                 return;
-    //               }
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                return;
+              }
 
-    //               //success
-    //               //alert
-    //               const alertTemplate = document.querySelector(".alert-template");
-    //               const clone = alertTemplate.content.cloneNode(true);
-    //               const alert = clone.querySelector(".alert");
-    //               const progressBar = alert.querySelector(".progress-bar");
-    //               //alert type
-    //               alert.classList.add("alert-success");
-    //               //icon
-    //               alert.querySelector(".fad").classList.add("fa-check-circle");
-    //               //message
-    //               alert.querySelector(".alert-message").innerHTML =
-    //                 apiRestoreFacture.message;
-    //               //progress bar
-    //               progressBar.style.transition = "width 10s linear";
-    //               progressBar.style.width = "100%";
+              //success
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-success");
+              //icon
+              alert.querySelector(".fad").classList.add("fa-check-circle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                apiRestoreSortie.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
 
-    //               //add alert
-    //               container
-    //                 .querySelector("#tbody-facture")
-    //                 .closest("div")
-    //                 .prepend(alert);
+              //add alert
+              container
+                .querySelector("#tbody-sortie")
+                .closest("div")
+                .prepend(alert);
 
-    //               //progress launch animation
-    //               setTimeout(() => {
-    //                 progressBar.style.width = "0%";
-    //               }, 10);
-    //               //auto close alert
-    //               setTimeout(() => {
-    //                 alert.querySelector(".btn-close").click();
-    //               }, 10000);
+              //progress launch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
 
-    //               //auto hide modal
-    //               modalRestoreFacture
-    //                 .querySelector("#btn-close-modal-restore-facture")
-    //                 .click();
+              //auto hide modal
+              modalRestoreSortie
+                .querySelector("#btn-close-modal-restore-sortie")
+                .click();
 
-    //               //refresh filter facture
-    //               filterFacture(
-    //                 selectStatus.value.trim(),
-    //                 selectArrangeBy.value.trim(),
-    //                 selectOrder.value.trim(),
-    //                 dateFrom.value.trim(),
-    //                 dateTo.value.trim(),
-    //                 selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
-    //                 $(selectIdUtilisateur).val().trim(),
-    //                 inputSearch.value.trim()
-    //               );
+              //refresh filter facture
+              filterSortie(
+                selectStatus.value.trim(),
+                selectArrangeBy.value.trim(),
+                selectOrder.value.trim(),
+                dateFrom.value.trim(),
+                dateTo.value.trim(),
+                selectNumCaisse ? $(selectNumCaisse).val().trim() : "",
+                $(selectIdUtilisateur).val().trim(),
+                inputSearch.value.trim()
+              );
 
-    //               return;
-    //             } catch (e) {
-    //               console.error(e);
-    //             }
-    //           });
-    //       });
-    //     }
+              return;
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      });
+    }
   }, 1050);
 
   //   //====================== FUNCTIONS ========================

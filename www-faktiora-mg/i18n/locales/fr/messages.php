@@ -276,6 +276,12 @@ return [
         'sortie_deleteAllDemandeSortie_plur' => "<b>:field</b> sorties ont été supprimées avec succès",
         //sortie - correction facture not mofidifed
         'sortie_correctionFacture_not_corrected' => "Aucune correction n'est faite pour cette facture",
+        //sortie - restore all demande sortie 0
+        'sortie_restoreAllDemandeSortie_0' => "Aucune sortie n'est récupérée",
+        //sortie - restore all demande sortie 1
+        'sortie_restoreAllDemandeSortie_1' => "Une sortie a été récupérée avec succès",
+        //sortie - restore all demande sortie plur
+        'sortie_restoreAllDemandeSortie_plur' => "<b>:field</b> sorties ont été récupérées avec succès",
         //client - create client
         'client_createClient' => "Nouveau client ajouté avec succès",
         //client - update client

@@ -156,6 +156,8 @@ return [
         'sortie_correctionFacture' => DEBUG ? "Erreur dans sortie/correctionFacture : :field" : "Une erreur est survenue lors de la correction de la facture",
         //sortie - print demande sortie
         'sortie_printDemandeSortie' => DEBUG ? "Erreur dans sortie/printDemandeSortie : :field" : "Une erreur est survenue lors de la génération de pdf de demande de sortie",
+        //sortie - restore all demande sortie
+        'sortie_restoreAllDemandeSortie' => DEBUG ? "Erreur dans sortie/restoreAllDemandeSortie : :field" : "Une erreur est survenue lors de la récupération des sorties",
         //produit  - create produit
         'produit_createProduit' => DEBUG ? "Erreur dans produit/createProduit : :field" : "Une erreur est survenue lors d'ajout de nouveau produit",
         //produit - filter produit
