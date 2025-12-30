@@ -106,6 +106,8 @@
         question_delete_permanent_article_plur: "<?= __('forms.labels.question_delete_permanent_article_plur') ?>",
         question_restore_article_1: "<?= __('forms.labels.question_restore_article_1') ?>",
         question_restore_article_plur: "<?= __('forms.labels.question_restore_article_plur') ?>",
+        question_restore_user_1: "<?= __('forms.labels.question_restore_user_1') ?>",
+        question_restore_user_plur: "<?= __('forms.labels.question_restore_user_plur') ?>",
 
     }
 </script>

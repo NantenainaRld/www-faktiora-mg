@@ -1066,6 +1066,67 @@ class User extends Database
         return $response;
     }
 
+    //static - restore all user
+    public static function restoreAllUser($ids_user, $id_utilisateur)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        $placeholers = implode(', ', array_fill(0, count($ids_user), '?'));
+        $sql = "UPDATE utilisateur SET etat_utilisateur = 'déconnecté' WHERE id_utilisateur IN ({$placeholers}) AND etat_utilisateur = 'supprimé' AND id_utilisateur != ? ";
+
+        //push id user in the end
+        array_push($ids_user, $id_utilisateur);
+
+        try {
+
+            $response = parent::executeQuery($sql, $ids_user);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+
+            //success
+            //0
+            if ($response['row_count'] === 0) {
+                $response['message'] = __('messages.success.user_restoreAllUser_0');
+            }
+            //1
+            elseif ($response['row_count'] === 1) {
+                $response['message'] = __('messages.success.user_restoreAllUser_1');
+            }
+            //plur
+            else {
+                $response['message'] = __('messages.success.user_restoreAllUser_plur', ['field' => $response['row_count']]);
+            }
+
+            $response = [
+                'message_type' => 'success',
+                'message' => $response['message']
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.user_restoreAllUser',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //====================== PRIVATE FUNCTION ====================
 
     //static - is email_utilisateur exist?

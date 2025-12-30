@@ -166,6 +166,12 @@ return [
         'user_deconnectAll_plur' => "<b>:field</b> utilisateurs ont été déconnecté avec succès",
         //user - signup
         'user_signup' => "Compte crée avec succès. Redirection vers la page de connexion",
+        //user - restore all user 0
+        'user_restoreAllUser_0' => "Aucun utilisateur n'est récupéré",
+        //user - restore all user 1
+        'user_restoreAllUser_1' => "Un utilisateur a été récupéré avec succès",
+        //user - restore all user plur
+        'user_restoreAllUser_plur' => "<b>:field</b> utilisateurs ont été récupérés avec succès",
         //caisse - create caisse
         'caisse_createCaisse' => "Caisse numéro <b>:field</b> ajoutée avec succès",
         //caisse - filter ligne caisse 0 

@@ -1707,6 +1707,229 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
         });
     });
+
+    //=======================  RESTORE USER ==========================
+    //modal restore user
+    const modalRestoreUser = document.getElementById("modal-restore-user");
+    //btn restore user
+    const btnRestoreUser = container.querySelector("#btn-restore-user");
+
+    //=====EVENT btn restore user
+    btnRestoreUser.addEventListener("click", () => {
+      //selected user
+      const selectedUser = tbody.querySelectorAll(
+        "input[type='checkbox']:checked"
+      );
+
+      //no selection
+      if (selectedUser.length <= 0) {
+        //alert
+        const alertTemplate = document.getElementById("alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-warning");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          lang.user_ids_user_empty;
+        //progress bar
+        progressBar.style.transition = "width 10s linear";
+        progressBar.style.width = "100%";
+
+        //add alert
+        tbody.closest("div").prepend(alert);
+
+        //progress lanch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 10000);
+
+        return;
+      }
+      //selection
+      else {
+        //modal message 1
+        if (selectedUser.length === 1) {
+          modalRestoreUser.querySelector(".message").innerHTML =
+            lang.question_restore_user_1.replace(
+              ":field",
+              selectedUser[0].closest("tr").dataset.userId
+            );
+        }
+        //modal message plur
+        else {
+          modalRestoreUser.querySelector(".message").innerHTML =
+            lang.question_restore_user_plur.replace(
+              ":field",
+              selectedUser.length
+            );
+        }
+
+        //show modal restore user
+        new bootstrap.Modal(modalRestoreUser).show();
+
+        //====== EVENT btn confirm  modal restore user
+        modalRestoreUser
+          .querySelector("#btn-confirm-restore-user")
+          .addEventListener("click", async () => {
+            try {
+              //ids_user
+              let ids_user = [...selectedUser];
+              ids_user = ids_user.map(
+                (selected) => selected.closest("tr").dataset.userId
+              );
+
+              //FETCH api restore all user
+              const apiRestoreUser = await apiRequest(
+                "/user/restore_all_user",
+                {
+                  method: "PUT",
+                  body: { ids_user: ids_user },
+                }
+              );
+
+              //error
+              if (apiRestoreUser.message_type === "error") {
+                //alert
+                const alertTemplate = document.getElementById("alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-triangle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiRestoreUser.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalRestoreUser.querySelector(".modal-body").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+
+                return;
+              }
+              //invalid
+              else if (apiRestoreUser.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.getElementById("alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiRestoreUser.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalRestoreUser.querySelector(".modal-body").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+
+                return;
+              }
+              //succcess
+              else {
+                //alert
+                const alertTemplate = document.getElementById("alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-success");
+                //icon
+                alert.querySelector(".fad").classList.add("fa-check-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiRestoreUser.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                tbody.closest("div").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+
+                //close modal
+                modalRestoreUser
+                  .querySelector("#btn-close-modal-restore-user")
+                  .click();
+
+                //refesh filter user
+                filterUser(
+                  tbody,
+                  container.querySelector("#chart-role"),
+                  container.querySelector("#chart-status"),
+                  selectStatus.value.trim(),
+                  selectRole.value.trim(),
+                  selectSex.value.trim(),
+                  selectArrangeBy.value.trim(),
+                  selectOrder.value.trim(),
+                  selectNumCaisse.value.trim(),
+                  selectDateBy.value.trim(),
+                  selectPer.value.trim(),
+                  dateFrom.value.trim(),
+                  dateTo.value.trim(),
+                  selectMonth.value.trim(),
+                  selectYear.value.trim(),
+                  inputSearch.value.trim()
+                );
+
+                return;
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      }
+    });
   }, 1050);
 
   //================ FUNCTIONS ================

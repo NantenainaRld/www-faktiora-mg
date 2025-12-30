@@ -38,6 +38,8 @@ return [
         'user_listAllUser' => DEBUG ? "Erreur dans user/listAllUser : :field" : "Une erreur est survenue lors de la recupération de liste des utilisateurs",
         //user - print all user
         'user_printAllUser' => DEBUG ? "Erreur dans user/printAllUser : :field" : "Une erreur est survenue lors de la génération de pdf pour la liste des utilisateurs",
+        //user - restore all user
+        'user_restoreAllUser' => DEBUG ? "Erreur dans user/restoreAllUser : :field" : "Une erreur est survenue lors de la récupération des utilisateurs",
         //caisse - create caisse
         'caisse_createCaisse' => DEBUG ? "Erreur dans caisse/createCaisse : :field" : "Erreur lors de la création de caisse",
         //caisse - is num caisse exist

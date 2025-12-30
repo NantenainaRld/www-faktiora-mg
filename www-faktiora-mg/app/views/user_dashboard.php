@@ -177,6 +177,10 @@
                                             <button class="btn btn-outline-dark fw-bold w-auto btn-sm me-2 my-2" id="btn-deconnect-user">
                                                 <i class="fad fa-arrow-left-from-bracket me-2"></i><?= __('forms.labels.disconnect') ?>
                                             </button>
+                                            <!-- btn restore user  -->
+                                            <button class="btn btn-outline-warning fw-bold w-auto btn-sm me-2 my-2" id="btn-restore-user">
+                                                <i class="fad fa-arrow-rotate-left me-2"></i><?= __('forms.labels.restore') ?>
+                                            </button>
                                             <!-- btn delete user  -->
                                             <button class="btn btn-outline-danger fw-bold w-auto btn-sm me-2 my-2" id="btn-delete-user">
                                                 <i class="fad fa-user-circle-minus me-2"></i><?= __('forms.labels.delete') ?>
@@ -722,6 +726,26 @@
                 <div class="modal-footer d-flex flex-nowrap justify-content-end">
                     <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-print-all-user"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
                     <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-print-all-user"><i class="fad fa-download me-2"></i><?= __('forms.labels.download') ?></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal restore user  -->
+    <div class="modal fade" id="modal-restore-user" tabindex="-1" aria-labelledby="modalRestoreUser" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <!-- modal header  -->
+                <div class="modal-header bg-warning text-light">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-arrow-rotate-left me-2"></i><?= __('forms.titles.user_restore') ?></h6>
+                </div>
+                <!-- modal body  -->
+                <div class="modal-body">
+                    <div class="message">Voulez-vous vraiment récupérer ces ... utilisateurs ?</div>
+                </div>
+                <!-- modal footer  -->
+                <div class="modal-footer d-flex flex-nowrap justify-content-end">
+                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-restore-user"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
+                    <button class="btn btn-primary btn-sm fw-bold" type="button" id="btn-confirm-restore-user"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_restore') ?></button>
                 </div>
             </div>
         </div>
