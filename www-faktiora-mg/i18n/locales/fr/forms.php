@@ -78,7 +78,8 @@ return [
         'produit_restore' => "Récupération des produits",
         'article_dashboard' => "Tableau de bord article",
         'article_update' => "Modification d'un article",
-        'article_delete' => "Suppréssion des articles"
+        'article_delete' => "Suppréssion des articles",
+        'article_restore' => "Récupération des articles"
     ],
     'labels' => [
         'all' => 'tout',
@@ -302,6 +303,8 @@ return [
         'question_delete_article_plur' => "Voulez-vous vraiment supprimé ces <b>:field</b> articles ?",
         'question_delete_permanent_article_1' => "Voulez-vous vraiment supprimé l'article avec l'ID <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>",
         'question_delete_permanent_article_plur' => "Voulez-vous vraiment supprimé ces <b>:field</b> articles ?. <span class='text-danger'>Cette action est irréversible</span>",
+        'question_restore_article_1' => "Voulez-vous vraiment récupérer l'article avec l'ID <b>:field</b> ?",
+        'question_restore_article_plur' => "Voulez-vous vraiment récupérer ces <b>:field</b> articles ?",
 
     ],
     'times' => [

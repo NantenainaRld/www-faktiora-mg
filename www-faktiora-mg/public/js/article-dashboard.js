@@ -907,6 +907,217 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
       });
     }
+
+    //btn restore article
+    const btnRestoreArticle = container.querySelector("#btn-restore-article");
+    //===== EVENT btn restore article
+    if (btnRestoreArticle) {
+      btnRestoreArticle.addEventListener("click", () => {
+        //modal restore article
+        const modalRestoreArticle = container.querySelector(
+          "#modal-restore-article"
+        );
+        //selected article
+        const selectedArticle = container.querySelectorAll(
+          "#tbody-article input[type='checkbox']:checked"
+        );
+
+        //no selection
+        if (selectedArticle.length <= 0) {
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-warning");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            lang.article_ids_article_empty;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          container
+            .querySelector("#tbody-article")
+            .closest("div")
+            .prepend(alert);
+
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+          return;
+        }
+
+        //modal message 1
+        if (selectedArticle.length === 1) {
+          modalRestoreArticle.querySelector(".message").innerHTML =
+            lang.question_restore_article_1.replace(
+              ":field",
+              selectedArticle[0].closest("tr").dataset.idArticle
+            );
+        }
+        //modal message plur
+        else {
+          modalRestoreArticle.querySelector(".message").innerHTML =
+            lang.question_restore_article_plur.replace(
+              ":field",
+              selectedArticle.length
+            );
+        }
+
+        //show modal restore artilce
+        new bootstrap.Modal(modalRestoreArticle).show();
+
+        //==== EVENT btn confirm modal restore article
+        modalRestoreArticle
+          .querySelector("#btn-confirm-modal-restore-article")
+          .addEventListener("click", async () => {
+            try {
+              //ids_article
+              let ids_article = [...selectedArticle];
+              ids_article = ids_article.map(
+                (selected) => selected.closest("tr").dataset.idArticle
+              );
+
+              //FETCH api restore article
+              const apiRestoreArticle = await apiRequest(
+                "/article/restore_all_article",
+                {
+                  method: "PUT",
+                  body: {
+                    ids_article: ids_article,
+                  },
+                }
+              );
+
+              //error
+              if (apiRestoreArticle.message_type === "error") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiRestoreArticle.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalRestoreArticle.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+                return;
+              }
+              //invalid
+              else if (apiRestoreArticle.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiRestoreArticle.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalRestoreArticle.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                return;
+              }
+
+              //success
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-success");
+              //icon
+              alert.querySelector(".fad").classList.add("fa-check-circle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                apiRestoreArticle.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              container
+                .querySelector("#tbody-article")
+                .closest("div")
+                .prepend(alert);
+
+              //progress launch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
+
+              //auto hide modal
+              modalRestoreArticle
+                .querySelector("#btn-close-modal-restore-article")
+                .click();
+
+              //refresh filter article
+              filterArticle(
+                selectStatus.value.trim(),
+                selectArrangeBy.value.trim(),
+                selectOrder.value.trim(),
+                inputSearch.value.trim()
+              );
+
+              return;
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      });
+    }
   }, 1050);
 
   //====================== FUNCTIONS ========================

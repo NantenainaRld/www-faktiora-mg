@@ -188,6 +188,8 @@ return [
         'article_findById' => DEBUG ? "Erreur dans article/findById : :field" : "Une erreur est survenue lors de la vérification d'article",
         //article - delete all article
         'article_deleteAllArticle' => DEBUG ? "Erreur dans article/deleteAllArticle : :field" : "Une erreur est survenue lors de la suppréssion des articles",
+        //article - restore all article
+        'article_restoreAllArticle' => DEBUG ? "Erreur dans article/restoreAllArticle : :field" : "Une erreur est survenue lors de la récupération des articles",
         //client - create client
         'client_createClient' => DEBUG ? "Erreur dans client/createClient : :field" : "Une erreur est survenue lors d'ajout de client",
         //client - filter client

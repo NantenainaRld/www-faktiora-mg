@@ -268,6 +268,12 @@ return [
         'article_deleteAllArticle_1' => "Un article a été supprimé avec succès",
         //article - delete all article plur
         'article_deleteAllArticle_plur' => "<b>:field</b> ont été supprimés avec succès",
+        //article - restore all article 0
+        'article_restoreAllArticle_0' => "Aucun article n'est récupéré",
+        //article - restore all article 1
+        'article_restoreAllArticle_1' => "Un article a été récupéré avec succès",
+        //article - restore all article plur
+        'article_restoreAllArticle_plur' => "<b>:field</b> articles ont été récupérés avec succès",
         //sortie - create ligne_ds
         'sortie_createLigneDs' => "Nouvele ligne sortie ajoutée avec succès",
         //sortie - create sortie

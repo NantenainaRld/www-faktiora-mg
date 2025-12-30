@@ -104,6 +104,8 @@
         article_ids_article_empty: "<?= __('messages.invalids.article_ids_article_empty') ?>",
         question_delete_permanent_article_1: "<?= __('forms.labels.question_delete_permanent_article_1') ?>",
         question_delete_permanent_article_plur: "<?= __('forms.labels.question_delete_permanent_article_plur') ?>",
+        question_restore_article_1: "<?= __('forms.labels.question_restore_article_1') ?>",
+        question_restore_article_plur: "<?= __('forms.labels.question_restore_article_plur') ?>",
 
     }
 </script>
