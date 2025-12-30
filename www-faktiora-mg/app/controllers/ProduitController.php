@@ -9,13 +9,65 @@ class ProduitController extends Controller
     //page - index
     public function index()
     {
-        echo "page index produit";
+        //redirect to page produit
+        header('Location: ' . SITE_URL . '/produit/page_produit');
+        return;
     }
 
     //page - produit dashboard
     public function pageProduit()
     {
-        $this->render('produit_dashboard', ['title' => "Gestion des produiuts"]);
+        //is loged in ?
+        $is_loged_in = Auth::isLogedIn();
+        //loged
+        if ($is_loged_in->getLoged()) {
+
+            //get currency_units
+            $currency_units = '';
+            try {
+                $config = json_decode(file_get_contents(PUBLIC_PATH . '/config/config.json'), true);
+
+                //currency_units not found
+                if (!isset($config['currency_units'])) {
+                    //redirect to error page 
+                    header('Location:' . SITE_URL . '/errors?messages=' . __('errors.not_found.json', ['field' => 'currency_units']));
+
+                    return;
+                }
+
+                $currency_units = $config['currency_units'];
+            } catch (Throwable $e) {
+                error_log($e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile());
+
+                $response = [
+                    'message_type' => 'error',
+                    'message' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()
+                ];
+
+                //redirect to error page
+                header('Location: ' . SITE_URL . '/errors?messages=' . $response['message']);
+
+                return;
+            }
+
+            $_SESSION['menu'] = 'produit';
+            $this->render('produit_dashboard', [
+                'title' => 'Faktiora - ' . __('forms.titles.produit_dashboard'),
+                'role' => $is_loged_in->getRole(),
+                'currency_units' => $currency_units
+            ]);
+            return;
+        }
+        //not loged
+        else {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
     }
 
     //============================ ACTIONS ==============================
@@ -161,52 +213,45 @@ class ProduitController extends Controller
         }
 
         //defaults
-        $order_by_default = ['libelle', 'nb_stock', 'total', 'quantite'];
-        $arrange_default = ['ASC', 'DESC'];
+        $arrange_by_default = ['id', 'libelle', 'nb_stock', 'total', 'quantite'];
+        $order_default = ['ASC', 'DESC'];
+        $status_default = ['active', 'deleted'];
 
         //status
-        $status = strtolower(trim($_GET['status'] ?? 'active'));
-        $status = ($status === 'deleted') ? 'deleted' : 'active';
-        if ($is_loged_in->getRole() === 'caissier') {
-            $status = 'active';
-        }
-        switch ($status) {
-            case 'active':
-                $status = 'actif';
-                break;
-            case 'deleted':
-                $status = 'supprimé';
-                break;
-        }
+        $status = strtolower(trim($_GET['status'] ?? 'all'));
+        $status = !in_array($status, $status_default, true) ? 'all' : $status;
 
-        //order_by
-        $order_by = strtolower(trim($_GET['order_by'] ?? 'libelle'));
-        $order_by = in_array($order_by, $order_by_default, true) ? $order_by : 'libelle';
-        switch ($order_by) {
+        //arrange_by
+        $arrange_by = strtolower(trim($_GET['arrange_by'] ?? 'id'));
+        $arrange_by = in_array($arrange_by, $arrange_by_default, true) ? $arrange_by : 'id';
+        switch ($arrange_by) {
+            case 'id':
+                $arrange_by = 'p.id_produit';
+                break;
             case 'libelle':
-                $order_by = 'p.libelle_produit';
+                $arrange_by = 'p.libelle_produit';
                 break;
             case 'nb_stock':
-                $order_by = 'p.nb_stock';
+                $arrange_by = 'p.nb_stock';
                 break;
             case 'quantite':
-                $order_by = 'quantite_produit';
+                $arrange_by = 'quantite_produit';
                 break;
             case 'total':
-                $order_by = 'total_produit';
+                $arrange_by = 'total_produit';
                 break;
         }
-        //arrange
-        $arrange = strtoupper(trim($_GET['arrange'] ?? 'ASC'));
-        $arrange = in_array($arrange, $arrange_default, true) ? $arrange : 'ASC';
+        //order
+        $order = strtoupper(trim($_GET['order'] ?? 'ASC'));
+        $order = in_array($order, $order_default, true) ? $order : 'ASC';
 
         //search_produit
-        $search_produit = "%" . trim($_GET['search_produit'] ?? '') . "%";
+        $search_produit = trim($_GET['search_produit'] ?? '');
 
         $params = [
             'status' => $status,
-            'order_by' => $order_by,
-            'arrange' => $arrange,
+            'arrange_by' => $arrange_by,
+            'order' => $order,
             'search_produit' => $search_produit
         ];
 

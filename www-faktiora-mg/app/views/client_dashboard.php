@@ -36,10 +36,10 @@
                 <div class="row py-2 flex-nowrap h-100">
                     <div class="col-12 h-100">
                         <div class="row overflow-x-auto w-100 flex-nowrap g-0 h-100">
-                            <!-- table ligne_caisse -->
+                            <!-- table client -->
                             <div class="col-12 h-100">
                                 <div class="card h-100">
-                                    <div class="card-body d-flex flex-column justify-content-between h-100">
+                                    <div class="card-body overflow-auto d-flex flex-column justify-content-between h-100">
                                         <!-- title table -->
                                         <div class="card-title text-secondary flex-grow-0" id="chart-transactions-curves-title">
                                             <i class="fad fa-list-dropdown me-2"></i><?= __('forms.titles.client_list') ?>

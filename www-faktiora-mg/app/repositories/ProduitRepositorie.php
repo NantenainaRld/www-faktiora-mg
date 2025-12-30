@@ -13,22 +13,29 @@ class ProduitRepositorie extends Database
     public static function filterProduit($params)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
-        $sql = "SELECT p.id_produit, p.libelle_produit, p.prix_produit, p.nb_stock, COUNT(lf.id_produit) AS quantite_produit , COALESCE(SUM(lf.prix * lf.quantite_produit), 0) AS total_produit FROM produit p LEFT JOIN ligne_facture lf ON lf.id_produit = p.id_produit ";
+        $sql = "SELECT p.id_produit, p.libelle_produit, p.prix_produit, p.nb_stock, COUNT(lf.id_produit) AS quantite_produit , COALESCE(SUM(lf.prix * lf.quantite_produit), 0) AS total_produit, p.etat_produit FROM produit p LEFT JOIN ligne_facture lf ON lf.id_produit = p.id_produit ";
         $paramsQuery = [];
 
         //where 1=1
         $sql .= "WHERE 1=1 ";
 
-        //status
-        $sql .= "AND p.etat_produit = :status ";
-        $paramsQuery['status'] = $params['status'];
+        //status - active 
+        if ($params['status'] === 'active') {
+            $sql .= "AND p.etat_produit = 'actif' ";
+        }
+        //status - deleted
+        elseif ($params['status'] === 'deleted') {
+            $sql .= "AND p.etat_produit = 'supprimé' ";
+        }
 
         //search_produit
-        $sql .= "AND (p.libelle_produit LIKE :search OR p.id_produit LIKE :search) ";
-        $paramsQuery['search'] = $params['search_produit'];
+        if ($params['search_produit'] !== '') {
+            $sql .= "AND (p.libelle_produit LIKE :search OR p.id_produit LIKE :search) ";
+            $paramsQuery['search'] = "%" . $params['search_produit'] . "%";
+        }
 
         //group by and order by
-        $sql .= "GROUP BY p.id_produit ORDER BY {$params['order_by']} {$params['arrange']} ";
+        $sql .= "GROUP BY p.id_produit ORDER BY {$params['arrange_by']} {$params['order']} ";
 
         try {
 

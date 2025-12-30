@@ -69,7 +69,9 @@ return [
         'sortie_correction_outflow' => "Correction de sortie (sortie)",
         'sortie_delete' => "Suppréssion des sorties",
         'sortie_restore' => "Récupération des sorties",
-        'ligne_sortie' => "Lignes de sortie"
+        'ligne_sortie' => "Lignes de sortie",
+        'produit_dashboard' => "Tableau de bord produit",
+        'produit_list' => "Liste des produits"
     ],
     'labels' => [
         'all' => 'tout',
@@ -278,6 +280,9 @@ return [
         'question_restore_sortie_1' => "Voulez-vous vraiment récupérer la sortie numéro <b>:field</b> ?",
         'question_restore_sortie_plur' => "Voulez-vous vraiment récupérer ces <b>:field</b> sorties ?",
         'sortie_number' => "Sortie numéro",
+        'nb_stock' => "Nombre de stock",
+        'quantite_vendu' => "Quantité vendue",
+        'total_vendu' => "Total vendue"
     ],
     'times' => [
         'minute' => "minute",
@@ -302,7 +307,8 @@ return [
         'libelle_ae' => "ex: apport de caisse",
         'correction_inflow' => "ajout d'un autre montant",
         'correction_outflow' => "réduction de montant",
-        'libelle_article' => "achat de carburant"
+        'libelle_article' => "achat de carburant",
+        'search_produit' => "ID produit, libellé produit"
     ]
 
 ];
