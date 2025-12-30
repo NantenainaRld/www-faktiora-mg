@@ -42,7 +42,7 @@
                                     <div class="card-body h-100 overlow-auto d-flex flex-column justify-content-between">
                                         <!-- title sortie -->
                                         <div class="card-title text-secondary flex-grow-0">
-                                            <i class="fad fa-list-dropdown me-2"></i><?= __('forms.titles.sortie_list') ?>
+                                            <i class="fad fa-list-dropdown me-2"></i><?= __('forms.titles.sortie_list') ?><span id="total-sortie" class="mx-2"></span>
                                         </div>
                                         <div class="row justify-content-center  overflow-auto align-items-top flex-grow-1">
                                             <div class="col-12">
@@ -100,13 +100,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- table ligne_facture -->
+                            <!-- table ligne_sortie -->
                             <div class="col-12 h-100 ms-2 col-lg-5">
                                 <div class="card h-100">
-                                    <div class="card-body d-flex flex-column justify-content-between">
+                                    <div class="card-body h-100 overlow-auto d-flex flex-column justify-content-between">
                                         <!-- title table -->
                                         <div class="card-title text-secondary flex-grow-0">
-                                            <i class="fad fa-list-dropdown me-2"></i><?= __('forms.titles.ligne_facture') . ' (' . strtolower(__('forms.labels.facture_num')) ?>: <span id="table-lf-facture-num"></span>)
+                                            <i class="fad fa-list-dropdown me-2"></i><?= __('forms.titles.ligne_sortie') . ' (' . strtolower(__('forms.labels.sortie_number')) ?>: <span id="table-lds-num-ds"></span>)
                                         </div>
                                         <div class="row justify-content-center  overflow-auto align-items-top flex-grow-1">
                                             <!-- table -->
@@ -121,7 +121,7 @@
                                                             <th class="text-center"><i class="fad fa-coins me-2"></i><?= __('forms.labels.amount') . " ({$currency_units})" ?></th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody id="tbody-lf">
+                                                    <tbody id="tbody-lds">
                                                         <tr>
                                                             <td colspan="9">
                                                                 <span class="bg-second placeholder w-100 rounded-1" style="height: 2vh !important;"></span>

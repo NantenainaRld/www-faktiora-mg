@@ -42,7 +42,7 @@
                                     <div class="card-body h-100 overflow-auto d-flex flex-column justify-content-between">
                                         <!-- title ae -->
                                         <div class="card-title text-secondary flex-grow-0">
-                                            <i class="fad fa-list-dropdown me-2"></i><?= __('forms.titles.ae_list') ?>
+                                            <i class="fad fa-list-dropdown me-2"></i><?= __('forms.titles.ae_list') ?><span id="table-total-ae" class="mx-2"></span>
                                         </div>
                                         <div class="row justify-content-center  overflow-auto align-items-top flex-grow-1">
                                             <div class="col-12">

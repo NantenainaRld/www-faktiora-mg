@@ -2278,6 +2278,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         tbodySortie.appendChild(tr);
       });
 
+      //total sortie
+      container.querySelector(
+        "#total-sortie"
+      ).innerHTML = `(${formatterTotal.format(Number(apiFilterSortie.total))})`;
+
       //foreach tr
       let selectedRow = null;
       const allTr = tbodySortie.querySelectorAll("tr");
@@ -2684,6 +2689,43 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
           }
         );
+
+        //===== EVENT tr selection
+        tr.addEventListener("click", () => {
+          //remove selection
+          if (selectedRow && selectedRow === tr) {
+            tr.classList.remove("active");
+            selectedRow = null;
+
+            //remove table lds num
+            container.querySelector("#table-lds-num-ds").innerHTML = "";
+
+            //remove tbody lds
+            container.querySelector("#tbody-lds").innerHTML = `  <tr>
+                                                            <td colspan="9">
+                                                                <span class="bg-second placeholder w-100 rounded-1" style="height: 2vh !important;"></span>
+                                                            </td>
+                                                        </tr>`;
+          }
+          //add selection
+          else {
+            //deselect all
+            allTr.forEach((tr0) => {
+              tr0.classList.remove("active");
+            });
+
+            //add selection
+            tr.classList.add("active");
+            selectedRow = tr;
+
+            //add table lds num_ds
+            container.querySelector("#table-lds-num-ds").innerHTML =
+              tr.dataset.numDs;
+
+            //list sortie connection
+            listConnectionSortie(tr.dataset.numDs.trim());
+          }
+        });
       });
 
       //===== EVENT check all
@@ -2865,350 +2907,209 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error(e);
     }
   }
-  //   //function - list ligne_facture
-  //   async function listLigneFacture(numFacture, div) {
-  //     try {
-  //       //FETCH api list ligne_facture
-  //       const apiListLigneFacture = await apiRequest(
-  //         `/entree/list_ligne_facture?num_facture=${numFacture}`
-  //       );
+  //function - list connection sortie
+  async function listConnectionSortie(numDs) {
+    //tbody lds
+    const tbodyLds = container.querySelector("#tbody-lds");
+    try {
+      //FETCH api list connection sortie
+      const apiListConnectionSortie = await apiRequest(
+        `/sortie/list_connection_sortie?num_ds=${numDs}`
+      );
 
-  //       //error
-  //       if (apiListLigneFacture.message_type === "error") {
-  //         //alert
-  //         const alertTemplate = document.querySelector(".alert-template");
-  //         const clone = alertTemplate.content.cloneNode(true);
-  //         const alert = clone.querySelector(".alert");
-  //         const progressBar = alert.querySelector(".progress-bar");
-  //         //alert type
-  //         alert.classList.add("alert-danger");
-  //         //icon
-  //         alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
-  //         //message
-  //         alert.querySelector(".alert-message").innerHTML =
-  //           apiListLigneFacture.message;
-  //         //progress bar
-  //         progressBar.style.transition = "width 20s linear";
-  //         progressBar.style.width = "100%";
+      //error
+      if (apiListConnectionSortie.message_type === "error") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-danger");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          apiListConnectionSortie.message;
+        //progress bar
+        progressBar.style.transition = "width 20s linear";
+        progressBar.style.width = "100%";
 
-  //         //add alert
-  //         div.prepend(alert);
+        //add alert
+        tbodyLds.closest("div").prepend(alert);
 
-  //         //progress launch animation
-  //         setTimeout(() => {
-  //           progressBar.style.width = "0%";
-  //         }, 10);
-  //         //auto close alert
-  //         setTimeout(() => {
-  //           alert.querySelector(".btn-close").click();
-  //         }, 20000);
-  //         return;
-  //       }
-  //       //invalid
-  //       else if (apiListLigneFacture.message_type === "invalid") {
-  //         //alert
-  //         const alertTemplate = document.querySelector(".alert-template");
-  //         const clone = alertTemplate.content.cloneNode(true);
-  //         const alert = clone.querySelector(".alert");
-  //         const progressBar = alert.querySelector(".progress-bar");
-  //         //alert type
-  //         alert.classList.add("alert-warning");
-  //         //icon
-  //         alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-  //         //message
-  //         alert.querySelector(".alert-message").innerHTML =
-  //           apiListLigneFacture.message;
-  //         //progress bar
-  //         progressBar.style.transition = "width 10s linear";
-  //         progressBar.style.width = "100%";
+        //progress launch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 20000);
+        return;
+      }
+      //invalid
+      else if (apiListConnectionSortie.message_type === "invalid") {
+        //alert
+        const alertTemplate = document.querySelector(".alert-template");
+        const clone = alertTemplate.content.cloneNode(true);
+        const alert = clone.querySelector(".alert");
+        const progressBar = alert.querySelector(".progress-bar");
+        //alert type
+        alert.classList.add("alert-warning");
+        //icon
+        alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+        //message
+        alert.querySelector(".alert-message").innerHTML =
+          apiListConnectionSortie.message;
+        //progress bar
+        progressBar.style.transition = "width 10s linear";
+        progressBar.style.width = "100%";
 
-  //         //add alert
-  //         div.prepend(alert);
+        //add alert
+        tbodyLds.closest("div").prepend(alert);
 
-  //         //progress launch animation
-  //         setTimeout(() => {
-  //           progressBar.style.width = "0%";
-  //         }, 10);
-  //         //auto close alert
-  //         setTimeout(() => {
-  //           alert.querySelector(".btn-close").click();
-  //         }, 10000);
-  //         return;
-  //       }
+        //progress lanch animation
+        setTimeout(() => {
+          progressBar.style.width = "0%";
+        }, 10);
+        //auto close alert
+        setTimeout(() => {
+          alert.querySelector(".btn-close").click();
+        }, 10000);
+        return;
+      }
 
-  //       //success api list ligne_facture
-  //       div.innerHTML = "";
-  //       apiListLigneFacture.data.forEach((line) => {
-  //         const divLF = document.createElement("div");
-  //         divLF.classList.add(
-  //           "p-2",
-  //           "d-flex",
-  //           "gap-2",
-  //           "bg-second",
-  //           "rounded-1",
-  //           "text-secondary",
-  //           "div-lf",
-  //           "flex-wrap"
-  //         );
-  //         divLF.dataset.prixTotal = line.prix_total;
-  //         divLF.dataset.idLf = line.id_lf;
-  //         divLF.dataset.prix = line.prix;
-  //         divLF.dataset.idProduit = line.id_produit;
-  //         divLF.innerHTML = `${line.id_lf} - ${
-  //           line.libelle_produit
-  //         } <span class='total-prix me-2'>(${formatterTotal.format(
-  //           Number(divLF.dataset.prixTotal)
-  //         )})</span><input class='form-control form-control-sm' type='number' min='0' max='${
-  //           line.quantite_produit
-  //         }' value='${line.quantite_produit}'>`;
+      //===== TABLE ligne_demande_sortie
 
-  //         //append div lf
-  //         div.append(divLF);
-  //       });
+      //set table list connection sortie
+      tbodyLds.innerHTML = "";
+      //lf
+      apiListConnectionSortie.lds.forEach((line) => {
+        const tr = document.createElement("tr");
 
-  //       //correction facture total
-  //       const correctionFactureTotal = container.querySelector(
-  //         "#correction-facture-total"
-  //       );
-  //       let prixTotal = 0;
-  //       //foreach divLF
-  //       div.querySelectorAll(".div-lf").forEach((divLF) => {
-  //         //prix total
-  //         prixTotal += Number(divLF.dataset.prixTotal);
+        //td - id_lds
+        const tdIdLF = document.createElement("td");
+        tdIdLF.textContent = line.id_lds;
+        tdIdLF.classList.add("text-center");
 
-  //         //===== EVENT input quantite_produit
-  //         divLF
-  //           .querySelector("input[type='number']")
-  //           .addEventListener("input", (e) => {
-  //             e.target.value = e.target.value.replace(/[^0-9]/g, "");
+        //td - libelle_article
+        const tdLibelle = document.createElement("td");
+        tdLibelle.textContent = line.libelle_article;
+        tdLibelle.classList.add("text-center");
 
-  //             //div prix total
-  //             divLF.dataset.prixTotal =
-  //               Number(divLF.dataset.prix) * Number(e.target.value);
-  //             divLF.querySelector(
-  //               ".total-prix"
-  //             ).innerHTML = `(${formatterTotal.format(
-  //               Number(divLF.dataset.prixTotal)
-  //             )})`;
+        //td - quantite_article
+        const tdQuantite = document.createElement("td");
+        tdQuantite.textContent = formatterNumber.format(
+          Number(line.quantite_article)
+        );
+        tdQuantite.classList.add("text-center");
 
-  //             //prix total
-  //             let prixTotal0 = 0;
-  //             div.querySelectorAll(".div-lf").forEach((divLF0) => {
-  //               //prix total 0
-  //               prixTotal0 += Number(divLF0.dataset.prixTotal);
-  //             });
-  //             correctionFactureTotal.innerHTML =
-  //               formatterTotal.format(prixTotal0);
-  //           });
-  //       });
-  //       correctionFactureTotal.innerHTML = formatterTotal.format(prixTotal);
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   }
-  //   //function - list connection facture
-  //   async function listConnectionFacture(numFacture) {
-  //     //tbody lf
-  //     const tbodyLF = container.querySelector("#tbody-lf");
-  //     try {
-  //       //FETCH api list connection facture
-  //       const apiListConnectionFacture = await apiRequest(
-  //         `/entree/list_connection_facture?num_facture=${numFacture}`
-  //       );
+        //td - prix
+        const tdPrix = document.createElement("td");
+        tdPrix.textContent = formatterNumber.format(Number(line.prix_article));
+        tdPrix.classList.add("text-center");
 
-  //       //error
-  //       if (apiListConnectionFacture.message_type === "error") {
-  //         //alert
-  //         const alertTemplate = document.querySelector(".alert-template");
-  //         const clone = alertTemplate.content.cloneNode(true);
-  //         const alert = clone.querySelector(".alert");
-  //         const progressBar = alert.querySelector(".progress-bar");
-  //         //alert type
-  //         alert.classList.add("alert-danger");
-  //         //icon
-  //         alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
-  //         //message
-  //         alert.querySelector(".alert-message").innerHTML =
-  //           apiListConnectionFacture.message;
-  //         //progress bar
-  //         progressBar.style.transition = "width 20s linear";
-  //         progressBar.style.width = "100%";
+        //td - montant
+        const tdMontant = document.createElement("td");
+        tdMontant.textContent = formatterNumber.format(Number(line.prix_total));
+        tdMontant.classList.add("text-center");
 
-  //         //add alert
-  //         tbodyLF.closest("div").prepend(alert);
+        tr.append(tdIdLF, tdLibelle, tdQuantite, tdPrix, tdMontant);
+        tbodyLds.appendChild(tr);
+      });
+      //ae
+      if (apiListConnectionSortie.autre_entree.length > 0) {
+        const trCorrectionAe = document.createElement("tr");
+        trCorrectionAe.innerHTML = `<td colspan='5' class='text-center text-light p-2 bg-secondary'><b>${
+          lang.correction
+        }</b> (${lang.inflow.toLowerCase()})</td>`;
 
-  //         //progress launch animation
-  //         setTimeout(() => {
-  //           progressBar.style.width = "0%";
-  //         }, 10);
-  //         //auto close alert
-  //         setTimeout(() => {
-  //           alert.querySelector(".btn-close").click();
-  //         }, 20000);
-  //         return;
-  //       }
-  //       //invalid
-  //       else if (apiListConnectionFacture.message_type === "invalid") {
-  //         //alert
-  //         const alertTemplate = document.querySelector(".alert-template");
-  //         const clone = alertTemplate.content.cloneNode(true);
-  //         const alert = clone.querySelector(".alert");
-  //         const progressBar = alert.querySelector(".progress-bar");
-  //         //alert type
-  //         alert.classList.add("alert-warning");
-  //         //icon
-  //         alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-  //         //message
-  //         alert.querySelector(".alert-message").innerHTML =
-  //           apiListConnectionFacture.message;
-  //         //progress bar
-  //         progressBar.style.transition = "width 10s linear";
-  //         progressBar.style.width = "100%";
+        tbodyLds.append(trCorrectionAe);
 
-  //         //add alert
-  //         tbodyLF.closest("div").prepend(alert);
+        //list correction ae
+        apiListConnectionSortie.autre_entree.forEach((line) => {
+          const tr = document.createElement("tr");
 
-  //         //progress lanch animation
-  //         setTimeout(() => {
-  //           progressBar.style.width = "0%";
-  //         }, 10);
-  //         //auto close alert
-  //         setTimeout(() => {
-  //           alert.querySelector(".btn-close").click();
-  //         }, 10000);
-  //         return;
-  //       }
+          //td - id_ae
+          const tdIdAe = document.createElement("td");
+          tdIdAe.textContent = line.num_ae;
+          tdIdAe.classList.add("text-center");
 
-  //       //===== TABLE ligne_facture
+          //td - libelle_ae
+          const tdLibelle = document.createElement("td");
+          tdLibelle.textContent = line.libelle_ae;
+          tdLibelle.classList.add("text-center");
 
-  //       //set table list connection facture
-  //       tbodyLF.innerHTML = "";
-  //       //lf
-  //       apiListConnectionFacture.lf.forEach((line) => {
-  //         const tr = document.createElement("tr");
+          //td - quantite_ae
+          const tdQuantite = document.createElement("td");
+          tdQuantite.textContent = 1;
+          tdQuantite.classList.add("text-center");
 
-  //         //td - id_lf
-  //         const tdIdLF = document.createElement("td");
-  //         tdIdLF.textContent = line.id_lf;
-  //         tdIdLF.classList.add("text-center");
+          //td - prix
+          const tdPrix = document.createElement("td");
+          tdPrix.textContent = formatterNumber.format(Number(line.montant_ae));
+          tdPrix.classList.add("text-center");
 
-  //         //td - libelle_produit
-  //         const tdLibelle = document.createElement("td");
-  //         tdLibelle.textContent = line.libelle_produit;
-  //         tdLibelle.classList.add("text-center");
+          //td - montant
+          const tdMontant = document.createElement("td");
+          tdMontant.textContent = formatterNumber.format(
+            Number(line.montant_ae)
+          );
+          tdMontant.classList.add("text-center");
 
-  //         //td - quantite_produit
-  //         const tdQuantite = document.createElement("td");
-  //         tdQuantite.textContent = formatterNumber.format(
-  //           Number(line.quantite_produit)
-  //         );
-  //         tdQuantite.classList.add("text-center");
+          tr.append(tdIdAe, tdLibelle, tdQuantite, tdPrix, tdMontant);
+          tbodyLds.appendChild(tr);
+        });
+      }
+      //sortie
+      if (apiListConnectionSortie.sortie.length > 0) {
+        const trCorrectionDs = document.createElement("tr");
+        trCorrectionDs.innerHTML = `<td colspan='5' class='text-center text-light p-2 bg-secondary'><b>${
+          lang.correction
+        }</b> (${lang.outflow.toLowerCase()})</td>`;
 
-  //         //td - prix
-  //         const tdPrix = document.createElement("td");
-  //         tdPrix.textContent = formatterNumber.format(Number(line.prix));
-  //         tdPrix.classList.add("text-center");
+        tbodyLds.append(trCorrectionDs);
 
-  //         //td - montant
-  //         const tdMontant = document.createElement("td");
-  //         tdMontant.textContent = formatterNumber.format(Number(line.prix_total));
-  //         tdMontant.classList.add("text-center");
+        //list correction ds
+        apiListConnectionSortie.sortie.forEach((line) => {
+          const tr = document.createElement("tr");
 
-  //         tr.append(tdIdLF, tdLibelle, tdQuantite, tdPrix, tdMontant);
-  //         tbodyLF.appendChild(tr);
-  //       });
-  //       //ae
-  //       if (apiListConnectionFacture.autre_entree.length > 0) {
-  //         const trCorrectionAe = document.createElement("tr");
-  //         trCorrectionAe.innerHTML = `<td colspan='5' class='text-center text-light p-2 bg-secondary'><b>${
-  //           lang.correction
-  //         }</b> (${lang.inflow.toLowerCase()})</td>`;
+          //td - id_ds
+          const tdIdDs = document.createElement("td");
+          tdIdDs.textContent = line.num_ds;
+          tdIdDs.classList.add("text-center");
 
-  //         tbodyLF.append(trCorrectionAe);
+          //td - libelle_ds
+          const tdLibelle = document.createElement("td");
+          tdLibelle.textContent = line.libelle_article;
+          tdLibelle.classList.add("text-center");
 
-  //         //list correction ae
-  //         apiListConnectionFacture.autre_entree.forEach((line) => {
-  //           const tr = document.createElement("tr");
+          //td - quantite_ds
+          const tdQuantite = document.createElement("td");
+          tdQuantite.textContent = 1;
+          tdQuantite.classList.add("text-center");
 
-  //           //td - id_ae
-  //           const tdIdAe = document.createElement("td");
-  //           tdIdAe.textContent = line.num_ae;
-  //           tdIdAe.classList.add("text-center");
+          //td - prix
+          const tdPrix = document.createElement("td");
+          tdPrix.textContent = formatterNumber.format(
+            Number(line.prix_article)
+          );
+          tdPrix.classList.add("text-center");
 
-  //           //td - libelle_ae
-  //           const tdLibelle = document.createElement("td");
-  //           tdLibelle.textContent = line.libelle_ae;
-  //           tdLibelle.classList.add("text-center");
+          //td - montant
+          const tdMontant = document.createElement("td");
+          tdMontant.textContent = formatterNumber.format(
+            Number(line.prix_article)
+          );
+          tdMontant.classList.add("text-center");
 
-  //           //td - quantite_ae
-  //           const tdQuantite = document.createElement("td");
-  //           tdQuantite.textContent = 1;
-  //           tdQuantite.classList.add("text-center");
-
-  //           //td - prix
-  //           const tdPrix = document.createElement("td");
-  //           tdPrix.textContent = formatterNumber.format(Number(line.montant_ae));
-  //           tdPrix.classList.add("text-center");
-
-  //           //td - montant
-  //           const tdMontant = document.createElement("td");
-  //           tdMontant.textContent = formatterNumber.format(
-  //             Number(line.montant_ae)
-  //           );
-  //           tdMontant.classList.add("text-center");
-
-  //           tr.append(tdIdAe, tdLibelle, tdQuantite, tdPrix, tdMontant);
-  //           tbodyLF.appendChild(tr);
-  //         });
-  //       }
-  //       //sortie
-  //       if (apiListConnectionFacture.sortie.length > 0) {
-  //         const trCorrectionDs = document.createElement("tr");
-  //         trCorrectionDs.innerHTML = `<td colspan='5' class='text-center text-light p-2 bg-secondary'><b>${
-  //           lang.correction
-  //         }</b> (${lang.outflow.toLowerCase()})</td>`;
-
-  //         tbodyLF.append(trCorrectionDs);
-
-  //         //list correction ds
-  //         apiListConnectionFacture.sortie.forEach((line) => {
-  //           const tr = document.createElement("tr");
-
-  //           //td - id_ds
-  //           const tdIdDs = document.createElement("td");
-  //           tdIdDs.textContent = line.num_ds;
-  //           tdIdDs.classList.add("text-center");
-
-  //           //td - libelle_ds
-  //           const tdLibelle = document.createElement("td");
-  //           tdLibelle.textContent = line.libelle_article;
-  //           tdLibelle.classList.add("text-center");
-
-  //           //td - quantite_ds
-  //           const tdQuantite = document.createElement("td");
-  //           tdQuantite.textContent = 1;
-  //           tdQuantite.classList.add("text-center");
-
-  //           //td - prix
-  //           const tdPrix = document.createElement("td");
-  //           tdPrix.textContent = formatterNumber.format(
-  //             Number(line.prix_article)
-  //           );
-  //           tdPrix.classList.add("text-center");
-
-  //           //td - montant
-  //           const tdMontant = document.createElement("td");
-  //           tdMontant.textContent = formatterNumber.format(
-  //             Number(line.prix_article)
-  //           );
-  //           tdMontant.classList.add("text-center");
-
-  //           tr.append(tdIdDs, tdLibelle, tdQuantite, tdPrix, tdMontant);
-  //           tbodyLF.appendChild(tr);
-  //         });
-  //       }
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   }
+          tr.append(tdIdDs, tdLibelle, tdQuantite, tdPrix, tdMontant);
+          tbodyLds.appendChild(tr);
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
 });

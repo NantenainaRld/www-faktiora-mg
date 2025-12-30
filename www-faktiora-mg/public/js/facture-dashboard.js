@@ -1952,6 +1952,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         tbodyFacture.appendChild(tr);
       });
 
+      //total facture
+      container.querySelector(
+        "#table-total-facture"
+      ).innerHTML = `(${formatterTotal.format(
+        Number(apiFilterFacture.total)
+      )})`;
+
       //foreach tr
       let selectedRow = null;
       const allTr = tbodyFacture.querySelectorAll("tr");

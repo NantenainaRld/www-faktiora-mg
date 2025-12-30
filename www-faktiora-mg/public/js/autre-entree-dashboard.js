@@ -1932,6 +1932,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         tbodyAE.appendChild(tr);
       });
 
+      //total ae
+      container.querySelector(
+        "#table-total-ae"
+      ).innerHTML = `(${formatterTotal.format(Number(apiFilterAE.total))})`;
+
       //foreach tr
       const allTr = tbodyAE.querySelectorAll("tr");
       selectedRow = null;

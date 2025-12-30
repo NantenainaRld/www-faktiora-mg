@@ -88,7 +88,7 @@ class EntreeRepositorie extends Database
                 'message' => 'success',
                 'data' => $response['data'],
                 'nb_facture' => count($response['data']),
-                'total_montant' => $total_montant
+                'total' => $total_montant
             ];
 
             return $response;
