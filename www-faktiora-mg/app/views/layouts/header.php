@@ -525,10 +525,40 @@
                                 </a>
                             </li>
                             <!-- application setting -->
-                            <li class="nav-item action bg-success rounded-1 mb-2 text-light">
-                                <a href="#" class="nav-link fw-bold p-2 text-start" style="font-size: 0.85rem;">
-                                    <i class="fad fa-gears me-2"></i><?= __('forms.labels.application') ?>
-                                </a>
+                            <li class="nav-item fw-bold action bg-success rounded-1 mb-2 text-light">
+                                <nav class="navbar action bg-success p-0 rounded ">
+                                    <a href="#"
+                                        class="nav-link navbar-toggler text-light p-2 justify-content-between d-flex"
+                                        data-bs-toggle="collapse" data-bs-target="#setting-menu-navbar" style="font-size: 0.85rem;">
+                                        <i class="fad fa-gears me-2 text-start">
+                                        </i>
+                                        <span class="w-100 text-start"><?= ucfirst(__('forms.labels.application')) ?>
+                                        </span>
+                                        <span class="text-end w-100">
+                                            <i class="fad fa-caret-down"></i>
+                                        </span>
+                                    </a>
+                                    <div class="collapse navbar-collapse" id="setting-menu-navbar">
+                                        <ul class="navbar-nav py-2 px-1" style="font-size: 0.75rem;">
+                                            <!-- lang  -->
+                                            <li class="nav-item green-second rounded-1 text-start px-3 bg-green-third mb-1">
+                                                <a href="#" data-bs-target="#modal-change-lang" data-bs-toggle="modal" class="nav-link text-light green-second">
+                                                    <i class="fad fa-language me-2">
+                                                    </i><?= __('forms.labels.lang') ?>
+                                                </a>
+                                            </li>
+                                            <!-- application -->
+                                            <?php if ($role === 'admin'): ?>
+                                                <li class="nav-item green-second rounded-1 text-start px-3 bg-green-third">
+                                                    <a href="#" class="nav-link text-light green-second">
+                                                        <i class="fad fa-gear me-2">
+                                                        </i><?= __('forms.labels.application') ?>
+                                                    </a>
+                                                </li>
+                                            <?php endif; ?>
+                                        </ul>
+                                    </div>
+                                </nav>
                             </li>
                             <!-- btn logout  -->
                             <li class="nav-item mt-3 mb-1">

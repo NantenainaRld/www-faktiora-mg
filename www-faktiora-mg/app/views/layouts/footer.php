@@ -92,6 +92,38 @@
          </div>
       </div>
    </div>
+   <!-- modal change lang -->
+   <div class="modal fade" id="modal-change-lang" tabindex="-1" aria-labelledby="modalChangeLang" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable">
+         <div class="modal-content">
+            <!-- modal header  -->
+            <div class="modal-header bg-green-0 text-light">
+               <h6 class="modal-title fw-bold"><i class="fad fa-language me-2"></i><?= __('forms.titles.change_lang') ?></h6>
+            </div>
+            <!-- form change lang-->
+            <form method="get" action="<?= SITE_URL ?>/lang">
+               <!-- modal body  -->
+               <div class="modal-body">
+                  <div class="mb-2">
+                     <div class="input-group">
+                        <span class="input-group-text text-success"><i class="fad fa-language"></i></span>
+                        <select name="lang" id="lang" class="form-select form-select-sm">
+                           <option value="fr" <?= $_COOKIE['lang'] === 'fr' ? 'selected' : '' ?>><?= __('forms.lang.fr') ?></option>
+                           <option value="mg" <?= $_COOKIE['lang'] === 'mg' ? 'selected' : '' ?>><?= __('forms.lang.mg') ?></option>
+                           <option value="en" <?= $_COOKIE['lang'] === 'en' ? 'selected' : '' ?>><?= __('forms.lang.en') ?></option>
+                        </select>
+                     </div>
+                  </div>
+               </div>
+               <!-- modal footer  -->
+               <div class="modal-footer d-flex flex-nowrap justify-content-end">
+                  <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-change-lang"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                  <button class="btn btn-primary btn-sm fw-bold" type="submit"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
    <!-- container  -->
    </div>
 
