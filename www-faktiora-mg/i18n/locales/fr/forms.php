@@ -81,7 +81,8 @@ return [
         'article_update' => "Modification d'un article",
         'article_delete' => "Suppréssion des articles",
         'article_restore' => "Récupération des articles",
-        'user_restore' => "Récupération des utilisateurs"
+        'user_restore' => "Récupération des utilisateurs",
+        'account_update' => "Modification des informations du compte"
     ],
     'labels' => [
         'all' => 'tout',

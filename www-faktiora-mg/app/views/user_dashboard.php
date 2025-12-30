@@ -582,7 +582,7 @@
                         </template>
                         <!-- update user name  -->
                         <div class="mb-2">
-                            <label for="update-update-user-name" class="form-label"><?= ucfirst(__('forms.labels.name')) ?> <span class="text-danger">*</span></label>
+                            <label for="input-update-user-name" class="form-label"><?= ucfirst(__('forms.labels.name')) ?> <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text text-success">
                                     <i class="fad fa-address-card"></i>

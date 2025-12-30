@@ -558,7 +558,6 @@ class User extends Database
                         'prenoms' => $this->prenoms_utilisateur,
                         'sexe' => $this->sexe_utilisateur,
                         'email' => $this->email_utilisateur,
-                        'role' => $this->role,
                         'id' => $this->id_utilisateur,
                     ]
                 );

@@ -1,65 +1,104 @@
    <!-- row  -->
    </div>
+   <!-- modal update account  -->
+   <div class="modal fade" id="modal-update-account" tabindex="-1" aria-labelledby="modalUpdateAccount" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable">
+         <div class="modal-content">
+            <!-- modal header  -->
+            <div class="modal-header bg-green-0 text-light">
+               <h6 class="modal-title fw-bold"><i class="fad fa-user-edit me-2"></i><?= __('forms.titles.account_update') ?></h6>
+            </div>
+            <!-- form update account -->
+            <form>
+               <!-- modal body  -->
+               <div class="modal-body">
+                  <!-- template alert  -->
+                  <template class="alert-template">
+                     <div class="alert alert-dismissible fade show alert-slide w-100" role="alert">
+                        <!-- alert progress bar  -->
+                        <div class="progress mb-2" style="height: 2px;">
+                           <div class="progress-bar bg-secondary"></div>
+                        </div>
+                        <!-- alert icon  -->
+                        <i class="fad me-2"></i>
+                        <!-- alert message  -->
+                        <span class="alert-message"></span>
+                        <!-- alert btn close  -->
+                        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+                     </div>
+                  </template>
+                  <!-- update user name  -->
+                  <div class="mb-2">
+                     <label for="input-update-user-name" class="form-label"><?= ucfirst(__('forms.labels.name')) ?> <span class="text-danger">*</span></label>
+                     <div class="input-group">
+                        <span class="input-group-text text-success">
+                           <i class="fad fa-address-card"></i>
+                        </span>
+                        <input type="text" class="form-control form-control-sm " placeholder="RALANDISON" id="input-update-user-name" maxlength="100" required>
+                     </div>
+                  </div>
+                  <!--  update user first name -->
+                  <div class="mb-2">
+                     <label for="input-update-user-first-name" class="form-label"><?= ucfirst(__('forms.labels.firstname')) ?></label>
+                     <div class="input-group">
+                        <span class="input-group-text text-success">
+                           <i class="fad fa-address-card"></i>
+                        </span>
+                        <input type="text" class="form-control form-control-sm " placeholder="Nantenaina" id="input-update-user-first-name" maxlength="100">
+                     </div>
+                  </div>
+                  <!-- update user sex -->
+                  <div class="mb-2">
+                     <label for="select-update-user-sex" class="form-label me-2 mt-1"><?= ucfirst(__('forms.labels.sex')) ?></label>
+                     <div class="input-group">
+                        <span class="input-group-text text-success">
+                           <i class="fad fa-venus"></i>
+                        </span>
+                        <select name="" id="select-update-user-sex" class="form-select form-select-sm">
+                           <option value="masculin"><?= strtolower(__('forms.labels.male')) ?></option>
+                           <option value="féminin"><?= strtolower(__('forms.labels.female')) ?></option>
+                        </select>
+                     </div>
+                  </div>
+                  <!--  update user email -->
+                  <div class="mb-2">
+                     <label for="input-update-user-email" class="form-label me-2"><?= ucfirst(__('forms.labels.email')) ?> <span class="text-danger">*</span></label>
+                     <div class="input-group">
+                        <span class="input-group-text text-success">
+                           <i class="fad fa-at"></i>
+                        </span>
+                        <input type="email" class="form-control form-control-sm " id="input-update-user-email" placeholder="nantenaina@faktiora.mg" maxlength="150" required>
+                     </div>
+                  </div>
+                  <!--  update user mdp -->
+                  <div class="mb-2">
+                     <label for="input-update-user-mdp" class="form-label me-2 mt-1"><?= ucfirst(__('forms.labels.password')) ?> </label>
+                     <div class="input-group">
+                        <span class="input-group-text text-success">
+                           <i class="fad fa-lock"></i>
+                        </span>
+                        <input type="password" class="form-control form-control-sm " id="input-update-user-mdp" minlength="6">
+                        <button class="input-group-text" type="button"><i class="fad fa-eye-slash"></i></button>
+                     </div>
+                     <span class="form-text text-secondary"><?= __('forms.labels.keep_empty') ?></span>
+                  </div>
+               </div>
+               <!-- modal footer  -->
+               <div class="modal-footer d-flex flex-nowrap justify-content-end">
+                  <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-update-account"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                  <button class="btn btn-primary btn-sm fw-bold" type="submit"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
    <!-- container  -->
    </div>
 
    <!-- bootstrap  -->
    <script src="<?= SITE_URL ?>/bootstrap-5.3.3/js/bootstrap.bundle.min.js"></script>
-   <!-- script header  -->
-   <script>
-      document.addEventListener('DOMContentLoaded', () => {
-         //template - placeholder
-         const templatePlaceholder = document.getElementById("template-placeholder");
-         // template real sidebar 
-         const templateRealSidebar = document.getElementById('template-sidebar');
-         //container
-         const container = document.getElementById("container");
-         //load placeholder
-         container.prepend(templatePlaceholder.content.cloneNode(true));
-         // load real content 
-         setTimeout(async () => {
-            container.innerHTML = '';
-            //load real side bar
-            container.append(templateRealSidebar.content.cloneNode(true));
-
-            try {
-               //get account info
-               const accountInfo = await apiRequest('/user/account_info');
-               //error 
-               if (accountInfo.message_type === 'error') {
-                  //div accountinfo
-                  const divAccountInfo = document.getElementById('account-info');
-                  divAccountInfo.innerHTML = `<div class='alert alert-danger'/><i class='fad fa-warning'></i>${accountInfo.message}</div>`;
-               }
-               //success
-               else {
-                  //a- user name
-                  const aUserName = document.getElementById('a-user_name');
-                  aUserName.className = 'mb-1 text-light text-decoration-none text-center fs-6';
-                  aUserName.innerHTML = `<h4 class='fw-bold'>${accountInfo.data.nom_utilisateur}</h4> <span class='fs-6 green-first'>${accountInfo.data.prenoms_utilisateur}</span>`;
-                  //a- user email
-                  const aUserEmail = document.getElementById('a-user_email');
-                  aUserEmail.className = 'mb-1 green-second text-decoration-none text-center form-text bg-green-third rounded-1 px-2';
-                  aUserEmail.innerHTML = `${accountInfo.data.email_utilisateur}`;
-                  //a- user role id user
-                  const aRoleIdUser = document.getElementById('a-user_role_id_user');
-                  aRoleIdUser.className = 'mb-1 green-second text-decoration-none text-center form-text bg-success rounded-1 px-2 fw-bold bg-opacity-25';
-                  aRoleIdUser.innerHTML = `${accountInfo.data.role_t} - ${accountInfo.data.id_utilisateur}`;
-                  //role - caissier
-                  if (accountInfo.data.role === 'caissier') {
-                     // a- user num_caisse 
-                     const aUserNumCaisse = document.getElementById('a-user_num_caisse');
-                     aUserNumCaisse.className = 'fw-bold';
-                     aUserNumCaisse.innerHTML = accountInfo.data.num_caisse;
-                  }
-               }
-
-            } catch (e) {
-               console.log(e);
-            }
-         }, 1000);
-      });
-   </script>
+   <!-- script setting -->
+   <script src="<?= SITE_URL ?>/js/setting.js"></script>
    <!-- script fontawesome  -->
    <script src="<?= SITE_URL ?>/fontawesome-pro-7.1.0-web/js/fontawesome.js"></script>
    <script src="<?= SITE_URL ?>/fontawesome-pro-7.1.0-web/js/duotone.js"></script>

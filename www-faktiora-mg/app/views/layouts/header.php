@@ -520,7 +520,7 @@
                             </li>
                             <!-- account setting -->
                             <li class="nav-item action bg-success rounded-1 mb-2 text-light">
-                                <a href="#" class="nav-link fw-bold p-2 text-start" style="font-size: 0.85rem;">
+                                <a href="#" class="nav-link fw-bold p-2 text-start" style="font-size: 0.85rem;" id="a-update-account">
                                     <i class="fad fa-user-gear me-2"></i><?= __('forms.labels.account') ?>
                                 </a>
                             </li>
