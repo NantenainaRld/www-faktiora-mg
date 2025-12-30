@@ -41,6 +41,17 @@ class Router
 
             return;
         }
+        //setting
+        else if ($this->controller === 'Setting') {
+            if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+                header('Content-Type: application/json');
+                $json = file_get_contents('php://input');
+                file_put_contents(PUBLIC_PATH . '/config/config.json', $json);
+
+                echo json_encode(["message_type" => 'success']);
+                return;
+            }
+        }
         //favicon
         else if ($this->controller === 'Favicon.ico') {
             return;

@@ -222,6 +222,58 @@ document.addEventListener("DOMContentLoaded", () => {
     //================== PING ====================
     ping();
     setInterval(ping, 1000 * 60 * 2);
+
+    //======================= SETTING ==================
+    //modal settting
+    const modalSetting = document.getElementById("modal-setting");
+
+    //===== EVENT a setting
+    document.getElementById("a-setting").addEventListener("click", async () => {
+      // config
+      fetch(SITE_URL + "/config/config.json")
+        .then((res) => res.json())
+        .then((data) => {
+          //input enterprise name
+          const inputEnterPriseName =
+            modalSetting.querySelector("#enterprise-name");
+          inputEnterPriseName.value = data.enterprise_name;
+          //select currency
+          const selectCurrency = modalSetting.querySelector("#currency");
+          selectCurrency.value = data.currency_units;
+
+          //==== EVENT enterprise name
+          inputEnterPriseName.addEventListener("input", (e) => {
+            e.target.value = e.target.value.replace("  ", " ");
+          });
+
+          //show modal setting
+          new bootstrap.Modal(modalSetting).show();
+
+          //===== EVENT form submit
+          modalSetting
+            .querySelector("form")
+            .addEventListener("submit", async (e) => {
+              //suspend submit
+              e.preventDefault();
+              //check validity
+              if (!e.target.checkValidity()) {
+                e.target.reportValidity();
+                return;
+              }
+
+              const response = await apiRequest("/setting", {
+                method: "PUT",
+                body: {
+                  enterprise_name: inputEnterPriseName.value.trim(),
+                  currency_units: selectCurrency.value.trim(),
+                },
+              });
+
+              if (response.message_type === "success") window.location.reload();
+            });
+        })
+        .catch((err) => console.error(err));
+    });
   }, 1000);
 
   //======================== FUNCTIONS ==================

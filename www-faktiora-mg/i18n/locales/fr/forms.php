@@ -83,7 +83,7 @@ return [
         'article_restore' => "Récupération des articles",
         'user_restore' => "Récupération des utilisateurs",
         'account_update' => "Modification des informations du compte",
-        'change_lang' => "Changement de langue"
+        'change_lang' => "Changement de langue",
     ],
     'labels' => [
         'all' => 'tout',
@@ -311,7 +311,10 @@ return [
         'question_restore_article_plur' => "Voulez-vous vraiment récupérer ces <b>:field</b> articles ?",
         'question_restore_user_1' => "Voulez-vous vraiment récupérer l'utilisateur avec l'ID <b>:field</b> ?",
         'question_restore_user_plur' => "Voulez-vous vraiment récupérer ces <b>:field</b> utilisateurs ?",
-        'lang' => "Langue"
+        'lang' => "Langue",
+        'enterprise_name' => "Nom de l'entrepise/société",
+        'currency' => "Unité monétaire"
+
     ],
     'times' => [
         'minute' => "minute",

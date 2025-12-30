@@ -550,7 +550,7 @@
                                             <!-- application -->
                                             <?php if ($role === 'admin'): ?>
                                                 <li class="nav-item green-second rounded-1 text-start px-3 bg-green-third">
-                                                    <a href="#" class="nav-link text-light green-second">
+                                                    <a href="#" class="nav-link text-light green-second" id="a-setting">
                                                         <i class="fad fa-gear me-2">
                                                         </i><?= __('forms.labels.application') ?>
                                                     </a>

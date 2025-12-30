@@ -124,6 +124,46 @@
          </div>
       </div>
    </div>
+   <!-- modal application setting -->
+   <div class="modal fade" id="modal-setting" tabindex="-1" aria-labelledby="modalSetting" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable">
+         <div class="modal-content">
+            <!-- modal header  -->
+            <div class="modal-header bg-dark text-light">
+               <h6 class="modal-title fw-bold"><i class="fad fa-gear me-2"></i><?= __('forms.labels.setting') ?></h6>
+            </div>
+            <!-- form setting -->
+            <form>
+               <!-- modal body  -->
+               <div class="modal-body">
+                  <div class="mb-2">
+                     <!-- enterprise name  -->
+                     <div class="mb-2">
+                        <label for="enterprise-name" class="form-label"><?= __('forms.labels.enterprise_name') ?><class="text-danger"> *</span></label>
+                        <input type="text" class="form-control form-control-sm" id="enterprise-name" required>
+                     </div>
+                     <div class="mb-2">
+                        <label for="currency" class="form-label"><?= __('forms.labels.currency') ?></label>
+                        <div class="input-group">
+                           <span class="input-group-text text-success"><i class="fad fa-dollar-circle"></i></span>
+                           <select id="currency" class="form-select form-select-sm">
+                              <option value="MGA">Ariary</option>
+                              <option value="EUR">Euro</option>
+                              <option value="USD">Dollar US</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <!-- modal footer  -->
+               <div class="modal-footer d-flex flex-nowrap justify-content-end">
+                  <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-change-lang"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                  <button class="btn btn-primary btn-sm fw-bold" type="submit"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
    <!-- container  -->
    </div>
 
