@@ -565,445 +565,218 @@ document.addEventListener("DOMContentLoaded", async () => {
           console.error(e);
         }
       });
-    //     //========================= DELETE PERMANENT CLIENT =================
-    //     //btn restore client
-    //     const btnDeletePermanentClient = container.querySelector(
-    //       "#btn-delete-permanent-client"
-    //     );
-    //     //===== EVENT btn delete permanent client
-    //     if (btnDeletePermanentClient) {
-    //       btnDeletePermanentClient.addEventListener("click", () => {
-    //         //modal delete client
-    //         const modalDeleteClient = container.querySelector(
-    //           "#modal-delete-client"
-    //         );
-    //         //selected client
-    //         const selectedClient = container.querySelectorAll(
-    //           "#tbody-client input[type='checkbox']:checked"
-    //         );
 
-    //         //no selection
-    //         if (selectedClient.length <= 0) {
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-warning");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             lang.client_ids_client_empty;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
+    //========================= DELETE PRODUIT =================
+    //btn delete produit
+    const btnDeleteProduit = container.querySelector("#btn-delete-produit");
+    //===== EVENT btn delete produit
+    if (btnDeleteProduit) {
+      btnDeleteProduit.addEventListener("click", () => {
+        //modal delete produit
+        const modalDeleteProduit = container.querySelector(
+          "#modal-delete-produit"
+        );
+        //selected produit
+        const selectedProduit = container.querySelectorAll(
+          "#tbody-produit input[type='checkbox']:checked"
+        );
 
-    //           //add alert
-    //           container
-    //             .querySelector("#tbody-client")
-    //             .closest("div")
-    //             .prepend(alert);
+        //no selection
+        if (selectedProduit.length <= 0) {
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-warning");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            lang.produit_ids_produit_empty;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
 
-    //           //progress launch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
-    //           return;
-    //         }
+          //add alert
+          container
+            .querySelector("#tbody-produit")
+            .closest("div")
+            .prepend(alert);
 
-    //         //modal message 1
-    //         if (selectedClient.length === 1) {
-    //           modalDeleteClient.querySelector(".message").innerHTML =
-    //             lang.question_delete_permanent_client_1.replace(
-    //               ":field",
-    //               selectedClient[0].closest("tr").dataset.idClient
-    //             );
-    //         }
-    //         //modal message plur
-    //         else {
-    //           modalDeleteClient.querySelector(".message").innerHTML =
-    //             lang.question_delete_permanent_client_plur.replace(
-    //               ":field",
-    //               selectedClient.length
-    //             );
-    //         }
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+          return;
+        }
 
-    //         //show modal delete client
-    //         new bootstrap.Modal(modalDeleteClient).show();
+        //modal message 1
+        if (selectedProduit.length === 1) {
+          modalDeleteProduit.querySelector(".message").innerHTML =
+            lang.question_delete_produit_1.replace(
+              ":field",
+              selectedProduit[0].closest("tr").dataset.idProduit
+            );
+        }
+        //modal message plur
+        else {
+          modalDeleteProduit.querySelector(".message").innerHTML =
+            lang.question_delete_produit_plur.replace(
+              ":field",
+              selectedProduit.length
+            );
+        }
 
-    //         //==== EVENT btn confirm modal delete client
-    //         modalDeleteClient
-    //           .querySelector("#btn-confirm-modal-delete-client")
-    //           .addEventListener("click", async () => {
-    //             try {
-    //               //ids_client
-    //               let ids_client = [...selectedClient];
-    //               ids_client = ids_client.map(
-    //                 (selected) => selected.closest("tr").dataset.idClient
-    //               );
+        //show modal delete produit
+        new bootstrap.Modal(modalDeleteProduit).show();
 
-    //               //FETCH api delete client
-    //               const apiDeleteClient = await apiRequest(
-    //                 "/client/delete_permanent_all_client",
-    //                 {
-    //                   method: "DELETE",
-    //                   body: {
-    //                     ids_client: ids_client,
-    //                   },
-    //                 }
-    //               );
+        //==== EVENT btn confirm modal delete produit
+        modalDeleteProduit
+          .querySelector("#btn-confirm-modal-delete-produit")
+          .addEventListener("click", async () => {
+            try {
+              //ids_produit
+              let ids_produit = [...selectedProduit];
+              ids_produit = ids_produit.map(
+                (selected) => selected.closest("tr").dataset.idProduit
+              );
 
-    //               //error
-    //               if (apiDeleteClient.message_type === "error") {
-    //                 //alert
-    //                 const alertTemplate = document.querySelector(".alert-template");
-    //                 const clone = alertTemplate.content.cloneNode(true);
-    //                 const alert = clone.querySelector(".alert");
-    //                 const progressBar = alert.querySelector(".progress-bar");
-    //                 //alert type
-    //                 alert.classList.add("alert-danger");
-    //                 //icon
-    //                 alert
-    //                   .querySelector(".fad")
-    //                   .classList.add("fa-exclamation-circle");
-    //                 //message
-    //                 alert.querySelector(".alert-message").innerHTML =
-    //                   apiDeleteClient.message;
-    //                 //progress bar
-    //                 progressBar.style.transition = "width 20s linear";
-    //                 progressBar.style.width = "100%";
+              //FETCH api delete produit
+              const apiDeleteProduit = await apiRequest(
+                "/produit/delete_all_produit",
+                {
+                  method: "PUT",
+                  body: {
+                    ids_produit: ids_produit,
+                  },
+                }
+              );
 
-    //                 //add alert
-    //                 modalDeleteClient.querySelector(".modal-body").prepend(alert);
+              //error
+              if (apiDeleteProduit.message_type === "error") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiDeleteProduit.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
 
-    //                 //progress launch animation
-    //                 setTimeout(() => {
-    //                   progressBar.style.width = "0%";
-    //                 }, 10);
-    //                 //auto close alert
-    //                 setTimeout(() => {
-    //                   alert.querySelector(".btn-close").click();
-    //                 }, 20000);
-    //                 return;
-    //               }
-    //               //invalid
-    //               else if (apiDeleteClient.message_type === "invalid") {
-    //                 //alert
-    //                 const alertTemplate = document.querySelector(".alert-template");
-    //                 const clone = alertTemplate.content.cloneNode(true);
-    //                 const alert = clone.querySelector(".alert");
-    //                 const progressBar = alert.querySelector(".progress-bar");
-    //                 //alert type
-    //                 alert.classList.add("alert-warning");
-    //                 //icon
-    //                 alert
-    //                   .querySelector(".fad")
-    //                   .classList.add("fa-exclamation-circle");
-    //                 //message
-    //                 alert.querySelector(".alert-message").innerHTML =
-    //                   apiDeleteClient.message;
-    //                 //progress bar
-    //                 progressBar.style.transition = "width 10s linear";
-    //                 progressBar.style.width = "100%";
+                //add alert
+                modalDeleteProduit.querySelector(".modal-body").prepend(alert);
 
-    //                 //add alert
-    //                 modalDeleteClient.querySelector(".modal-body").prepend(alert);
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+                return;
+              }
+              //invalid
+              else if (apiDeleteProduit.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiDeleteProduit.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
 
-    //                 //progress launch animation
-    //                 setTimeout(() => {
-    //                   progressBar.style.width = "0%";
-    //                 }, 10);
-    //                 //auto close alert
-    //                 setTimeout(() => {
-    //                   alert.querySelector(".btn-close").click();
-    //                 }, 10000);
-    //                 return;
-    //               }
+                //add alert
+                modalDeleteProduit.querySelector(".modal-body").prepend(alert);
 
-    //               //success
-    //               //alert
-    //               const alertTemplate = document.querySelector(".alert-template");
-    //               const clone = alertTemplate.content.cloneNode(true);
-    //               const alert = clone.querySelector(".alert");
-    //               const progressBar = alert.querySelector(".progress-bar");
-    //               //alert type
-    //               alert.classList.add("alert-success");
-    //               //icon
-    //               alert.querySelector(".fad").classList.add("fa-check-circle");
-    //               //message
-    //               alert.querySelector(".alert-message").innerHTML =
-    //                 apiDeleteClient.message;
-    //               //progress bar
-    //               progressBar.style.transition = "width 10s linear";
-    //               progressBar.style.width = "100%";
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                return;
+              }
 
-    //               //add alert
-    //               container
-    //                 .querySelector("#tbody-client")
-    //                 .closest("div")
-    //                 .prepend(alert);
+              //success
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-success");
+              //icon
+              alert.querySelector(".fad").classList.add("fa-check-circle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                apiDeleteProduit.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
 
-    //               //progress launch animation
-    //               setTimeout(() => {
-    //                 progressBar.style.width = "0%";
-    //               }, 10);
-    //               //auto close alert
-    //               setTimeout(() => {
-    //                 alert.querySelector(".btn-close").click();
-    //               }, 10000);
+              //add alert
+              container
+                .querySelector("#tbody-produit")
+                .closest("div")
+                .prepend(alert);
 
-    //               //auto hide modal
-    //               modalDeleteClient
-    //                 .querySelector("#btn-close-modal-delete-client")
-    //                 .click();
+              //progress launch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
 
-    //               //refresh filter client
-    //               filterClient(
-    //                 selectStatus.value.trim(),
-    //                 selectSex.value.trim(),
-    //                 selectArrangeBy.value.trim(),
-    //                 selectOrder.value.trim(),
-    //                 selectDateBy.value.trim(),
-    //                 selectPer.value.trim(),
-    //                 dateFrom.value.trim(),
-    //                 dateTo.value.trim(),
-    //                 selectMonth.value.trim(),
-    //                 selectYear.value.trim(),
-    //                 inputSearch.value.trim()
-    //               );
+              //auto hide modal
+              modalDeleteProduit
+                .querySelector("#btn-close-modal-delete-produit")
+                .click();
 
-    //               return;
-    //             } catch (e) {
-    //               console.error(e);
-    //             }
-    //           });
-    //       });
-    //     }
+              //refresh filter produit
+              filterProduit(
+                selectStatus.value.trim(),
+                selectArrangeBy.value.trim(),
+                selectOrder.value.trim(),
+                inputSearch.value.trim()
+              );
 
-    //     //========================== RESTORE CLIENT =========================
-    //     //btn restore client
-    //     const btnRestoreClient = container.querySelector("#btn-restore-client");
-    //     //===== EVENT btn restore client
-    //     if (btnRestoreClient) {
-    //       btnRestoreClient.addEventListener("click", () => {
-    //         //modal restore client
-    //         const modalRestoreClient = container.querySelector(
-    //           "#modal-restore-client"
-    //         );
-    //         //selected client
-    //         const selectedClient = container.querySelectorAll(
-    //           "#tbody-client input[type='checkbox']:checked"
-    //         );
-
-    //         //no selection
-    //         if (selectedClient.length <= 0) {
-    //           //alert
-    //           const alertTemplate = document.querySelector(".alert-template");
-    //           const clone = alertTemplate.content.cloneNode(true);
-    //           const alert = clone.querySelector(".alert");
-    //           const progressBar = alert.querySelector(".progress-bar");
-    //           //alert type
-    //           alert.classList.add("alert-warning");
-    //           //icon
-    //           alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-    //           //message
-    //           alert.querySelector(".alert-message").innerHTML =
-    //             lang.client_ids_client_empty;
-    //           //progress bar
-    //           progressBar.style.transition = "width 10s linear";
-    //           progressBar.style.width = "100%";
-
-    //           //add alert
-    //           container
-    //             .querySelector("#tbody-client")
-    //             .closest("div")
-    //             .prepend(alert);
-
-    //           //progress launch animation
-    //           setTimeout(() => {
-    //             progressBar.style.width = "0%";
-    //           }, 10);
-    //           //auto close alert
-    //           setTimeout(() => {
-    //             alert.querySelector(".btn-close").click();
-    //           }, 10000);
-    //           return;
-    //         }
-
-    //         //modal message 1
-    //         if (selectedClient.length === 1) {
-    //           modalRestoreClient.querySelector(".message").innerHTML =
-    //             lang.question_restore_client_1.replace(
-    //               ":field",
-    //               selectedClient[0].closest("tr").dataset.idClient
-    //             );
-    //         }
-    //         //modal message plur
-    //         else {
-    //           modalRestoreClient.querySelector(".message").innerHTML =
-    //             lang.question_restore_client_plur.replace(
-    //               ":field",
-    //               selectedClient.length
-    //             );
-    //         }
-
-    //         //show modal restore client
-    //         new bootstrap.Modal(modalRestoreClient).show();
-
-    //         //==== EVENT btn confirm modal restore client
-    //         modalRestoreClient
-    //           .querySelector("#btn-confirm-modal-restore-client")
-    //           .addEventListener("click", async () => {
-    //             try {
-    //               //ids_client
-    //               let ids_client = [...selectedClient];
-    //               ids_client = ids_client.map(
-    //                 (selected) => selected.closest("tr").dataset.idClient
-    //               );
-
-    //               //FETCH api restore client
-    //               const apiRestoreClient = await apiRequest(
-    //                 "/client/restore_all_client",
-    //                 {
-    //                   method: "PUT",
-    //                   body: {
-    //                     ids_client: ids_client,
-    //                   },
-    //                 }
-    //               );
-
-    //               //error
-    //               if (apiRestoreClient.message_type === "error") {
-    //                 //alert
-    //                 const alertTemplate = document.querySelector(".alert-template");
-    //                 const clone = alertTemplate.content.cloneNode(true);
-    //                 const alert = clone.querySelector(".alert");
-    //                 const progressBar = alert.querySelector(".progress-bar");
-    //                 //alert type
-    //                 alert.classList.add("alert-danger");
-    //                 //icon
-    //                 alert
-    //                   .querySelector(".fad")
-    //                   .classList.add("fa-exclamation-circle");
-    //                 //message
-    //                 alert.querySelector(".alert-message").innerHTML =
-    //                   apiRestoreClient.message;
-    //                 //progress bar
-    //                 progressBar.style.transition = "width 20s linear";
-    //                 progressBar.style.width = "100%";
-
-    //                 //add alert
-    //                 modalRestoreClient.querySelector(".modal-body").prepend(alert);
-
-    //                 //progress launch animation
-    //                 setTimeout(() => {
-    //                   progressBar.style.width = "0%";
-    //                 }, 10);
-    //                 //auto close alert
-    //                 setTimeout(() => {
-    //                   alert.querySelector(".btn-close").click();
-    //                 }, 20000);
-    //                 return;
-    //               }
-    //               //invalid
-    //               else if (apiRestoreClient.message_type === "invalid") {
-    //                 //alert
-    //                 const alertTemplate = document.querySelector(".alert-template");
-    //                 const clone = alertTemplate.content.cloneNode(true);
-    //                 const alert = clone.querySelector(".alert");
-    //                 const progressBar = alert.querySelector(".progress-bar");
-    //                 //alert type
-    //                 alert.classList.add("alert-warning");
-    //                 //icon
-    //                 alert
-    //                   .querySelector(".fad")
-    //                   .classList.add("fa-exclamation-circle");
-    //                 //message
-    //                 alert.querySelector(".alert-message").innerHTML =
-    //                   apiRestoreClient.message;
-    //                 //progress bar
-    //                 progressBar.style.transition = "width 10s linear";
-    //                 progressBar.style.width = "100%";
-
-    //                 //add alert
-    //                 modalRestoreClient.querySelector(".modal-body").prepend(alert);
-
-    //                 //progress launch animation
-    //                 setTimeout(() => {
-    //                   progressBar.style.width = "0%";
-    //                 }, 10);
-    //                 //auto close alert
-    //                 setTimeout(() => {
-    //                   alert.querySelector(".btn-close").click();
-    //                 }, 10000);
-    //                 return;
-    //               }
-
-    //               //success
-    //               //alert
-    //               const alertTemplate = document.querySelector(".alert-template");
-    //               const clone = alertTemplate.content.cloneNode(true);
-    //               const alert = clone.querySelector(".alert");
-    //               const progressBar = alert.querySelector(".progress-bar");
-    //               //alert type
-    //               alert.classList.add("alert-success");
-    //               //icon
-    //               alert.querySelector(".fad").classList.add("fa-check-circle");
-    //               //message
-    //               alert.querySelector(".alert-message").innerHTML =
-    //                 apiRestoreClient.message;
-    //               //progress bar
-    //               progressBar.style.transition = "width 10s linear";
-    //               progressBar.style.width = "100%";
-
-    //               //add alert
-    //               container
-    //                 .querySelector("#tbody-client")
-    //                 .closest("div")
-    //                 .prepend(alert);
-
-    //               //progress launch animation
-    //               setTimeout(() => {
-    //                 progressBar.style.width = "0%";
-    //               }, 10);
-    //               //auto close alert
-    //               setTimeout(() => {
-    //                 alert.querySelector(".btn-close").click();
-    //               }, 10000);
-
-    //               //auto hide modal
-    //               modalRestoreClient
-    //                 .querySelector("#btn-close-modal-restore-client")
-    //                 .click();
-
-    //               //refresh filter client
-    //               filterClient(
-    //                 selectStatus.value.trim(),
-    //                 selectSex.value.trim(),
-    //                 selectArrangeBy.value.trim(),
-    //                 selectOrder.value.trim(),
-    //                 selectDateBy.value.trim(),
-    //                 selectPer.value.trim(),
-    //                 dateFrom.value.trim(),
-    //                 dateTo.value.trim(),
-    //                 selectMonth.value.trim(),
-    //                 selectYear.value.trim(),
-    //                 inputSearch.value.trim()
-    //               );
-
-    //               return;
-    //             } catch (e) {
-    //               console.error(e);
-    //             }
-    //           });
-    //       });
-    //     }
+              return;
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      });
+    }
   }, 1050);
 
   //====================== FUNCTIONS ========================
@@ -1287,389 +1060,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       });
 
-      // //===== EVENT check all
-      // const inputCheckAll = container.querySelector("#check-all-client");
-      // if (inputCheckAll) {
-      //   inputCheckAll.addEventListener("change", (e) => {
-      //     tbodyClient
-      //       .querySelectorAll("input[type='checkbox']")
-      //       .forEach((checkbox) => {
-      //         checkbox.checked = e.target.checked;
-      //       });
-      //   });
-      // }
+      //===== EVENT check all
+      const inputCheckAll = container.querySelector("#check-all-produit");
+      if (inputCheckAll) {
+        inputCheckAll.addEventListener("change", (e) => {
+          tbodyProduit
+            .querySelectorAll("input[type='checkbox']")
+            .forEach((checkbox) => {
+              checkbox.checked = e.target.checked;
+            });
+        });
+      }
     } catch (e) {
       console.error(e);
     }
   }
-  //   //function - chart nb_facture
-  //   async function chartNbFacture(
-  //     divChartNbFacture,
-  //     id_client,
-  //     date_by,
-  //     per,
-  //     from,
-  //     to,
-  //     month,
-  //     year
-  //   ) {
-  //     try {
-  //       //FETCH api facture effective
-  //       const factureEffective = await apiRequest(
-  //         `/entree/list_all_facture?date_by=${date_by}&per=${per}&from=${from}&to=${to}&month=${month}&year=${year}&id_client=${id_client}`
-  //       );
-
-  //       //error
-  //       if (factureEffective.message_type === "error") {
-  //         //alert
-  //         const alertTemplate = document.querySelector(".alert-template");
-  //         const clone = alertTemplate.content.cloneNode(true);
-  //         const alert = clone.querySelector(".alert");
-  //         const progressBar = alert.querySelector(".progress-bar");
-  //         //alert type
-  //         alert.classList.add("alert-danger");
-  //         //icon
-  //         alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
-  //         //message
-  //         alert.querySelector(".alert-message").innerHTML =
-  //           factureEffective.message;
-  //         //progress bar
-  //         progressBar.style.transition = "width 20s linear";
-  //         progressBar.style.width = "100%";
-
-  //         //add alert
-  //         divChartNbFacture
-  //           .closest(".modal-body")
-  //           .querySelector(".alert-container")
-  //           .prepend(alert);
-
-  //         //progress launch animation
-  //         setTimeout(() => {
-  //           progressBar.style.width = "0%";
-  //         }, 10);
-  //         //auto close alert
-  //         setTimeout(() => {
-  //           alert.querySelector(".btn-close").click();
-  //         }, 20000);
-
-  //         return;
-  //       }
-  //       //invalid
-  //       else if (factureEffective.message_type === "invalid") {
-  //         //alert
-  //         const alertTemplate = document.querySelector(".alert-template");
-  //         const clone = alertTemplate.content.cloneNode(true);
-  //         const alert = clone.querySelector(".alert");
-  //         const progressBar = alert.querySelector(".progress-bar");
-  //         //alert type
-  //         alert.classList.add("alert-warning");
-  //         //icon
-  //         alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-  //         //message
-  //         alert.querySelector(".alert-message").innerHTML =
-  //           factureEffective.message;
-  //         //progress bar
-  //         progressBar.style.transition = "width 10s linear";
-  //         progressBar.style.width = "100%";
-
-  //         //add alert
-  //         divChartNbFacture
-  //           .closest(".modal-body")
-  //           .querySelector(".alert-container")
-  //           .prepend(alert);
-
-  //         //progress lanch animation
-  //         setTimeout(() => {
-  //           progressBar.style.width = "0%";
-  //         }, 10);
-  //         //auto close alert
-  //         setTimeout(() => {
-  //           alert.querySelector(".btn-close").click();
-  //         }, 10000);
-
-  //         return;
-  //       }
-
-  //       //success effective transactions
-  //       //all dates
-  //       const allDates = [
-  //         ...new Set([...factureEffective.data.map((d) => d.date)]),
-  //       ].sort();
-
-  //       Chart.defaults.locale = cookieLangValue;
-  //       //count par date
-  //       const countNbTotalFacture = countNbTotal(factureEffective);
-  //       //=====show chart histo nb_facture
-  //       const canvasHistoNbFacture = document.createElement("canvas");
-  //       new Chart(canvasHistoNbFacture, {
-  //         type: "line",
-  //         data: {
-  //           labels: allDates,
-  //           datasets: [
-  //             {
-  //               label: lang.bill,
-  //               data: prepareCount(countNbTotalFacture, allDates),
-  //               borderColor: "#01a7b9ff",
-  //               borderWidth: 1,
-  //               backgroundColor: "#2ec4b5a1",
-  //               // barThickness: 10,
-  //               borderRadius: 5,
-  //             },
-  //           ],
-  //         },
-  //         options: {
-  //           responsive: true,
-  //           plugins: {
-  //             title: {
-  //               display: true,
-  //               text: `${lang.nb_facture} (${formatterNumber.format(
-  //                 factureEffective.nb_facture
-  //               )})`,
-  //             },
-  //             legend: { display: true, position: "bottom", align: "center" },
-  //           },
-  //           scales: {
-  //             x: {
-  //               title: {
-  //                 display: true,
-  //                 text: lang.date,
-  //               },
-  //               type: "time",
-  //               time: { unit: "day" },
-  //             },
-  //             y: {
-  //               title: { display: true, text: lang.number },
-  //               beginAtZero: true,
-  //               ticks: { stepSize: 1 },
-  //             },
-  //           },
-  //           zoom: {
-  //             // zoom: {
-  //             //   wheel: {
-  //             //     enabled: true,
-  //             //     minScale: 0.5,
-  //             //     maxScale: 10,
-  //             //     wheelEvent: "wheel",
-  //             //   },
-  //             //   pinch: { enabled: true },
-  //             //   pan: {
-  //             //     enabled: true,
-  //             //     mode: "xy",
-  //             //     modifierKey: "alt",
-  //             //   },
-  //             //   drag: {
-  //             //     mode: "xy",
-  //             //     enabled: true,
-  //             //     backgroundColor: "red",
-  //             //     animation: 100,
-  //             //   },
-  //             // },
-  //           },
-  //         },
-  //         plugins: [ChartZoom],
-  //       });
-  //       divChartNbFacture.innerHTML = "";
-  //       divChartNbFacture.append(canvasHistoNbFacture);
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   }
-  //   //function - chart total_facture
-  //   async function chartTotalFacture(
-  //     divChartTotalFacture,
-  //     id_client,
-  //     date_by,
-  //     per,
-  //     from,
-  //     to,
-  //     month,
-  //     year
-  //   ) {
-  //     try {
-  //       //FETCH api facture effective
-  //       const factureEffective = await apiRequest(
-  //         `/entree/list_all_facture?date_by=${date_by}&per=${per}&from=${from}&to=${to}&month=${month}&year=${year}&id_client=${id_client}`
-  //       );
-
-  //       //error
-  //       if (factureEffective.message_type === "error") {
-  //         //alert
-  //         const alertTemplate = document.querySelector(".alert-template");
-  //         const clone = alertTemplate.content.cloneNode(true);
-  //         const alert = clone.querySelector(".alert");
-  //         const progressBar = alert.querySelector(".progress-bar");
-  //         //alert type
-  //         alert.classList.add("alert-danger");
-  //         //icon
-  //         alert.querySelector(".fad").classList.add("fa-exclamation-triangle");
-  //         //message
-  //         alert.querySelector(".alert-message").innerHTML =
-  //           factureEffective.message;
-  //         //progress bar
-  //         progressBar.style.transition = "width 20s linear";
-  //         progressBar.style.width = "100%";
-
-  //         //add alert
-  //         divChartTotalFacture
-  //           .closest(".modal-body")
-  //           .querySelector(".alert-container")
-  //           .prepend(alert);
-
-  //         //progress launch animation
-  //         setTimeout(() => {
-  //           progressBar.style.width = "0%";
-  //         }, 10);
-  //         //auto close alert
-  //         setTimeout(() => {
-  //           alert.querySelector(".btn-close").click();
-  //         }, 20000);
-
-  //         return;
-  //       }
-  //       //invalid
-  //       else if (factureEffective.message_type === "invalid") {
-  //         //alert
-  //         const alertTemplate = document.querySelector(".alert-template");
-  //         const clone = alertTemplate.content.cloneNode(true);
-  //         const alert = clone.querySelector(".alert");
-  //         const progressBar = alert.querySelector(".progress-bar");
-  //         //alert type
-  //         alert.classList.add("alert-warning");
-  //         //icon
-  //         alert.querySelector(".fad").classList.add("fa-exclamation-circle");
-  //         //message
-  //         alert.querySelector(".alert-message").innerHTML =
-  //           factureEffective.message;
-  //         //progress bar
-  //         progressBar.style.transition = "width 10s linear";
-  //         progressBar.style.width = "100%";
-
-  //         //add alert
-  //         divChartTotalFacture
-  //           .closest(".modal-body")
-  //           .querySelector(".alert-container")
-  //           .prepend(alert);
-
-  //         //progress lanch animation
-  //         setTimeout(() => {
-  //           progressBar.style.width = "0%";
-  //         }, 10);
-  //         //auto close alert
-  //         setTimeout(() => {
-  //           alert.querySelector(".btn-close").click();
-  //         }, 10000);
-
-  //         return;
-  //       }
-
-  //       //success effective transactions
-  //       //all dates
-  //       const allDates = [
-  //         ...new Set([...factureEffective.data.map((d) => d.date)]),
-  //       ].sort();
-
-  //       Chart.defaults.locale = cookieLangValue;
-  //       //count par date
-  //       const countNbTotalFacture = countNbTotal(factureEffective);
-  //       //=====show chart histo total_facture
-  //       const canvasHistoTotalFacture = document.createElement("canvas");
-  //       new Chart(canvasHistoTotalFacture, {
-  //         type: "line",
-  //         data: {
-  //           labels: allDates,
-  //           datasets: [
-  //             {
-  //               label: lang.bill,
-  //               data: prepareTotal(countNbTotalFacture, allDates),
-  //               borderColor: "#01a7b9ff",
-  //               borderWidth: 1,
-  //               backgroundColor: "#2ec4b5a1",
-  //               // barThickness: 10,
-  //               borderRadius: 5,
-  //             },
-  //           ],
-  //         },
-  //         options: {
-  //           responsive: true,
-  //           plugins: {
-  //             title: {
-  //               display: true,
-  //               text: `${lang.total_facture} (${formatterTotal.format(
-  //                 factureEffective.total_facture
-  //               )})`,
-  //             },
-  //             legend: { display: true, position: "bottom", align: "center" },
-  //           },
-  //           scales: {
-  //             x: {
-  //               title: {
-  //                 display: true,
-  //                 text: lang.date,
-  //               },
-  //               type: "time",
-  //               time: { unit: "day" },
-  //             },
-  //             y: {
-  //               title: {
-  //                 display: true,
-  //                 text: `${lang.total} (${currencyUnits})`,
-  //               },
-  //               beginAtZero: true,
-  //               ticks: { stepSize: 1 },
-  //             },
-  //           },
-  //           zoom: {
-  //             // zoom: {
-  //             //   wheel: {
-  //             //     enabled: true,
-  //             //     minScale: 0.5,
-  //             //     maxScale: 10,
-  //             //     wheelEvent: "wheel",
-  //             //   },
-  //             //   pinch: { enabled: true },
-  //             //   pan: {
-  //             //     enabled: true,
-  //             //     mode: "xy",
-  //             //     modifierKey: "alt",
-  //             //   },
-  //             //   drag: {
-  //             //     mode: "xy",
-  //             //     enabled: true,
-  //             //     backgroundColor: "red",
-  //             //     animation: 100,
-  //             //   },
-  //             // },
-  //           },
-  //         },
-  //         plugins: [ChartZoom],
-  //       });
-  //       divChartTotalFacture.innerHTML = "";
-  //       divChartTotalFacture.append(canvasHistoTotalFacture);
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   }
-  //   //function - count nb && total per date
-  //   const countNbTotal = (effective) => {
-  //     const result = {};
-  //     effective.data.forEach((item) => {
-  //       if (!result[item.date]) {
-  //         //object date {} not exist
-  //         result[item.date] = {
-  //           count: 0,
-  //           total: 0,
-  //         };
-  //       }
-  //       //increment
-  //       result[item.date].count++;
-  //       result[item.date].total += Number(item.montant);
-  //     });
-  //     return result;
-  //   };
-  //   //function - prepare count
-  //   const prepareCount = (countNbTotal, allDates) =>
-  //     allDates.map((date) => countNbTotal[date]?.count || 0);
-  //   //function - prepare total
-  //   const prepareTotal = (countNbTotal, allDates) =>
-  //     allDates.map((date) => countNbTotal[date]?.total || 0);
 });

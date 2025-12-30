@@ -59,14 +59,10 @@
                                                         <button class="btn btn-sm btn-outline-warning" id="btn-restore-client"><i class="fad fa-arrow-rotate-left me-2">
                                                             </i><?= __('forms.labels.restore') ?>
                                                         </button>
-                                                    <?php endif; ?>
-                                                    <?php if ($role === 'admin'): ?>
-                                                        <!-- btn delete client  -->
-                                                        <button class="btn btn-sm btn-outline-danger" id="btn-delete-client"><i class="fad fa-user-circle-minus me-2">
+                                                        <!-- btn delete produit -->
+                                                        <button class="btn btn-sm btn-outline-danger" id="btn-delete-produit"><i class="fad fa-user-circle-minus me-2">
                                                             </i><?= __('forms.labels.delete') ?>
                                                         </button>
-                                                    <?php endif; ?>
-                                                    <?php if ($role === 'admin'): ?>
                                                         <!-- btn delete permanent client  -->
                                                         <button class="btn btn-sm btn-danger" id="btn-delete-permanent-client"><i class="fad fa-user-circle-minus me-2">
                                                             </i><?= __('forms.labels.delete_permanent') ?>
@@ -272,22 +268,22 @@
             </div>
         </div>
     </div>
-    <!-- modal delete client -->
-    <div class="modal fade" id="modal-delete-client" tabindex="-1" aria-labelledby="modalDeleteClient" aria-hidden="true">
+    <!-- modal delete produit-->
+    <div class="modal fade" id="modal-delete-produit" tabindex="-1" aria-labelledby="modalDeleteProduit" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <!-- modal header  -->
                 <div class="modal-header bg-danger text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-user-circle-minus me-2"></i><?= __('forms.titles.delete_client') ?></h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-user-circle-minus me-2"></i><?= __('forms.titles.produit_delete') ?></h6>
                 </div>
                 <!-- modal body  -->
                 <div class="modal-body">
-                    <div class="message">Voulez-vous vraiment supprimer ces ... clients ?</div>
+                    <div class="message">Voulez-vous vraiment supprimer ces ... produits ?</div>
                 </div>
                 <!-- modal footer  -->
                 <div class="modal-footer d-flex flex-nowrap justify-content-end">
-                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-delete-client"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
-                    <button class="btn btn-primary btn-sm fw-bold" id="btn-confirm-modal-delete-client"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_delete') ?></button>
+                    <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-delete-produit"><i class="fad fa-x me-2"></i><?= __('forms.labels.no_cancel') ?></button>
+                    <button class="btn btn-primary btn-sm fw-bold" id="btn-confirm-modal-delete-produit"><i class="fad fa-check me-2"></i><?= __('forms.labels.yes_delete') ?></button>
                 </div>
             </div>
         </div>

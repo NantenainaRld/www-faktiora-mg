@@ -73,7 +73,8 @@ return [
         'produit_dashboard' => "Tableau de bord produit",
         'produit_list' => "Liste des produits",
         'produit_add' => "Ajout d'un produit",
-        'produit_update' => "Modification de produit"
+        'produit_update' => "Modification de produit",
+        'produit_delete' => "Suppréssion des produits"
     ],
     'labels' => [
         'all' => 'tout',
@@ -284,7 +285,9 @@ return [
         'sortie_number' => "Sortie numéro",
         'nb_stock' => "Nombre de stock",
         'quantite_vendu' => "Quantité vendue",
-        'total_vendu' => "Total vendue"
+        'total_vendu' => "Total vendue",
+        'question_delete_produit_1' => "Voulez-vous vraiment supprimé le produit avec l'ID <b>:field</b> ?",
+        'question_delete_produit_plur' => "Voulez-vous vraiment supprimé ces <b>:field</b> produits ?",
     ],
     'times' => [
         'minute' => "minute",

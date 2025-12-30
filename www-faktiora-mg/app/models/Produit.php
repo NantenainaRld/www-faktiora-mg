@@ -328,7 +328,7 @@ class Produit extends Database
         $response = ['message_type' => 'success', 'message' => 'success'];
 
         $placeholders = implode(', ', array_fill(0, count($ids_produit), '?'));
-        $sql = "UPDATE produit SET etat_produit = 'supprimé' WHERE id_produit IN ({$placeholders}) ";
+        $sql = "UPDATE produit SET etat_produit = 'supprimé' WHERE id_produit IN ({$placeholders}) AND etat_produit = 'actif' ";
 
         try {
 

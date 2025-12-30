@@ -92,5 +92,8 @@
         question_restore_sortie_1: "<?= __('forms.labels.question_restore_sortie_1') ?>",
         question_restore_sortie_plur: "<?= __('forms.labels.question_restore_sortie_plur') ?>",
         sortie_nums_ds_empty: "<?= __('messages.invalids.sortie_nums_ds_empty') ?>",
+        produit_ids_produit_empty: "<?= __('messages.invalids.produit_ids_produit_empty') ?>",
+        question_delete_produit_1: "<?= __('forms.labels.question_delete_produit_1') ?>",
+        question_delete_produit_plur: "<?= __('forms.labels.question_delete_produit_plur') ?>",
     }
 </script>
