@@ -777,6 +777,220 @@ document.addEventListener("DOMContentLoaded", async () => {
           });
       });
     }
+
+    //========================= DELETE PERMANENT PRODUIT =================
+    //btn delete permanent produit
+    const btnDeletePermanentProduit = container.querySelector(
+      "#btn-delete-permanent-produit"
+    );
+    //===== EVENT btn delete produit
+    if (btnDeletePermanentProduit) {
+      btnDeletePermanentProduit.addEventListener("click", () => {
+        //modal delete produit
+        const modalDeleteProduit = container.querySelector(
+          "#modal-delete-produit"
+        );
+        //selected produit
+        const selectedProduit = container.querySelectorAll(
+          "#tbody-produit input[type='checkbox']:checked"
+        );
+
+        //no selection
+        if (selectedProduit.length <= 0) {
+          //alert
+          const alertTemplate = document.querySelector(".alert-template");
+          const clone = alertTemplate.content.cloneNode(true);
+          const alert = clone.querySelector(".alert");
+          const progressBar = alert.querySelector(".progress-bar");
+          //alert type
+          alert.classList.add("alert-warning");
+          //icon
+          alert.querySelector(".fad").classList.add("fa-exclamation-circle");
+          //message
+          alert.querySelector(".alert-message").innerHTML =
+            lang.produit_ids_produit_empty;
+          //progress bar
+          progressBar.style.transition = "width 10s linear";
+          progressBar.style.width = "100%";
+
+          //add alert
+          container
+            .querySelector("#tbody-produit")
+            .closest("div")
+            .prepend(alert);
+
+          //progress launch animation
+          setTimeout(() => {
+            progressBar.style.width = "0%";
+          }, 10);
+          //auto close alert
+          setTimeout(() => {
+            alert.querySelector(".btn-close").click();
+          }, 10000);
+          return;
+        }
+
+        //modal message 1
+        if (selectedProduit.length === 1) {
+          modalDeleteProduit.querySelector(".message").innerHTML =
+            lang.question_delete_permanent_produit_1.replace(
+              ":field",
+              selectedProduit[0].closest("tr").dataset.idProduit
+            );
+        }
+        //modal message plur
+        else {
+          modalDeleteProduit.querySelector(".message").innerHTML =
+            lang.question_delete_permanent_produit_plur.replace(
+              ":field",
+              selectedProduit.length
+            );
+        }
+
+        //show modal delete produit
+        new bootstrap.Modal(modalDeleteProduit).show();
+
+        //==== EVENT btn confirm modal delete produit
+        modalDeleteProduit
+          .querySelector("#btn-confirm-modal-delete-produit")
+          .addEventListener("click", async () => {
+            try {
+              //ids_produit
+              let ids_produit = [...selectedProduit];
+              ids_produit = ids_produit.map(
+                (selected) => selected.closest("tr").dataset.idProduit
+              );
+
+              //FETCH api delete produit
+              const apiDeleteProduit = await apiRequest(
+                "/produit/delete_permanent_all_produit",
+                {
+                  method: "DELETE",
+                  body: {
+                    ids_produit: ids_produit,
+                  },
+                }
+              );
+
+              //error
+              if (apiDeleteProduit.message_type === "error") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiDeleteProduit.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalDeleteProduit.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+                return;
+              }
+              //invalid
+              else if (apiDeleteProduit.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  apiDeleteProduit.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalDeleteProduit.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                return;
+              }
+
+              //success
+              //alert
+              const alertTemplate = document.querySelector(".alert-template");
+              const clone = alertTemplate.content.cloneNode(true);
+              const alert = clone.querySelector(".alert");
+              const progressBar = alert.querySelector(".progress-bar");
+              //alert type
+              alert.classList.add("alert-success");
+              //icon
+              alert.querySelector(".fad").classList.add("fa-check-circle");
+              //message
+              alert.querySelector(".alert-message").innerHTML =
+                apiDeleteProduit.message;
+              //progress bar
+              progressBar.style.transition = "width 10s linear";
+              progressBar.style.width = "100%";
+
+              //add alert
+              container
+                .querySelector("#tbody-produit")
+                .closest("div")
+                .prepend(alert);
+
+              //progress launch animation
+              setTimeout(() => {
+                progressBar.style.width = "0%";
+              }, 10);
+              //auto close alert
+              setTimeout(() => {
+                alert.querySelector(".btn-close").click();
+              }, 10000);
+
+              //auto hide modal
+              modalDeleteProduit
+                .querySelector("#btn-close-modal-delete-produit")
+                .click();
+
+              //refresh filter produit
+              filterProduit(
+                selectStatus.value.trim(),
+                selectArrangeBy.value.trim(),
+                selectOrder.value.trim(),
+                inputSearch.value.trim()
+              );
+
+              return;
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      });
+    }
   }, 1050);
 
   //====================== FUNCTIONS ========================

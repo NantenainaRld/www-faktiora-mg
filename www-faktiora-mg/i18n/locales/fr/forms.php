@@ -288,6 +288,10 @@ return [
         'total_vendu' => "Total vendue",
         'question_delete_produit_1' => "Voulez-vous vraiment supprimé le produit avec l'ID <b>:field</b> ?",
         'question_delete_produit_plur' => "Voulez-vous vraiment supprimé ces <b>:field</b> produits ?",
+        'question_delete_permanent_produit_1' => "Voulez-vous vraiment supprimé le produit avec l'ID <b>:field</b> ?. <span class='text-danger'>Cette action est irréversible</span>.",
+        'question_delete_permanent_produit_plur' => "Voulez-vous vraiment supprimé ces <b>:field</b> produits ?. <span class='text-danger'>Cette action est irréversible</span>.",
+
+
     ],
     'times' => [
         'minute' => "minute",

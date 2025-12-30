@@ -506,8 +506,8 @@ class ProduitController extends Controller
         return;
     }
 
-    //action - permanent delete all produit
-    public function permanentDeleteAllProduit()
+    //action - delete permanent all produit
+    public function deletePermanentAllProduit()
     {
         header('Content-Type: application/json');
         $response = null;
@@ -546,8 +546,8 @@ class ProduitController extends Controller
 
             try {
 
-                //permanent delete all produit
-                $response = Produit::permanentDeleteAllProduit($ids_produit);
+                //delete permanent all produit
+                $response = Produit::deletePermanentAllProduit($ids_produit);
 
                 echo json_encode($response);
                 return;

@@ -380,8 +380,8 @@ class Produit extends Database
         return $response;
     }
 
-    //static - permanent delete all produit
-    public static function permanentDeleteAllProduit($ids_produit)
+    //static - delete permanent all produit
+    public static function deletePermanentAllProduit($ids_produit)
     {
         $response = ['message_type' => 'success', 'message' => 'success'];
 

@@ -63,8 +63,8 @@
                                                         <button class="btn btn-sm btn-outline-danger" id="btn-delete-produit"><i class="fad fa-user-circle-minus me-2">
                                                             </i><?= __('forms.labels.delete') ?>
                                                         </button>
-                                                        <!-- btn delete permanent client  -->
-                                                        <button class="btn btn-sm btn-danger" id="btn-delete-permanent-client"><i class="fad fa-user-circle-minus me-2">
+                                                        <!-- btn delete permanent produit  -->
+                                                        <button class="btn btn-sm btn-danger" id="btn-delete-permanent-produit"><i class="fad fa-user-circle-minus me-2">
                                                             </i><?= __('forms.labels.delete_permanent') ?>
                                                         </button>
                                                     <?php endif; ?>
@@ -274,7 +274,7 @@
             <div class="modal-content">
                 <!-- modal header  -->
                 <div class="modal-header bg-danger text-light">
-                    <h6 class="modal-title fw-bold"><i class="fad fa-user-circle-minus me-2"></i><?= __('forms.titles.produit_delete') ?></h6>
+                    <h6 class="modal-title fw-bold"><i class="fad fa-circle-minus me-2"></i><?= __('forms.titles.produit_delete') ?></h6>
                 </div>
                 <!-- modal body  -->
                 <div class="modal-body">
