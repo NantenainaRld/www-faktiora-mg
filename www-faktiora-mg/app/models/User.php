@@ -1126,6 +1126,34 @@ class User extends Database
         return $response;
     }
 
+    //static - ping
+    public static function ping($id_utilisateur)
+    {
+        $response = ['message_type' => 'success', 'message' => 'success'];
+
+        try {
+
+            $response = parent::executeQuery('UPDATE utilisateur SET dernier_session = NOW() WHERE id_utilisateur = :id_user', ['id_user' => $id_utilisateur]);
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' =>  $e->getMessage() .
+                    ' - Line : ' . $e->getLine() .
+                    ' - File : ' . $e->getFile()
+            ];
+
+            return $response;
+        }
+
+        return $response;
+    }
+
     //====================== PRIVATE FUNCTION ====================
 
     //static - is email_utilisateur exist?

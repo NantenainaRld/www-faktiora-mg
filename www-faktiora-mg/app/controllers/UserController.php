@@ -1539,4 +1539,34 @@ class UserController extends Controller
         echo json_encode($response);
         return;
     }
+
+    //action - ping
+    public function ping()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //loged ?
+        $is_loged_in = Auth::isLogedIn();
+
+        //not loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to login page
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+
+        //ping
+        $response = User::ping($is_loged_in->getIdUtilisateur());
+
+        //error
+        if ($response['message_type'] === 'error') {
+            //redirect to error page
+            header('Location: ' . SITE_URL . '/error?messages=' . $response['message']);
+            return;
+        }
+
+        echo json_encode($response);
+        return;
+    }
 }

@@ -218,9 +218,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           });
       });
+
+    //================== PING ====================
+    ping();
+    setInterval(ping, 1000 * 60 * 2);
   }, 1000);
 
   //======================== FUNCTIONS ==================
+  //function - account info
   async function accountInfo() {
     try {
       //get account info
@@ -261,6 +266,15 @@ document.addEventListener("DOMContentLoaded", () => {
           aUserNumCaisse.innerHTML = accountInfo.data.num_caisse;
         }
       }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  //function - ping
+  async function ping() {
+    try {
+      //api ping
+      const apiPing = await apiRequest("/user/ping");
     } catch (e) {
       console.log(e);
     }

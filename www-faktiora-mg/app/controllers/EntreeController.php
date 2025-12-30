@@ -55,7 +55,7 @@ class EntreeController extends Controller
                 ];
 
                 //redirect to error page
-                header('Location: ' . SITE_URL . '/errors?messages=' . $response['message']);
+                header('Location: ' . SITE_URL . '/error?messages=' . $response['message']);
 
                 return;
             }
@@ -92,7 +92,7 @@ class EntreeController extends Controller
                 //currency_units not found
                 if (!isset($config['currency_units'])) {
                     //redirect to error page 
-                    header('Location:' . SITE_URL . '/errors?messages=' . __('errors.not_found.json', ['field' => 'currency_units']));
+                    header('Location:' . SITE_URL . '/error?messages=' . __('errors.not_found.json', ['field' => 'currency_units']));
 
                     return;
                 }
