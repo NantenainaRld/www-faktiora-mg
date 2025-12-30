@@ -51,6 +51,7 @@ return [
         'facture_delete' => "Supprésion des factures",
         'facture_restore' => "Récupération des factures",
         'ligne_facture' => "Lignes de facture",
+        'facture_update' => "Modification de facture",
         'autre_entree_dashboard' => "Tableau de bord autre entrée",
         'ae_list' => "Liste des autres entrées",
         'ae_add' => "Ajout d'une autre entrée",

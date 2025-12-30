@@ -413,6 +413,37 @@
             </div>
         </div>
     </div>
+    <!-- modal update facture -->
+    <div class="modal fade" id="modal-update-facture" tabindex="-1" aria-labelledby="modalUpdateFacture" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <!-- modal header  -->
+                <div class="modal-header bg-green-0 text-light">
+                    <h6 class="modal-title fw-bold"><i class="fad fa-pen-to-square me-2"></i><?= __('forms.titles.facture_update') ?></h6>
+                </div>
+                <form>
+                    <!-- modal body  -->
+                    <div class="modal-body">
+                        <!-- num_facture -->
+                        <div class="mb-2 text-center fw-bold text-secondary" id="update-facture-num-facture"></div>
+                        <!-- input - update facture date_facture -->
+                        <div class="mb-2">
+                            <label for="input-update-facture-date-facture" class="form-label"><?= __('forms.labels.date') ?> <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text text-success"><i class="fad fa-calendar"></i></span>
+                                <input type="datetime-local" class="form-control form-control-sm" id="input-update-facture-date-facture" required>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- modal footer  -->
+                    <div class="modal-footer d-flex flex-nowrap justify-content-end">
+                        <button class="btn btn-outline-secondary btn-sm fw-bold" data-bs-dismiss="modal" type="button" id="btn-close-modal-update-facture"><i class="fad fa-x me-2"></i><?= __('forms.labels.cancel') ?></button>
+                        <button class="btn btn-primary btn-sm fw-bold" type="submit" id="btn-confirm-update-facture"><i class="fad fa-floppy-disk me-2"></i><?= __('forms.labels.save') ?></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <!-- modal correction facture -->
     <div class="modal fade" id="modal-correction-facture" tabindex="-1" aria-labelledby="modalCorrectionFacture" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
