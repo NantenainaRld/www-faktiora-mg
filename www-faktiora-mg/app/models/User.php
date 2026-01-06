@@ -525,6 +525,47 @@ class User extends Database
         }
     }
 
+    //update etat_utilisateur to connected
+    public static function logOut($id_utilisateur)
+    {
+        $response = [
+            'message_type' => 'success',
+            'message' => 'success',
+        ];
+
+        try {
+
+            $response = parent::executeQuery("UPDATE utilisateur SET etat_utilisateur = 'déconnécté' WHERE id_utilisateur = :id ", ['id' => $id_utilisateur]);
+
+            //error
+            if ($response['message_type'] === 'error') {
+                return $response;
+            }
+            $response = [
+                'message_type' => 'success',
+                'message' => 'success',
+            ];
+
+            return $response;
+        } catch (Throwable $e) {
+            error_log($e->getMessage() .
+                ' - Line : ' . $e->getLine() .
+                ' - File : ' . $e->getFile());
+
+            $response = [
+                'message_type' => 'error',
+                'message' => __(
+                    'errors.catch.auth_loginUser',
+                    ['field' => $e->getMessage() .
+                        ' - Line : ' . $e->getLine() .
+                        ' - File : ' . $e->getFile()]
+                )
+            ];
+
+            return $response;
+        }
+    }
+
 
     //update account
     public function updateAccount()

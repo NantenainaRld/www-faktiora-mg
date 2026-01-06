@@ -562,7 +562,7 @@
                             </li>
                             <!-- btn logout  -->
                             <li class="nav-item mt-3 mb-1">
-                                <button type="button" class="btn btn-light btn-sm"><i class="fad fa-arrow-left-from-bracket me-2"></i><?= __('forms.labels.logout') ?></button>
+                                <a href="<?= SITE_URL ?>/auth/log_out" type="button" class="btn btn-light btn-sm"><i class="fad fa-arrow-left-from-bracket me-2"></i><?= __('forms.labels.logout') ?></a>
                             </li>
                         </ul>
                     </div>

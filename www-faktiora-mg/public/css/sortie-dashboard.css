@@ -23,7 +23,6 @@ table {
 /* th */
 table th {
   border-bottom: 2px solid white !important;
-  border-radius: 12px;
 }
 
 /* td  */

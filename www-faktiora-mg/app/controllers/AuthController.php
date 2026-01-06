@@ -270,6 +270,12 @@ class AuthController extends Controller
                         echo json_encode($response);
                         return;
                     }
+
+                    //update to connected
+                    $user_model = new User();
+                    $user_model->setIdUtilsateur($is_loged_in->getIdUtilisateur());
+                    $user_model->updateToConnected();
+
                     //redirect to user home
                     header('Location: ' . SITE_URL . '/user/page_home');
                     return;
@@ -610,5 +616,30 @@ class AuthController extends Controller
             header('Location: ' . SITE_URL . '/auth/page_signup');
             return;
         }
+    }
+
+
+    //action - signup
+    public function logOut()
+    {
+        header('Content-Type: application/json');
+        $response = null;
+
+        //is loged in
+        $is_loged_in  = Auth::isLogedIn();
+        //loged
+        if (!$is_loged_in->getLoged()) {
+            //redirect to user index
+            header('Location: ' . SITE_URL . '/auth');
+            return;
+        }
+
+        User::logOut($is_loged_in->getIdUtilisateur());
+
+        session_destroy();
+
+        header('Location: ' . SITE_URL . '/auth/page_login');
+
+        return;
     }
 }
