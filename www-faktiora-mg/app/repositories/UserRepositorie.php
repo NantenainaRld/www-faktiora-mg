@@ -278,7 +278,7 @@ class UserRepositorie extends Database
                     $data['etat_utilisateur'] = 'connected';
                 }
                 //count disconnected
-                elseif ($data['minutes_ago'] > 0 && $data['etat_utilisateur'] === 'déconnecté') {
+                elseif ($data['minutes_ago'] >= 0 && $data['etat_utilisateur'] === 'déconnecté') {
                     $nb_disconnected++;
                     $data['etat_utilisateur'] = 'disconnected';
                 }

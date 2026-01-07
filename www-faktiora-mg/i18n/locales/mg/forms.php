@@ -84,6 +84,8 @@ return [
         'user_restore' => "Famerena ny mpampiasa",
         'account_update' => "Fanovan\'ny fampahalalana kaonty",
         'change_lang' => "Fanovan\'ny fiteny",
+        'delete_account' => "Fafaina ny kaonty"
+
     ],
     'labels' => [
         'all' => 'rehetra',
@@ -325,18 +327,18 @@ return [
         'mg' => 'Malagasy',
         'en' => 'Anglisy'
     ],
- 'placeholders' => [
-    'email' => 'anarana@faktiora.mg',
-    'search_lc' => "ID tsanganana vata, ID mpampiasa",
-    'search_client' => "ID, anarana na fanampin\'anarana, finday, adiresy",
-    'search_facture' => "isa faktiora, ID mpanjifa",
-    'search_ae' => "isa fidirana hafa, teny fanehoana",
-    'libelle_ae' => "ohatra: fampindramam-bola",
-    'correction_inflow' => "fanampinam-bola hafa",
-    'correction_outflow' => "fihenam-bola",
-    'libelle_article' => "ohatra: fividianana solika",
-    'search_produit' => "ID vokatra, teny fanehoana vokatra",
-    'libelle_produit' => "ohatra: divay",
-    'search_article' => "ID singa, teny fanehoana singa"
-]
+    'placeholders' => [
+        'email' => 'anarana@faktiora.mg',
+        'search_lc' => "ID tsanganana vata, ID mpampiasa",
+        'search_client' => "ID, anarana na fanampin\'anarana, finday, adiresy",
+        'search_facture' => "isa faktiora, ID mpanjifa",
+        'search_ae' => "isa fidirana hafa, teny fanehoana",
+        'libelle_ae' => "ohatra: fampindramam-bola",
+        'correction_inflow' => "fanampinam-bola hafa",
+        'correction_outflow' => "fihenam-bola",
+        'libelle_article' => "ohatra: fividianana solika",
+        'search_produit' => "ID vokatra, teny fanehoana vokatra",
+        'libelle_produit' => "ohatra: divay",
+        'search_article' => "ID singa, teny fanehoana singa"
+    ]
 ];

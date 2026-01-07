@@ -1179,7 +1179,7 @@ class UserController extends Controller
             return;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
 
             try {
 

@@ -2,216 +2,214 @@
 
 return [
     'catch' => [
-        'router' => DEBUG ? "Fahadisoana : :field" : "Nisy fahadisoana nitranga tamin'ny fitantanana ny lalana.",
-        'database' => DEBUG ? "Fahadisoana amin'ny fandraisana fifandraisana amin'ny tahirin-kevitra : :field" : "Fahadisoana amin'ny fandraisana fifandraisana amin'ny tahirin-kevitra.",
-        'query' => DEBUG ? "Fahadisoana amin'ny fangatahana : :field" : "Fahadisoana amin'ny fandraisana fifandraisana amin'ny mpizara.",
-        'correction' => DEBUG ? "Fahadisoana fanitsiana : :field" : "Nisy fahadisoana nitranga tamin'ny fanitsiana",
+        'router' => DEBUG ? "Tsy fetezana teo amin'ny `routeur` : :field" : "Nisy tsy fetezana nitranga teo amin'ny fandaminana ny rohy.",
+        'database' => DEBUG ? "Tsy fetezana teo amin'ny fifandraisana amin'ny `base de données`: :field" : "Nisy tsy fetezana nitranga teo amin'ny fifandraisana amin'ny `base de données`.",
+        'query' => DEBUG ? "Tsy fetezana teo amin'ny fangatahana any amin'ny `base de données` : :field" : "Nisy tsy fetezana nitranga teo amin'ny fangatahana any amin'ny `base de données`.",
+        'correction' => DEBUG ? "Tsy fetezana teo amin'ny fanitsiana : :field" : "Nisy fetezana nitranga teo amin'ny fanitsiana.",
         //user - create default admin
-        'user_createDefaultAdmin' => DEBUG ? "Fahadisoana ao amin'ny user/createDefaultAdmin : :field" : "Nisy fahadisoana nitranga tamin'ny famoronana kaonty admin tsotra",
+        'user_createDefaultAdmin' => DEBUG ? "Tsy fetezana teo amin'ny user/createDefaultAdmin : :field" : "Nisy tsy fetezana nitranga teo amin'ny famoronana kaonty ho an'i tomponandraikitra fototra.",
         //auth - is loged in
-        'auth_isLogedIn' => DEBUG ? "Fahadisoana ao amin'ny auth/isLogedIn : :field" : "Nisy fahadisoana nitranga",
+        'auth_isLogedIn' => DEBUG ? "Tsy fetezana teo amin'ny auth/isLogedIn : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana fa efa tafiditra ny mpampiasa.",
         //auth - login
-        'auth_loginUser' => DEBUG ? "Fahadisoana ao amin'ny auth/loginUser : :field" : "Nisy fahadisoana nitranga tamin'ny fidirana",
+        'auth_loginUser' => DEBUG ? "Tsy fetezana teo ami'ny auth/loginUser : :field" : "Nisy tsy fetezana nitranga nandritra ny fidirana.",
         //user - create user
-        'user_createUser' => DEBUG ? "Fahadisoana ao amin'ny user/createUser : :field" : "Nisy fahadisoana nitranga tamin'ny famoronana kaonty",
+        'user_createUser' => DEBUG ? "Tsy fetezana teo amin'ny user/createUser : :field" : "Nisy tsy fetezana nitranga teo amin'ny famoronana kaonty.",
         //user - is email user exist
-        'user_isEmailUserExist' => DEBUG ? "Fahadisoana ao amin'ny user/isEmailUserExist : :field" : "Nisy fahadisoana nitranga tamin'ny fanamarinana ny adiresy mailaka",
+        'user_isEmailUserExist' => DEBUG ? "Tsy fetezana teo amin'ny user/isEmailUserExist : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana ny adiresy mailaka.",
         //user - filter user
-        'user_filterUser' => DEBUG ? "Fahadisoana ao amin'ny user/filterUser : :field" : "sNisy fahadisoana nitranga tamin'ny fanisana ny mpampiasa",
+        'user_filterUser' => DEBUG ? "Tsy fetezana teo amin'ny user/filterUser : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny mpampiasa.",
         //user - list caissier
-        'user_listCaissier' => DEBUG ? "Fahadisoana ao amin'ny user/listCaissier : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny mpitahiry vola",
+        'user_listCaissier' => DEBUG ? "Tsy fetezana teo amin'ny user/listCaissier : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny mpikajy vola.",
         //user find by id
-        'user_findById' => DEBUG ? "Fahadisoana ao amin'ny user/findById : :field" : "Nisy fahadisoana nitranga tamin'ny fanamarinana ny ID mpampiasa",
+        'user_findById' => DEBUG ? "Tsy fetezana teo amin'ny user/findById : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana ny ID-n'ny mpampiasa.",
         //user update
-        'user_update' => DEBUG ? "Fahadisoana ao amin'ny user/update : :field" : "Nisy fahadisoana nitranga tamin'ny fanovana ny fampahalalana mpampiasa",
+        'user_update' => DEBUG ? "Tsy fetezana teo amin'ny user/update : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanovana ny mombamomba ny mpampiasa.",
         //user - is email user exist
-        'user_isEmailUserExist' => DEBUG ? "Fahadisoana ao amin'ny user/isEmailUserExist : :field" : "Nisy fahadisoana nitranga",
+        'user_isEmailUserExist' => DEBUG ? "Tsy fetezana teo amin'ny user/isEmailUserExist : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana ny adiresy mailaka-n'ny mpampiasa.",
         //user - delete account
-        "user_deleteAccount" => DEBUG ? "Fahadisoana ao amin'ny user/deleteAccount : :field" : "Nisy fahadisoana nitranga tamin'ny famafana kaonty",
+        "user_deleteAccount" => DEBUG ? "Tsy fetezana teo amin'ny user/deleteAccount : :field" : "Nisy tsy fetezana nitranga teo amin'ny famafana ny kaonty.",
         //user - delete all
-        'user_deleteAll' => DEBUG ? "Fahadisoana ao amin'ny user/deleteAll : :field" : "Nisy fahadisoana nitranga tamin'ny famafana ny mpampiasa",
+        'user_deleteAll' => DEBUG ? "Tsy fetezana teo amin'ny user/deleteAll : :field" : "Nisy tsy fetezana nitranga teo amin'ny famafana an'ireo mpampiasa.",
         //user - deconnect all
-        'user_deconnectAll' => DEBUG ? "Fahadisoana ao amin'ny user/deconnectAll : :field" : "Nisy fahadisoana nitranga tamin'ny fanalana ny fifandraisana ny mpampiasa",
+        'user_deconnectAll' => DEBUG ? "Tsy fetezana amin'ny user/deconnectAll : :field" : "Nisy tsy fetezana nitranga teo amin'ny famoahana an'ireo mpampiasa.",
         //user - find by email
-        'user_findByEmail' => DEBUG ? "Fahadisoana ao amin'ny user/findByEmail : :field" : "Nisy fahadisoana nitranga tamin'ny fanamarinana ny adiresy mailaka mpampiasa",
+        'user_findByEmail' => DEBUG ? "Tsy fetezana teo amin'ny user/findByEmail : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana ny mpampiasa tamin'ny alalan'ny adiresy mailaka.",
         //user - list all user
-        'user_listAllUser' => DEBUG ? "Fahadisoana ao amin'ny user/listAllUser : :field" : "Nisy fahadisoana nitranga tamin'ny fandraisana ny lisitry ny mpampiasa",
+        'user_listAllUser' => DEBUG ? "Tsy fetezana teo amin'ny user/listAllUser : :field" : "Nisy tsy fetezana nitranga teo amin'ny fakana ny lisitry ny mpampiasa.",
         //user - print all user
-        'user_printAllUser' => DEBUG ? "Fahadisoana ao amin'ny user/printAllUser : :field" : "Nisy fahadisoana nitranga tamin'ny famokarana PDF ho an'ny lisitry ny mpampiasa",
+        'user_printAllUser' => DEBUG ? "Tsy fetezana teo amin'ny user/printAllUser : :field" : "Nisy tsy fetezana nitranga tamin'ny famoronana ny PDF ho an'ny lisitry ny mpampiasa.",
         //user - restore all user
-        'user_restoreAllUser' => DEBUG ? "Fahadisoana ao amin'ny user/restoreAllUser : :field" : "Nisy fahadisoana nitranga tamin'ny famerenana ny mpampiasa",
+        'user_restoreAllUser' => DEBUG ? "Tsy fetezana teo amin'ny user/restoreAllUser : :field" : "Nisy fetezana nitranga teo amin'ny famerenana ny mpampiasa.",
         //caisse - create caisse
-        'caisse_createCaisse' => DEBUG ? "Fahadisoana ao amin'ny caisse/createCaisse : :field" : "Fahadisoana tamin'ny famoronana vata fitehirizam-bola",
+        'caisse_createCaisse' => DEBUG ? "Tsy fetezana teo amin'ny caisse/createCaisse : :field" : "Nisy tsy fetezana nitranga teo amin'ny famoronana ny toeram-pandrotsaham-bola.",
         //caisse - is num caisse exist
-        'caisse_isNumCaisseExist' => DEBUG ? "Fahadisoana ao amin'ny caisse/isNumCaisseExist : :field" : "Nisy fahadisoana nitranga tamin'ny fanamarinana ny isa vata fitehirizam-bola",
+        'caisse_isNumCaisseExist' => DEBUG ? "Tsy fetezana teo amin'ny caisse/isNumCaisseExist : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana ny laharan'ny toeram-pandrotsaham-bola.",
         //caisse - filter caisse
-        'caisse_filterCaisse' => DEBUG ? "Fahadisoana ao amin'ny caisse/filterCaisse : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny vata fitehirizam-bola",
+        'caisse_filterCaisse' => DEBUG ? "Tsy fetezana teo amin'ny caisse/filterCaisse : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny toeram-pandrotsaham-bola.",
         //caisse - find by id
-        'caisse_findById' => DEBUG ? "Fahadisoana ao amin'ny caisse/findById : :field" : "Nisy fahadisoana nitranga tamin'ny fanamarinana ny isa vata fitehirizam-bola",
+        'caisse_findById' => DEBUG ? "Tsy fetezana teo amin'ny caisse/findById : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana ny laharan'ny toeram-pandrotsaham-bola.",
         //caisse - filter ligne caisse
-        'caisse_filterLigneCaisse' => DEBUG ? "Fahadisoana ao amin'ny caisse/filterLigneCaisse : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny tsanganana vata fitehirizam-bola",
+        'caisse_filterLigneCaisse' => DEBUG ? "Tsy fetezana teo amin'ny caisse/filterLigneCaisse : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny fitantanana ny toeram-pandrotsaham-bola.",
         //caisse - update caisse
-        'caisse_updateCaisse' => DEBUG ? "Fahadisoana ao amin'ny caisse/updateCaisse : :field" : "Nisy fahadisoana nitranga tamin'ny fanovana ny fampahalalana vata fitehirizam-bola",
+        'caisse_updateCaisse' => DEBUG ? "Tsy fetezana teo amin'ny caisse/updateCaisse : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanovana ny mombamomba ny toeram-pandrotsaham-bola.",
         //caisse - list free caisse
-        'caisse_listFreeCaisse' => DEBUG ? "Fahadisoana ao amin'ny caisse/listFreeCaisse : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny vata fitehirizam-bola malalaka",
+        'caisse_listFreeCaisse' => DEBUG ? "Tsy fetezana teo amin'ny caisse/listFreeCaisse : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny toeram-pandrotsaham-bola malalaka.",
         //caisse - list all caisse
-        'caisse_listAllCaisse' => DEBUG ? "Fahadisoana ao amin'ny caisse/listAllCaisse : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny vata fitehirizam-bola rehetra",
-        //caisse - delete all
-        'caisse_deleteAll' => DEBUG ? "Fahadisoana ao amin'ny caisse/deleteAll : :field" : "Nisy fahadisoana nitranga tamin'ny famafana ny vata fitehirizam-bola",
+        'caisse_listAllCaisse' => DEBUG ? "Tsy fetezana teo amin'ny caisse/listAllCaisse : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny toeram-pandrotsaham-bola rehetra.",
+        //caisse - delete all caisse
+        'caisse_deleteAll' => DEBUG ? "Tsy fetezana teo amin'ny caisse/deleteAll : :field" : "Nisy tsy fetezana nitranga teo amin'ny famafana an'ireo toeram-pandrotsaham-bola.",
         //caisse - delete all ligne caisse
-        'caisse_deleteAllLigneCaisse' => DEBUG ? "Fahadisoana ao amin'ny caisse/deleteAllLigneCaisse : :field" : "Nisy fahadisoana nitranga tamin'ny famafana ny tsanganana vata fitehirizam-bola",
+        'caisse_deleteAllLigneCaisse' => DEBUG ? "Tsy fetezana teo  amin'ny caisse/deleteAllLigneCaisse : :field" : "Nisy tsy fetezana nitranga teo amin'ny famafana an'ireo andalana ao amin'ny fitantanana ny toeram-pandrotsaham-bola.",
         //caisse - add ligne caisse
-        'caisse_addLigneCaisse' => DEBUG ? "Fahadisoana ao amin'ny caisse/addLigneCaisse : :field" : "Nisy fahadisoana nitranga tamin'ny fanampiana tsanganana vata fitehirizam-bola",
+        'caisse_addLigneCaisse' => DEBUG ? "Tsy fetezana teo amin'ny caisse/addLigneCaisse : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanampiana ny andalana ao amin'ny fitantanana ny toeram-pandrotsaham-bola.",
         //caisse - find by id ligne caisse
-        'caisse_findByIdLc' => DEBUG ? "Fahadisoana ao amin'ny caisse/findByIdLc : :field" : "Nisy fahadisoana nitranga tamin'ny fanamarinana ny ID isa vata fitehirizam-bola",
+        'caisse_findByIdLc' => DEBUG ? "Tsy fetezana teo amin'ny caisse/findByIdLc : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana ny andalana ao amin'ny fitantanana ny toeram-pandrotsaham-bola.",
         //caisse - is date interval exist ?
-        'caisse_isDateIntervalExist' => DEBUG ? "Fahadisoana ao amin'ny caisse/isDateIntervalExist : :field" : "Nisy fahadisoana nitranga tamin'ny fanamarinana ny datin'ny tsanganana vata fitehirizam-bola",
+        'caisse_isDateIntervalExist' => DEBUG ? "Tsy fetezana teo amin'ny caisse/isDateIntervalExist : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana ny daty ao amin'ny andalana ao amin'ny fitantanana ny toeram-pandrotsaham-bola.",
         //caisse - create ligne caisse
-        'caisse_createLigneCaisse' => DEBUG ? "Fahadisoana ao amin'ny caisse/createLigneCaisse : :field" : "Nisy fahadisoana nitranga tamin'ny famoronana tsanganana vata fitehirizam-bola",
+        'caisse_createLigneCaisse' => DEBUG ? "Tsy fetezana teo amin'ny caisse/addLigneCaisse : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanampiana ny andalana ao amin'ny fitantanana ny toeram-pandrotsaham-bola.",
         //caisse - close ligne caisse
-        'caisse_closeLigneCaisse' => DEBUG ? "Fahadisoana ao amin'ny caisse/closeLigneCaisse : :field" : "Nisy fahadisoana nitranga tamin'ny fanakatonana tsanganana vata fitehirizam-bola",
+        'caisse_closeLigneCaisse' => DEBUG ? "Tsy fetezana teo amin'ny caisse/closeLigneCaisse : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanakatonana ny andalana ao amin'ny fitantanana ny toeram-pandrotsaham-bola.",
         //caisse - occup caisse
-        'caisse_occupCaisse' => DEBUG ? "Fahadisoana ao amin'ny caisse/occupCaisse : :field" : "Nisy fahadisoana nitranga tamin'ny fakan'ny vata fitehirizam-bola",
+        'caisse_occupCaisse' => DEBUG ? "Tsy fetezana amin'ny caisse/occupCaisse : :field" : "Nisy tsy fetezana nitranga teo amin'ny fandraisana ny toeram-pandrotsaham-bola.",
         //caisse - update etat caisse
-        'caisse_updateEtatCaisse' => DEBUG ? "Fahadisoana ao amin'ny caisse/updateEtatCaisse : :field" : "Nisy fahadisoana nitranga tamin'ny fanavaozana ny toetry ny vata fitehirizam-bola",
+        'caisse_updateEtatCaisse' => DEBUG ? "Tsy fetezana teo amin'ny caisse/updateEtatCaisse : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanavaozana ny toetry ny toeram-pandrotsaham-bola.",
         //caisse - quit caisse
-        'caisse_quitCaisse' => DEBUG ? "Fahadisoana ao amin'ny caisse/quitCaisse : :field" : "Nisy fahadisoana nitranga tamin'ny famotsorana vata fitehirizam-bola",
+        'caisse_quitCaisse' => DEBUG ? "Tsy fetezana teo amin'ny caisse/quitCaisse : :field" : "Nisy tsy fetezana nitranga teo amin'ny famelana ny toeram-pandrotsaham-bola.",
         //caisse - free caisse
-        'caisse_freeCaisse' => DEBUG ? "Fahadisoana ao amin'ny caisse/freeCaisse : :field" : "Nisy fahadisoana nitranga tamin'ny famotsorana ny vata fitehirizam-bola",
-        //caisse - is id lc exist 
-        'caisse_isIdLcExist' => DEBUG ? "Fahadisoana ao amin'ny caisse/isIdLcExist : :field" : "Nisy fahadisoana nitranga",
+        'caisse_freeCaisse' => DEBUG ? "Tsy fetezana teo amin'ny caisse/quitCaisse : :field" : "Nisy tsy fetezana nitranga teo amin'ny famelana an'ireo toeram-pandrotsaham-bola.",
         //caisse - update ligne caisse
-        'caisse_updateLigneCaisse' => DEBUG ? "Fahadisoana ao amin'ny caisse/updateLigneCaisse : :field" : "Nisy fahadisoana nitranga tamin'ny fanovana tsanganana vata fitehirizam-bola",
+        'caisse_updateLigneCaisse' => DEBUG ? "Tsy fetezana teo amin'ny caisse/updateLigneCaisse : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanovana ny mombamomba ny andalana ao amin'ny fitantanana ny toeram-pandrotsaham-bola.",
         //caisse - find caisse
-        'caisse_findCaisse' => DEBUG ? "Fahadisoana ao amin'ny caisse/findCaisse : :field" : "Nisy fahadisoana nitranga tamin'ny fanamarinana ny vata fitehirizam-bolan'ny mpampiasa",
+        'caisse_findCaisse' => DEBUG ? "Tsy fetezana teo amin'ny caisse/findCaisse : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana toeram-pandrotsaham-bolan'ny mpampiasa.",
         //caisse - update solde
-        'caisse_updateSolde' => DEBUG ? "Fahadisoana ao amin'ny caisse/updateSolde : :field" : "Nisy fahadisoana nitranga tamin'ny fanavaozana ny vola ao amin'ny vata fitehirizam-bola",
+        'caisse_updateSolde' => DEBUG ? "Tsy fetezana teo amin'ny caisse/updateSolde : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanavaozana ny vola ao amin'ny toeram-pandrotsaham-bola.",
         //caisse - cash report
-        'caisse_cashReport' => DEBUG ? "Fahadisoana ao amin'ny caisse/cashReport : :field" : "Nisy fahadisoana nitranga tamin'ny famokarana PDF tatitra vata fitehirizam-bola",
+        'caisse_cashReport' => DEBUG ? "Tsy fetezana teo amin'ny caisse/cashReport : :field" : "Nisy tsy fetezana nitranga teo amin'ny famoronana ny PDF ho an'ny tatitra ny toeram-pandrotsaham-bola.",
         //caisse - restore all
-        'caisse_restoreAll' => DEBUG ? "Fahadisoana ao amin'ny caisse/restoreAll : :field" : "Nisy fahadisoana nitranga tamin'ny famerenana ny vata fitehirizam-bola",
+        'caisse_restoreAll' => DEBUG ? "Tsy fetezana teo amin'ny caisse/restoreAll : :field" : "Nisy tsy fetezana nitranga teo amin'ny famerenana an'ireo toeram-pandrotsaham-bola.",
         //entree - create autre entree
-        'entree_createAutreEntree' => DEBUG ? "Fahadisoana ao amin'ny entree/createAutreEntree : :field" : "Nisy fahadisoana nitranga tamin'ny fanampiana fidirana hafa vaovao",
+        'entree_createAutreEntree' => DEBUG ? "Tsy fetezana teo amin'ny entree/createAutreEntree : :field" : "Nisy tsy fetezana nitranga teo amin'ny famoronana ny `vola miditra hafa`.",
         //entree - is num_ae exist 
-        'entree_isNumAeExist' => DEBUG ? "Fahadisoana ao amin'ny entree/isNumAeExist : :field" : "Nisy fahadisoana nitranga tamin'ny fanamarinana ny isa fidirana hafa",
+        'entree_isNumAeExist' => DEBUG ? "Tsy fetezana teo amin'ny entree/isNumAeExist : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana ny laharan'ny `vola miditra hafa`.",
         //entree - filter autre entree
-        'entree_filterAutreEntreeAdmin' => DEBUG ? "Fahadisoana ao amin'ny entree/filterAutreEntree : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny fidirana hafa",
+        'entree_filterAutreEntreeAdmin' => DEBUG ? "Tsy fetezana teo amin'ny entree/filterAutreEntree : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny `vola miditra hafa`.",
         //entree - list all autre entree
-        'entree_listAllAutreEntree' => DEBUG ? "Fahadisoana ao amin'ny entree/listAllAutreEntree : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny fidirana hafa rehetra",
+        'entree_listAllAutreEntree' =>  DEBUG ? "Tsy fetezana teo amin'ny entree/listAutreEntree : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny `vola miditra hafa` rehetra.",
         //entree - update autre entree
-        'entree_updateAutreEntree' => DEBUG ? "Fahadisoana ao amin'ny entree/updateAutreEntree : :field" : "Nisy fahadisoana nitranga tamin'ny fanovana fidirana hafa",
+        'entree_updateAutreEntree' => DEBUG ? "Tsy fetezana teo amin'ny entree/updateAutreEntree : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanovana ny mombamomba ny `vola midira hafa`.",
         //entree - find by id
-        'entree_findById' => DEBUG ? "Fahadisoana ao amin'ny entree/findById : :field" : "Nisy fahadisoana nitranga tamin'ny fanamarinana ny isa fidirana hafa",
+        'entree_findById' => DEBUG ? "Tsy fetezana teo amin'ny entree/findById : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana ny laharan'ny `vola miditra hafa`.",
         //entree - delete all autre entree
-        'entree_deleteAllAutreEntree' => DEBUG ? "Fahadisoana ao amin'ny entree/deleteAllAutreEntree : :field" : "Nisy fahadisoana nitranga tamin'ny famafana ny fidirana hafa",
+        'entree_deleteAllAutreEntree' => DEBUG ? "Tsy fetezana teo amin'ny entree/deleteAllAutreEntree : :field" : "Nisy tsy fetezana nitranga teo amin'ny famafana an'ireo `vola miditra hafa`.",
         //entree- list connection autre entree
-        'entree_listConnectionAutreEntree' => DEBUG ? "Fahadisoana ao amin'ny entree/listConnectionAutreEntree : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny fifandraisana ho an'ity fidirana hafa ity",
+        'entree_listConnectionAutreEntree' => DEBUG ? "Tsy fetezana teo amin'ny entree/listConnectionAutreEntree : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny fifandraisana ho an'ity `vola miditra hafa` ity.",
         //entree - connection autree entree
-        'entree_connectionAutreEntree' => DEBUG ? "Fahadisoana ao amin'ny entree/connectionAutreEntree : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny fifandraisana ho an'ny fidirana",
+        'entree_connectionAutreEntree' => DEBUG ? "Tsy fetezana teo amin'ny entree/connectionAutreEntree : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny fifandraisan'ny vola miditra.",
         //entree - create facture
-        'entree_createFacture' => DEBUG ? "Fahadisoana ao amin'ny entree/createFacture : :field" : "Nisy fahadisoana nitranga tamin'ny famoronana faktiora",
+        'entree_createFacture' => DEBUG ? "Tsy fetezana teo amin'ny entree/createFacture : :field" : "Nisy tsy fetezana nitranga teo amin'ny famoronana ny faktiora.",
         //entree - create ligne facture
-        'entree_createLigneFacture' => DEBUG ? "Fahadisoana ao amin'ny entree/createLigneFacture : :field" : "Nisy fahadisoana nitranga tamin'ny famoronana tsanganana faktiora",
+        'entree_createLigneFacture' => DEBUG ? "Tsy fetezana teo amin'ny entree/createLigneFacture : :field" : "Nisy tsy fetezana nitranga teo amin'ny famoronana ny andalana ho an'ny faktiora.",
         //entree - filter facture
-        'entree_filterFacture' => DEBUG ? "Fahadisoana ao amin'ny entree/filterFacture : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny faktiora",
+        'entree_filterFacture' => DEBUG ? "Tsy fetezana teo amin'ny entree/filterFacture : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny faktiora.",
         //entree - list all facture
-        'entree_listAllFacture' => DEBUG ? "Fahadisoana ao amin'ny entree/listAllFacture : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny faktiora rehetra",
+        'entree_listAllFacture' => DEBUG ? "Tsy fetezana teo amin'ny entree/listAllFacture : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny  faktiora rehetra.",
         //entree - ligne facture
-        'entree_ligneFacture' => DEBUG ? "Fahadisoana ao amin'ny entree/ligneFacture : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny tsanganana faktiora",
+        'entree_ligneFacture' => DEBUG ? "Tsy fetezana teo amin'ny entree/ligneFacture : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny andalana ao amin'ny faktiora.",
         //entree - facture find by id
-        'facture_findById' => DEBUG ? "Fahadisoana ao amin'ny entree_facture/findById : :field" : "Nisy fahadisoana nitranga tamin'ny fanamarinana ny isa faktiora",
+        'facture_findById' => DEBUG ? "Tsy fetezana teo amin'ny entree_facture/findById : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana ny laharan'ny faktiora.",
         //entree - list connection facture
-        'entree_listConnectionFacture' => DEBUG ? "Fahadisoana ao amin'ny entree/listConnectionFacture : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny fifandraisana ho an'ity faktiora ity",
+        'entree_listConnectionFacture' => DEBUG ? "Tsy fetezana teo amin'ny entree/listConnectionFacture : :field" : "Nisy tsy fetezana nitranaga teo amin'ny lisitry ny fifandraisana ho an'ity faktiora ity.",
         //entree - update facture
-        'entree_updateFacture' => DEBUG ? "Fahadisoana ao amin'ny entree/updateFacture : :field" : "Nisy fahadisoana nitranga tamin'ny fanovana faktiora",
+        'entree_updateFacture' => DEBUG ? "Tsy fetezana ao amin'ny entree/updateFacture : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanovana ny faktiora.",
         //entree - delete all facture
-        'entree_deleteAllFacture' => DEBUG ? "Fahadisoana ao amin'ny entree/deleteAllFacture : :field" : "Nisy fahadisoana nitranga tamin'ny famafana ny faktiora",
+        'entree_deleteAllFacture' => DEBUG ? "Tsy fetezana teo amin'ny entree/deleteAllFacture : :field" : "Nisy tsy fetezana nitranga teo amin'ny famafana an'ireo faktiora.",
         //entree - lf find by id
-        'entree_lf_findById' => DEBUG ? "Fahadisoana ao amin'ny entree_lf/findById : :field" : "Nisy fahadisoana nitranga tamin'ny fanamarinana ny ID tsanganana faktiora",
+        'entree_lf_findById' => DEBUG ? "Tsy fetezana teo amin'ny entree_lf/findById : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana ny ID-n'ny andalana ao amin'ny faktiora.",
         //entree - restore all facture
-        'entree_restoreAllFacture' => DEBUG ? "Fahadisoana ao amin'ny entree/restoreAllFacture : :field" : "Nisy fahadisoana nitranga tamin'ny famerenana ny faktiora",
+        'entree_restoreAllFacture' => DEBUG ? "Tsy fetezana teo amin'ny entree/restoreAllFacture : :field" : "Nisy tsy fetezana nitranga teo amin'ny famerenana an'ireo faktiora.",
         //entree - restore all ae
-        'entree_restoreAllAutreEntree' => DEBUG ? "Fahadisoana ao amin'ny entree/restoreAllAutreEntree : :field" : "Nisy fahadisoana nitranga tamin'ny famerenana ny fidirana hafa",
+        'entree_restoreAllAutreEntree' => DEBUG ? "Tsy fetezana teo amin'ny entree/restoreAllAutreEntree : :field" : "Nisy tsy fetezana nitranga teo amin'ny famerenana an'ireo `vola miditra hafa`.",
         //sortie - connection sortie
-        'sortie_connectionSortie' => DEBUG ? "Fahadisoana ao amin'ny sortie/connectionSortie : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny fifandraisana ho an'ny fivoahana",
+        'sortie_connectionSortie' => DEBUG ? "Tsy fetezana teo amin'ny sortie/connectionSortie : :field" : "Nisy tsy fetezana nitranga teo amin'ny vola mivoaka.",
         //sortie - create sortie 
-        'sortie_createSortie' => DEBUG ? "Fahadisoana ao amin'ny sortie/createSortie : :field" : "Nisy fahadisoana nitranga tamin'ny famoronana fivoahana",
+        'sortie_createSortie' => DEBUG ? "Tsy fetezana teo amin'ny sortie/createSortie : :field" : "Nisy tsy fetezana nitranga teo amin'ny famoronana ny vola mivoaka.",
         //sortie - create ligne_ds
-        'sortie_createLigneDs' => DEBUG ? "Fahadisoana ao amin'ny sortie/createLigneDs : :field" : "Nisy fahadisoana nitranga tamin'ny famoronana tsanganana fivoahana",
+        'sortie_createLigneDs' => DEBUG ? "Tsy fetezana teo amin'ny sortie/createLigneDs : :field" : "Nisy tsy fetezana nitranga teo amin'ny famoronana ny andalana ao amin'ny vola mivoaka.",
         //sortie - filter demande sortie
-        'sortie_filterDemandeSortie' => DEBUG ? "Fahadisoana ao amin'ny sortie/filterDemandeSortie : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny fivoahana",
+        'sortie_filterDemandeSortie' => DEBUG ? "Tsy fetezana teo amin'ny sortie/filterDemandeSortie : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny vola mivoaka.",
         //sortie - list connection sortie
-        'sortie_listConnectionSortie' => DEBUG ? "Fahadisoana ao amin'ny sortie/listConnectionSortie : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny fifandraisana ho an'ity fivoahana ity",
+        'sortie_listConnectionSortie' => DEBUG ? "Tsy fetezana teo amin'ny sortie/listConnectionSortie : :field" : "Nisy tsy fetezana nitranga teo amin'ny fifandraisana ho an'ity vola mivoaka ity.",
         //sortie - find by id
-        'sortie_findById' => DEBUG ? "Fahadisoana ao amin'ny sortie/findById : :field" : "Nisy fahadisoana nitranga tamin'ny fanamarinana ny isa fivoahana",
+        'sortie_findById' => DEBUG ? "Tsy fetezana teo amin'ny sortie/findById : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana ny laharan'ny vola mivoaka.",
         //sortie - ligne ds
-        'sortie_ligneDs' => DEBUG ? "Fahadisoana ao amin'ny sortie/ligneDs : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny tsanganana fivoahana",
+        'sortie_ligneDs' => DEBUG ? "Tsy fetezana teo amin'ny sortie/ligneDs : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny andalana ao amin'ny vola mivoaka.",
         //sortie - list all demande sortie
-        'sortie_listAllDemandeSortie' => DEBUG ? "Fahadisoana ao amin'ny sortie/listAllDemandeSortie : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny fivoahana rehetra",
+        'sortie_listAllDemandeSortie' => DEBUG ? "Tsy fetezana teo amin'ny sortie/listAllDemandeSortie : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny vola mivoaka rehetra.",
         //sortie - update demande sortie
-        'sortie_updateDemandeSortie' => DEBUG ? "Fahadisoana ao amin'ny sortie/updateDemandeSortie : :field" : "Nisy fahadisoana nitranga tamin'ny fanovana fivoahana",
+        'sortie_updateDemandeSortie' => DEBUG ? "Tsy fetezana teo amin'ny sortie/updateDemandeSortie : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanovana ny vola mivoaka.",
         //sortie - delete all demande sortie
-        'sortie_deleteAllDemandeSortie' => DEBUG ? "Fahadisoana ao amin'ny sortie/deleteAllDemandeSortie : :field" : "Nisy fahadisoana nitranga tamin'ny famafana ny fivoahana",
+        'sortie_deleteAllDemandeSortie' => DEBUG ? "Tsy fetezana teo amin'ny sortie/deleteAllDemandeSortie : :field" : "Nisy tsy fetezana nitranga teo amin'ny famafana an'ireo vola mivoaka.",
         //sortie - get montant_ds
-        'sortie_getMontantDs' => DEBUG ? "Fahadisoana ao amin'ny sortie/getMontantDs : :field" : "Nisy fahadisoana nitranga tamin'ny kajy ny volan'ny fivoahana",
+        'sortie_getMontantDs' => DEBUG ? "Tsy fetezana teo amin'ny sortie/getMontantDs : :field" : "Nisy tsy fetezana nitranga teo amin'ny fikajiana ny vola mivoaka.",
         //sortie - correction facture
-        'sortie_correctionFacture' => DEBUG ? "Fahadisoana ao amin'ny sortie/correctionFacture : :field" : "Nisy fahadisoana nitranga tamin'ny fanitsiana ny faktiora",
+        'sortie_correctionFacture' => DEBUG ? "Tsy fetezana teo amin'ny sortie/correctionFacture : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanitsiana ny faktiora.",
         //sortie - print demande sortie
-        'sortie_printDemandeSortie' => DEBUG ? "Fahadisoana ao amin'ny sortie/printDemandeSortie : :field" : "Nisy fahadisoana nitranga tamin'ny famokarana PDF fangatahana fivoahana",
+        'sortie_printDemandeSortie' => DEBUG ? "Tsy fetezana teo amin'ny sortie/printDemandeSortie : :field" : "Nisy tsy fetezana nitranga teo amin'ny famoronana ny PDF ho an'ny vola mivoaka.",
         //sortie - restore all demande sortie
-        'sortie_restoreAllDemandeSortie' => DEBUG ? "Fahadisoana ao amin'ny sortie/restoreAllDemandeSortie : :field" : "Nisy fahadisoana nitranga tamin'ny famerenana ny fivoahana",
+        'sortie_restoreAllDemandeSortie' => DEBUG ? "Tsy fetezana teo amin'ny sortie/restoreAllDemandeSortie : :field" : "Nisy tsy fetezana nitranga teo amin'ny famerenana an'ireo vola mivoaka.",
         //produit  - create produit
-        'produit_createProduit' => DEBUG ? "Fahadisoana ao amin'ny produit/createProduit : :field" : "Nisy fahadisoana nitranga tamin'ny fanampiana vokatra vaovao",
+        'produit_createProduit' => DEBUG ? "Tsy fetezana teo amin'ny produit/createProduit : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanampiana ny vokatra vaovao.",
         //produit - filter produit
-        'produit_filterProduit' => DEBUG ? "Fahadisoana ao amin'ny produit/filterProduit : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny vokatra",
+        'produit_filterProduit' => DEBUG ? "Tsy fetezana teo amin'ny produit/filterProduit : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny vokatra.",
         //produit - list all produit
-        'produit_listAllProduit' => DEBUG ? "Fahadisoana ao amin'ny produit/listAllProduit : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny vokatra rehetra",
+        'produit_listAllProduit' => DEBUG ? "Tsy fetezana teo amin'ny produit/listAllProduit : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny vokatra rehetra.",
         //produit - update produit
-        'produit_updateProduit' => DEBUG ? "Fahadisoana ao amin'ny produit/updateProduit : :field" : "Nisy fahadisoana nitranga tamin'ny fanovana vokatra",
+        'produit_updateProduit' => DEBUG ? "Tsy fetezana teo amin'ny produit/updateProduit : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanovana ny mombamomba ny vokatra.",
         //produit - find by id
-        'produit_findById' => DEBUG ? "Fahadisoana ao amin'ny produit/findById : :field" : "Nisy fahadisoana nitranga tamin'ny fanamarinana ny ID vokatra",
+        'produit_findById' => DEBUG ? "Tsy fetezana teo amin'ny produit/findById : :field" : "Nisy tsy fetezana teo amin'ny fanamarinana ny ID-n'ny vokatra.",
         //produit - delete all produit
-        'produit_deleteAllProduit' => DEBUG ? "Fahadisoana ao amin'ny produit/deleteAllProduit : :field" : "Nisy fahadisoana nitranga tamin'ny famafana ny vokatra",
+        'produit_deleteAllProduit' => DEBUG ? "Tsy fetezana teo amin'ny produit/deleteAllProduit : :field" : "Nisy tsy fetezana nitranga teo amin'ny famafana an'ireo vokatra.",
         //produit - update nb stock
-        'produit_updateNbStocke' => DEBUG ? "Fahadisoana ao amin'ny produit/updateNbStock : :field" : "Nisy fahadisoana nitranga tamin'ny fanavaozana ny isan'ny tahiry",
+        'produit_updateNbStocke' => DEBUG ? "Tsy fetezana teo amin'ny produit/updateNbStock : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanavozana ny isan'ny tahiry.",
         //produit - restore all produit
-        'produit_restoreAllProduit' => DEBUG ? "Fahadisoana ao amin'ny produit/restoreAllProduit : :field" : "Nisy fahadisoana nitranga tamin'ny famerenana ny vokatra",
+        'produit_restoreAllProduit' => DEBUG ? "Tsy fetezana teo amin'ny produit/restoreAllProduit : :field" : "Nisy tsy fetezana nitranga teo amin'ny famerenana an'ireo vokatra.",
         //article - create article
-        'article_createArticle' => DEBUG ? "Fahadisoana ao amin'ny article/createArticle : :field" : "Nisy fahadisoana nitranga tamin'ny fanampiana singa vaovao",
+        'article_createArticle' => DEBUG ? "Tsy fetezana teo amin'ny article/createArticle : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanampiana ny fandaniana.",
         //article - is libelle article exist
-        'article_isLibelleArticleExist' => DEBUG ? "Fahadisoana ao amin'ny article/isLibelleArticleExist : :field" : "Nisy fahadisoana nitranga tamin'ny fanamarinana ny singa",
+        'article_isLibelleArticleExist' => DEBUG ? "Tsy fetezana teo amin'ny article/isLibelleArticleExist : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana ny fandaniana.",
         //article - filter article
-        'article_filterArticle' => DEBUG ? "Fahadisoana ao amin'ny article/filterArticle : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny singa",
+        'article_filterArticle' => DEBUG ? "Tsy fetezana teo amin'ny article/filterArticle : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny  fandaniana.",
         //article - list all article
-        'article_listAllArticle' => DEBUG ? "Fahadisoana ao amin'ny article/listAllArticle : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny singa rehetra",
+        'article_listAllArticle' => DEBUG ? "Tsy fetezana teo amin'ny article/listAllArticle : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny fandaniana rehetra.",
         //article - update article
-        'article_updateArticle' => DEBUG ? "Fahadisoana ao amin'ny article/updateArticle : :field" : "Nisy fahadisoana nitranga tamin'ny fanovana singa",
+        'article_updateArticle' => DEBUG ? "Tsy fetezana teo amin'ny article/updateArticle : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanovana ny mombamomba ny fandaniana.",
         //article - find by id
-        'article_findById' => DEBUG ? "Fahadisoana ao amin'ny article/findById : :field" : "Nisy fahadisoana nitranga tamin'ny fanamarinana ny singa",
+        'article_findById' => DEBUG ? "Tsy fetezana teo amin'ny article/findById : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana ny ID-n'ny fandaniana.",
         //article - delete all article
-        'article_deleteAllArticle' => DEBUG ? "Fahadisoana ao amin'ny article/deleteAllArticle : :field" : "Nisy fahadisoana nitranga tamin'ny famafana ny singa",
+        'article_deleteAllArticle' => DEBUG ? "Tsy fetezana teo amin'ny article/deleteAllArticle : :field" : "Nisy tsy fetezana nitranga teo amin'ny famafana an'ireo fandaniana.",
         //article - restore all article
-        'article_restoreAllArticle' => DEBUG ? "Fahadisoana ao amin'ny article/restoreAllArticle : :field" : "Nisy fahadisoana nitranga tamin'ny famerenana ny singa",
+        'article_restoreAllArticle' => DEBUG ? "Tsy fetezana teo amin'ny article/restoreAllArticle : :field" : "Nisy tsy fetezana nitranga teo amin'ny famerenana an'ireo fandaniana.",
         //client - create client
-        'client_createClient' => DEBUG ? "Fahadisoana ao amin'ny client/createClient : :field" : "Nisy fahadisoana nitranga tamin'ny fanampiana mpanjifa",
+        'client_createClient' => DEBUG ? "Tsy fetezana teo amin'ny client/createClient : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanampiana ny mpanjifa.",
         //client - filter client
-        'client_filterClient' => DEBUG ? "Fahadisoana ao amin'ny client/filterClient : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny mpanjifa",
+        'client_filterClient' => DEBUG ? "Tsy fetezana teo amin'ny client/filterClient : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny mpanjifa.",
         //client - list all client
-        'client_listAllClient' => DEBUG ? "Fahadisoana ao amin'ny client/listAllClient : :field" : "Nisy fahadisoana nitranga tamin'ny fanisana ny mpanjifa rehetra",
+        'client_listAllClient' => DEBUG ? "Tsy fetezana teo amin'ny client/listAllClient : :field" : "Nisy tsy fetezana nitranga teo amin'ny lisitry ny mpanjifa rehetra.",
         //client - update client 
-        'client_updateClient' => DEBUG ? "Fahadisoana ao amin'ny client/updateClient : :field" : "Nisy fahadisoana nitranga tamin'ny fanovana ny fampahalalana mpanjifa",
+        'client_updateClient' => DEBUG ? "Tsy fetezana teo amin'ny client/updateClient : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanovana ny mombamomba ny mpanjifa.",
         //client - find by id
-        'client_findById' => DEBUG ? "Fahadisoana ao amin'ny client/findById : :field" : "Nisy fahadisoana nitranga tamin'ny fanamarinana ny ID mpanjifa",
+        'client_findById' => DEBUG ? "Tsy fetezana teo amin'ny client/findById : :field" : "Nisy tsy fetezana nitranga teo amin'ny fanamarinana ID-n'ny mpanjifa.",
         //client - delete all client
-        'client_deleteAllClient' => DEBUG ? "Fahadisoana ao amin'ny client/deleteAllClient : :field" : "Nisy fahadisoana nitranga tamin'ny famafana ny mpanjifa",
+        'client_deleteAllClient' => DEBUG ? "Tsy fetezana teo amin'ny client/deleteAllClient : :field" : "Nisy tsy fetezana nitranga teo amin'ny famafana an'ireo mpanjifa.",
         //client - restore all client
-        'client_restoreAllClient' => DEBUG ? "Fahadisoana ao amin'ny client/restoreAllClient : :field" : "Nisy fahadisoana nitranga tamin'ny famerenana ny mpanjifa",
+        'client_restoreAllClient' => DEBUG ? "Tsy fetezana teo amin'ny client/restoreAllClient : :field" : "Nisy tsy fetezana nitranga teo amin'ny famerenana ny mpanjifa.",
     ],
     'not_found' => [
-        'page' => "Tsy hita ny pejy nangatahana : :field",
-        'action' => "Tsy hita ny hetsika nangatahana : :field",
-        'class' => DEBUG ? "Fahadisoana fampidirana kilasy, tsy hita ny kilasy : :field" : "Nisy fahadisoana nitranga",
-        'config' => "Fahadisoana rakitra config : tsy voafaritra ny fanalahidy <b>:field</b>",
-        'json' => "Fahadisoana JSON : tsy misy ny fanalahidy <b>:field</b>"
+        'page' => "Tsy hita ny pejy nangatahina : :field",
+        'action' => "Tsy hita ny hetsika nangatahina : :field",
+        'class' => DEBUG ? "Tsy fetezana teo amin'ny fampdirana ny `classe`, tsy hita ny `classe` : :field" : "Nisy tsy fetezana nitranga.",
+        'config' => "Tsy fetezana teo amin'ny fikirakirana : tsy voafaritra ny fanalahidy <b>:field</b>.",
+        'json' => "Tsy fetezana teo amin'ny JSON : tsy misy ny fanalahidy <b>:field</b>."
     ]
 ];

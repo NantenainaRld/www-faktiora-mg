@@ -659,7 +659,7 @@ class User extends Database
         ];
 
         try {
-            $response = parent::executeQuery("UPDATE utilisateur SET etat_utilisateur = 'supprimé' WHERE id_utilisateur = :id", ['id' => $this->id_utilisateur]);
+            $response = parent::executeQuery("UPDATE utilisateur SET etat_utilisateur = 'supprimé' WHERE id_utilisateur = :id AND etat_utilisateur = 'connécté' AND dernier_session >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) ", ['id' => $this->id_utilisateur]);
 
             //error
             if ($response['message_type'] === 'error') {

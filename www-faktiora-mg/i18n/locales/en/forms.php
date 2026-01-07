@@ -312,7 +312,9 @@ return [
         'question_restore_user_plur' => "Do you really want to restore these <b>:field</b> users?",
         'lang' => "Language",
         'enterprise_name' => "Company Name",
-        'currency' => "Currency Unit"
+        'currency' => "Currency Unit",
+        'delete_account' => "Delete account"
+
     ],
     'times' => [
         'minute' => "minute",
@@ -329,17 +331,17 @@ return [
         'en' => 'English'
     ],
     'placeholders' => [
-    'email' => 'name@faktiora.mg',
-    'search_lc' => "Cash register line ID, User ID",
-    'search_client' => "ID, last name or first names, phone, address",
-    'search_facture' => "invoice number, Client ID",
-    'search_ae' => "other income number, label",
-    'libelle_ae' => "ex: cash contribution",
-    'correction_inflow' => "addition of another amount",
-    'correction_outflow' => "amount reduction",
-    'libelle_article' => "ex: fuel purchase",
-    'search_produit' => "Product ID, product label",
-    'libelle_produit' => "ex: wine",
-    'search_article' => "Item ID, item label"
-]
+        'email' => 'name@faktiora.mg',
+        'search_lc' => "Cash register line ID, User ID",
+        'search_client' => "ID, last name or first names, phone, address",
+        'search_facture' => "invoice number, Client ID",
+        'search_ae' => "other income number, label",
+        'libelle_ae' => "ex: cash contribution",
+        'correction_inflow' => "addition of another amount",
+        'correction_outflow' => "amount reduction",
+        'libelle_article' => "ex: fuel purchase",
+        'search_produit' => "Product ID, product label",
+        'libelle_produit' => "ex: wine",
+        'search_article' => "Item ID, item label"
+    ]
 ];

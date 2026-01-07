@@ -82,6 +82,10 @@
                      </div>
                      <span class="form-text text-secondary"><?= __('forms.labels.keep_empty') ?></span>
                   </div>
+                  <!-- btn delete account -->
+                  <div class="mb-2 mt-4 d-flex justify-content-center">
+                     <button type="button" class="btn btn-sm btn-danger" id="btn-delete-account"><i class="fad fa-user-circle-minus me-2"></i><?= __('forms.labels.delete_account') ?></button>
+                  </div>
                </div>
                <!-- modal footer  -->
                <div class="modal-footer d-flex flex-nowrap justify-content-end">

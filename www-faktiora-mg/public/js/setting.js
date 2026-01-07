@@ -217,6 +217,24 @@ document.addEventListener("DOMContentLoaded", () => {
               }
             }
           });
+
+        //===== EVENT btn delete account
+        modalUpdateAccount
+          .querySelector("#btn-delete-account")
+          .addEventListener("click", async () => {
+            try {
+              //FETCH api delete account
+              const apiDeleteAccount = await apiRequest(
+                "/user/delete_account",
+                {
+                  method: "PUT",
+                  body: {},
+                }
+              );
+            } catch (e) {
+              console.error(e);
+            }
+          });
       });
 
     //================== PING ====================

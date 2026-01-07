@@ -313,8 +313,8 @@ return [
         'question_restore_user_plur' => "Voulez-vous vraiment récupérer ces <b>:field</b> utilisateurs ?",
         'lang' => "Langue",
         'enterprise_name' => "Nom de l'entrepise/société",
-        'currency' => "Unité monétaire"
-
+        'currency' => "Unité monétaire",
+        'delete_account' => "Supprimer le compte"
     ],
     'times' => [
         'minute' => "minute",
