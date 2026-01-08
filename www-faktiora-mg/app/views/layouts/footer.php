@@ -143,7 +143,7 @@
                   <div class="mb-2">
                      <!-- enterprise name  -->
                      <div class="mb-2">
-                        <label for="enterprise-name" class="form-label"><?= __('forms.labels.enterprise_name') ?><class="text-danger"> *</span></label>
+                        <label for="enterprise-name" class="form-label"><?= __('forms.labels.enterprise_name') ?><span class="text-danger"> *</span></label>
                         <input type="text" class="form-control form-control-sm" id="enterprise-name" required>
                      </div>
                      <div class="mb-2">
