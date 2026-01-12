@@ -553,10 +553,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const rest =
           Number(e.target.dataset.val) -
           Number(
-            inputAddSolde.value
-              .replace(/[\u202F\u00A0 ]/g, "")
-              .replace(",", ".")
-          );
+            inputAddSolde.dataset.val);
         if (rest > 0) {
           e.target.dataset.val = inputAddSolde.dataset.val;
           e.target.value = e.target.dataset.val;
@@ -581,9 +578,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const rest =
           Number(e.target.dataset.val) -
           Number(
-            inputAddSolde.value
-              .replace(/[\u202F\u00A0 ]/g, "")
-              .replace(",", ".")
+            inputAddSolde.dataset.val
           );
         if (rest > 0) {
           e.target.dataset.val = inputAddSolde.dataset.val;
