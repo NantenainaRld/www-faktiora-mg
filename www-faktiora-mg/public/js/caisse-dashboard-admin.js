@@ -502,7 +502,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         //real value for calcul
-        e.target.dataset.val = e.target.value.replace(/[\u202F\u00A0 ]/g, "");
+        e.target.dataset.val = e.target.value.replace(",", "");
       } else {
         //number and , only
         e.target.value = e.target.value.replace(/[^0-9,]/g, "");
@@ -513,7 +513,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (e.target.value.startsWith(",")) {
           e.target.value = "0" + e.target.value;
         }
-
+2
         //real value for calcul
         e.target.dataset.val = e.target.value
           .replace(",", ".")
@@ -606,18 +606,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         e.target.reportValidity();
         return;
       } else {
+
         try {
           //FETCH api add caisse
           const response = await apiRequest("/caisse/create_caisse", {
             method: "POST",
             body: {
               num_caisse: inputAddNumCaisse.value.trim(),
-              solde: inputAddSolde.value
-                .replace(/[\u202F\u00A0 ]/g, "")
-                .replace(",", "."),
-              seuil: inputAddSeuil.value
-                .replace(/[\u202F\u00A0 ]/g, "")
-                .replace(",", "."),
+              solde: inputAddSolde.dataset.val.replace(cookieLangValue === 'en' ?"," : "",""),
+              seuil: inputAddSeuil.dataset.val.replace(cookieLangValue === 'en' ?"," : "",""),
             },
           });
           //invalid
@@ -949,9 +946,168 @@ document.addEventListener("DOMContentLoaded", async () => {
         }, 10000);
         return;
       }
+  //selection
+      else {
+        //modal message 1
+        if (selectedCaisse.length === 1) {
+          modalDeleteCaisse.querySelector(".message").innerHTML =
+            lang.question_delete_caisse_1.replace(
+              ":field",
+              selectedCaisse[0].closest("tr").dataset.numCaisse
+            );
+        }
+        //modal message plur
+        else {
+          modalDeleteCaisse.querySelector(".message").innerHTML =
+            lang.question_delete_caisse_plur.replace(
+              ":field",
+              selectedCaisse.length
+            );
+        }
 
-      //modal delete client
-      const modalDeleteClient = container.querySelector("#modal-delete-client");
+        //show modal delete caisse
+        new bootstrap.Modal(modalDeleteCaisse).show();
+
+        //===== EVENT btn confirm delete caisse
+        modalDeleteCaisse
+          .querySelector("#btn-confirm-delete-caisse")
+          .addEventListener("click", async () => {
+            try {
+              //nums_caisse
+              let nums_caisse = [...selectedCaisse];
+              nums_caisse = nums_caisse.map(
+                (selected) => selected.closest("tr").dataset.numCaisse
+              );
+              //FETCH api delete permanent all caisse
+              const response = await apiRequest(
+                "/caisse/delete_all_caisse",
+                {
+                  method: "PUT",
+                  body: { nums_caisse: nums_caisse },
+                }
+              );
+              //error
+              if (response.message_type === "error") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-danger");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-triangle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 20s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalDeleteCaisse.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 20000);
+                return;
+              }
+              //invalid
+              else if (response.message_type === "invalid") {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-warning");
+                //icon
+                alert
+                  .querySelector(".fad")
+                  .classList.add("fa-exclamation-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                modalDeleteCaisse.querySelector(".modal-body").prepend(alert);
+
+                //progress launch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                return;
+              }
+              //succcess
+              else {
+                //alert
+                const alertTemplate = document.querySelector(".alert-template");
+                const clone = alertTemplate.content.cloneNode(true);
+                const alert = clone.querySelector(".alert");
+                const progressBar = alert.querySelector(".progress-bar");
+                //alert type
+                alert.classList.add("alert-success");
+                //icon
+                alert.querySelector(".fad").classList.add("fa-check-circle");
+                //message
+                alert.querySelector(".alert-message").innerHTML =
+                  response.message;
+                //progress bar
+                progressBar.style.transition = "width 10s linear";
+                progressBar.style.width = "100%";
+
+                //add alert
+                tbodyCaisse.closest("div").prepend(alert);
+
+                //progress lanch animation
+                setTimeout(() => {
+                  progressBar.style.width = "0%";
+                }, 10);
+                //auto close alert
+                setTimeout(() => {
+                  alert.querySelector(".btn-close").click();
+                }, 10000);
+                //close modal
+                modalDeleteCaisse
+                  .querySelector("#btn-close-modal-delete-caisse")
+                  .click();
+
+                //refesh filter user
+                filterCaisse(
+                  tbodyCaisse,
+                  container.querySelector("#chart-cash-number"),
+                  selectStatus.value.trim(),
+                  selectArrangeBy.value.trim(),
+                  selectOrder.value.trim(),
+                  selectDateBy.value.trim(),
+                  selectPer.value.trim(),
+                  dateFrom.value.trim(),
+                  dateTo.value.trim(),
+                  selectMonth.value.trim(),
+                  selectYear.value.trim(),
+                  inputSearch.value.trim()
+                );
+                return;
+              }
+            } catch (e) {
+              console.error(e);
+            }
+          });
+      }
     });
 
     //=======================  DELETE PERMANENT CAISSE =========================

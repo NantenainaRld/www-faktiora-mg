@@ -123,7 +123,7 @@ class CaisseController extends Controller
 
             //num_caisse - invalid
             $num_caisse = filter_var($json['num_caisse'], FILTER_VALIDATE_INT);
-            if (!$num_caisse || $num_caisse < 0) {
+            if ((!$num_caisse && $num_caisse != 0 )|| $num_caisse < 0 ) {
                 $response = [
                     'message_type' => 'invalid',
                     'message' => __('messages.invalids.caisse_num_caisse')
