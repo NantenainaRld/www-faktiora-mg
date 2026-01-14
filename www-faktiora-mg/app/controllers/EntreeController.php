@@ -2779,7 +2779,7 @@ class EntreeController extends Controller
             $strings = [
                 'bill' => strtoupper(__('forms.labels.bill')),
                 'phone' => __('forms.labels.phone'),
-                'adress' => __('forms.labels.adress'),
+                'address' => __('forms.labels.adress'),
                 'correction' => __('forms.labels.correction'),
                 'on' => __('forms.labels.on'),
                 'quantity' => __('forms.labels.quantity'),
