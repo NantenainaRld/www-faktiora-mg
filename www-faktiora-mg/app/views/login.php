@@ -188,10 +188,6 @@
                                     <button class="input-group-text" type="button"><i class="fad fa-eye-slash"></i></button>
                                 </div>
                             </div>
-                            <!-- forgot password  -->
-                            <div class="d-flex justify-content-end mb-4">
-                                <a href="#" class="text-decoration-none text-primary a-style"><?= __('forms.labels.forgot_password') ?></a>
-                            </div>
                             <!-- btn submit  -->
                             <div class="mt-4 mb-2 text-center">
                                 <button class="btn btn-outline-success " type="submit">
